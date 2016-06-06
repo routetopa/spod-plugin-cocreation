@@ -19,7 +19,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
                 exit;
             }
 
-        $room = COCREATIONEP_BOL_Service::getInstance()->addRoom(
+        $room = COCREATION_BOL_Service::getInstance()->addRoom(
             OW::getUser()->getId(),
             $clean['name'],
             $clean['subject'],
@@ -29,7 +29,8 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             $clean['goal'],
             $clean['invitation_text'],
             empty($clean['is_open']) ? 0 : 1,
-            implode(" ", $clean['users_value'])
+            implode(" ", $clean['users_value']),
+            $clean['room_type']
         );
 
         $randomString = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 5);

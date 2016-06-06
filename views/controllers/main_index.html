@@ -59,9 +59,9 @@
 {literal}
 <script type="text/javascript">
 
-    function addCocreationRoom()
+    function addCocreationRoom(room_type)
     {
-        previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_CreateRoom', {} , {width:'60%', height:'62vh', iconClass: 'ow_ic_add', title: ''});
+        previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_CreateRoom', {room_type : room_type} , {width:'60%', height:'62vh', iconClass: 'ow_ic_add', title: ''});
 
     }
 
@@ -99,8 +99,8 @@
     <paper-fab-speed-dial direction="top" class="bottom-right add-paper-fab">
         <paper-fab icon="add" title='' class="dropdown-trigger"></paper-fab>
         <div class="dropdown-content">
-            <paper-fab title='' mini icon="assessment" onclick=""></paper-fab>
-            <paper-fab title='' mini icon="description" onclick="addCocreationRoom()"></paper-fab>
+            <paper-fab title='' mini icon="assessment" onclick="addCocreationRoom('data')"></paper-fab>
+            <paper-fab title='' mini icon="description" onclick="addCocreationRoom('knowledge')"></paper-fab>
         </div>
     </paper-fab-speed-dial>
 

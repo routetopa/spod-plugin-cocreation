@@ -201,12 +201,11 @@ class COCREATION_BOL_Service
     public function addRoom($ownerId, $name, $subject,
                             $description, $from, $to,
                             $goal, $invitationText, $isOpen,
-                            $invitedUserArray)
+                            $invitedUserArray, $roomType)
     {
 
         $room = new COCREATION_BOL_Room();
 
-        $room->type           = $type;
         $room->ownerId        = $ownerId;
         $room->name           = $name;
         $room->subject        = $subject;
@@ -216,6 +215,7 @@ class COCREATION_BOL_Service
         $room->goal           = $goal;
         $room->invitationText = $invitationText;
         $room->isOpen         = $isOpen;
+        $room->type           = $roomType;
 
         COCREATION_BOL_RoomDao::getInstance()->save($room);
 

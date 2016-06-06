@@ -3,7 +3,7 @@
 
 class COCREATION_CMP_CreateRoom extends OW_Component
 {
-    public function __construct()
+    public function __construct($room_type)
     {
         $friendsInfo = [];
         $users = BOL_UserService::getInstance()->findList(0,10000);
@@ -63,6 +63,10 @@ class COCREATION_CMP_CreateRoom extends OW_Component
         $managerOp->setValue("requestToAddRoom");
         $managerOp->setId('manager_op');
 
+        $roomType  = new HiddenField('room_type');
+        $roomType->setId('room_type');
+        $roomType->setValue($room_type);
+
         $submit = new Submit('submit');
         $submit->setId('submit_new_room');
         $submit->setValue(OW::getLanguage()->text('cocreation', 'create_room_button_label'));
@@ -75,6 +79,7 @@ class COCREATION_CMP_CreateRoom extends OW_Component
         $form->addElement($invitationText);
         $form->addElement($usersValue);
         $form->addElement($managerOp);
+        $form->addElement($roomType);
         $form->addElement($isOpen);
         $form->addElement($submit);
 
