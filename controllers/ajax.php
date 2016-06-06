@@ -35,7 +35,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
         $randomString = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 5);
 
-        if($clean['type'] == "knowledge")
+        if($clean['room_type'] == "knowledge")
         {
             COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 0, "explore", rtrim(OW_URL_HOME,"/")  . ":9001" . "/p/explore_room_" .$room->id."_".$randomString);
             COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "ideas",   rtrim(OW_URL_HOME,"/") . ":9001" . "/p/ideas_room_"   .$room->id."_".$randomString);
