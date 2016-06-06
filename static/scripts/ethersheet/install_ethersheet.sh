@@ -188,9 +188,4 @@ esac
 
 exitProg
 
-#download ethersheet project
-#curl https://raw.githubusercontent.com/ethersheet-collective/EtherSheet/master/dev_install.sh | bash
-#copy configuration in ethersheet-service.js
-#socketPath : '/var/run/mysqld/mysqld.sock',
-
 
