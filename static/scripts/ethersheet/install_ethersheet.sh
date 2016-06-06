@@ -26,8 +26,8 @@ cloneRepository()
     cd /home/ethersheet
     curl https://raw.githubusercontent.com/ethersheet-collective/EtherSheet/master/dev_install.sh | bash
     chown -R ethersheet:ethersheet ethersheet
-    npm install module
     cd ethersheet/EtherSheet
+    #sh dev_install.sh
     npm install module
     tput setaf 2
     echo "done"
@@ -40,8 +40,7 @@ createDatabase()
     echo "3. Create database\r\r"
     tput sgr0
     #Commands
-    #mysql -u root -pis15rdc -e "create database ethersheet; grant all privileges on ethersheet.* to 'ethersheet'@'localhost' identified by 'is15rdc';exit"
-    cd /home/ethersheet/ethersheet/EtherSheet/examples
+    cd ${ABSOLUTE_PATH}
     mysql -u root -pis15rdc < db.sql
     tput setaf 2
     echo "done"
@@ -57,8 +56,8 @@ copySettings()
     cd ${ABSOLUTE_PATH}
     cp config.js /home/ethersheet/ethersheet/EtherSheet
     cp ethersheet_service.js /home/ethersheet/ethersheet/EtherSheet/lib
-    cp ethersheet.js /home/ethersheet/ethersheet/es_client
-    cp -R ./styles/* /home/ethersheet/ethersheet/es_client/styles
+    cp ethersheet.js /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client
+    cp -R ./styles/* /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client/styles
     tput setaf 2
     echo "done"
 }

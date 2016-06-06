@@ -11,5 +11,5 @@ module.exports = {
   default_row_count: 100,
   default_col_count: 20,
   expire_days: 0,
-  intro_text: "welcome to ethersheet, enter a sheet name to get started"
+  intro_text: "Welcome to SPOD Spreadsheet, enter a sheet name to get started"
 }
