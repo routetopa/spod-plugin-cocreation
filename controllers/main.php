@@ -13,7 +13,7 @@ class COCREATION_CTRL_Main extends OW_ActionController
         $invitations      = array();
         $visible_rooms    = array();
 
-        $rooms = COCREATION_BOL_Service::getInstance()->getAllRooms();
+        /*$rooms = COCREATION_BOL_Service::getInstance()->getAllRooms();
         foreach ($rooms as $room) {
             if (COCREATION_BOL_Service::getInstance()->isMemberJoinedToRoom(OW::getUser()->getId(), $room->id) ||
                 OW::getUser()->getId() == intval($room->ownerId)

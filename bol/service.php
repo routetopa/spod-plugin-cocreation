@@ -198,11 +198,10 @@ class COCREATION_BOL_Service
         return $result;
     }
 
-    public function addRoom($type, $ownerId, $name, $subject,
+    public function addRoom($ownerId, $name, $subject,
                             $description, $from, $to,
                             $goal, $invitationText, $isOpen,
-                            $invitedUserArray,
-                            $templateId)
+                            $invitedUserArray)
     {
 
         $room = new COCREATION_BOL_Room();

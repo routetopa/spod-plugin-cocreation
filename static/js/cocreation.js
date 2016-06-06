@@ -58,8 +58,8 @@ COCREATION.autocomplete = function()
             var containerHeight = $("#added_suggested_contact_container").height();
 
             list.css({
-                top: parentPosition.top + containerHeight + 60,
-                left: parentPosition.left + 7,
+                top: parentPosition.top + containerHeight + 50,
+                left: parentPosition.left,
                 position: 'absolute'
             });
 

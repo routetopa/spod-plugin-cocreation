@@ -8,18 +8,23 @@
 <link rel="import" href="{$components_url}bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="{$components_url}bower_components/paper-button/paper-button.html">
 
+<link rel="import" href="{$components_url}bower_components/paper-fab-transitions/paper-fab-speed-dial.html">
+
 {literal}
 <style is="custom-style">
 
     paper-fab
     {
-        position: absolute;
-        bottom: 55px;
-        right: 40px;
         --paper-fab-background:#2196F3;
     }
 
-    body .floatbox_canvas .floatbox_container{ margin-top:10px; }
+    paper-fab-speed-dial.add-paper-fab {
+        position: absolute;
+        bottom: 55px;
+        right: 40px;
+    }
+
+    body .floatbox_canvas .floatbox_container{ margin-top:110px; }
 
     cocreation-paper-card-controllet{
         /*margin: 20px;*/
@@ -56,7 +61,7 @@
 
     function addCocreationRoom()
     {
-        previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_CreateRoom', {} , {width:'70%', height:'90vh', iconClass: 'ow_ic_add', title: ''});
+        previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_CreateRoom', {} , {width:'60%', height:'62vh', iconClass: 'ow_ic_add', title: ''});
 
     }
 
@@ -91,8 +96,13 @@
         {/foreach}
     </div>
 
-
-    <paper-fab id="add_room_button" icon="add" onclick="addCocreationRoom()" title='{text key="cocreationep+add_room"}'></paper-fab>
+    <paper-fab-speed-dial direction="top" class="bottom-right add-paper-fab">
+        <paper-fab icon="add" title='' class="dropdown-trigger"></paper-fab>
+        <div class="dropdown-content">
+            <paper-fab title='' mini icon="assessment" onclick=""></paper-fab>
+            <paper-fab title='' mini icon="description" onclick="addCocreationRoom()"></paper-fab>
+        </div>
+    </paper-fab-speed-dial>
 
     {if {$invitations|@count} > 0}
         <paper-toast id="infoToast" duration="0" text="">

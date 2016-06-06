@@ -1,101 +1,260 @@
-{style}
-body .floatbox_header
-{
-    display: none;
-}
+<script type="text/javascript">
+    $( document ).ready(function() {
 
-body .floatbox_bottom
-{
-    display: none;
-}
+        var selected_menu = $(".cocoreation_create_room_left_menu_selected")[0];
 
-body .floatbox_body
-{
-    padding: 0px 0px 0px 0px;
-}
+        $(".cocoreation_create_room_left_menu li").click(function()
+        {
+            if(this == selected_menu)
+                return;
 
-#added_suggested_contact_container:after
-{
-    margin-bottom: 0px;
-    content:"";
-    display:block;
-    clear:both;
-}
+            selected_menu = this;
+            var clicked_class = $(this).attr('class');
+            var in_class = ".in-" + clicked_class;
+            $(".cocoreation_create_room_content .step").hide();
+            $(".cocoreation_create_room_left_menu li").removeClass("cocoreation_create_room_left_menu_selected");
+            $(this).addClass("cocoreation_create_room_left_menu_selected");
+            $(in_class).show();
+        });
+    });
+</script>
 
-#suggested_friends
-{
-    display:none;
-    box-shadow:1px 3px 1px #d4d4d5;
-    border:1px solid #cacacb;
-    width:300px;
-}
 
-#suggested_friends table { width:300px; }
-#suggested_friends table td:nth-child(odd) { width:30px }
-#suggested_friends table td > * {  vertical-align : middle;  }
-#suggested_friends table tr { background-color:#ffffff; cursor:pointer }
-#suggested_friends table tr:hover { background-color: #ececed }
+<style>
 
-.suggested_name
-{
-    margin-top:10px;
-}
+    .floatbox_container
+    {
+        border: 0px;
+    }
 
-.suggested_email
-{
-    color: #8b7683;
-    font-size: 14px;
-}
+    .floatbox_header
+    {
+        padding: 0px;
+    }
 
-.added_suggested_contact
-{
-    display: inline;
-    float: left;
-    margin-right: 5px;
-    background-color: #f5f5f5;
-    border: 1px solid #d9d9d9;
-    cursor: default;
-    height: 23px;
-    white-space: nowrap;
-    -webkit-border-radius: 3px;
-    border-radius: 3px;
-}
+    .floatbox_bottom
+    {
+        display: none;
+    }
 
-.added_suggested_contact_text
-{
-    padding: 3px 0px 0px 3px;
-    display: inline-block;
-}
+    html .floatbox_header .floatbox_cap
+    {
+        display: none;
+    }
 
-.added_suggested_contact:hover {
-    border-color: #b9b9b9;
-}
+    .floatbox_body
+    {
+        padding: 0px;
+        text-align: left;
+    }
 
-.remove_suggested_contact
-{
-    display: inline-block;
-    width: 12px;
-    height: 20px;
-    background: no-repeat url(/ow_static/themes/rtpa_matter/images/contactarea_sprite_2.gif) -4px 2px;
-    opacity: .6;
-    vertical-align: top;
-    cursor: pointer;
-}
-#parent input
-{
-    /*width: 70%;*/
-    /*height: 15px;*/
-}
-{/style}
+    .cocoreation_create_room_container
+    {
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .cocoreation_create_room_container > div
+    {
+        float: left;
+    }
+
+    .cocoreation_create_room_container form
+    {
+        height: 100%;
+    }
+
+    .cocoreation_create_room_header
+    {
+        float: none;
+        width: 100%;
+        height: 70px;
+        background-color: #2196F3;
+        font-family: 'Roboto Condensed', sans-serif;
+        font-size: 18px;
+        vertical-align: middle;
+        line-height: 70px;
+        color: #FFFFFF;
+        padding-left: 10px;
+    }
+
+    .cocoreation_create_room_left_menu
+    {
+        width: 300px;
+        height: calc(100% - 70px);
+        background-color: #212121;
+    }
+
+    .cocoreation_create_room_left_menu ul
+    {
+        margin-top: 30px;
+        color: #505050;
+    }
+
+    .cocoreation_create_room_left_menu li
+    {
+        font-family: 'Roboto Condensed', sans-serif;
+        vertical-align: middle;
+        background-color: #1D1D1D;
+        margin-top: 8px;
+        height: 45px;
+        line-height: 45px;
+        padding-left: 10px;
+
+        box-shadow: 0 4px 4px -2px #232323;
+        -moz-box-shadow: 0 4px 4px -2px #232323;
+        -webkit-box-shadow: 0 4px 4px -2px #232323;
+
+        cursor: pointer;
+    }
+
+    .cocoreation_create_room_left_menu li:hover
+    {
+        background-color: #03A9F5;
+        color: #FFFFFF;
+
+        box-shadow: 0 4px 4px -2px #232323;
+        -moz-box-shadow: 0 4px 4px -2px #232323;
+        -webkit-box-shadow: 0 4px 4px -2px #232323;
+    }
+
+    div .cocoreation_create_room_left_menu_selected
+    {
+        background-color: #03A9F5;
+        color: #FFFFFF;
+
+        box-shadow: 0 4px 4px -2px #232323;
+        -moz-box-shadow: 0 4px 4px -2px #232323;
+        -webkit-box-shadow: 0 4px 4px -2px #232323;
+    }
+
+    .cocoreation_create_room_content
+    {
+        width: calc(100% - 300px);
+        float: left;
+        height: calc(100% - 70px);
+        position: relative;
+    }
+
+    .cocoreation_create_room_content > div
+    {
+        clear: both;
+        display: none;
+    }
+
+    div .in-step-show
+    {
+        display: block;
+    }
+
+    .title
+    {
+        font-family: 'Roboto Condensed', sans-serif;
+        font-size: 30px;
+        margin-top: 44px;
+        padding-left: 100px;
+    }
+
+    .input
+    {
+        width: 300px;
+        margin-top: 20px;
+        padding-left: 100px;
+    }
+
+    #added_suggested_contact_container
+    {
+        width: 500px;
+    }
+
+    #added_suggested_contact_container:after
+    {
+        margin-bottom: 0px;
+        content:"";
+        display:block;
+        clear:both;
+    }
+
+    #suggested_friends
+    {
+        display:none;
+        box-shadow:1px 3px 1px #d4d4d5;
+        border:1px solid #cacacb;
+        width:300px;
+    }
+
+    #suggested_friends table { width:300px; }
+    #suggested_friends table td:nth-child(odd) { width:30px }
+    #suggested_friends table td > * {  vertical-align : middle;  }
+    #suggested_friends table tr { background-color:#ffffff; cursor:pointer }
+    #suggested_friends table tr:hover { background-color: #ececed }
+
+    .suggested_name
+    {
+        margin-top:10px;
+    }
+
+    .suggested_email
+    {
+        color: #8b7683;
+        font-size: 14px;
+    }
+
+    .added_suggested_contact
+    {
+        display: inline;
+        float: left;
+        margin-right: 5px;
+        background-color: #f5f5f5;
+        border: 1px solid #d9d9d9;
+        cursor: default;
+        height: 23px;
+        white-space: nowrap;
+        -webkit-border-radius: 3px;
+        border-radius: 3px;
+    }
+
+    .added_suggested_contact_text
+    {
+        padding: 3px 0px 0px 3px;
+        display: inline-block;
+    }
+
+    .added_suggested_contact:hover {
+        border-color: #b9b9b9;
+    }
+
+    .remove_suggested_contact
+    {
+        display: inline-block;
+        width: 12px;
+        height: 20px;
+        background: no-repeat url(/ow_static/themes/spod_theme_matter/images/contactarea_sprite_2.gif) -4px 2px;
+        opacity: .6;
+        vertical-align: top;
+        cursor: pointer;
+    }
+
+    .data_picker_label
+    {
+        margin-top: 30px;
+        float: left;
+    }
+
+    .submit_container
+    {
+        position: absolute;
+        bottom: 22px;
+        right: 10px;
+    }
+
+</style>
 
 <style is="custom-style">
 
     .date_period
     {
-        float:left;
-        width:40%;
-        margin-right: 20px;
-        margin-left: 30px;
+        margin-bottom: 30px;
     }
 
     #submit_overlay{
@@ -115,35 +274,76 @@ body .floatbox_body
 
 </style>
 
-<div class="ow_superwide ow_automargin">
-    <div id="submit_overlay">
-        <img id="base_datalet_spin" src="{$components_url}datalets/base-datalet/static/images/spin.svg">
+<link href='https://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
+
+<input type="hidden" id="friends_info" value='{$friends_info}' />
+
+<div class="cocoreation_create_room_container">
+
+    <div class="cocoreation_create_room_header">
+        CREATE A NEW ROOM
     </div>
 
-    <input type="hidden" id="friends_info" value='{$friends_info}' />
+    <div class="cocoreation_create_room_left_menu">
+        <ul>
+            <li class="step-1 cocoreation_create_room_left_menu_selected">NAME</li>
+            <li class="step-2">SUBJECT</li>
+            <li class="step-3">DESCRIPTION</li>
+            <li class="step-4">PERIOD</li>
+            <li class="step-5">GOAL</li>
+            <li class="step-6">INVITATION TEXT</li>
+            <li class="step-7">MEMBERS</li>
+        </ul>
+    </div>
 
     {form name='CoCreationEpAddRoomForm'}
-    <table class="ow_table_1 ow_form">
-        <tr class="ow_alt2 ow_tr_first">
-            <td class="ow_label">{text key="cocreation+room_name"}</td>
-            <td class="ow_value">{input name='name'}</td>
-        </tr>
-        <tr class="ow_alt1">
-            <td class="ow_label">{text key="cocreation+room_subject"}</td>
-            <td class="ow_value">{input name='subject'}</td>
-        </tr>
-        <tr class="ow_alt1">
-            <td class="ow_label">{text key="cocreation+room_description"}</td>
-            <td class="ow_value">{input name='description'}</td>
-        </tr>
-        <tr class="ow_alt1">
-            <td class="ow_label">{text key="cocreation+room_period"}</td>
-            <td class="ow_value">
+    <div class="cocoreation_create_room_content">
 
+        <!-- USER VALUE -->
+        {input name='users_value'}
+
+        <!-- ROOM NAME -->
+        <div class="step in-step-1 in-step-show">
+            <div class="title">
+                <span>{text key="cocreationep+room_name"}</span>
+            </div>
+            <div class="input">
+                {input name='name'}
+            </div>
+        </div>
+
+        <!-- ROOM  SUBJECT-->
+        <div class="step in-step-2">
+            <div class="title">
+                <span>{text key="cocreationep+room_subject"}</span>
+            </div>
+            <div class="input">
+                {input name='subject'}
+            </div>
+        </div>
+
+        <!-- ROOM  DESCRIPTION-->
+        <div class="step in-step-3">
+            <div class="title">
+                <span>{text key="cocreationep+room_description"}</span>
+            </div>
+            <div class="input">
+                {input name='description'}
+            </div>
+        </div>
+
+        <!-- ROOM PERIOD-->
+        <div class="step in-step-4">
+            <div class="title">
+                <span>{text key="cocreationep+room_period"}</span>
+            </div>
+            <div class="input">
                 {literal}
                 <template is="dom-bind" id="scope">
                     <section>
-                        <input class="date_period" name="data_from" type="text" on-tap="showDialog" data-args="from" raised value="{{dateFormat(dateFrom, 'LL')}}">
+                        <span class="data_picker_label">From : </span>
+                        <input class="date_period" id="data_from" name="data_from" type="text" on-tap="showDialog" data-args="from" raised value="{{dateFormat(dateFrom, 'LL')}}">
+                        <span class="data_picker_label">To : </span>
                         <input class="date_period" name="data_to" type="text" on-tap="showDialog" data-args="to"   raised value="{{dateFormat(dateTo, 'LL')}}">
                         <paper-dialog id="dialog" class="paper-date-picker-dialog" on-iron-overlay-closed="dismissDialog">
                             <paper-date-picker id="picker"></paper-date-picker>
@@ -155,72 +355,82 @@ body .floatbox_body
                     </section>
                 </template>
                 {/literal}
-
-            </td>
-        </tr>
-        <tr class="ow_alt1">
-            <td class="ow_label">{text key="cocreation+room_goal"}</td>
-            <td class="ow_value">{input name='goal'}</td>
-        </tr>
-        <tr class="ow_alt1">
-            <td class="ow_label">{text key="cocreation+room_template"}</td>
-            <td class="ow_value">{input name='template'}</td>
-        </tr>
-        <tr class="ow_alt1">
-            <td class="ow_label">{text key="cocreation+room_invitationText"}</td>
-            <td class="ow_value">{input name='invitation_text'}</td>
-        </tr>
-        <tr class="ow_alt1">
-            <td class="ow_label">{text key="cocreation+room_members"}</td>
-            <td class="ow_value" id="parent">
-                <div id="added_suggested_contact_container">
-                </div>
-                <input type="text" id="members" name="members" autocomplete="off"
-                       onkeyup="COCREATION.autocomplete()"
-                        onblur="COCREATION.hideAutocomplete()"
-                       onfocus="COCREATION.autocomplete()"
-                >
-            </td>
-        </tr>
-        <tr class="ow_alt1">
-            <td class="ow_label">{text key="cocreation+room_is_open"}</td>
-            <td class="ow_value">{input name='is_open'}</td>
-        </tr>
-    </table>
-    <div class="clearfix ow_stdmargin"><div class="ow_right">{submit name='submit' class='ow_ic_new'}</div></div>
-    {/form}
-
-
-
-    <!-- suggested -->
-    <div id="suggested_friends">
-        <table id="suggested_friends_table">
-        </table>
-    </div>
-
-        <!-- TEMPLATE -->
-        <table style="display:none">
-            <tr id="suggested_friends_tr_template" onmousedown="COCREATION.addSuggestedUser(this)">
-                <td>
-                    <div class="ow_avatar">
-                        <a href="" target="_blank"><img alt="" src="" style="max-width: 100%;"></a>
-                    </div>
-                </td>
-                <td>
-                    <div class="suggested_name"></div>
-                    <div class="suggested_email"></div>
-                </td>
-            </tr>
-        </table>
-
-        <div style="display:none">
-            <div id="added_suggested_contact_template" class="added_suggested_contact">
-                <div class="added_suggested_contact_text"></div>
-                <div class="remove_suggested_contact" onclick="COCREATION.removeFromSuggestionList(this)"></div>
             </div>
         </div>
-        <!-- TEMPLATE -->
 
-    <!-- suggested -->
+        <!-- ROOM  GOAL-->
+        <div class="step in-step-5">
+            <div class="title">
+                <span>{text key="cocreationep+room_goal"}</span>
+            </div>
+            <div class="input">
+                {input name='goal'}
+            </div>
+        </div>
+
+        <!-- ROOM  INVITATION TEXT-->
+        <div class="step in-step-6">
+            <div class="title">
+                <span>{text key="cocreationep+room_invitationText"}</span>
+            </div>
+            <div class="input">
+                {input name='invitation_text'}
+            </div>
+        </div>
+
+        <!-- ROOM  MEMBERS/SUBMIT-->
+        <div class="step in-step-7">
+            <div class="title">
+                <span>{text key="cocreationep+room_members"}</span>
+            </div>
+            <div class="input">
+                <div id="parent">
+                    <div id="added_suggested_contact_container">
+                    </div>
+                    <input type="text" id="members" name="members" autocomplete="off"
+                           onkeyup="COCREATION.autocomplete()"
+                           onblur="COCREATION.hideAutocomplete()"
+                           onfocus="COCREATION.autocomplete()"
+                    >
+                </div>
+            </div>
+            <div class="submit_container">
+                {submit name='submit' class='ow_ic_new'}
+            </div>
+        </div>
+
+    </div>
+    {/form}
 
 </div>
+
+<!-- suggested -->
+<div id="suggested_friends">
+    <table id="suggested_friends_table">
+    </table>
+</div>
+
+<!-- TEMPLATE -->
+<table style="display:none">
+    <tr id="suggested_friends_tr_template" onmousedown="COCREATION.addSuggestedUser(this)">
+        <td>
+            <div class="ow_avatar">
+                <a href="" target="_blank"><img alt="" src="" style="max-width: 100%;"></a>
+            </div>
+        </td>
+        <td>
+            <div class="suggested_name"></div>
+            <div class="suggested_email"></div>
+        </td>
+    </tr>
+</table>
+
+<div style="display:none">
+    <div id="added_suggested_contact_template" class="added_suggested_contact">
+        <div class="added_suggested_contact_text"></div>
+        <div class="remove_suggested_contact" onclick="COCREATION.removeFromSuggestionList(this)"></div>
+    </div>
+</div>
+<!-- TEMPLATE -->
+
+<!-- suggested -->
