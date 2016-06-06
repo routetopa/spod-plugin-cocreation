@@ -107,7 +107,7 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
                 'numDataletsInRoom'                   => count(COCREATION_BOL_Service::getInstance()->getDataletsByRoomId($params['roomId'])),
                 'coocreation_room_suggested_datasets' => $suggested_datasets_string,
                 'roomId'                              => $params['roomId'],
-                'entity_type'                         => COCREATION_BOL_Service::ENTITY_TYPE
+                'entity_type'                         => COCREATION_BOL_Service::ROOM_ENTITY_TYPE
             ));
 
             OW::getDocument()->addOnloadScript($js);

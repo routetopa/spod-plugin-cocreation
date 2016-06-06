@@ -1,0 +1,168 @@
+::-webkit-scrollbar {
+-webkit-appearance: none;
+width: 7px;
+}
+::-webkit-scrollbar-thumb {
+border-radius: 4px;
+background-color: rgba(0,0,0,.5);
+-webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+.es-table-view{
+position:absolute;
+overflow:hidden;
+top:0;
+left:0;
+height:100%;
+width:100%;
+background: #EEE;
+color:#111;
+}
+.es-table{
+border-collapse: collapse;
+table-layout: fixed;
+width: 0;
+}
+.es-table tr{
+  height: 22px;
+}
+.es-column-headers,.es-row-headers,.es-grid-container{
+position:absolute;
+}
+.es-column-headers th:hover, .es-row-headers th:hover, .es-header-active {
+  background-color: #2196F3;
+  color: #dadada;
+  cursor: pointer;
+}
+.es-column-headers{
+margin-left:45px;
+left:0px;
+top:0px;
+height:18px;
+background:#edeff0;
+}
+.es-row-headers{
+left:0px;
+top:0px;
+width:45px;
+margin-top:18px;
+background:#edeff0;
+}
+.es-grid-container{
+left:45px;
+top:0;
+width:97%;
+height:97%;
+margin-top:18px;
+overflow:scroll;
+}
+.es-table-cell, .es-column-header{
+padding:0;
+margin:0;
+width: 100px;
+font-size:14px;
+line-height:12px;
+}
+.es-table-corner{
+width:45px;
+height:18px;
+position:absolute;
+top:0;
+left:0;
+background: #444;
+color: #eee;
+text-align: center;
+}
+.es-logo{
+margin-top: 2px;
+font-size: 12px;
+cursor: pointer;
+}
+.es-table th.es-column-header{
+border:1px solid #2196F3;
+border-top:none;
+border-bottom:none;
+height:100%;
+line-height: 19px;
+position:relative;
+}
+.es-row-header{
+border:1px solid #2196F3;
+border-right: none;
+border-left: none;
+padding: 0;
+position:relative;
+}
+.es-table-cell{
+border-top:1px solid #D0D2D3;
+border-left:1px solid #D0D2D3;
+overflow:hidden;
+}
+.es-table-cell-input{
+border: 0px;
+position: absolute;
+resize:none;
+overflow: hidden;
+}
+.es-expression-editor{
+height: 100%;
+width: 100%;
+position: relative;
+}
+#es-expression-wizard{
+text-decoration: none;
+font-style: italic;
+font-weight: bold;
+font-family: ariel;
+cursor: pointer;
+}
+.es-expression-editor-input{
+font-size: 14px;
+font-family: 'Source Code Pro', Ariel, Sans-Serif;
+display: block;
+margin: 0;
+padding: 0;
+width: 100%;
+resize:vertical;
+}
+#es-func-list{
+height:350px;
+overflow:scroll;
+}
+.es-bg-red{
+  background: #ff0000;
+}
+.es-bg-black{
+  background: #000;
+}
+.es-bg-white{
+  background: #fff;
+}
+
+.es-fg-white{
+  color: #FFF;
+}
+.es-fg-black{
+  color: #000;
+}
+.es-bold{
+  font-weight: bold;
+}
+.es-underline{
+  text-decoration: underline;
+}
+.es-italic{
+  font-style: italic;
+}
+.es-row-odd{
+  background: #FBFBFB;
+}
+.es-menu-arrow{
+  display: none;
+  top: 2px;
+  right:4px;
+}
+.es-column-headers th:hover .es-menu-arrow, .es-row-headers th:hover .es-menu-arrow{
+  position: absolute;
+  display:block;
+}
+
