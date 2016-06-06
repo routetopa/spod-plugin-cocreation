@@ -1,0 +1,45 @@
+<link rel="import" href="{$components_url}bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="{$components_url}controllets/paper-card-controllet/paper-card-controllet.html"/>
+<link rel="import" href="{$components_url}datalets/datatable-datalet/datatable-datalet.html">
+
+{literal}
+<style is="custom-style">
+
+    paper-fab#card-modify.paper-card-controllet{
+        display: none;
+    }
+
+    paper-fab#card-delete.paper-card-controllet{
+        display: none;
+    }
+
+    :host .legend.paper-card-controllet {
+        height: 60px;
+    }
+    paper-card-controllet{
+        margin: 20px;
+        position: relative;
+        float: left;
+    }
+
+
+</style>
+{/literal}
+
+<div id="dataset-grid-container">
+    {foreach $datasets as $dataset }
+    <paper-card-controllet
+            card-type="datalet"
+            card-title="{$dataset->name}"
+            class="dataset-grid-item"
+            width="300"
+            height="300">
+        <datatable-datalet
+                data-url="{$dataset->url}"
+                description="{$dataset->description}"
+                title="{$dataset->name}"
+                fields='{$dataset->fields}'>
+        </datatable-datalet>
+    </paper-card-controllet>
+    {/foreach}
+</div>

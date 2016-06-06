@@ -1,0 +1,111 @@
+<link rel="import" href="{$components_url}controllets/cocreation-paper-card-controllet/cocreation-paper-card-controllet.html">
+
+<link rel="import" href="{$components_url}bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="{$components_url}bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="{$components_url}bower_components/paper-toast/paper-toast.html">
+
+<link rel="import" href="{$components_url}bower_components/paper-date-picker/paper-date-picker.html">
+<link rel="import" href="{$components_url}bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="{$components_url}bower_components/paper-button/paper-button.html">
+
+{literal}
+<style is="custom-style">
+
+    paper-fab
+    {
+        position: absolute;
+        bottom: 55px;
+        right: 40px;
+        --paper-fab-background:#2196F3;
+    }
+
+    body .floatbox_canvas .floatbox_container{ margin-top:10px; }
+
+    cocreation-paper-card-controllet{
+        /*margin: 20px;*/
+        padding: 20px;
+    }
+
+    .blue-button {
+        text-transform: none;
+        color: #2196F3;
+        margin-top: 8px;
+    }
+
+    .confirm_button{
+        position: relative;
+        float: right;
+        margin-top: -8px;
+    }
+
+    #submit_overlay{
+        z-index: 1;
+        position:absolute;
+        top:0;
+        left:0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+</style>
+{/literal}
+
+{literal}
+<script type="text/javascript">
+
+    function addCocreationRoom()
+    {
+        previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_CreateRoom', {} , {width:'70%', height:'90vh', iconClass: 'ow_ic_add', title: ''});
+
+    }
+
+    setTimeout(function(){
+                var roomList = document.querySelector('template[is="dom-bind"]');
+                if(roomList.$.infoToast != undefined)
+                   roomList.$.infoToast.show();
+            }
+            ,1000);
+
+</script>
+{/literal}
+
+<template id="list" is="dom-bind">
+
+    {if $isActive == false}
+        <div id="submit_overlay">
+            <h1 style="position: relative; top: 25%; left: 10%;">{text key="cocreation+concreation_not_active"}</h1>
+        </div>
+    {/if}
+
+    <div class="layout" style="margin-top:20px;">
+        {foreach $cocreation_rooms as $room}
+        <cocreation-paper-card-controllet
+                name="{$room->name}"
+                owner="{$room->owner}"
+                from="{$room->from}"
+                to="{$room->to}"
+                goal="{$room->goal}"
+                room-url="{$partialRoomUrl}{$room->type}-room/{$room->id}">
+        </cocreation-paper-card-controllet>
+        {/foreach}
+    </div>
+
+
+    <paper-fab id="add_room_button" icon="add" onclick="addCocreationRoom()" title='{text key="cocreationep+add_room"}'></paper-fab>
+
+    {if {$invitations|@count} > 0}
+        <paper-toast id="infoToast" duration="0" text="">
+            <div class="layout horizontal">
+                <h5>{text key="cocreation+room_info_toast"}</h5>
+                <paper-button onclick="infoToast.toggle()" class="blue-button"><b>x</b></paper-button>
+            </div>
+            <div class="layout vertical">
+                {foreach $invitations as $invitation}
+                <p>{$invitation}</p>
+                {/foreach}
+            </div>
+        </paper-toast>
+    {/if}
+
+</template>
