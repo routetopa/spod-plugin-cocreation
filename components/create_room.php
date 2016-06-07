@@ -5,6 +5,9 @@ class COCREATION_CMP_CreateRoom extends OW_Component
 {
     public function __construct($room_type)
     {
+        OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl() . 'input-menu.js');
+        OW::getDocument()->addStyleSheet(OW::getPluginManager()->getPlugin('cocreation')->getStaticCssUrl() . 'input-menu.css');
+
         $friendsInfo = [];
         $users = BOL_UserService::getInstance()->findList(0,10000);
 
