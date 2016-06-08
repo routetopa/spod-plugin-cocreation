@@ -1,0 +1,237 @@
+.floatbox_container
+{
+    border: 0px;
+}
+
+.floatbox_header
+{
+    padding: 0px;
+}
+
+.floatbox_bottom
+{
+    display: none;
+}
+
+html .floatbox_header .floatbox_cap
+{
+    display: none;
+}
+
+.floatbox_body
+{
+    padding: 0px;
+    text-align: left;
+}
+
+/* CREATION FORM */
+.cocoreation_create_room_container
+{
+    height: 100%;
+    overflow: hidden;
+}
+
+.cocoreation_create_room_container > div
+{
+    float: left;
+}
+
+.cocoreation_create_room_container form
+{
+    height: 100%;
+}
+
+.cocoreation_create_room_header
+{
+    float: none;
+    width: 100%;
+    height: 70px;
+    background-color: #2196F3;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 18px;
+    vertical-align: middle;
+    line-height: 70px;
+    color: #FFFFFF;
+    padding-left: 10px;
+}
+
+.cocoreation_create_room_left_menu
+{
+    width: 300px;
+    height: calc(100% - 70px);
+    background-color: #212121;
+}
+
+.cocoreation_create_room_left_menu ul
+{
+    margin-top: 30px;
+    color: #505050;
+}
+
+.cocoreation_create_room_left_menu li
+{
+    font-family: 'Roboto Condensed', sans-serif;
+    vertical-align: middle;
+    background-color: #1D1D1D;
+    margin-top: 8px;
+    height: 45px;
+    line-height: 45px;
+    padding-left: 10px;
+
+    box-shadow: 0 4px 4px -2px #232323;
+    -moz-box-shadow: 0 4px 4px -2px #232323;
+    -webkit-box-shadow: 0 4px 4px -2px #232323;
+
+    cursor: pointer;
+}
+
+.cocoreation_create_room_left_menu li:hover
+{
+    background-color: #03A9F5;
+    color: #FFFFFF;
+
+    box-shadow: 0 4px 4px -2px #232323;
+    -moz-box-shadow: 0 4px 4px -2px #232323;
+    -webkit-box-shadow: 0 4px 4px -2px #232323;
+}
+
+.check
+{
+    color: #008000;
+}
+
+.error
+{
+    color: #FF0000;
+}
+
+div .cocoreation_create_room_left_menu_selected
+{
+    background-color: #03A9F5;
+    color: #FFFFFF;
+
+    box-shadow: 0 4px 4px -2px #232323;
+    -moz-box-shadow: 0 4px 4px -2px #232323;
+    -webkit-box-shadow: 0 4px 4px -2px #232323;
+}
+
+.cocoreation_create_room_content
+{
+    width: calc(100% - 300px);
+    float: left;
+    height: calc(100% - 70px);
+    position: relative;
+}
+
+.cocoreation_create_room_content > div
+{
+    clear: both;
+    display: none;
+}
+
+div .in-step-show
+{
+    display: block;
+}
+
+.title
+{
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 30px;
+    margin-top: 44px;
+    padding-left: 100px;
+}
+
+.input
+{
+    width: 300px;
+    margin-top: 20px;
+    padding-left: 100px;
+}
+
+.data_picker_label
+{
+    margin-top: 30px;
+    float: left;
+}
+
+.submit_container
+{
+    position: absolute;
+    bottom: 22px;
+    right: 10px;
+}
+/* CREATION FORM */
+
+#added_suggested_contact_container
+{
+    width: 500px;
+}
+
+#added_suggested_contact_container:after
+{
+    margin-bottom: 0px;
+    content:"";
+    display:block;
+    clear:both;
+}
+
+#suggested_friends
+{
+    display:none;
+    box-shadow:1px 3px 1px #d4d4d5;
+    border:1px solid #cacacb;
+    width:300px;
+}
+
+#suggested_friends table { width:300px; }
+#suggested_friends table td:nth-child(odd) { width:30px }
+#suggested_friends table td > * {  vertical-align : middle;  }
+#suggested_friends table tr { background-color:#ffffff; cursor:pointer }
+#suggested_friends table tr:hover { background-color: #ececed }
+
+.suggested_name
+{
+    margin-top:10px;
+}
+
+.suggested_email
+{
+    color: #8b7683;
+    font-size: 14px;
+}
+
+.added_suggested_contact
+{
+    display: inline;
+    float: left;
+    margin-right: 5px;
+    background-color: #f5f5f5;
+    border: 1px solid #d9d9d9;
+    cursor: default;
+    height: 23px;
+    white-space: nowrap;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.added_suggested_contact_text
+{
+    padding: 3px 0px 0px 3px;
+    display: inline-block;
+}
+
+.added_suggested_contact:hover {
+    border-color: #b9b9b9;
+}
+
+.remove_suggested_contact
+{
+    display: inline-block;
+    width: 12px;
+    height: 20px;
+    background: no-repeat url(/ow_static/themes/spod_theme_matter/images/contactarea_sprite_2.gif) -4px 2px;
+    opacity: .6;
+    vertical-align: top;
+    cursor: pointer;
+}
