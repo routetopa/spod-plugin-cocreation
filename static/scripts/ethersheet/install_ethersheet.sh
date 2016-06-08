@@ -97,7 +97,7 @@ settingSudoUser(){
     #Commands
     #IP = "$(ifconfig | grep -A 1 'eth0' | tail -1 | cut -d ':' -f 2 | cut -d ' ' -f 1)"
     IP="$(hostname -I | cut -d' ' -f1)"
-    if grep -q "Host_Alias LOCAL=${IP}" /etc/sudoers ;tail /var/
+    if grep -q "Host_Alias LOCAL=${IP}" /etc/sudoers ;
         then
            tput setaf 3
            echo "Host_Alias already created"

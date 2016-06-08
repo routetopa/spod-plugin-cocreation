@@ -4,6 +4,8 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
 {
     public function settings($params)
     {
+        $this->assign('components_url', SPODPR_COMPONENTS_URL);
+
         $this->setPageTitle(OW::getLanguage()->text('cocreation', 'admin_title'));
         $this->setPageHeading(OW::getLanguage()->text('cocreation', 'admin_heading'));
 
@@ -12,62 +14,98 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
 
         $submit = new Submit('add');
 
-        $field = new HiddenField('running');
-        $form->addElement($field);
+        $document_field    = new HiddenField('document_server_status');
+        $spreadsheet_field = new HiddenField('spreadsheet_server_status');
+        $form->addElement($document_field);
+        $form->addElement($spreadsheet_field);
 
-        $connection = @fsockopen('localhost', '9001');
+        $doc_connection    = @fsockopen('localhost', '9001');
+        $spread_connection = @fsockopen('localhost', '8001');
 
-        if (is_resource($connection))
+        if (is_resource($doc_connection))
         {
-            $submit->setValue('STOP');
-            $this->assign('running', true);
-            $field->setValue(1);
+            $this->assign('document_server_status', true);
+            $document_field->setValue(1);
         }
         else
         {
-            $submit->setValue('START');
-            $this->assign('running', false);
-            $field->setValue(0);
+            $this->assign('document_server_status', false);
+            $document_field->setValue(0);
         }
 
+        if (is_resource($spread_connection))
+        {
+            $this->assign('spreadsheet_server_status', true);
+            $spreadsheet_field->setValue(1);
+        }
+        else
+        {
+            $this->assign('spreadsheet_server_status', false);
+            $spreadsheet_field->setValue(0);
+        }
+
+        $submit->setValue('SAVE');
         $form->addElement($submit);
 
         if ( OW::getRequest()->isPost() && $form->isValid($_POST))
         {
             $data = $form->getValues();
 
-            $preference = BOL_PreferenceService::getInstance()->findPreference('cocreation_admin_run_status');
+            $document_server_status_preference = BOL_PreferenceService::getInstance()->findPreference('document_server_status_preference');
+            if(empty($document_server_status_preference)) {
+                $document_server_status_preference = new BOL_Preference();
+            }
 
-            if(empty($preference))
-                $preference = new BOL_Preference();
+            $document_server_status_preference->key = 'document_server_status_preference';
+            $document_server_status_preference->sortOrder = 1;
+            $document_server_status_preference->sectionName = 'general';
 
-            $preference->key = 'cocreation_admin_run_status';
-            $preference->sortOrder = 1;
-            $preference->sectionName = 'general';
-
-            chdir(OW::getPluginManager()->getPlugin('cocreation')->getStaticDir() . '/ether-etherpad-lite/bin');
-            if($data['running'])
+            if($data['document_server_status'])
             {
                 //is running
-                $submit->setValue('START');
-                $this->assign('running', false);
+                $this->assign('document_server_status', false);
                 $field->setValue(0);
-
                 shell_exec("/usr/bin/sudo /usr/bin/service etherpad-lite stop");
-                $preference->defaultValue = 'STOP';
+                $document_server_status_preference->defaultValue = 'STOP';
             }
             else
             {
                 //is not running
-                $output = shell_exec("/usr/bin/sudo /usr/bin/service etherpad-lite start");
-                //$this->liveExecuteCommand("sh ./run.sh");
-                $preference->defaultValue = 'RUN';
-
-                $submit->setValue('STOP');
-                $this->assign('running', true);
+                shell_exec("/usr/bin/sudo /usr/bin/service etherpad-lite start");
+                $document_server_status_preference->defaultValue = 'RUN';
+                $this->assign('document_server_status', true);
                 $field->setValue(1);
             }
-            BOL_PreferenceService::getInstance()->savePreference($preference);
+
+            BOL_PreferenceService::getInstance()->savePreference($document_server_status_preference);
+
+            $spreadsheet_server_status_preference = BOL_PreferenceService::getInstance()->findPreference('spreadsheet_server_status_preference');
+            if(empty($spreadsheet_server_status_preference)) {
+                $spreadsheet_server_status_preference = new BOL_Preference();
+            }
+
+            $spreadsheet_server_status_preference->key = 'spreadsheet_server_status_preference';
+            $spreadsheet_server_status_preference->sortOrder = 1;
+            $spreadsheet_server_status_preference->sectionName = 'general';
+
+            if($data['spreadsheet_server_status'])
+            {
+                //is running
+                $this->assign('spreadsheet_server_status', false);
+                $field->setValue(0);
+                shell_exec("/usr/bin/sudo /usr/bin/service ethersheet stop");
+                $spreadsheet_server_status_preference->defaultValue = 'STOP';
+            }
+            else
+            {
+                //is not running
+                shell_exec("/usr/bin/sudo /usr/bin/service ethersheet start");
+                $spreadsheet_server_status_preference->defaultValue = 'RUN';
+                $this->assign('spreadsheet_server_status', true);
+                $field->setValue(1);
+            }
+
+            BOL_PreferenceService::getInstance()->savePreference($spreadsheet_server_status_preference);
         }
     }
 

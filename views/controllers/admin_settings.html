@@ -1,19 +1,98 @@
-<style>
-</style>
+<link rel="import" href="{$components_url}bower_components/paper-toggle-button/paper-toggle-button.html">
 
-{form name='settings'}
-<table class="ow_table_1 ow_form ow_automargin">
-    <tr class="ow_alt1">
-        <td class="ow_value">Document server is </td>
-        {if $running == true}
-           <td class="ow_value">running</td>
-        {/if}
-        {if $running == false}
-           <td class="ow_value">not running</td>
-        {/if}
-    </tr>
-    <tr>
-        <td colspan="2" class="ow_center">{submit name='add' class='ow_button ow_ic_save'}</td>
-    </tr>
-</table>
-{/form}
+<style is="custom-style">
+    paper-toggle-button.room_toggle {
+        --paper-toggle-button-checked-bar-color:  var(--paper-green-500);
+        --paper-toggle-button-checked-button-color:  var(--paper-green-500);
+        --paper-toggle-button-checked-ink-color: var(--paper-green-500);
+        --paper-toggle-button-unchecked-bar-color:  var(--paper-gray-500);
+        --paper-toggle-button-unchecked-button-color:  var(--paper-gray-500);
+        --paper-toggle-button-unchecked-ink-color: var(--paper-gray-500);
+    }
+</style>
+{literal}
+<script>
+
+    $(document).ready(function(){
+        $(".toggle").click(function(){
+            alert("cose");
+        });
+    });
+
+    var settings_form = document.querySelector('template[is="dom-bind"]');
+
+    settings_form._toggleChanged = function(){
+        alert("Acchiappapè");
+    }
+
+
+
+</script>
+{/literal}
+
+<template id="settings_form" is="dom-bind">
+    {form name='settings'}
+    <table class="ow_table_1 ow_form ow_automargin">
+        <tr class="ow_alt1">
+            <td class="ow_value">Document server status</td>
+            {if $document_server_status == true}
+               <td class="ow_value">
+                   <paper-toggle-button class="server_toggle toggle" id="document_server_command" name="document_server_command" checked on-change="_toggleChanged"></paper-toggle-button>
+               </td>
+            {/if}
+            {if $document_server_status == false}
+               <td class="ow_value">
+                   <paper-toggle-button class="server_toggle toggle" id="document_server_command" name="document_server_command"></paper-toggle-button>
+               </td>
+            {/if}
+        </tr>
+        <tr class="ow_alt1">
+            <td class="ow_value">Spreadsheet server status</td>
+            {if $spreadsheet_server_status == true}
+            <td class="ow_value">
+                <paper-toggle-button class="server_toggle toggle" id="spreadsheet_server_command" name="spreadsheet_server_command" checked></paper-toggle-button>
+            </td>
+            {/if}
+            {if $spreadsheet_server_status == false}
+            <td class="ow_value">
+                <paper-toggle-button class="server_toggle toggle" id="spreadsheet_server_command" name="spreadsheet_server_command"></paper-toggle-button>
+            </td>
+            {/if}
+        </tr>
+        <tr>
+            <td colspan="2" class="ow_center">
+                <h4>Active room types</h4>
+            </td>
+        </tr>
+        <tr class="ow_alt1">
+            <td class="ow_value">Knowledge room</td>
+            {if $knowledge_room_command == true}
+            <td class="ow_value">
+                <paper-toggle-button class="room_toggle toggle" id="knowledge_room_command" name="knowledge_room_command" checked></paper-toggle-button>
+            </td>
+            {/if}
+            {if $knowledge_room_command == false}
+            <td class="ow_value">
+                <paper-toggle-button class="room_toggle toggle" id="knowledge_room_command" name="knowledge_room_command"></paper-toggle-button>
+            </td>
+            {/if}
+        </tr>
+        <tr class="ow_alt1">
+            <td class="ow_value">Dataset room</td>
+            {if $dataset_room_status == true}
+            <td class="ow_value">
+                <paper-toggle-button class="room_toggle toggle" id="dataset_room_command" name="dataset_room_command" checked></paper-toggle-button>
+            </td>
+            {/if}
+            {if $dataset_room_status == false}
+            <td class="ow_value">
+                <paper-toggle-button class="room_toggle toggle" id="dataset_room_command" name="dataset_room_command"></paper-toggle-button>
+            </td>
+            {/if}
+        </tr>
+        <tr>
+            <td colspan="2" class="ow_center">{submit name='add' class='ow_button ow_ic_save'}</td>
+        </tr>
+    </table>
+    {/form}
+</template>
