@@ -39,7 +39,6 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         $this->assign('members', $members);
         $this->assign('currentUser' , BOL_AvatarService::getInstance()->getDataForUserAvatars(array(OW::getUser()->getId()))[OW::getUser()->getId()]);
 
-
         //comment and rate
         $commentsParams = new BASE_CommentsParams('cocreation', COCREATION_BOL_Service::ROOM_ENTITY_TYPE);
         $commentsParams->setEntityId($params['roomId']);//1001 to test
@@ -78,15 +77,21 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         $this->assign('headers', $headers);
         $this->assign('data', json_encode($data));
 
-        //$this->assign('metadatas', COCREATION_BOL_Service::getInstance()->getMatadatasByRoomId($params['roomId']));
+        $metadata = COCREATION_BOL_Service::getInstance()->getMatadatasByRoomId($params['roomId']);
+
+        $this->assign('core_common_required_metadatas', json_decode($metadata[0]->common_core_required));
+        $this->assign('common_core_if_applicable_metadatas', json_decode($metadata[0]->common_core_if_applicable));
+        $this->assign('expanded_metadatas', json_decode($metadata[0]->expanded));
 
         $js = UTIL_JsGenerator::composeJsString('
-                ODE.ajax_coocreation_room_get_sheetdata   = {$ajax_coocreation_room_get_sheetdata}
+                ODE.ajax_coocreation_room_get_sheetdata      = {$ajax_coocreation_room_get_sheetdata}
+                ODE.ajax_coocreation_room_update_metadatas   = {$ajax_coocreation_room_update_metadatas}
                 COCREATION = {};
-                COCREATION.sheetName                      = {$sheetName}
+                COCREATION.sheetName                         = {$sheetName}
             ', array(
-               'ajax_coocreation_room_get_sheetdata'   => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getSheetData')   . "?sheetName="  . 'testz',
-               'sheetName'                             => $sheetName
+               'ajax_coocreation_room_get_sheetdata'    => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getSheetData') . "?sheetName=" . $sheetName,
+               'ajax_coocreation_room_update_metadatas' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'updateMetadatas'),
+               'sheetName'                              => $sheetName
         ));
         OW::getDocument()->addOnloadScript($js);
         OW::getDocument()->addOnloadScript("data_room.init()");

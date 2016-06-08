@@ -50,7 +50,7 @@ class COCREATION_CTRL_Main extends OW_ActionController
         $this->assign('cocreation_rooms', $visible_rooms);
        /*$this->assign('partialRoomUrl', str_replace("index/", "", OW::getRouter()->urlFor(($room->type == "data") ? 'COCREATION_CTRL_DataRoom'
                                                                                                                   : 'COCREATION_CTRL_KnowledgeRoom', 'index')));*/
-        $this->assign('partialRoomUrl',OW_URL_HOME.'/cocreation/');
+        $this->assign('partialRoomUrl',OW_URL_HOME.'cocreation/');
         $this->assign('isActive', true);
     }
 }

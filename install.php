@@ -74,8 +74,9 @@ CREATE TABLE IF NOT EXISTS `' . OW_DB_PREFIX . 'cocreation_room_sheet` (
 CREATE TABLE IF NOT EXISTS `' . OW_DB_PREFIX . 'cocreation_room_metadata` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `roomId` int(11) NOT NULL,
-  `key` varchar(255),
-  `value` varchar(255),
+  `common_core_required` text,
+  `common_core_if_applicable` text,
+  `expanded` text,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
 

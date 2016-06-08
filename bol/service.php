@@ -71,6 +71,49 @@ class COCREATION_BOL_Service
         return $data;
     }
 
+    public function getArrayOfObjectSheetData($sheetName){
+        $data = array();
+
+        try {
+            $stmt = $this->sheetDBconnection->query("SELECT * FROM store WHERE store.key LIKE '%" . $sheetName . "%'");
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $result = json_decode($result[0]['value']);
+
+            $stmt = $this->sheetDBconnection->query("SELECT * FROM store WHERE store.key LIKE '%" . $result[0] . "%'");
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $rows = json_decode($result[0]['value'], true);
+            $cols = json_decode($result[1]['value'], true);
+            $cells = json_decode($result[2]['value'], true);
+
+            $headers = array();
+            foreach($cols as $col){
+                if($cells[$rows[0]][$col]['value'] == "") break;
+                array_push($headers, $cells[$rows[0]][$col]['value']);
+            }
+
+            for($i = 1; $i < $rows; $i++){
+                $wrong_values = 0;
+                $obj = new stdClass();
+                for($j = 0; $j < count($headers); $j++){
+                    if($cells[$rows[$i]][$cols[$j]]['value'] == "") {$wrong_values++; continue;};
+                    if($cells[$rows[$i]][$cols[$j]]['type'] == 'string')
+                        $obj->{$headers[$j]} = $cells[$rows[$i]][$cols[$j]]['value'];
+                    else
+                        $obj->{$headers[$j]} = intval($cells[$rows[$i]][$cols[$j]]['value']);
+                }
+                if($wrong_values == count($headers)) break;
+                array_push($data, $obj);
+            }
+
+        }catch (PDOException $e){
+            return null;
+        }
+
+        return $data;
+    }
+
     public function addSheetToRoom($roomId, $description, $url){
         $roomSheet = new COCREATION_BOL_RoomSheet();
 
@@ -81,14 +124,59 @@ class COCREATION_BOL_Service
         COCREATION_BOL_RoomSheetDao::getInstance()->save($roomSheet);
     }
 
-    public function addMetadataToRoom($roomId, $key, $value){
+    public function createMetadataForRoom($roomId){
         $roomMetadata = new COCREATION_BOL_RoomMetadata();
 
-        $roomMetadata->roomId      = $roomId;
-        $roomMetadata->key   = $key;
-        $roomMetadata->value = $value;
+        $common_core_required = array(
+           "title"               => "",
+           "description"         => "",
+           "tags"                => "",
+           "last_update"         => "",
+           "publisher"           => "",
+           "contact_name"        => "",
+           "contact_email"       => "",
+           "unique_identifier"   => "",
+           "public_access_level" => ""
+        );
+
+        $common_core_if_applicable = array(
+            "bureau_code"          => "",
+            "program_code"         => "",
+            "access_level_comment" => "",
+            "download_url"         => "",
+            "endpoint"             => "",
+            "format"               => "",
+            "license"              => "",
+            "spatial"              => "",
+            "temporal"             => ""
+        );
+
+        $expanded = array(
+            "category"                  => "",
+            "data_dictionary"           => "",
+            "data_quality"              => "",
+            "distribution"              => "",
+            "frequency"                 => "",
+            "homepage_url"              => "",
+            "language"                  => "",
+            "primary_IT_investment_UII" => "",
+            "related_documents"         => "",
+            "release_date"              => "",
+            "system_of_records"         => "",
+        );
+
+
+        $roomMetadata->roomId                     = $roomId;
+        $roomMetadata->common_core_required       = json_encode($common_core_required);
+        $roomMetadata->common_core_if_applicable  = json_encode($common_core_if_applicable);
+        $roomMetadata->expanded                   = json_encode($expanded);
 
         COCREATION_BOL_RoomMetadataDao::getInstance()->save($roomMetadata);
+    }
+
+    public function updateMetadatas($roomId, $ccr, $ccia, $e)
+    {
+        COCREATION_BOL_RoomMetadataDao::getInstance()->updateMetadatas($roomId,$ccr,$ccia, $e);
     }
 
     public function getSheetByRoomId($roomId)

@@ -45,6 +45,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             //Document for notes related to the dataset
             COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "notes",  rtrim(OW_URL_HOME,"/")   . ":9001" . "/p/notes_room_"  .$room->id."_".$randomString);
             COCREATION_BOL_Service::getInstance()->addSheetToRoom($room->id, "dataset", rtrim(OW_URL_HOME,"/")   . ":8001" . "/s/dataset_room_".$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->createMetadataForRoom($room->id);
         }
 
         //Send message to all members
@@ -113,7 +114,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
 
         echo json_encode(array("status" => "ok", "message" => "dataset successful created in the current room"));
-        $this->emitNotification(["plugin" => "cocreation", "operation" => "addDatasetToRoom", "entity_type" => COCREATION_BOL_Service::ENTITY_TYPE, "entity_id" => $clean['roomId']]);
+        $this->emitNotification(["plugin" => "cocreation", "operation" => "addDatasetToRoom", "entity_type" => COCREATION_BOL_Service::ROOM_ENTITY_TYPE, "entity_id" => $clean['roomId']]);
         exit;
 
     }
@@ -182,12 +183,12 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
         $datalet_postits = COCREATION_BOL_Service::getInstance()->getPostitByDataletId($clean['dataletId']);
 
-        $this->emitNotification(["plugin" => "cocreation",
-                                 "operation" => "addPostitToDatalet",
-                                 "postits" => json_encode($datalet_postits),
-                                 "dataletId" => $clean['dataletId'],
+        $this->emitNotification(["plugin"      => "cocreation",
+                                 "operation"   => "addPostitToDatalet",
+                                 "postits"     => json_encode($datalet_postits),
+                                 "dataletId"   => $clean['dataletId'],
                                  "entity_type" => COCREATION_BOL_Service::ENTITY_TYPE,
-                                 "entity_id" => $clean['roomId']]);
+                                 "entity_id"   => $clean['roomId']]);
         exit;
     }
 
@@ -245,7 +246,39 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             OW::getFeedback()->info(OW::getLanguage()->text('cocreationes', 'insane_values'));
             exit;
         }
-        echo json_encode(COCREATIONES_BOL_Service::getInstance()->getSheetData($clean['sheetName']));
+        echo json_encode(COCREATION_BOL_Service::getInstance()->getSheetData($clean['sheetName']));
         exit;
     }
+
+    public function getArrayOfObjectSheetData(){
+
+        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        if ($clean == null){
+            OW::getFeedback()->info(OW::getLanguage()->text('cocreationes', 'insane_values'));
+            exit;
+        }
+        echo json_encode(COCREATION_BOL_Service::getInstance()->getArrayOfObjectSheetData($clean['sheetName']));
+        exit;
+    }
+
+    public function updateMetadatas()
+    {
+        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        if ($clean == null){
+            /*echo json_encode(array("status" => "error", "massage" => 'Insane inputs detected'));*/
+            OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'insane_user_email_value'));
+            exit;
+        }
+
+        COCREATION_BOL_Service::getInstance()->updateMetadatas($clean['roomId'],
+                                                               $clean['core_common_required_metadatas'],
+                                                               $clean['common_core_if_applicable_metadatas'],
+                                                               $clean['expanded_metadatas']);
+
+
+        echo json_encode(array("status" => "ok", "message" => "metadatas sucessfully update for current room"));
+        exit;
+
+    }
+
 }

@@ -148,5 +148,33 @@ left_data_room.addMetadata = function(){
 }
 
 left_data_room.saveMetadatas = function(){
+    var core_common_required_metadatas      = $("#core_common_required_metadatas").children();
+    var common_core_if_applicable_metadatas = $("#common_core_if_applicable_metadatas").children();
+    var expanded_metadatas                  = $("#expanded_metadatas").children();
 
+    var ccr  = {}
+    var ccia = {}
+    var e    = {}
+
+    for(var i = 0; i < core_common_required_metadatas.length; i++)
+       ccr[$(core_common_required_metadatas[i]).attr('metadata')] = core_common_required_metadatas[i].getValue();
+
+    for(i = 0; i < common_core_if_applicable_metadatas.length; i++)
+        ccia[$(common_core_if_applicable_metadatas[i]).attr('metadata')] = common_core_if_applicable_metadatas[i].getValue();
+
+    for(i = 0; i < expanded_metadatas.length; i++)
+        e[$(expanded_metadatas[i]).attr('metadata')] = expanded_metadatas[i].getValue();
+
+    $.post(ODE.ajax_coocreation_room_update_metadatas,
+        {
+            core_common_required_metadatas      : JSON.stringify(ccr),
+            common_core_if_applicable_metadatas : JSON.stringify(ccia),
+            expanded_metadatas                  : JSON.stringify(e)
+        },
+        function (data, status) {
+
+            var status = JSON.parse(data);
+
+        }
+    );
 }

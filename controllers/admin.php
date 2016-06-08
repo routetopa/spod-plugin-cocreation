@@ -64,7 +64,7 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
             {
                 //is running
                 $this->assign('document_server_status', false);
-                $field->setValue(0);
+                $document_field->setValue(0);
                 shell_exec("/usr/bin/sudo /usr/bin/service etherpad-lite stop");
                 $document_server_status_preference->defaultValue = 'STOP';
             }
@@ -74,7 +74,7 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
                 shell_exec("/usr/bin/sudo /usr/bin/service etherpad-lite start");
                 $document_server_status_preference->defaultValue = 'RUN';
                 $this->assign('document_server_status', true);
-                $field->setValue(1);
+                $document_field->setValue(1);
             }
 
             BOL_PreferenceService::getInstance()->savePreference($document_server_status_preference);
@@ -92,7 +92,7 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
             {
                 //is running
                 $this->assign('spreadsheet_server_status', false);
-                $field->setValue(0);
+                $spreadsheet_field->setValue(0);
                 shell_exec("/usr/bin/sudo /usr/bin/service ethersheet stop");
                 $spreadsheet_server_status_preference->defaultValue = 'STOP';
             }
@@ -102,7 +102,7 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
                 shell_exec("/usr/bin/sudo /usr/bin/service ethersheet start");
                 $spreadsheet_server_status_preference->defaultValue = 'RUN';
                 $this->assign('spreadsheet_server_status', true);
-                $field->setValue(1);
+                $spreadsheet_field->setValue(1);
             }
 
             BOL_PreferenceService::getInstance()->savePreference($spreadsheet_server_status_preference);
