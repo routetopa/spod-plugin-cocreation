@@ -1,6 +1,6 @@
 <?php
 
-class COCREATION_BOL_RoomMetadataDao extends OW_BaseDao
+class COCREATION_BOL_DatasetDao extends OW_BaseDao
 {
 
     /**
@@ -14,14 +14,14 @@ class COCREATION_BOL_RoomMetadataDao extends OW_BaseDao
     /**
      * Singleton instance.
      *
-     * @var COCREATION_BOL_RoomMetadataDao
+     * @var COCREATION_BOL_DatasetDao
      */
     private static $classInstance;
 
     /**
      * Returns an instance of class (singleton pattern implementation).
      *
-     * @return COCREATION_BOL_RoomMetadataDao
+     * @return COCREATION_BOL_DatasetDao
      */
     public static function getInstance()
     {
@@ -39,7 +39,7 @@ class COCREATION_BOL_RoomMetadataDao extends OW_BaseDao
      */
     public function getDtoClassName()
     {
-        return 'COCREATION_BOL_RoomMetadata';
+        return 'COCREATION_BOL_Dataset';
     }
 
     /**
@@ -48,15 +48,6 @@ class COCREATION_BOL_RoomMetadataDao extends OW_BaseDao
      */
     public function getTableName()
     {
-        return OW_DB_PREFIX . 'cocreation_room_metadata';
-    }
-
-    public function updateMetadatas($roomId, $ccr, $ccia, $e )
-    {
-        $query = 'UPDATE ' . $this->getTableName() . ' SET ' .
-            'common_core_required=\'' . $ccr .'\', common_core_if_applicable=\'' . $ccia .'\', expanded=\'' . $e .'\'' .
-            ' WHERE roomId=' . $roomId;
-
-        return $this->dbo->query($query);
+        return OW_DB_PREFIX . 'cocreation_dataset';
     }
 }

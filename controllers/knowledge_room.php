@@ -26,6 +26,7 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
 
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl()                . 'cocreation.js', 'text/javascript');
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl()                . 'masonry.pkgd.min.js', 'text/javascript');
+        OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl()                . 'cocreation-room.js', 'text/javascript');
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl()                . 'cocreation-knowledge.js', 'text/javascript');
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl()                . 'perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js', 'text/javascript');
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticUrl()                  . 'components/js/' . 'dataletsSlider.js', 'text/javascript');
@@ -97,6 +98,7 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
                 /*COCREATION  = {}*/
                 COCREATION.roomId                       = {$roomId}
                 COCREATION.entity_type                  = {$entity_type}
+                COCREATION.room_type                    = "knowledge"
             ', array(
                 'current_room_url'                    => str_replace("/index", "", OW::getRouter()->urlFor('COCREATION_CTRL_KnowledgeRoom', 'index')) . $params['roomId'],
                 'ajax_coocreation_room_add_dataset'   => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'addDatasetToRoom')   . "?roomId="  . $params['roomId'],

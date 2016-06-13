@@ -58,6 +58,7 @@ copySettings()
     cp ethersheet_service.js /home/ethersheet/ethersheet/EtherSheet/lib
     cp ethersheet.js /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client
     cp -R ./styles/* /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client/styles
+    cp -R ./it/* /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client/locales
     tput setaf 2
     echo "done"
 }

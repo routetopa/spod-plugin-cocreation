@@ -56,8 +56,6 @@ $( document ).ready(function() {
     room.loadDataletsSlider();
 });
 
-var room = document.querySelector('template[is="dom-bind"]');
-
 room.selectedMode            = 1;
 room.selectedTab_cocreation  = 0;
 room.selectedTab_data        = 0;
@@ -94,9 +92,6 @@ room._onModeChange = function(e){
     }
 };
 
-room._openInfo = function(){
-    room.$.dialog_info.open();
-};
 
 room._addDataset = function(){
         previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_AddDatasetForm', {}, {
@@ -161,32 +156,9 @@ room._handleCcModeClick = function(e){
     }
 }
 
-room.loadDataletsSlider = function(){
-    var roomId = window.location.pathname.split("/")[window.location.pathname.split("/").length - 1];
-
-    $.post(OW.ajaxComponentLoaderRsp + "?cmpClass=COCREATION_CMP_DataletsSlider",
-        {params: "[\"" + roomId + "\"]"},
-        function (data, status) {
-            data = JSON.parse(data);
-            //onloadScript
-            var onload = document.createElement('script');
-            onload.setAttribute("type","text/javascript");
-            onload.innerHTML = data.onloadScript;
-            //script files
-            $('#datalets_slider_container').html(data.content);
-            $('#addDatalet').click(function(){room._addDatalet()});
-
-            var event = new CustomEvent('page-slider-controllet_selected',{ detail : {'selected' : ODE.numDataletsInCocreationRooom - 1 }});
-            window.dispatchEvent(event);
-
-            room.sliderRefreshCurrentDatalet();
-        });
-}
-
 room.loadDatasetsLibrary = function() {
-    var roomId = window.location.pathname.split("/")[window.location.pathname.split("/").length - 1];
     $.post(OW.ajaxComponentLoaderRsp + "?cmpClass=COCREATION_CMP_DatasetsLibrary",
-        {params: "[\"" + roomId + "\"]"},
+        {params: "[\"" + COCREATION.roomId + "\"]"},
         function (data, status) {
             data = JSON.parse(data);
             //onloadScript
@@ -202,15 +174,6 @@ room.loadDatasetsLibrary = function() {
         });
 }
 
-room.inviteNewUsers = function(){
-    previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_AddMembers', { roomId : window.location.pathname.split("/")[window.location.pathname.split("/").length - 1]}, {
-        width: '40%',
-        height: '30vh',
-        iconClass: 'ow_ic_add',
-        title: ''
-    });
-}
-
 room.refreshDatasets = function(){
     $.post(ODE.ajax_coocreation_room_get_datasets, {} ,
         function(data){
@@ -218,6 +181,36 @@ room.refreshDatasets = function(){
             SPODPUBLICROOM.suggested_datasets = data.suggested_datasets;
         });
 }
+
+/*room.loadDataletsSlider = function(){
+ $.post(OW.ajaxComponentLoaderRsp + "?cmpClass=COCREATION_CMP_DataletsSlider",
+ {params: "[\"" + COCREATION.roomId + "\"]"},
+ function (data, status) {
+ data = JSON.parse(data);
+ //onloadScript
+ var onload = document.createElement('script');
+ onload.setAttribute("type","text/javascript");
+ onload.innerHTML = data.onloadScript;
+ //script files
+ $('#datalets_slider_container').html(data.content);
+ $('#addDatalet').click(function(){room._addDatalet()});
+
+ var event = new CustomEvent('page-slider-controllet_selected',{ detail : {'selected' : ODE.numDataletsInCocreationRooom - 1 }});
+ window.dispatchEvent(event);
+
+ room.sliderRefreshCurrentDatalet();
+ });
+ }
+
+
+ room.inviteNewUsers = function(){
+ previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_AddMembers', { roomId : window.location.pathname.split("/")[window.location.pathname.split("/").length - 1]}, {
+ width: '40%',
+ height: '30vh',
+ iconClass: 'ow_ic_add',
+ title: ''
+ });
+ }
 
 room.init = function(){
     var socket = io("http://" + window.location.hostname +":3000");
@@ -240,4 +233,4 @@ room.init = function(){
                 break;
         }
     });
-}
+}*/

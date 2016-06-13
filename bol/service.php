@@ -176,7 +176,7 @@ class COCREATION_BOL_Service
 
     public function updateMetadatas($roomId, $ccr, $ccia, $e)
     {
-        COCREATION_BOL_RoomMetadataDao::getInstance()->updateMetadatas($roomId,$ccr,$ccia, $e);
+        return COCREATION_BOL_RoomMetadataDao::getInstance()->updateMetadatas($roomId,$ccr,$ccia, $e);
     }
 
     public function getSheetByRoomId($roomId)
@@ -374,6 +374,50 @@ class COCREATION_BOL_Service
         $example->andFieldEqual('dataletId', $dataletId);
         $result = COCREATION_BOL_RoomPostitDao::getInstance()->findListByExample($example);
         for($i=0;$i < count($result);$i++) $result[$i]->content = htmlspecialchars($result[$i]->content);
+        return $result;
+    }
+
+    public function addDataset($roomId,
+                               $owners,
+                               $datasetId,
+                               $data,
+                               $notes,
+                               $common_core_required_metadatas,
+                               $common_core_if_applicable_metadatas,
+                               $expanded_metadatas)
+    {
+        //get last version and up it
+        $version = 1;
+        $result = $this->getDatasetsByDatasetId($datasetId);
+        if(count($result) > 0){
+            $version = $result[count($result) - 1]->version + 1;
+        }
+
+        $dataset = new COCREATION_BOL_Dataset();
+
+        $dataset->roomId                              = $roomId;
+        $dataset->owners                              = json_encode($owners);
+        $dataset->datasetId                           = $datasetId;
+        $dataset->version                             = $version;
+        $dataset->data                                = $data;
+        $dataset->notes                               = $notes;
+        $dataset->common_core_required_metadatas      = json_encode($common_core_required_metadatas);
+        $dataset->common_core_if_applicable_metadatas = json_encode($common_core_if_applicable_metadatas);
+        $dataset->expanded_metadatas                  = json_encode($expanded_metadatas);
+
+        COCREATION_BOL_DatasetDao::getInstance()->save($dataset);
+    }
+
+    public function  getAllDatasets()
+    {
+        return COCREATION_BOL_DatasetDao::getInstance()->findAll();
+    }
+
+    public function getDatasetsByDatasetId($datasetId)
+    {
+        $example = new OW_Example();
+        $example->andFieldEqual('datasetId', $datasetId);
+        $result = COCREATION_BOL_DatasetDao::getInstance()->findListByExample($example);
         return $result;
     }
 }

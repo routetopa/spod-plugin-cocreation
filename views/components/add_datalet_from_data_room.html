@@ -1,0 +1,25 @@
+<link rel="import" href="{$components_url}controllets/data-sevc-controllet/co-datalets-creator-controllet.html"/>
+<script src="{$components_url}locales/controllet_ln.js" type="text/javascript"></script>
+<script src="{$components_url}locales/paper_card_controllet_ln.js" type="text/javascript"></script>
+
+<style>
+    div.clearfix.floatbox_cap{
+        display: none;
+    }
+</style>
+
+{literal}
+<script>
+    $(document).ready(function(){
+        window.addEventListener('data-sevc-controllet.dataletCreated', function(e){
+            ODE.savedDataletListener(e);
+        });
+    });
+</script>
+{/literal}
+
+<co-datalets-creator-controllet
+        deep-url="http://192.168.164.128/deep/DEEP/"
+        data-url={$dataUrl}
+        datalets-list-url="http://192.168.164.128/deep/DEEP/datalets-list">
+</co-datalets-creator-controllet>

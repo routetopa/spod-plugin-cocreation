@@ -8,8 +8,11 @@ $(document).ready(function(){
                 sheetName: COCREATION.sheetName
             },
             function (data, status) {
-                $("#datalet")[0].behavior.data = JSON.parse(data);
-                data_room.refreshDatalet();
+                var datalet = $('div[id^="datalet_placeholder_"]').children();
+                for(var i=1; i < datalet.length; i+=2){
+                    datalet[i].behavior.data = JSON.parse(data);
+                }
+                room.loadDataletsSlider();
             }
         );
     });
@@ -49,18 +52,17 @@ $(document).ready(function(){
         }
     });
 });
-var data_room = document.querySelector('template[is="dom-bind"]');
 
-data_room.cc_mode          = "";
-data_room.cc_selected_mode = "";
+room.cc_mode          = "";
+room.cc_selected_mode = "";
 
-data_room._handleCcModeClick = function(e){
-    data_room.cc_mode = e.currentTarget.id;
+room._handleCcModeClick = function(e){
+    room.cc_mode = e.currentTarget.id;
     switch(e.currentTarget.id) {
         case "cc_mode_0":
-            if(data_room.cc_selected_mode == "cc_mode_0") break;
+            if(room.cc_selected_mode == "cc_mode_0") break;
             $("#datalets_slider_container").toggle('blind',
-                { direction: 'top'},
+                { direction: 'top' },
                 function(){
                     $("#datalets_slider_container").css('display', 'none');
                     $("#shared_spreadsheet").css('width', '100%');
@@ -69,10 +71,10 @@ data_room._handleCcModeClick = function(e){
             $("#cc_mode_1").css('background-color', '#B6B6B6');
             $("#cc_mode_2").css('background-color', '#B6B6B6');
             $(e.currentTarget).css('background-color', '#00BCD4');
-            data_room.cc_selected_mode = "cc_mode_0";
+            room.cc_selected_mode = "cc_mode_0";
             break;
         case "cc_mode_1":
-            if(data_room.cc_selected_mode == "cc_mode_1") break;
+            if(room.cc_selected_mode == "cc_mode_1") break;
             $("#datalets_slider_container").toggle('blind',
                 { direction: 'top'},
                 function(){
@@ -84,11 +86,11 @@ data_room._handleCcModeClick = function(e){
             $("#cc_mode_0").css('background-color', '#B6B6B6');
             $("#cc_mode_2").css('background-color', '#B6B6B6');
             $(e.currentTarget).css('background-color', '#00BCD4');
-            data_room.cc_selected_mode = "cc_mode_1";
-            data_room.refreshDatalet();
+            room.cc_selected_mode = "cc_mode_1";
+            room.refreshDatalet();
             break;
         case "cc_mode_2":
-            if(data_room.cc_selected_mode == "cc_mode_2") break;
+            if(room.cc_selected_mode == "cc_mode_2") break;
             $("#datalets_slider_container").toggle('blind',
                 { direction: 'top'},
                 function(){
@@ -100,37 +102,73 @@ data_room._handleCcModeClick = function(e){
             $("#cc_mode_0").css('background-color', '#B6B6B6');
             $("#cc_mode_1").css('background-color', '#B6B6B6');
             $(e.currentTarget).css('background-color', '#00BCD4');
-            data_room.cc_selected_mode = "cc_mode_2";
-            data_room.refreshDatalet();
+            room.cc_selected_mode = "cc_mode_2";
+            room.refreshDatalet();
             break;
     }
 }
 
-data_room.refreshDatalet = function(){
-    setTimeout(function () {
-        var datalet = $('#datalet')[0];
+room.current_dataset = "";
 
-        if (datalet != undefined && datalet.behavior != undefined && datalet.nodeName != "DATATABLE-DATALET") {
-            if (datalet.refresh != undefined)
-                datalet.refresh();
-            else {
-                datalet.behavior.transformData();
-                datalet.behavior.presentData();
-            }
+room._publishDataset = function(){
+    $.post(ODE.ajax_coocreation_room_get_array_sheetdata,
+        {
+            sheetName: COCREATION.sheetName
+        },
+        function (data, status) {
+             room.current_dataset = data;
+             ODE.pluginPreview = "cocreation";
+             previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_PublishDataset', {data: data} , {width:'90%', height:'90vh', iconClass:'ow_ic_lens', title:''});
         }
-    }, 1500);
+    );
 }
 
-data_room._openInfo = function(){
-    data_room.$.dialog_info.open();
-};
+room.confirmDatasetPublication = function(){
+    $.get(ODE.ajax_coocreation_room_get_html_note,
+        function (data, status) {
+            if(JSON.parse(data).status == "ok")
+            {
+                var metadatas = room.getMetadatas();
+                $.post(ODE.ajax_coocreation_room_publish_dataset,
+                    {
+                        roomId                              : COCREATION.roomId,
+                        datasetId                           : COCREATION.sheetName,
+                        owners                              : COCREATION.room_members,
+                        data                                : room.current_dataset,
+                        notes                               : data,
+                        common_core_required_metadatas      : metadatas.core_common_required_metadatas,
+                        common_core_if_applicable_metadatas : metadatas.core_common_if_applicable_metadatas,
+                        expanded_metadatas                  : metadatas.expanded_metadatas
+                    },
+                    function (data, status) {
 
-data_room.init = function(){
-    //catch ethersheet messages
-    /*var socket = io("http://" + window.location.hostname +":8001");
-    socket.on('*', function(rawData) {
-        console.log("ilc");
-    });*/
+                    }
+                );
+            }
+        }
+    );
+}
+
+room.getMetadatas = function()
+{
+    var core_common_required_metadatas      = $("#core_common_required_metadatas").children();
+    var common_core_if_applicable_metadatas = $("#common_core_if_applicable_metadatas").children();
+    var expanded_metadatas                  = $("#expanded_metadatas").children();
+
+    var ccr  = {};
+    var ccia = {};
+    var e    = {};
+
+    for(var i = 0; i < core_common_required_metadatas.length; i++)
+        ccr[$(core_common_required_metadatas[i]).attr('metadata')] = core_common_required_metadatas[i].getValue();
+
+    for(i = 0; i < common_core_if_applicable_metadatas.length; i++)
+        ccia[$(common_core_if_applicable_metadatas[i]).attr('metadata')] = common_core_if_applicable_metadatas[i].getValue();
+
+    for(i = 0; i < expanded_metadatas.length; i++)
+        e[$(expanded_metadatas[i]).attr('metadata')] = expanded_metadatas[i].getValue();
+
+    return {core_common_required_metadatas : ccr, core_common_if_applicable_metadatas : ccia, expanded_metadatas : e };
 }
 
 var left_data_room = document.querySelector('#left_data_room');
@@ -148,33 +186,26 @@ left_data_room.addMetadata = function(){
 }
 
 left_data_room.saveMetadatas = function(){
-    var core_common_required_metadatas      = $("#core_common_required_metadatas").children();
-    var common_core_if_applicable_metadatas = $("#common_core_if_applicable_metadatas").children();
-    var expanded_metadatas                  = $("#expanded_metadatas").children();
 
-    var ccr  = {}
-    var ccia = {}
-    var e    = {}
-
-    for(var i = 0; i < core_common_required_metadatas.length; i++)
-       ccr[$(core_common_required_metadatas[i]).attr('metadata')] = core_common_required_metadatas[i].getValue();
-
-    for(i = 0; i < common_core_if_applicable_metadatas.length; i++)
-        ccia[$(common_core_if_applicable_metadatas[i]).attr('metadata')] = common_core_if_applicable_metadatas[i].getValue();
-
-    for(i = 0; i < expanded_metadatas.length; i++)
-        e[$(expanded_metadatas[i]).attr('metadata')] = expanded_metadatas[i].getValue();
+    var metadatas = room.getMetadatas();
 
     $.post(ODE.ajax_coocreation_room_update_metadatas,
         {
-            core_common_required_metadatas      : JSON.stringify(ccr),
-            common_core_if_applicable_metadatas : JSON.stringify(ccia),
-            expanded_metadatas                  : JSON.stringify(e)
+            roomId                              : COCREATION.roomId,
+            core_common_required_metadatas      : JSON.stringify(metadatas.core_common_required_metadatas),
+            common_core_if_applicable_metadatas : JSON.stringify(metadatas.core_common_if_applicable_metadatas),
+            expanded_metadatas                  : JSON.stringify(metadatas.expanded_metadatas)
         },
         function (data, status) {
 
-            var status = JSON.parse(data);
-
+            var response = JSON.parse(data);
+            if(response.status == "ok"){
+                left_data_room.$.syncMessage.innerHTML = "Metadatas successfully saved";
+                left_data_room.$.syncToast.show();
+            }else{
+                left_data_room.$.syncMessage.innerHTML = "Error saving metadatas. Please check the values.";
+                left_data_room.$.syncToast.show();
+            }
         }
     );
 }

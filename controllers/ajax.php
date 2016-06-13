@@ -157,7 +157,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             COCREATION_BOL_Service::getInstance()->addDataletToRoom($clean['roomId'], $datalet->id);
             OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_add_datalet_successful'));
             echo json_encode(array("status" => "ok", "message" => "datalet successful created in the current room", "dataletId" => $datalet->id));
-            $this->emitNotification(["plugin" => "cocreation", "operation" => "addDataletToRoom", "entity_type" => COCREATION_BOL_Service::ENTITY_TYPE, "entity_id" => $clean['roomId']]);
+            $this->emitNotification(["plugin" => "cocreation", "operation" => "addDataletToRoom", "entity_type" => COCREATION_BOL_Service::ROOM_ENTITY_TYPE, "entity_id" => $clean['roomId']]);
             exit;
         }else{
             OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_add_datalet_fail'));
@@ -187,7 +187,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
                                  "operation"   => "addPostitToDatalet",
                                  "postits"     => json_encode($datalet_postits),
                                  "dataletId"   => $clean['dataletId'],
-                                 "entity_type" => COCREATION_BOL_Service::ENTITY_TYPE,
+                                 "entity_type" => COCREATION_BOL_Service::ROOM_ENTITY_TYPE,
                                  "entity_id"   => $clean['roomId']]);
         exit;
     }
@@ -252,6 +252,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
     public function getArrayOfObjectSheetData(){
 
+        //ser cors header
         $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
         if ($clean == null){
             OW::getFeedback()->info(OW::getLanguage()->text('cocreationes', 'insane_values'));
@@ -265,20 +266,68 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
     {
         $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
         if ($clean == null){
-            /*echo json_encode(array("status" => "error", "massage" => 'Insane inputs detected'));*/
             OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'insane_user_email_value'));
             exit;
         }
 
-        COCREATION_BOL_Service::getInstance()->updateMetadatas($clean['roomId'],
-                                                               $clean['core_common_required_metadatas'],
-                                                               $clean['common_core_if_applicable_metadatas'],
-                                                               $clean['expanded_metadatas']);
+        if(COCREATION_BOL_Service::getInstance()->updateMetadatas($clean['roomId'],
+                                                                  $clean['core_common_required_metadatas'],
+                                                                  $clean['common_core_if_applicable_metadatas'],
+                                                                  $clean['expanded_metadatas']))
 
-
-        echo json_encode(array("status" => "ok", "message" => "metadatas sucessfully update for current room"));
+           echo json_encode(array("status" => "ok", "message" => "metadatas sucessfully update for current room"));
+        else
+           echo json_encode(array("status" => "error", "message" => "error in sql syntax"));
         exit;
 
+    }
+
+    public function publishDataset()
+    {
+        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        if ($clean == null){
+            OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'insane_user_email_value'));
+            exit;
+        }
+
+        COCREATION_BOL_Service::getInstance()->addDataset($clean['roomId'],
+                                                          $clean['owners'],
+                                                          $clean['datasetId'],
+                                                          $clean['data'],
+                                                          $clean['notes'],
+                                                          $clean['common_core_required_metadatas'],
+                                                          $clean['common_core_if_applicable_metadatas'],
+                                                          $clean['expanded_metadatas'],
+                                                          $clean['timestamp']);
+        exit;
+    }
+
+    function getNoteHTMLByPadIDApiUrl() {
+        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        if ($clean == null){
+            OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'insane_user_email_value'));
+            exit;
+        }
+
+        try {
+            $apiurl = rtrim(OW_URL_HOME, "/") . ":9001/api/1/getHTML?apikey=e20a517df87a59751b0f01d708e2cb6496cf6a59717ccfde763360f68a7bfcec&padID=" . explode("/", $clean['noteUrl'])[4];
+            $ch = curl_init();
+            // you should put here url of your getinfo.php script
+            curl_setopt($ch, CURLOPT_URL, $apiurl);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $result = curl_exec($ch);
+            curl_close($ch);
+            $result = json_decode($result);
+            if($result->message == "ok")
+                echo json_encode(array("status" => "ok", "data" => $result->data->html));
+            else
+                echo json_encode(array("status" => "error", "message" => "error getting note content"));
+
+        }catch(Exception $e){
+            echo json_encode(array("status" => "error", "message" => "error getting note content"));
+        }finally{
+            exit;
+        }
     }
 
 }

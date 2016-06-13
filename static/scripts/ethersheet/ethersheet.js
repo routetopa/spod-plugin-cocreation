@@ -153,7 +153,7 @@ Ethersheet.prototype.sendCommand = function(c){
     this.socket.send(Command.serialize(c));
   }
 
-  console.log(c);
+  //console.log(c);
   if(c.type == "sheet" && c.action == "commitCell"){
     top.postMessage("ethersheet_sheet_updated", 'http://' + window.location.hostname);
   }

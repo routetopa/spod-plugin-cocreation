@@ -46,10 +46,14 @@ window.addEventListener('postit-container-controllet_create-new-postit', functio
 room._addDatalet = function(op){
     switch(op)
     {
-        case "new":
+        case "knowledge":
             room.refreshDatasets();
             ODE.pluginPreview = "cocreation";
-            previewFloatBox = OW.ajaxFloatBox('ODE_CMP_Preview', {text:'testo'} , {width:'90%', height:'90vh', iconClass:'ow_ic_lens', title:''});
+            previewFloatBox = OW.ajaxFloatBox('ODE_CMP_Preview', {} , {width:'90%', height:'90vh', iconClass:'ow_ic_lens', title:''});
+            break;
+        case "data":
+            ODE.pluginPreview = "cocreation";
+            previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_AddDataletFromDataRoom', {dataUrl:ODE.ajax_coocreation_room_get_array_sheetdata} , {width:'90%', height:'70vh', iconClass:'ow_ic_lens', title:''});
             break;
         case "myspace":
             break;

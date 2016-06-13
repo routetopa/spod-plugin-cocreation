@@ -93,7 +93,6 @@
         <div id="datalet_placeholder_{$smarty.foreach.alldatalets.index}" class="datalet-container">
             <link rel="import" href="{$components_url}datalets/{$datalet->component}/{$datalet->component}.html">
             <{$datalet->component}
-            data='{$datalet->data}'
             fields='[{$datalet->fields}]'
             {foreach key=key item=value from=$datalet->params}
             {$key}='{$value}'
@@ -101,7 +100,7 @@
             >
         </{$datalet->component}>
         </div>
-        <div id="postit_container_{$datalet->id}">
+        <div class="postit_container" id="postit_container_{$datalet->id}">
             <postit-container-controllet id="postit_{$datalet->id}" class="postit" data='{$postits[$datalet->id]}'></postit-container-controllet>
         </div>
     </neon-animatable>
@@ -111,5 +110,5 @@
 </page-slider-controllet>
 
 <!--<paper-fab title='{text key="cocreationep+new_datalet"}' mini icon="assessment" onclick="room._addDatalet('new');"></paper-fab>-->
-<iron-icon class="add_new_datalet" mini icon="assessment" onclick="room._addDatalet('new');"></iron-icon>
+<iron-icon class="add_new_datalet" mini icon="assessment" onclick="room._addDatalet(COCREATION.room_type);"></iron-icon>
 {$private_room}

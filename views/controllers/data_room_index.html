@@ -273,6 +273,20 @@
         float:left;
     }
 
+    .postit_container{
+        display: none;
+    }
+
+    #share_from_private_room{
+        display: none;
+    }
+
+    iron-icon.add_new_datalet{
+        position: fixed;
+        bottom: 52px;
+        right: 30px;
+    }
+
 </style>
 
 {/literal}
@@ -357,7 +371,6 @@
             </div>
         </div>
     </paper-dialog>
-
 </template>
 <div class="layout vertical" style="background-color:#e8e8e8;margin-top: 5px;">
     <paper-material id="comments_container" elevation="5" class="layout vertical">
@@ -420,7 +433,7 @@
                                         description="Most recent date on which the dataset was changed, updated or modified."
                                         heading="Last Update"
                                         value="{$core_common_required_metadatas->last_update}"
-                                        metadata="tags"
+                                        metadata="last_updates"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="5"
@@ -618,20 +631,18 @@
                     <paper-tab noink on-click="_tabClicked" id="2">{text key="cocreation+metadata"}</paper-tab>
                 </paper-tabs>
             </div>
+
+            <paper-toast id="syncToast" duration="0" text="">
+                <div class="layout horizontal">
+                    <h5>{text key="cocreation+room_sync_toast"}</h5>
+                    <paper-button onclick="syncToast.toggle()" class="blue-button"><b>x</b></paper-button>
+                </div>
+                <div class="layout vertical" id="syncMessage"></div>
+            </paper-toast>
+
         </template>
         <paper-material id="datalets_slider_container" elevation="3" style="width: 50%;height:73vh;background-color:#FFFFFF;padding:8px;overflow:scroll;">
-            <linechart-datalet
-                    id="datalet"
-                    data='{$data}'
-                    filters='[]'
-                    aggregators='[]'
-                    orders='[]'
-                    description='description'
-                    title='On the fly visualization'
-                    x-axis-label='{$headers[0]}'
-                    y-axis-label='{$headers[1]}'
-                    suffix='euro'
-                    theme='themeBase'></linechart-datalet>
+            {$datalets_slider}
         </paper-material>
     </div>
 </div>
