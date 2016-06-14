@@ -142,7 +142,7 @@ room.confirmDatasetPublication = function(){
                     },
                     function (data, status) {
                         previewFloatBox.close();
-                        
+                        OW.info("Dataset successful published");
                     }
                 );
             }
