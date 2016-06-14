@@ -410,7 +410,16 @@ class COCREATION_BOL_Service
 
     public function  getAllDatasets()
     {
-        return COCREATION_BOL_DatasetDao::getInstance()->findAll();
+        $sql = "SELECT * FROM ". OW_DB_PREFIX ."cocreation_dataset order by roomId DESC, version DESC";
+        return OW::getDbo()->queryForObjectList($sql, 'COCREATION_BOL_Dataset');
+    }
+
+    public function  getDatasetByRoomIdAndVersion($roomId, $version)
+    {
+        $ex = new OW_Example();
+        $ex->andFieldEqual('roomId', $roomId);
+        $ex->andFieldEqual('version', $version);
+        return COCREATION_BOL_DatasetDao::getInstance()->findObjectByExample($ex);
     }
 
     public function getDatasetsByDatasetId($datasetId)
