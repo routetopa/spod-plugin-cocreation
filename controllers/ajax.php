@@ -384,7 +384,6 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         echo json_encode($data);
         exit;
     }
-
     /* AND */
 
 }
