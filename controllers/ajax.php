@@ -330,4 +330,54 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         }
     }
 
+    /* AND */
+    public function getDatasetByRoomIdAndVersion()
+    {
+        $room_id = $_REQUEST["room_id"];
+        $version = $_REQUEST["version"];
+
+        header("Access-Control-Allow-Origin: *");
+        echo COCREATION_BOL_Service::getInstance()->getDatasetByRoomIdAndVersion($room_id, $version)->data;
+        exit;
+    }
+
+    public function getDatasetDocByRoomIdAndVersion()
+    {
+        $room_id = $_REQUEST["room_id"];
+        $version = $_REQUEST["version"];
+
+        header("Access-Control-Allow-Origin: *");
+        $notes = COCREATION_BOL_Service::getInstance()->getDatasetByRoomIdAndVersion($room_id, $version)->notes;
+        $notes = json_decode($notes);
+        echo $notes->data;
+        exit;
+    }
+
+    public function getAllDataset()
+    {
+        $datasets = COCREATION_BOL_Service::getInstance()->getAllDatasets();
+        $data = array();
+
+        foreach ($datasets as $dataset)
+        {
+            $common_core_required_metadatas = json_decode($dataset->common_core_required_metadatas);
+
+            $data[] = array(
+                'w' => 1,
+                'provider_name' => 'p:99',
+                'organization_name' => '',
+                'package_name' => $common_core_required_metadatas->title,
+                'resource_name' => $common_core_required_metadatas->title . " - " . $dataset->version,
+                'url' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getDatasetByRoomIdAndVersion') . "?room_id=" . $dataset->roomId . "&version=" . $dataset->version,
+                'metas' => $dataset->common_core_required_metadatas
+            );
+        }
+
+        header("Access-Control-Allow-Origin: *");
+        echo json_encode($data);
+        exit;
+    }
+
+    /* AND */
+
 }
