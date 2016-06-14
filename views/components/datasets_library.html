@@ -22,8 +22,21 @@
         float: left;
     }
 
+    #dataset-grid-container{
+        position: relative;
+        height: 77vh;
+        overflow-x: auto;
+    }
+
 
 </style>
+
+<script>
+    $(document).ready(function(){
+        $("#dataset-grid-container").perfectScrollbar();
+    });
+
+</script>
 {/literal}
 
 <div id="dataset-grid-container">

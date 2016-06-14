@@ -287,11 +287,28 @@
         right: 30px;
     }
 
+    #overlay{
+        z-index: 1;
+        position:absolute;
+        top:0;
+        left:0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
 </style>
 
 {/literal}
 
 <template id="data_room" is="dom-bind">
+    {if $isMember == false}
+    <div id="overlay">
+        <h1 style="position: relative; top: 25%; left: 10%;">{text key="cocreation+concreation_not_member"}</h1>
+    </div>
+    {/if}
+    {if $isMember == true}
+
     <paper-toolbar class="toolbar-main">
         <paper-icon-button id="info_room_button" icon="info" on-tap="_openInfo"></paper-icon-button>
         <paper-icon-button id="publish_dataset_button" icon="editor:publish" on-tap="_publishDataset"></paper-icon-button>
@@ -646,6 +663,7 @@
         </paper-material>
     </div>
 </div>
+{/if}
 
 <!-- ODE PRIVATE-ROOM -->
 <div>

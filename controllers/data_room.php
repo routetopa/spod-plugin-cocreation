@@ -4,6 +4,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
 {
     public function index(array $params)
     {
+        OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl() . 'cocreation.js');
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl() . 'cocreation-room.js');
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl() . 'cocreation-data.js');
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('spodpublic')->getStaticJsUrl() . 'perfect-scrollbar.jquery.js');
@@ -94,7 +95,6 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                 ODE.ajax_coocreation_room_add_datalet         = {$ajax_coocreation_room_add_datalet}
                 ODE.ajax_coocreation_room_publish_dataset     = {$ajax_coocreation_room_publish_dataset}
                 ODE.ajax_coocreation_room_get_html_note       = {$ajax_coocreation_room_get_html_note}
-                COCREATION = {};
                 COCREATION.sheetName                          = {$sheetName}
                 COCREATION.roomId                             = {$roomId}
                 COCREATION.room_type                          = "data"

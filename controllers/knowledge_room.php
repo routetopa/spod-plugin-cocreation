@@ -76,13 +76,8 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
                 $this->addComponent('datalets_slider', new COCREATION_CMP_DataletsSlider($params['roomId']));
             }
 
-            $datasets = COCREATION_BOL_Service::getInstance()->getDatasetsByRoomId($params['roomId']);
-            $suggested_datasets_string = '[';
-            foreach($datasets as $dataset) $suggested_datasets_string .= '{"resource_name":"' . $dataset->name .'","url": "' . $dataset->url .'","metas" : { "description" : "' . $dataset->name .'"}},';
-            $suggested_datasets_string = rtrim($suggested_datasets_string, ",") . ']';
-
             $this->assign('components_url', SPODPR_COMPONENTS_URL);
-            $this->assign('datasets_list', ODE_DATASET_LIST);
+            $this->assign('datasets_list', ODE_BOL_Service::getInstance()->getSettingByKey('openwall_dataset_list')->value);
 
             $js = UTIL_JsGenerator::composeJsString('
                 ODE.current_room_url                    = {$current_room_url}
@@ -94,8 +89,7 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
                 ODE.numDataletsInCocreationRooom        = {$numDataletsInRoom}
                 ODE.pluginPreview                       = "cocreation"
                 SPODPUBLICROOM = {}
-                SPODPUBLICROOM.suggested_datasets       = {$coocreation_room_suggested_datasets}
-                /*COCREATION  = {}*/
+                /*SPODPUBLICROOM.suggested_datasets       = {$cocreation_room_suggested_datasets}*/
                 COCREATION.roomId                       = {$roomId}
                 COCREATION.entity_type                  = {$entity_type}
                 COCREATION.room_type                    = "knowledge"
@@ -107,7 +101,6 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
                 'ajax_coocreation_room_get_datalets'  => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getRoomDatalets')    . "?roomId="  . $params['roomId'],
                 'ajax_coocreation_room_add_postit'    => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'addPostitToDatalet') . "?roomId="  . $params['roomId'],
                 'numDataletsInRoom'                   => count(COCREATION_BOL_Service::getInstance()->getDataletsByRoomId($params['roomId'])),
-                'coocreation_room_suggested_datasets' => $suggested_datasets_string,
                 'roomId'                              => $params['roomId'],
                 'entity_type'                         => COCREATION_BOL_Service::ROOM_ENTITY_TYPE
             ));

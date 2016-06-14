@@ -12,12 +12,12 @@ error_reporting(-1);
 class COCREATION_CTRL_Ajax extends OW_ActionController
 {
     public function createRoom(){
-            $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
-            if ($clean == null){
-                /*echo json_encode(array("status" => "error", "massage" => 'Insane inputs detected'));*/
-                OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'insane_user_email_value'));
-                exit;
-            }
+        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        if ($clean == null){
+            /*echo json_encode(array("status" => "error", "massage" => 'Insane inputs detected'));*/
+            OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'insane_user_email_value'));
+            exit;
+        }
 
         $room = COCREATION_BOL_Service::getInstance()->addRoom(
             OW::getUser()->getId(),
@@ -29,7 +29,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             $clean['goal'],
             $clean['invitation_text'],
             empty($clean['is_open']) ? 0 : 1,
-            implode(" ", $clean['users_value']),
+            implode("#######", $clean['users_value']),
             $clean['room_type']
         );
 
@@ -128,11 +128,19 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         }
         $datasets = COCREATION_BOL_Service::getInstance()->getDatasetsByRoomId($clean['roomId']);
 
-        $suggested_datasets_string = '[';
-        foreach($datasets as $dataset) $suggested_datasets_string .= '{"name":"' . $dataset->name .'","url": "' . $dataset->url .'","description" : "' . $dataset->name .'"},';
-        $suggested_datasets_string = rtrim($suggested_datasets_string, ",") . ']';
+        $suggested_datasets = array();
+        foreach($datasets as $dataset){
+            $d = new stdClass();
+            $metas = new stdClass();
+            $metas->description = $dataset->description;
 
-        echo json_encode(array("status" => "ok", "suggested_datasets" => $suggested_datasets_string));
+            $d->resource_name =  $dataset->name;
+            $d->url           =  $dataset->url;
+            $d->metas         =  json_encode($metas);
+            array_push($suggested_datasets, $d);
+        }
+
+        echo json_encode(array("status" => "ok", "suggested_datasets" => json_encode($suggested_datasets)));
         exit;
     }
 
@@ -224,7 +232,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             exit;
         }
 
-        COCREATIONEP_BOL_Service::getInstance()->memberJoinToRoom($clean['memberId'], $clean['roomId']);
+        COCREATION_BOL_Service::getInstance()->memberJoinToRoom($clean['memberId'], $clean['roomId']);
     }
 
     private function emitNotification($map){
@@ -297,8 +305,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
                                                           $clean['notes'],
                                                           $clean['common_core_required_metadatas'],
                                                           $clean['common_core_if_applicable_metadatas'],
-                                                          $clean['expanded_metadatas'],
-                                                          $clean['timestamp']);
+                                                          $clean['expanded_metadatas']);
         exit;
     }
 

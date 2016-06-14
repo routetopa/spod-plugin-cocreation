@@ -17,6 +17,7 @@
 <link rel="import" href="{$components_url}controllets/page-slider-controllet/page-slider-controllet.html"/>
 <link rel="import" href="{$components_url}controllets/postit-container-controllet/postit-container-controllet.html"/>
 <link rel="import" href="{$components_url}controllets/dataset-selection-controllet/dataset-selection-controllet.html"/>
+<link rel="import" href="{$components_url}controllets/select-dataset-controllet/select-dataset-controllet.html"/>
 <link rel="import" href="{$components_url}controllets/select-data-controllet/select-data-controllet.html"/>
 
 <link rel="import" href="{$components_url}controllets/document-card-controllet/document-card-controllet.html"/>
@@ -332,9 +333,13 @@
                          <div id="add_dataset_container" class="layout horizontal">
                              <page-slider-controllet id="slider_dataset" style="width: 100%; margin-top: 10px;height: 81vh;overflow: scroll">
                                  <neon-animatable id="pass_1">
-                                         <dataset-selection-controllet id="dataset_selection"
+                                         <!--<dataset-selection-controllet id="dataset_selection"
                                                                        datasets='{$datasets_list}'>
-                                         </dataset-selection-controllet>
+                                         </dataset-selection-controllet>-->
+                                     <select-dataset-controllet
+                                             id="dataset_selection"
+                                             datasets='{$datasets_list}'>
+                                         </select-dataset-controllet>
                                  </neon-animatable>
 
                                  <neon-animatable id="pass_2">

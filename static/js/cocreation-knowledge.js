@@ -1,7 +1,6 @@
 $( document ).ready(function() {
    $("#grid-container").perfectScrollbar();
    $("#dialog_content").perfectScrollbar();
-   $("#dataset-grid-container").perfectScrollbar();
 
    window.addEventListener('page-slider-controllet_selected', function(e){
         ln["localization"] = "en";
@@ -23,11 +22,17 @@ $( document ).ready(function() {
     });
 
     window.addEventListener('dataset-selection-controllet_data-url', function(e){
-        $("#pass_2_select_data_container").html('<select-data-controllet id="select_data_controllet" data-url=' + e.detail.url + '></select-data-controllet>');
+        //To get all entry for selected dataset
+        /*var f = Object.create(providerFactory);
+        var provider = f.getProvider(e.detail.url);
+        var dataUrl = provider.addLimit(e.detail.url);*/
+
+        room.$.select_data_controllet.dataUrl =  e.detail.url;
+        room.$.select_data_controllet.init();
     });
 
-    window.addEventListener('tree-view-controllet_selected-fields', function(e){
-        room.selectedDatasetFields = e.detail.fields;
+    window.addEventListener('select-fields-controllet_selected-fields', function(e){
+        room.selectedDatasetFields = room.$.select_data_controllet.getSelectedFields();
     });
 
     window.addEventListener('create_dataset_form-form_submitted', function(e){
