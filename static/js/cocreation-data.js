@@ -149,8 +149,7 @@ room.confirmDatasetPublication = function(){
     );
 }
 
-room.getMetadatas = function()
-{
+room.getMetadatas = function(){
     var core_common_required_metadatas      = $("#core_common_required_metadatas").children();
     var common_core_if_applicable_metadatas = $("#common_core_if_applicable_metadatas").children();
     var expanded_metadatas                  = $("#expanded_metadatas").children();
@@ -169,6 +168,23 @@ room.getMetadatas = function()
         e[$(expanded_metadatas[i]).attr('metadata')] = expanded_metadatas[i].getValue();
 
     return {core_common_required_metadatas : ccr, core_common_if_applicable_metadatas : ccia, expanded_metadatas : e };
+}
+
+room.loadMetadatas = function(core_common_required_metadatas, common_core_if_applicable_metadatas, expanded_metadatas){
+
+    for(var meta in core_common_required_metadatas){
+
+        $("[metadata='"+ meta + "']")[0].value = core_common_required_metadatas[meta];
+    }
+
+    for(meta in common_core_if_applicable_metadatas){
+        $("[metadata='"+ meta + "']")[0].value = common_core_if_applicable_metadatas[meta];
+    }
+
+    for(meta in expanded_metadatas){
+        $("[metadata='"+ meta + "']")[0].value = expanded_metadatas[meta];
+    }
+
 }
 
 var left_data_room = document.querySelector('#left_data_room');

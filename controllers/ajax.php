@@ -281,10 +281,19 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         if(COCREATION_BOL_Service::getInstance()->updateMetadatas($clean['roomId'],
                                                                   $clean['core_common_required_metadatas'],
                                                                   $clean['common_core_if_applicable_metadatas'],
-                                                                  $clean['expanded_metadatas']))
+                                                                  $clean['expanded_metadatas'])) {
 
-           echo json_encode(array("status" => "ok", "message" => "metadatas sucessfully update for current room"));
-        else
+            echo json_encode(array("status" => "ok", "message" => "metadatas sucessfully update for current room"));
+
+            $this->emitNotification(["plugin"                              => "cocreation",
+                                     "operation"                           => "updateMetadatas",
+                                     "core_common_required_metadatas"      => $clean['core_common_required_metadatas'],
+                                     "common_core_if_applicable_metadatas" => $clean['common_core_if_applicable_metadatas'],
+                                     "expanded_metadatas"                  => $clean['expanded_metadatas'],
+                                     "entity_type" => COCREATION_BOL_Service::ROOM_ENTITY_TYPE,
+                                     "entity_id"   => $clean['roomId']
+            ]);
+        }else
            echo json_encode(array("status" => "error", "message" => "error in sql syntax"));
         exit;
 
