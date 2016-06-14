@@ -14,20 +14,27 @@ class COCREATION_CMP_DatasetsLibrary extends OW_Component
         $datasets = COCREATION_BOL_Service::getInstance()->getDatasetsByRoomId($roomId);
         $this->assign('datasets', $datasets);
 
-        $suggested_datasets_string = '[';
-        //foreach($datasets as $dataset) $suggested_datasets_string .= '{"name":"' . $dataset->name .'","url": "' . $dataset->url .'","description" : "' . $dataset->name .'"},';
-        foreach($datasets as $dataset) $suggested_datasets_string .= '{"resource_name":"' . $dataset->name .'","url": "' . $dataset->url .'","metas" : { "description" : "' . $dataset->name .'"}},';
-        $suggested_datasets_string = rtrim($suggested_datasets_string, ",") . ']';
+        $suggested_datasets = array();
+        foreach($datasets as $dataset){
+            $d = new stdClass();
+            $metas = new stdClass();
+            $metas->description = $dataset->description;
+
+            $d->resource_name =  $dataset->name;
+            $d->url           =  $dataset->url;
+            $d->metas         =  json_encode($metas);
+            array_push($suggested_datasets, $d);
+        }
 
         $this->assign('components_url', SPODPR_COMPONENTS_URL);
         $this->assign('datasets_list', ODE_DATASET_LIST);
 
         $js = UTIL_JsGenerator::composeJsString('
                 SPODPUBLICROOM = {}
-                SPODPUBLICROOM.suggested_datasets       = {$coocreation_room_suggested_datasets}
+                SPODPUBLICROOM.suggested_datasets       = {$cocreation_room_suggested_datasets}
             ', array(
             'numDataletsInRoom'                   => count(COCREATION_BOL_Service::getInstance()->getDataletsByRoomId($roomId)),
-            'coocreation_room_suggested_datasets' => $suggested_datasets_string
+            'cocreation_room_suggested_datasets'  => json_encode($suggested_datasets)
         ));
 
         OW::getDocument()->addOnloadScript($js);
