@@ -141,7 +141,8 @@ room.confirmDatasetPublication = function(){
                         expanded_metadatas                  : metadatas.expanded_metadatas
                     },
                     function (data, status) {
-
+                        previewFloatBox.close();
+                        
                     }
                 );
             }
