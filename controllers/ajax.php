@@ -328,7 +328,6 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         try {
             $apiurl = rtrim(OW_URL_HOME, "/") . ":9001/api/1/getHTML?apikey=e20a517df87a59751b0f01d708e2cb6496cf6a59717ccfde763360f68a7bfcec&padID=" . explode("/", $clean['noteUrl'])[4];
             $ch = curl_init();
-            // you should put here url of your getinfo.php script
             curl_setopt($ch, CURLOPT_URL, $apiurl);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $result = curl_exec($ch);
