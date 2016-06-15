@@ -142,7 +142,7 @@ room.confirmDatasetPublication = function(){
                     },
                     function (data, status) {
                         previewFloatBox.close();
-                        OW.info("Dataset successful published");
+                        OW.info(OW.getLanguageText('cocreation', 'dataset_successfully_published'));
                     }
                 );
             }
@@ -217,10 +217,10 @@ left_data_room.saveMetadatas = function(){
 
             var response = JSON.parse(data);
             if(response.status == "ok"){
-                left_data_room.$.syncMessage.innerHTML = "Metadatas successfully saved";
+                left_data_room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'metadata_successfully_saved');
                 left_data_room.$.syncToast.show();
             }else{
-                left_data_room.$.syncMessage.innerHTML = "Error saving metadatas. Please check the values.";
+                left_data_room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'error_metadata_updates');
                 left_data_room.$.syncToast.show();
             }
         }

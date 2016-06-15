@@ -80,7 +80,8 @@
 
 </style>
 
-<page-slider-controllet id="slider_datalets" prev-entry-animation="fade-in-animation"
+<page-slider-controllet id="slider_datalets"
+                        prev-entry-animation="fade-in-animation"
                         prev-exit-animation="fade-out-animation"
                         next-entry-animation="fade-in-animation"
                         next-exit-animation="fade-out-animation"
@@ -109,6 +110,6 @@
 
 </page-slider-controllet>
 
-<!--<paper-fab title='{text key="cocreationep+new_datalet"}' mini icon="assessment" onclick="room._addDatalet('new');"></paper-fab>-->
+
 <iron-icon class="add_new_datalet" mini icon="assessment" onclick="room._addDatalet(COCREATION.room_type);"></iron-icon>
 {$private_room}

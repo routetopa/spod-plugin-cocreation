@@ -391,7 +391,7 @@
 </template>
 <div class="layout vertical" style="background-color:#e8e8e8;margin-top: 5px;">
     <paper-material id="comments_container" elevation="5" class="layout vertical">
-        <h5 style="position: absolute; margin: 5px; top: 0px; left: 20px;">Discussion</h5>
+        <h5 style="position: absolute; margin: 5px; top: 0px; left: 20px;">{text key="cocreation+room_discussion_tab_label"}</h5>
         <paper-fab id="fullscreen-comment-open-button" class="fullscreen-button" mini icon="arrow-drop-up"></paper-fab>
         <paper-fab id="fullscreen-comment-close-button" class="fullscreen-button" mini icon="arrow-drop-down"></paper-fab>
         <div id="comments_content">
@@ -643,9 +643,9 @@
 
                 </iron-pages>
                 <paper-tabs id="data_tab" selected="[[selectedTab]]">
-                    <paper-tab noink on-click="_tabClicked" id="0">{text key="cocreation+dataset"}</paper-tab>
-                    <paper-tab noink on-click="_tabClicked" id="1">{text key="cocreation+notes"}</paper-tab>
-                    <paper-tab noink on-click="_tabClicked" id="2">{text key="cocreation+metadata"}</paper-tab>
+                    <paper-tab noink on-click="_tabClicked" id="0">{text key="cocreation+room_dataset_tab_label"}</paper-tab>
+                    <paper-tab noink on-click="_tabClicked" id="1">{text key="cocreation+room_notes_tab_label"}</paper-tab>
+                    <paper-tab noink on-click="_tabClicked" id="2">{text key="cocreation+room_metadata_tab_label"}</paper-tab>
                 </paper-tabs>
             </div>
 

@@ -175,7 +175,7 @@ room.loadDatasetsLibrary = function() {
             previewFloatBox.close();
             room.$.slider_dataset.selected = 0;
             room.selectedTab_data          = 2;
-            OW.info(OW.getLanguageText('cocreationep', 'dataset_successful_added'));
+            OW.info(OW.getLanguageText('cocreation', 'dataset_successfully_added'));
         });
 }
 

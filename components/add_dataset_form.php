@@ -17,7 +17,7 @@ class COCREATION_CMP_AddDatasetForm extends OW_Component
 
         $name = new TextField('name');
         $name->setId('dataset_name');
-        $name->setDescription(OW::getLanguage()->text('cocreation', 'name_max_40_char'));
+        $name->setDescription(OW::getLanguage()->text('cocreation', 'name_more_than_40_char'));
         $name->setRequired(true);
         $name->addValidator($nameValidator);
 

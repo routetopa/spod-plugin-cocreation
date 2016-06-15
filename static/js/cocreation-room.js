@@ -19,26 +19,26 @@ room.init = function(){
         switch(rawData.operation){
             case "addDatasetToRoom":
                 room.loadDatasetsLibrary();
-                room.$.syncMessage.innerHTML = "New dataset has been added";
+                room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'dataset_successfully_added');
                 room.$.syncToast.show();
                 break;
             case "addDataletToRoom":
                 var scope = room;
                 if(COCREATION.room_type == "data") scope = left_data_room;
                 room.loadDataletsSlider();
-                scope.$.syncMessage.innerHTML = "New datalet has been added";
+                scope.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'datalet_successfully_added');
                 scope.$.syncToast.show();
                 break;
             case "addPostitToDatalet":
                 room._handleCcModeClick({currentTarget : {id : room.cc_mode}});
-                room.$.syncMessage.innerHTML = "New postit has been added";
+                room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'postit_successfully_added');
                 room.$.syncToast.show();
                 break;
             case "updateMetadatas":
                 room.loadMetadatas(JSON.parse(rawData.core_common_required_metadatas),
                                    JSON.parse(rawData.common_core_if_applicable_metadatas),
                                    JSON.parse(rawData.expanded_metadatas ));
-                left_data_room.$.syncMessage.innerHTML = "Metadatas updates";
+                left_data_room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'metadata_successfully_updated');
                 left_data_room.$.syncToast.show();
                 break;
         }

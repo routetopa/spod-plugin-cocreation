@@ -33,8 +33,8 @@ class COCREATION_CMP_DatasetsLibrary extends OW_Component
                 SPODPUBLICROOM = {}
                 SPODPUBLICROOM.suggested_datasets       = {$cocreation_room_suggested_datasets}
             ', array(
-            'numDataletsInRoom'                   => count(COCREATION_BOL_Service::getInstance()->getDataletsByRoomId($roomId)),
-            'cocreation_room_suggested_datasets'  => json_encode($suggested_datasets)
+               'numDataletsInRoom'                   => count(COCREATION_BOL_Service::getInstance()->getDataletsByRoomId($roomId)),
+               'cocreation_room_suggested_datasets'  => json_encode($suggested_datasets)
         ));
 
         OW::getDocument()->addOnloadScript($js);

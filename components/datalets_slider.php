@@ -34,9 +34,9 @@ class COCREATION_CMP_DataletsSlider extends OW_Component
         /* ODE */
 
         $js = UTIL_JsGenerator::composeJsString('
-                ODE.numDataletsInCocreationRooom       = {$numDataletsInRoom}
+                ODE.numDataletsInCocreationRooom = {$numDataletsInRoom}
             ', array(
-            'numDataletsInRoom' => count($room_datalets)
+               'numDataletsInRoom' => count($room_datalets)
         ));
 
         OW::getDocument()->addOnloadScript($js);
