@@ -349,21 +349,27 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
     /* AND */
     public function getDatasetByRoomIdAndVersion()
     {
-        $room_id = $_REQUEST["room_id"];
-        $version = $_REQUEST["version"];
+        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        if ($clean == null){
+            OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'insane_user_email_value'));
+            exit;
+        }
 
         header("Access-Control-Allow-Origin: *");
-        echo COCREATION_BOL_Service::getInstance()->getDatasetByRoomIdAndVersion($room_id, $version)->data;
+        echo COCREATION_BOL_Service::getInstance()->getDatasetByRoomIdAndVersion($clean['room_id'], $clean['version'])->data;
         exit;
     }
 
     public function getDatasetDocByRoomIdAndVersion()
     {
-        $room_id = $_REQUEST["room_id"];
-        $version = $_REQUEST["version"];
+        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        if ($clean == null){
+            OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'insane_user_email_value'));
+            exit;
+        }
 
         header("Access-Control-Allow-Origin: *");
-        $notes = COCREATION_BOL_Service::getInstance()->getDatasetByRoomIdAndVersion($room_id, $version)->notes;
+        $notes = COCREATION_BOL_Service::getInstance()->getDatasetByRoomIdAndVersion($clean['room_id'], $clean['version'])->notes;
         $notes = json_decode($notes);
         echo $notes->data;
         exit;
