@@ -36,14 +36,14 @@ class COCREATION_CTRL_DataRoomList extends OW_ActionController
             foreach ($users as $user)
             {
                 $avatar = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($user));
-                $avatars[] = $avatar[$user]["src"];
+                $avatars[] = array("src" => $avatar[$user]["src"], "href" => $avatar[$user]["url"]);
             }
 
             $common_core_required_metadatas = json_decode($data->common_core_required_metadatas);
 
             $dataset[] = array("ID" => $data->roomId,
                                "VER" => $data->version,
-                               "USER" => implode(",", $avatars),
+                               "USER" => $avatars,
                                "NAME" => $common_core_required_metadatas->title,
                                "DATA" => date('d/m/Y', strtotime($data->timestamp)),
                                "DESCRIPTION" => $common_core_required_metadatas->description
