@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 BCOLOR=3
 ABSOLUTE_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
+DBPWD="$1"
+
 #define functions
 createUser()
 {
@@ -41,7 +43,8 @@ createDatabase()
     tput sgr0
     #Commands
     cd ${ABSOLUTE_PATH}
-    mysql -u root -pis15rdc < db.sql
+    mysql -u root -p${DBPWD} -e "SET PASSWORD FOR 'ethersheet'@'localhost' = PASSWORD('ethersheet');"
+    mysql -u root -p${DBPWD} < db.sql
     tput setaf 2
     echo "done"
 }
@@ -168,7 +171,7 @@ echo "7.  Make www-data able to start EtherSheet service"
 # Set bold mode
 tput bold
 tput cup 14 15
-read -p "Enter your choice [1-10] " choice
+read -p "Enter your choice [1-7] " choice
 
 case $choice in
    1) createUser
