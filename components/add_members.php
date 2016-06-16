@@ -15,7 +15,7 @@ class COCREATION_CMP_AddMembers extends OW_Component
 
             $friendsInfo[] = array(
                 "id" => $user->id,
-                "name" => BOL_UserService::getInstance()->getDisplayName($user->id),
+                "name" => filter_var(BOL_UserService::getInstance()->getDisplayName($user->id), FILTER_SANITIZE_SPECIAL_CHARS),
                 "username" => $user->username,
                 "email" => $user->email,
                 "avatar" => $avatar[$user->id]["src"],
@@ -26,7 +26,7 @@ class COCREATION_CMP_AddMembers extends OW_Component
         $this->assign('friends_info', json_encode($friendsInfo));
         $this->assign('components_url', SPODPR_COMPONENTS_URL);
 
-        $form = new Form('CoCreationEpAddMembersForm');
+        $form = new Form('CoCreationAddMembersForm');
 
         $usersValue  = new HiddenField('users_value');
         $usersValue->setValue("");
