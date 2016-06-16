@@ -18,7 +18,7 @@ class COCREATION_CMP_CreateRoom extends OW_Component
 
             $friendsInfo[] = array(
                               "id" => $user->id,
-                              "name" => BOL_UserService::getInstance()->getDisplayName($user->id),
+                              "name" => filter_var(BOL_UserService::getInstance()->getDisplayName($user->id), FILTER_SANITIZE_SPECIAL_CHARS),
                               "username" => $user->username,
                               "email" => $user->email,
                               "avatar" => $avatar[$user->id]["src"],
