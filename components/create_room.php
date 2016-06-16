@@ -29,7 +29,7 @@ class COCREATION_CMP_CreateRoom extends OW_Component
         $this->assign('friends_info', json_encode($friendsInfo));
         $this->assign('components_url', SPODPR_COMPONENTS_URL);
 
-        $form = new Form('CoCreationEpAddRoomForm');
+        $form = new Form('CoCreationAddRoomForm');
 
         $name = new TextField('name');
         $name->setRequired(true);
