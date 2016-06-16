@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 BCOLOR=3
 ABSOLUTE_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
+DBPWD="$1"
 #define functions
 createUser()
 {
@@ -36,7 +37,8 @@ createDatabase()
     echo "3. Create database\r\r"
     tput sgr0
     #Commands
-    mysql -u root -pis15rdc -e "create database etherpadLite; grant all privileges on etherpadLite.* to 'etherpad'@'localhost' identified by 'is15rdc';exit"
+    mysql -u root -p${DBPWD} -e "SET PASSWORD FOR 'etherpad'@'localhost' = PASSWORD('etherpad');"
+    mysql -u root -p${DBPWD} -e "create database etherpadLite; grant all privileges on etherpadLite.* to 'etherpad'@'localhost' identified by 'etherpad';exit"
     tput setaf 2
     echo "done"
 }
@@ -77,7 +79,7 @@ alterTables()
     echo "5. Alter etherpad tables for production\r\r"
     tput sgr0
     #Commands
-    mysql -u root -pis15rdc -e "alter database etherpadLite character set utf8 collate utf8_bin; use etherpadLite; alter table store convert to character set utf8 collate utf8_bin; exit;"
+    mysql -u root -p${DBPWD} -e "alter database etherpadLite character set utf8 collate utf8_bin; use etherpadLite; alter table store convert to character set utf8 collate utf8_bin; exit;"
     tput setaf 2
     echo "done"
 }
@@ -125,7 +127,7 @@ installPlugins()
     npm install ep_font_family
     npm install ep_font_size
     npm install ep_mammoth_custom
-    npm install ep_disable_change_author_name
+    #npm install ep_disable_change_author_name
     tput setaf 2
     echo "done"
 }
