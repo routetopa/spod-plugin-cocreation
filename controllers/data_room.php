@@ -83,15 +83,15 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
 
         $metadata = COCREATION_BOL_Service::getInstance()->getMatadatasByRoomId($params['roomId']);
 
-        $this->assign('core_common_required_metadatas', json_decode($metadata[0]->common_core_required));
-        $this->assign('common_core_if_applicable_metadatas', json_decode($metadata[0]->common_core_if_applicable));
-        $this->assign('expanded_metadatas', json_decode($metadata[0]->expanded));
+        $this->assign('core_common_required_metadata', json_decode($metadata[0]->common_core_required));
+        $this->assign('common_core_if_applicable_metadata', json_decode($metadata[0]->common_core_if_applicable));
+        $this->assign('expanded_metadata', json_decode($metadata[0]->expanded));
         $this->addComponent('datalets_slider', new COCREATION_CMP_DataletsSlider($params['roomId']));
 
         $js = UTIL_JsGenerator::composeJsString('
                 ODE.ajax_coocreation_room_get_sheetdata       = {$ajax_coocreation_room_get_sheetdata}
                 ODE.ajax_coocreation_room_get_array_sheetdata = {$ajax_coocreation_room_get_array_sheetdata}
-                ODE.ajax_coocreation_room_update_metadatas    = {$ajax_coocreation_room_update_metadatas}
+                ODE.ajax_coocreation_room_update_metadata     = {$ajax_coocreation_room_update_metadata}
                 ODE.ajax_coocreation_room_add_datalet         = {$ajax_coocreation_room_add_datalet}
                 ODE.ajax_coocreation_room_publish_dataset     = {$ajax_coocreation_room_publish_dataset}
                 ODE.ajax_coocreation_room_get_html_note       = {$ajax_coocreation_room_get_html_note}
@@ -103,7 +103,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
             ', array(
                'ajax_coocreation_room_get_sheetdata'       => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getSheetData')              . "?sheetName=" . $sheetName,
                'ajax_coocreation_room_get_array_sheetdata' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getArrayOfObjectSheetData') . "?sheetName=" . $sheetName,
-               'ajax_coocreation_room_update_metadatas'    => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'updateMetadatas'),
+               'ajax_coocreation_room_update_metadata'     => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'updateMetadata'),
                'ajax_coocreation_room_add_datalet'         => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'addDataletToRoom')          . "?roomId="  . $params['roomId'],
                'ajax_coocreation_room_publish_dataset'     => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'publishDataset'),
                'ajax_coocreation_room_get_html_note'       => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getNoteHTMLByPadIDApiUrl')  . "?noteUrl="  . $noteUrl,

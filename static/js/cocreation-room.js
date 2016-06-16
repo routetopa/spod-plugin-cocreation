@@ -34,10 +34,10 @@ room.init = function(){
                 room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'postit_successfully_added');
                 room.$.syncToast.show();
                 break;
-            case "updateMetadatas":
-                room.loadMetadatas(JSON.parse(rawData.core_common_required_metadatas),
-                                   JSON.parse(rawData.common_core_if_applicable_metadatas),
-                                   JSON.parse(rawData.expanded_metadatas ));
+            case "updateMetadata":
+                room.loadMetadata(JSON.parse(rawData.core_common_required_metadata),
+                                   JSON.parse(rawData.common_core_if_applicable_metadata),
+                                   JSON.parse(rawData.expanded_metadata ));
                 left_data_room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'metadata_successfully_updated');
                 left_data_room.$.syncToast.show();
                 break;

@@ -8,8 +8,8 @@ class COCREATION_BOL_Dataset extends OW_Entity
     public $version;
     public $data;
     public $notes;
-    public $common_core_required_metadatas;
-    public $common_core_if_applicable_metadatas;
-    public $expanded_metadatas;
+    public $common_core_required_metadata;
+    public $common_core_if_applicable_metadata;
+    public $expanded_metadata;
     public $timestamp;
 }

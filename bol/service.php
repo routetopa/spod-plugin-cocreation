@@ -174,9 +174,9 @@ class COCREATION_BOL_Service
         COCREATION_BOL_RoomMetadataDao::getInstance()->save($roomMetadata);
     }
 
-    public function updateMetadatas($roomId, $ccr, $ccia, $e)
+    public function updateMetadata($roomId, $ccr, $ccia, $e)
     {
-        return COCREATION_BOL_RoomMetadataDao::getInstance()->updateMetadatas($roomId,$ccr,$ccia, $e);
+        return COCREATION_BOL_RoomMetadataDao::getInstance()->updateMetadata($roomId,$ccr,$ccia, $e);
     }
 
     public function getSheetByRoomId($roomId)
@@ -382,9 +382,9 @@ class COCREATION_BOL_Service
                                $datasetId,
                                $data,
                                $notes,
-                               $common_core_required_metadatas,
-                               $common_core_if_applicable_metadatas,
-                               $expanded_metadatas)
+                               $common_core_required_metadata,
+                               $common_core_if_applicable_metadata,
+                               $expanded_metadata)
     {
         //get last version and up it
         $version = 1;
@@ -395,15 +395,15 @@ class COCREATION_BOL_Service
 
         $dataset = new COCREATION_BOL_Dataset();
 
-        $dataset->roomId                              = $roomId;
-        $dataset->owners                              = json_encode($owners);
-        $dataset->datasetId                           = $datasetId;
-        $dataset->version                             = $version;
-        $dataset->data                                = $data;
-        $dataset->notes                               = $notes;
-        $dataset->common_core_required_metadatas      = json_encode($common_core_required_metadatas);
-        $dataset->common_core_if_applicable_metadatas = json_encode($common_core_if_applicable_metadatas);
-        $dataset->expanded_metadatas                  = json_encode($expanded_metadatas);
+        $dataset->roomId                             = $roomId;
+        $dataset->owners                             = json_encode($owners);
+        $dataset->datasetId                          = $datasetId;
+        $dataset->version                            = $version;
+        $dataset->data                               = $data;
+        $dataset->notes                              = $notes;
+        $dataset->common_core_required_metadata      = json_encode($common_core_required_metadata);
+        $dataset->common_core_if_applicable_metadata = json_encode($common_core_if_applicable_metadata);
+        $dataset->expanded_metadata                  = json_encode($expanded_metadata);
 
         COCREATION_BOL_DatasetDao::getInstance()->save($dataset);
     }

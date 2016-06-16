@@ -88,9 +88,9 @@ CREATE TABLE IF NOT EXISTS `' . OW_DB_PREFIX . 'cocreation_dataset` (
   `version` int(11) NOT NULL,
   `data` text,
   `notes` text,
-  `common_core_required_metadatas` text,
-  `common_core_if_applicable_metadatas` text,
-  `expanded_metadatas` text,
+  `common_core_required_metadata` text,
+  `common_core_if_applicable_metadata` text,
+  `expanded_metadata` text,
   `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;

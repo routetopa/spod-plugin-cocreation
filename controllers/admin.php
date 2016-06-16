@@ -47,7 +47,7 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
         $submit->setValue('SAVE');
         $form->addElement($submit);
 
-        if ( OW::getRequest()->isPost() && $form->isValid($_POST))
+        if ( OW::getRequest()->isPost() && $form->isValid($_POST) )
         {
             $data = $form->getValues();
 

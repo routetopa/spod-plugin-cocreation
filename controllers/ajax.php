@@ -270,7 +270,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         exit;
     }
 
-    public function updateMetadatas()
+    public function updateMetadata()
     {
         $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
         if ($clean == null){
@@ -278,18 +278,18 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             exit;
         }
 
-        if(COCREATION_BOL_Service::getInstance()->updateMetadatas($clean['roomId'],
-                                                                  $clean['core_common_required_metadatas'],
-                                                                  $clean['common_core_if_applicable_metadatas'],
-                                                                  $clean['expanded_metadatas'])) {
+        if(COCREATION_BOL_Service::getInstance()->updateMetadata($clean['roomId'],
+                                                                  $clean['core_common_required_metadata'],
+                                                                  $clean['common_core_if_applicable_metadata'],
+                                                                  $clean['expanded_metadata'])) {
 
-            echo json_encode(array("status" => "ok", "message" => "metadatas sucessfully update for current room"));
+            echo json_encode(array("status" => "ok", "message" => "metadata sucessfully update for current room"));
 
             $this->emitNotification(["plugin"                              => "cocreation",
-                                     "operation"                           => "updateMetadatas",
-                                     "core_common_required_metadatas"      => $clean['core_common_required_metadatas'],
-                                     "common_core_if_applicable_metadatas" => $clean['common_core_if_applicable_metadatas'],
-                                     "expanded_metadatas"                  => $clean['expanded_metadatas'],
+                                     "operation"                           => "updateMetadata",
+                                     "core_common_required_metadata"      => $clean['core_common_required_metadata'],
+                                     "common_core_if_applicable_metadata" => $clean['common_core_if_applicable_metadata'],
+                                     "expanded_metadata"                  => $clean['expanded_metadata'],
                                      "entity_type" => COCREATION_BOL_Service::ROOM_ENTITY_TYPE,
                                      "entity_id"   => $clean['roomId']
             ]);
@@ -312,9 +312,9 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
                                                           $clean['datasetId'],
                                                           $clean['data'],
                                                           $clean['notes'],
-                                                          $clean['common_core_required_metadatas'],
-                                                          $clean['common_core_if_applicable_metadatas'],
-                                                          $clean['expanded_metadatas']);
+                                                          $clean['common_core_required_metadata'],
+                                                          $clean['common_core_if_applicable_metadata'],
+                                                          $clean['expanded_metadata']);
         exit;
     }
 
@@ -381,16 +381,16 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
         foreach ($datasets as $dataset)
         {
-            $common_core_required_metadatas = json_decode($dataset->common_core_required_metadatas);
+            $common_core_required_metadata = json_decode($dataset->common_core_required_metadata);
 
             $data[] = array(
                 'w' => 1,
                 'provider_name' => 'p:99',
                 'organization_name' => '',
-                'package_name' => $common_core_required_metadatas->title,
-                'resource_name' => $common_core_required_metadatas->title . " - " . $dataset->version,
+                'package_name' => $common_core_required_metadata->title,
+                'resource_name' => $common_core_required_metadata->title . " - " . $dataset->version,
                 'url' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getDatasetByRoomIdAndVersion') . "?room_id=" . $dataset->roomId . "&version=" . $dataset->version,
-                'metas' => $dataset->common_core_required_metadatas
+                'metas' => $dataset->common_core_required_metadata
             );
         }
 

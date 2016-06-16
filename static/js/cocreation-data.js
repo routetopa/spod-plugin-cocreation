@@ -1,6 +1,6 @@
 $(document).ready(function(){
     $('#comments_content').perfectScrollbar();
-    $('#metadatas').perfectScrollbar();
+    $('#metadata').perfectScrollbar();
 
     window.addEventListener('message', function(e){
         $.post(ODE.ajax_coocreation_room_get_sheetdata,
@@ -128,7 +128,7 @@ room.confirmDatasetPublication = function(){
         function (data, status) {
             if(JSON.parse(data).status == "ok")
             {
-                var metadatas = room.getMetadatas();
+                var metadata = room.getMetadata();
                 $.post(ODE.ajax_coocreation_room_publish_dataset,
                     {
                         roomId                              : COCREATION.roomId,
@@ -136,9 +136,9 @@ room.confirmDatasetPublication = function(){
                         owners                              : COCREATION.room_members,
                         data                                : room.current_dataset,
                         notes                               : data,
-                        common_core_required_metadatas      : metadatas.core_common_required_metadatas,
-                        common_core_if_applicable_metadatas : metadatas.core_common_if_applicable_metadatas,
-                        expanded_metadatas                  : metadatas.expanded_metadatas
+                        common_core_required_metadata       : metadata.core_common_required_metadata,
+                        common_core_if_applicable_metadat   : metadata.core_common_if_applicable_metadata,
+                        expanded_metadata                   : metadata.expanded_metadata
                     },
                     function (data, status) {
                         previewFloatBox.close();
@@ -150,40 +150,40 @@ room.confirmDatasetPublication = function(){
     );
 }
 
-room.getMetadatas = function(){
-    var core_common_required_metadatas      = $("#core_common_required_metadatas").children();
-    var common_core_if_applicable_metadatas = $("#common_core_if_applicable_metadatas").children();
-    var expanded_metadatas                  = $("#expanded_metadatas").children();
+room.getMetadata = function(){
+    var core_common_required_metadata      = $("#core_common_required_metadata").children();
+    var common_core_if_applicable_metadata = $("#common_core_if_applicable_metadata").children();
+    var expanded_metadata                  = $("#expanded_metadata").children();
 
     var ccr  = {};
     var ccia = {};
     var e    = {};
 
-    for(var i = 0; i < core_common_required_metadatas.length; i++)
-        ccr[$(core_common_required_metadatas[i]).attr('metadata')] = core_common_required_metadatas[i].getValue();
+    for(var i = 0; i < core_common_required_metadata.length; i++)
+        ccr[$(core_common_required_metadata[i]).attr('metadata')] = core_common_required_metadata[i].getValue();
 
-    for(i = 0; i < common_core_if_applicable_metadatas.length; i++)
-        ccia[$(common_core_if_applicable_metadatas[i]).attr('metadata')] = common_core_if_applicable_metadatas[i].getValue();
+    for(i = 0; i < common_core_if_applicable_metadata.length; i++)
+        ccia[$(common_core_if_applicable_metadata[i]).attr('metadata')] = common_core_if_applicable_metadata[i].getValue();
 
-    for(i = 0; i < expanded_metadatas.length; i++)
-        e[$(expanded_metadatas[i]).attr('metadata')] = expanded_metadatas[i].getValue();
+    for(i = 0; i < expanded_metadata.length; i++)
+        e[$(expanded_metadata[i]).attr('metadata')] = expanded_metadata[i].getValue();
 
-    return {core_common_required_metadatas : ccr, core_common_if_applicable_metadatas : ccia, expanded_metadatas : e };
+    return {core_common_required_metadata : ccr, core_common_if_applicable_metadata : ccia, expanded_metadata : e };
 }
 
-room.loadMetadatas = function(core_common_required_metadatas, common_core_if_applicable_metadatas, expanded_metadatas){
+room.loadMetadata = function(core_common_required_metadata, common_core_if_applicable_metadata, expanded_metadata){
 
-    for(var meta in core_common_required_metadatas){
+    for(var meta in core_common_required_metadata){
 
-        $("[metadata='"+ meta + "']")[0].value = core_common_required_metadatas[meta];
+        $("[metadata='"+ meta + "']")[0].value = core_common_required_metadata[meta];
     }
 
-    for(meta in common_core_if_applicable_metadatas){
-        $("[metadata='"+ meta + "']")[0].value = common_core_if_applicable_metadatas[meta];
+    for(meta in common_core_if_applicable_metadata){
+        $("[metadata='"+ meta + "']")[0].value = common_core_if_applicable_metadata[meta];
     }
 
-    for(meta in expanded_metadatas){
-        $("[metadata='"+ meta + "']")[0].value = expanded_metadatas[meta];
+    for(meta in expanded_metadata){
+        $("[metadata='"+ meta + "']")[0].value = expanded_metadata[meta];
     }
 
 }
@@ -195,23 +195,23 @@ left_data_room._tabClicked = function(e){
 }
 
 left_data_room.addMetadata = function(){
-   $("#metadatas").append('<metadata-element-controllet ' +
+   $("#metadata").append('<metadata-element-controllet ' +
                                 'number="x" ' +
                                 'description="The name for the current dataset" ' +
                                 'heading="Dataset name" '+
                           '></metadata-element-controllet>');
 }
 
-left_data_room.saveMetadatas = function(){
+left_data_room.saveMetadata = function(){
 
-    var metadatas = room.getMetadatas();
+    var metadata = room.getMetadata();
 
-    $.post(ODE.ajax_coocreation_room_update_metadatas,
+    $.post(ODE.ajax_coocreation_room_update_metadata,
         {
-            roomId                              : COCREATION.roomId,
-            core_common_required_metadatas      : JSON.stringify(metadatas.core_common_required_metadatas),
-            common_core_if_applicable_metadatas : JSON.stringify(metadatas.core_common_if_applicable_metadatas),
-            expanded_metadatas                  : JSON.stringify(metadatas.expanded_metadatas)
+            roomId                             : COCREATION.roomId,
+            core_common_required_metadata      : JSON.stringify(metadata.core_common_required_metadata),
+            common_core_if_applicable_metadata : JSON.stringify(metadata.core_common_if_applicable_metadata),
+            expanded_metadata                  : JSON.stringify(metadata.expanded_metadata)
         },
         function (data, status) {
 

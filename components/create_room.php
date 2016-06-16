@@ -43,14 +43,6 @@ class COCREATION_CMP_CreateRoom extends OW_Component
         $goal  = new TextField('goal');
         $goal->setRequired(true);
 
-        //$template  = new Selectbox('template');
-
-        /*$availableTemplate = COCREATIONEP_BOL_Service::getInstance()->getAllTemplates();
-        $template->setRequired(false);
-
-        foreach($availableTemplate as $tmp)
-            $template->addOption($tmp->id, $tmp->name);*/
-
         $invitationText  = new TextField('invitation_text');
         $invitationText->setRequired(true);
 
@@ -58,9 +50,6 @@ class COCREATION_CMP_CreateRoom extends OW_Component
         $usersValue->setValue("");
         $usersValue->setId('users_value');
         $usersValue->setRequired(false);
-
-       /* $isOpen = new CheckboxField('is_open');
-        $isOpen->setRequired(false);*/
 
         $managerOp  = new HiddenField('manager_op');
         $managerOp->setValue("requestToAddRoom");
@@ -78,12 +67,10 @@ class COCREATION_CMP_CreateRoom extends OW_Component
         $form->addElement($subject);
         $form->addElement($description);
         $form->addElement($goal);
-        //$form->addElement($template);
         $form->addElement($invitationText);
         $form->addElement($usersValue);
         $form->addElement($managerOp);
         $form->addElement($roomType);
-        //$form->addElement($isOpen);
         $form->addElement($submit);
 
         $form->setAction(OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'createRoom'));

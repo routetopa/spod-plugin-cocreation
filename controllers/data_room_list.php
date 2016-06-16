@@ -39,14 +39,14 @@ class COCREATION_CTRL_DataRoomList extends OW_ActionController
                 $avatars[] = array("src" => $avatar[$user]["src"], "href" => $avatar[$user]["url"]);
             }
 
-            $common_core_required_metadatas = json_decode($data->common_core_required_metadatas);
+            $common_core_required_metadata = json_decode($data->common_core_required_metadata);
 
             $dataset[] = array("ID" => $data->roomId,
                                "VER" => $data->version,
                                "USER" => $avatars,
-                               "NAME" => $common_core_required_metadatas->title,
+                               "NAME" => $common_core_required_metadata->title,
                                "DATA" => date('d/m/Y', strtotime($data->timestamp)),
-                               "DESCRIPTION" => $common_core_required_metadatas->description
+                               "DESCRIPTION" => $common_core_required_metadata->description
                 );
         }
 

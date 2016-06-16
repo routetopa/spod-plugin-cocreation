@@ -51,7 +51,7 @@ class COCREATION_BOL_RoomMetadataDao extends OW_BaseDao
         return OW_DB_PREFIX . 'cocreation_room_metadata';
     }
 
-    public function updateMetadatas($roomId, $ccr, $ccia, $e )
+    public function updateMetadata($roomId, $ccr, $ccia, $e )
     {
         $query = 'UPDATE ' . $this->getTableName() . ' SET ' .
             'common_core_required=\'' . $ccr .'\', common_core_if_applicable=\'' . $ccia .'\', expanded=\'' . $e .'\'' .
