@@ -387,8 +387,8 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
                 'w' => 1,
                 'provider_name' => 'p:99',
                 'organization_name' => '',
-                'package_name' => $common_core_required_metadata->title,
-                'resource_name' => $common_core_required_metadata->title . " - " . $dataset->version,
+                'package_name' => !empty($common_core_required_metadata->title) ? $common_core_required_metadata->title : '',
+                'resource_name' => !empty($common_core_required_metadata->title) ? $common_core_required_metadata->title. " - Ver. " . $dataset->version : "Ver. " . $dataset->version,
                 'url' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getDatasetByRoomIdAndVersion') . "?room_id=" . $dataset->roomId . "&version=" . $dataset->version,
                 'metas' => $dataset->common_core_required_metadata
             );

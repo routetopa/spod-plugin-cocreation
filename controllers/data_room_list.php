@@ -44,9 +44,9 @@ class COCREATION_CTRL_DataRoomList extends OW_ActionController
             $dataset[] = array("ID" => $data->roomId,
                                "VER" => $data->version,
                                "USER" => $avatars,
-                               "NAME" => $common_core_required_metadata->title,
+                               "NAME" => !empty($common_core_required_metadata->title) ? $common_core_required_metadata->title : '',
                                "DATA" => date('d/m/Y', strtotime($data->timestamp)),
-                               "DESCRIPTION" => $common_core_required_metadata->description
+                               "DESCRIPTION" => !empty($common_core_required_metadata->description) ? $common_core_required_metadata->description : ''
                 );
         }
 
