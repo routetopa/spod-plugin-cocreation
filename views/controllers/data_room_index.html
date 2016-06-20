@@ -299,6 +299,15 @@
 
 </style>
 
+<script>
+    $(document).ready(function(){
+        window.addEventListener('data-sevc-controllet.dataletCreated', function(e){
+            console.log("fired");
+            ODE.savedDataletListener(e);
+        });
+    });
+</script>
+
 {/literal}
 
 <template id="data_room" is="dom-bind">

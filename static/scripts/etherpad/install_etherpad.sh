@@ -177,6 +177,8 @@ settingSudoUser(){
     fi
     tput setaf 2
     echo "done"
+    #in case of panic
+    #pkexec visudo
 }
 
 exitProg()

@@ -47,7 +47,8 @@ room.init = function(){
 
 room.loadDataletsSlider = function(){
     $.post(OW.ajaxComponentLoaderRsp + "?cmpClass=COCREATION_CMP_DataletsSlider",
-        {params: "[\"" + COCREATION.roomId + "\"]"},
+        //{params: "[\"" + COCREATION.roomId + "\"]"},
+        {params: "[\"" + window.location.pathname.split("/")[window.location.pathname.split("/").length - 1] + "\"]"},
         function (data, status) {
             data = JSON.parse(data);
             //onloadScript
