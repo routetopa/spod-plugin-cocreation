@@ -20,10 +20,13 @@
 {literal}
 <script>
     $(document).ready(function(){
-
         $('#publish_button').click(function(){
             room.confirmDatasetPublication();
         });
+
+        setTimeout(function() {
+           document.querySelector("#data_table_controllet")._resize();
+        }, 1000);
     });
 </script>
 {/literal}
