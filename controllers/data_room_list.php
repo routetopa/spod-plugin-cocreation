@@ -19,6 +19,7 @@ class COCREATION_CTRL_DataRoomList extends OW_ActionController
         
         $this->assign('datasets', $this->formatDatasetData());
         $this->assign('components_url', SPODPR_COMPONENTS_URL);
+        $this->assign('language', BOL_LanguageService::getInstance()->getCurrent()->tag);
     }
 
     public function formatDatasetData()
