@@ -17,13 +17,13 @@
         $(".toggle").click(function(){
             alert("cose");
         });
+
+        var settings = document.querySelector('#settings_form');
+
+        _toggleChanged = function(){
+            alert("Acchiappapè");
+        };
     });
-
-    var settings_form = document.querySelector('template[is="dom-bind"]');
-
-    settings_form._toggleChanged = function(){
-        alert("Acchiappapè");
-    }
 
 
 
@@ -37,7 +37,7 @@
             <td class="ow_value">Document server status</td>
             {if $document_server_status == true}
                <td class="ow_value">
-                   <paper-toggle-button class="server_toggle toggle" id="document_server_command" name="document_server_command" checked on-change="_toggleChanged"></paper-toggle-button>
+                   <paper-toggle-button class="server_toggle toggle" id="document_server_command" name="document_server_command" checked on-change="_toggleChanged()"></paper-toggle-button>
                </td>
             {/if}
             {if $document_server_status == false}
