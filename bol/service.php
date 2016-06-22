@@ -87,6 +87,11 @@ class COCREATION_BOL_Service
             $cols = json_decode($result[1]['value'], true);
             $cells = json_decode($result[2]['value'], true);
 
+            if($rows[0] == null){
+                $cells = $rows;
+                $rows  = array_keys($rows);
+            }
+
             $headers = array();
             foreach($cols as $col){
                 if($cells[$rows[0]][$col]['value'] == "") break;
@@ -101,7 +106,7 @@ class COCREATION_BOL_Service
                     if($cells[$rows[$i]][$cols[$j]]['type'] == 'string')
                         $obj->{$headers[$j]} = $cells[$rows[$i]][$cols[$j]]['value'];
                     else
-                        $obj->{$headers[$j]} = intval($cells[$rows[$i]][$cols[$j]]['value']);
+                        $obj->{$headers[$j]} = floatval($cells[$rows[$i]][$cols[$j]]['value']);
                 }
                 if($wrong_values == count($headers)) break;
                 array_push($data, $obj);

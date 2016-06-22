@@ -12,21 +12,12 @@
 </style>
 {literal}
 <script>
-
     $(document).ready(function(){
-        $(".toggle").click(function(){
-            alert("cose");
-        });
-
         var settings = document.querySelector('#settings_form');
-
-        _toggleChanged = function(){
-            alert("Acchiappapè");
+        settings._toggleChanged = function(e){
+            $("#" + e.target.id.replace("_command", "_status")).attr('value',  document.querySelector('#' + e.target.id).checked);
         };
     });
-
-
-
 </script>
 {/literal}
 
@@ -37,12 +28,12 @@
             <td class="ow_value">Document server status</td>
             {if $document_server_status == true}
                <td class="ow_value">
-                   <paper-toggle-button class="server_toggle toggle" id="document_server_command" name="document_server_command" checked on-change="_toggleChanged()"></paper-toggle-button>
+                   <paper-toggle-button class="server_toggle toggle" id="document_server_command" name="document_server_command" checked on-change="_toggleChanged"></paper-toggle-button>
                </td>
             {/if}
             {if $document_server_status == false}
                <td class="ow_value">
-                   <paper-toggle-button class="server_toggle toggle" id="document_server_command" name="document_server_command"></paper-toggle-button>
+                   <paper-toggle-button class="server_toggle toggle" id="document_server_command" name="document_server_command" on-change="_toggleChanged"></paper-toggle-button>
                </td>
             {/if}
         </tr>
@@ -50,12 +41,12 @@
             <td class="ow_value">Spreadsheet server status</td>
             {if $spreadsheet_server_status == true}
             <td class="ow_value">
-                <paper-toggle-button class="server_toggle toggle" id="spreadsheet_server_command" name="spreadsheet_server_command" checked></paper-toggle-button>
+                <paper-toggle-button class="server_toggle toggle" id="spreadsheet_server_command" name="spreadsheet_server_command" checked on-change="_toggleChanged"></paper-toggle-button>
             </td>
             {/if}
             {if $spreadsheet_server_status == false}
             <td class="ow_value">
-                <paper-toggle-button class="server_toggle toggle" id="spreadsheet_server_command" name="spreadsheet_server_command"></paper-toggle-button>
+                <paper-toggle-button class="server_toggle toggle" id="spreadsheet_server_command" name="spreadsheet_server_command" on-change="_toggleChanged"></paper-toggle-button>
             </td>
             {/if}
         </tr>
@@ -66,14 +57,14 @@
         </tr>
         <tr class="ow_alt1">
             <td class="ow_value">Knowledge room</td>
-            {if $knowledge_room_command == true}
+            {if $knowledge_room_status == true}
             <td class="ow_value">
-                <paper-toggle-button class="room_toggle toggle" id="knowledge_room_command" name="knowledge_room_command" checked></paper-toggle-button>
+                <paper-toggle-button class="room_toggle toggle" id="knowledge_room_command" name="knowledge_room_command" checked on-change="_toggleChanged"></paper-toggle-button>
             </td>
             {/if}
-            {if $knowledge_room_command == false}
+            {if $knowledge_room_status == false}
             <td class="ow_value">
-                <paper-toggle-button class="room_toggle toggle" id="knowledge_room_command" name="knowledge_room_command"></paper-toggle-button>
+                <paper-toggle-button class="room_toggle toggle" id="knowledge_room_command" name="knowledge_room_command" on-change="_toggleChanged"></paper-toggle-button>
             </td>
             {/if}
         </tr>
@@ -81,12 +72,12 @@
             <td class="ow_value">Dataset room</td>
             {if $dataset_room_status == true}
             <td class="ow_value">
-                <paper-toggle-button class="room_toggle toggle" id="dataset_room_command" name="dataset_room_command" checked></paper-toggle-button>
+                <paper-toggle-button class="room_toggle toggle" id="dataset_room_command" name="dataset_room_command" checked on-change="_toggleChanged"></paper-toggle-button>
             </td>
             {/if}
             {if $dataset_room_status == false}
             <td class="ow_value">
-                <paper-toggle-button class="room_toggle toggle" id="dataset_room_command" name="dataset_room_command"></paper-toggle-button>
+                <paper-toggle-button class="room_toggle toggle" id="dataset_room_command" name="dataset_room_command" on-change="_toggleChanged"></paper-toggle-button>
             </td>
             {/if}
         </tr>
