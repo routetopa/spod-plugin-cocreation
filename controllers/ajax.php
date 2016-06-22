@@ -94,7 +94,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         }
 
         OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_members_add_successful'));
-        $this->redirect(str_replace("index/", $room->id, OW::getRouter()->urlFor('COCREATION_CTRL_KnowledgeRoom', 'index')));
+        $this->redirect(str_replace("index/", $room->id, $room->type == "knowdeldge" ? OW::getRouter()->urlFor('COCREATION_CTRL_KnowledgeRoom', 'index') : OW::getRouter()->urlFor('COCREATION_CTRL_DataRoom', 'index') ));
     }
 
     public function addDatasetToRoom()
