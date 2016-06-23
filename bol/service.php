@@ -30,7 +30,6 @@ class COCREATION_BOL_Service
 
     public function getSheetData($sheetName){
         $data = array();
-
         try {
             $stmt = $this->sheetDBconnection->query("SELECT * FROM store WHERE store.key LIKE '%" . $sheetName . "%'");
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -44,10 +43,15 @@ class COCREATION_BOL_Service
             $cols = json_decode($result[1]['value'], true);
             $cells = json_decode($result[2]['value'], true);
 
+            if($rows[0] == null){
+                $cells = $rows;
+                $rows  = array_keys($rows);
+            }
+
             foreach($cols as $col){
                 if( $cells[$rows[0]][$col]['value'] == "") break;
                 $obj = new stdClass();
-                $obj->name =  $cells[$rows[0]][$col]['value'];
+                $obj->name =  filter_var(str_replace('"',"",$cells[$rows[0]][$col]['value']), FILTER_SANITIZE_S);
                 $obj->data = array();
                 array_push($data, $obj);
             }
@@ -57,23 +61,20 @@ class COCREATION_BOL_Service
                 for($j = 0; $j < count($data); $j++){
                     if($cells[$rows[$i]][$cols[$j]]['value'] == "") {$wrong_values++; continue;};
                     if($cells[$rows[$i]][$cols[$j]]['type'] == 'string')
-                        array_push($data[$j]->data, $cells[$rows[$i]][$cols[$j]]['value']);
+                        array_push($data[$j]->data, filter_var(str_replace('"',"",$cells[$rows[$i]][$cols[$j]]['value']), FILTER_SANITIZE_STRING));
                     else
-                        array_push($data[$j]->data, intval($cells[$rows[$i]][$cols[$j]]['value']));
+                        array_push($data[$j]->data, floatval($cells[$rows[$i]][$cols[$j]]['value']));
                 }
                 if($wrong_values == count($data)) break;
             }
-
         }catch (PDOException $e){
             return null;
         }
-
         return $data;
     }
 
     public function getArrayOfObjectSheetData($sheetName){
         $data = array();
-
         try {
             $stmt = $this->sheetDBconnection->query("SELECT * FROM store WHERE store.key LIKE '%" . $sheetName . "%'");
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -95,7 +96,7 @@ class COCREATION_BOL_Service
             $headers = array();
             foreach($cols as $col){
                 if($cells[$rows[0]][$col]['value'] == "") break;
-                array_push($headers, $cells[$rows[0]][$col]['value']);
+                array_push($headers, filter_var(str_replace('"',"",$cells[$rows[0]][$col]['value']), FILTER_SANITIZE_STRING));
             }
 
             for($i = 1; $i < $rows; $i++){
@@ -104,18 +105,16 @@ class COCREATION_BOL_Service
                 for($j = 0; $j < count($headers); $j++){
                     if($cells[$rows[$i]][$cols[$j]]['value'] == "") {$wrong_values++; continue;};
                     if($cells[$rows[$i]][$cols[$j]]['type'] == 'string')
-                        $obj->{$headers[$j]} = $cells[$rows[$i]][$cols[$j]]['value'];
+                        $obj->{$headers[$j]} = filter_var(str_replace('"',"",$cells[$rows[$i]][$cols[$j]]['value']), FILTER_SANITIZE_STRING);
                     else
                         $obj->{$headers[$j]} = floatval($cells[$rows[$i]][$cols[$j]]['value']);
                 }
                 if($wrong_values == count($headers)) break;
                 array_push($data, $obj);
             }
-
         }catch (PDOException $e){
             return null;
         }
-
         return $data;
     }
 
