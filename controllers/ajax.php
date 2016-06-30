@@ -114,7 +114,10 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
 
         echo json_encode(array("status" => "ok", "message" => "dataset successful created in the current room"));
-        $this->emitNotification(["plugin" => "cocreation", "operation" => "addDatasetToRoom", "entity_type" => COCREATION_BOL_Service::ROOM_ENTITY_TYPE, "entity_id" => $clean['roomId']]);
+        SPODNOTIFICATION_CLASS_EventHandler::getInstance()->emitNotification(["plugin" => "cocreation",
+                                                                              "operation" => "addDatasetToRoom",
+                                                                              "entity_type" => COCREATION_BOL_Service::ROOM_ENTITY_TYPE,
+                                                                              "entity_id" => $clean['roomId']]);
         exit;
 
     }
@@ -165,7 +168,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             COCREATION_BOL_Service::getInstance()->addDataletToRoom($clean['roomId'], $datalet->id);
             OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_add_datalet_successful'));
             echo json_encode(array("status" => "ok", "message" => "datalet successful created in the current room", "dataletId" => $datalet->id));
-            $this->emitNotification(["plugin" => "cocreation", "operation" => "addDataletToRoom", "entity_type" => COCREATION_BOL_Service::ROOM_ENTITY_TYPE, "entity_id" => $clean['roomId']]);
+            SPODNOTIFICATION_CLASS_EventHandler::getInstance()->emitNotification(["plugin" => "cocreation", "operation" => "addDataletToRoom", "entity_type" => COCREATION_BOL_Service::ROOM_ENTITY_TYPE, "entity_id" => $clean['roomId']]);
             exit;
         }else{
             OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_add_datalet_fail'));
@@ -191,7 +194,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
         $datalet_postits = COCREATION_BOL_Service::getInstance()->getPostitByDataletId($clean['dataletId']);
 
-        $this->emitNotification(["plugin"      => "cocreation",
+        SPODNOTIFICATION_CLASS_EventHandler::getInstance()->emitNotification(["plugin"      => "cocreation",
                                  "operation"   => "addPostitToDatalet",
                                  "postits"     => json_encode($datalet_postits),
                                  "dataletId"   => $clean['dataletId'],
@@ -235,18 +238,6 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         COCREATION_BOL_Service::getInstance()->memberJoinToRoom($clean['memberId'], $clean['roomId']);
     }
 
-    private function emitNotification($map){
-        try
-        {
-            $client = new Client(new Version1X('http://localhost:3000'));
-            $client->initialize();
-            $client->emit('realtime_notification', $map);
-            $client->close();
-        }
-        catch(Exception $e)
-        {}
-    }
-
     public function getSheetData(){
 
         $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
@@ -285,7 +276,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
             echo json_encode(array("status" => "ok", "message" => "metadata sucessfully update for current room"));
 
-            $this->emitNotification(["plugin"                              => "cocreation",
+            SPODNOTIFICATION_CLASS_EventHandler::getInstance()->emitNotification(["plugin"                              => "cocreation",
                                      "operation"                           => "updateMetadata",
                                      "core_common_required_metadata"      => $clean['core_common_required_metadata'],
                                      "common_core_if_applicable_metadata" => $clean['common_core_if_applicable_metadata'],

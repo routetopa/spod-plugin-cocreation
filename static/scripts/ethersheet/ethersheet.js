@@ -39,6 +39,15 @@ var Ethersheet = module.exports = function(o) {
   this.initializeDisplay(o);
   this.initializeCommands(o);
 
+  this.commandQueue = [];
+  setInterval(function(){
+    while(this.commandQueue.length > 0)
+    {
+      this.commandQueue.shift();
+      top.postMessage("ethersheet_sheet_updated", 'http://' + window.location.hostname);
+    }
+  }, 3000);
+
 };
 
 Ethersheet.prototype.initializeData = function(o){
@@ -141,7 +150,8 @@ Ethersheet.prototype.executeCommand = function(c){
 
   var cmd = JSON.parse(c.sanitized_data);
   if(cmd.type == "sheet" && cmd.action == "commitCell"){
-    top.postMessage("ethersheet_sheet_updated", 'http://' + window.location.hostname);
+    this.commandQueue.push(1);
+    //top.postMessage("ethersheet_sheet_updated", 'http://' + window.location.hostname);
   }
 
 };
@@ -155,7 +165,8 @@ Ethersheet.prototype.sendCommand = function(c){
 
   //console.log(c);
   if(c.type == "sheet" && c.action == "commitCell"){
-    top.postMessage("ethersheet_sheet_updated", 'http://' + window.location.hostname);
+    this.commandQueue.push(1);
+    //top.postMessage("ethersheet_sheet_updated", 'http://' + window.location.hostname);
   }
 
 };
@@ -208,6 +219,14 @@ Ethersheet.prototype.bindDataToSocket = function(){
         es.undoQ.push(do_cmd,undo_cmd);
       }
     });
+  }
+};
+
+Ethersheet.prototype.messageDispatcher = function(){
+  while(this.commandQueue.length > 0)
+  {
+    this.commandQueue.shift();
+    top.postMessage("ethersheet_sheet_updated", 'http://' + window.location.hostname);
   }
 };
 
