@@ -36,17 +36,17 @@ class COCREATION_BOL_Service
 
             $result = json_decode($result[0]['value']);
 
-            $stmt = $this->sheetDBconnection->query("SELECT * FROM store WHERE store.key LIKE '%" . $result[0] . "%'");
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt = $this->sheetDBconnection->query("SELECT * FROM store WHERE store.key LIKE '" . $result[0] . ":rows'");
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $rows = json_decode($rows[0]['value'], true);
 
-            $rows = json_decode($result[0]['value'], true);
-            $cols = json_decode($result[1]['value'], true);
-            $cells = json_decode($result[2]['value'], true);
+            $stmt = $this->sheetDBconnection->query("SELECT * FROM store WHERE store.key LIKE '" . $result[0] . ":cols'");
+            $cols = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $cols = json_decode($cols[0]['value'], true);
 
-            if($rows[0] == null){
-                $cells = $rows;
-                $rows  = array_keys($rows);
-            }
+            $stmt  = $this->sheetDBconnection->query("SELECT * FROM store WHERE store.key LIKE '" . $result[0] . ":cells'");
+            $cells = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $cells = json_decode($cells[0]['value'], true);
 
             foreach($cols as $col){
                 if( $cells[$rows[0]][$col]['value'] == "") break;
