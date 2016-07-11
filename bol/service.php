@@ -198,7 +198,7 @@ class COCREATION_BOL_Service
         return $result;
     }
 
-    public function getMatadatasByRoomId($roomId)
+    public function getMetadataByRoomId($roomId)
     {
         $example = new OW_Example();
         $example->andFieldEqual('roomId', $roomId);

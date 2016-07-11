@@ -79,7 +79,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         $this->assign('headers', $headers);
         $this->assign('data', json_encode($data));
 
-        $metadata = COCREATION_BOL_Service::getInstance()->getMatadatasByRoomId($params['roomId']);
+        $metadata = COCREATION_BOL_Service::getInstance()->getMetadataByRoomId($params['roomId']);
 
         $this->assign('core_common_required_metadata', json_decode($metadata[0]->common_core_required));
         $this->assign('common_core_if_applicable_metadata', json_decode($metadata[0]->common_core_if_applicable));
