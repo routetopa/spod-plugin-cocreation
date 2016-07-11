@@ -102,7 +102,7 @@ class COCREATION_BOL_Service
 
             $headers = array();
             foreach($cols as $col){
-                if(!$cells[$rows[0]][$col] || $cells[$rows[0]][$col]['value'] == "") break;
+                if(!isset($cells[$rows[0]][$col]) || $cells[$rows[0]][$col]['value'] == "") break;
                 array_push($headers, filter_var(str_replace('"',"",$cells[$rows[0]][$col]['value']), FILTER_SANITIZE_STRING));
             }
 
@@ -110,7 +110,7 @@ class COCREATION_BOL_Service
                 $wrong_values = 0;
                 $obj = new stdClass();
                 for($j = 0; $j < count($headers); $j++){
-                    if($cells[$rows[$i]][$cols[$j]]['value'] == "") {$wrong_values++; continue;};
+                    if(!isset($cells[$rows[$i]][$cols[$j]]) || $cells[$rows[$i]][$cols[$j]]['value'] == "") {$wrong_values++; continue;};
                     if($cells[$rows[$i]][$cols[$j]]['type'] == 'string')
                         $obj->{$headers[$j]} = $cells[$rows[$i]][$cols[$j]]['value'];//filter_var(str_replace('"',"",$cells[$rows[$i]][$cols[$j]]['value']), FILTER_SANITIZE_STRING);
                     else
