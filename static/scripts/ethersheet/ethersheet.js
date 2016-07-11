@@ -146,9 +146,9 @@ Ethersheet.prototype.connect = function(){
 
 Ethersheet.prototype.executeCommand = function(c){
   var model = this.getModel(c.getDataType(),c.getDataId());
-  model.disableSend();
+  //model.disableSend();
   c.execute(model);
-  model.enableSend();
+  //model.enableSend();
 
   /*isislab*/
   //var cmd = JSON.parse(c.sanitized_data);
