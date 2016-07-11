@@ -61,6 +61,9 @@ copySettings()
     cp config.js /home/ethersheet/ethersheet/EtherSheet
     cp ethersheet_service.js /home/ethersheet/ethersheet/EtherSheet/lib
     cp ethersheet.js /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client
+    cp ./views/table.js /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client/views
+    cp ./views/cell_menu.js /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client/views
+    cp ./templates/cell_menu.jst /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client/templates
     cp -R ./styles/* /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client/styles
     cp -R ./it/* /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client/locales
     tput setaf 2

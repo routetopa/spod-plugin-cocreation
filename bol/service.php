@@ -112,7 +112,7 @@ class COCREATION_BOL_Service
                 for($j = 0; $j < count($headers); $j++){
                     if($cells[$rows[$i]][$cols[$j]]['value'] == "") {$wrong_values++; continue;};
                     if($cells[$rows[$i]][$cols[$j]]['type'] == 'string')
-                        $obj->{$headers[$j]} = filter_var(str_replace('"',"",$cells[$rows[$i]][$cols[$j]]['value']), FILTER_SANITIZE_STRING);
+                        $obj->{$headers[$j]} = $cells[$rows[$i]][$cols[$j]]['value'];//filter_var(str_replace('"',"",$cells[$rows[$i]][$cols[$j]]['value']), FILTER_SANITIZE_STRING);
                     else
                         $obj->{$headers[$j]} = floatval($cells[$rows[$i]][$cols[$j]]['value']);
                 }

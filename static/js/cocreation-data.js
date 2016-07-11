@@ -2,19 +2,32 @@ $(document).ready(function(){
     $('#comments_content').perfectScrollbar();
     $('#metadata').perfectScrollbar();
 
+    window.addEventListener('open-select-merker-map_event', function(e){
+        alert("open map");
+    });
+
     window.addEventListener('message', function(e){
-        $.post(ODE.ajax_coocreation_room_get_sheetdata,
-            {
-                sheetName: COCREATION.sheetName
-            },
-            function (data, status) {
-                var datalet = $('div[id^="datalet_placeholder_"]').children();
-                for(var i=1; i < datalet.length; i+=2){
-                    datalet[i].behavior.data = JSON.parse(data);
-                }
-                room.loadDataletsSlider();
-            }
-        );
+        switch(e.data){
+            case 'ethersheet_sheet_updated':
+                $.post(ODE.ajax_coocreation_room_get_sheetdata,
+                    {
+                        sheetName: COCREATION.sheetName
+                    },
+                    function (data, status) {
+                        var datalet = $('div[id^="datalet_placeholder_"]').children();
+                        for(var i=1; i < datalet.length; i+=2){
+                            datalet[i].behavior.data = JSON.parse(data);
+                        }
+                        room.loadDataletsSlider();
+                    }
+                );
+                break;
+            case 'open-select-merker-map_event':
+                //if(previewFloatBox != 'undefined') previewFloatBox.close();
+                ODE.pluginPreview = "cocreation";
+                previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_AddMarker', {} , {width:'90%', height:'75vh', iconClass:'ow_ic_lens', title:''});
+                break;
+        }
     });
 
     $("#fullscreen-comment-close-button").click(function(){

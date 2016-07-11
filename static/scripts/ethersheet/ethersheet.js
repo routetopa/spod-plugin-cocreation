@@ -28,14 +28,10 @@ var keyboardEvents = require('./lib/keyboard');
 var timer;
 var commandQueue = [];
 function messageDispatcher(){
-    //while(commandQueue.length > 0)
-    //{
-      //commandQueue.shift();
   if(commandQueue.length > 0) {
     top.postMessage("ethersheet_sheet_updated", 'http://' + window.location.hostname);
     commandQueue = [];
   }
-    //}
 };
 
 var Ethersheet = module.exports = function(o) {
@@ -52,7 +48,7 @@ var Ethersheet = module.exports = function(o) {
   this.initializeDisplay(o);
   this.initializeCommands(o);
 
-  timer = setInterval(messageDispatcher, 7000);
+  timer = setInterval(messageDispatcher, 10000)
 
 };
 
@@ -154,14 +150,14 @@ Ethersheet.prototype.executeCommand = function(c){
   c.execute(model);
   model.enableSend();
 
-  var cmd = JSON.parse(c.sanitized_data);
-  if(cmd.type == "sheet" && cmd.action == "commitCell"){
+  /*isislab*/
+  //var cmd = JSON.parse(c.sanitized_data);
+  if(c.type == "sheet" && c.action == "commitCell"){
     commandQueue.push(1);
     clearTimeout(timer);
-    timer = setInterval(messageDispatcher, 7000);
-    //top.postMessage("ethersheet_sheet_updated", 'http://' + window.location.hostname);
+    timer = setInterval(messageDispatcher, 10000);
   }
-
+  /*isislab*/
 };
 
 Ethersheet.prototype.sendCommand = function(c){
@@ -171,14 +167,13 @@ Ethersheet.prototype.sendCommand = function(c){
     this.socket.send(Command.serialize(c));
   }
 
-  //console.log(c);
+  /*isislab*/
   if(c.type == "sheet" && c.action == "commitCell"){
     commandQueue.push(1);
     clearTimeout(timer);
-    timer = setInterval(messageDispatcher, 7000);
-    //top.postMessage("ethersheet_sheet_updated", 'http://' + window.location.hostname);
+    timer = setInterval(messageDispatcher, 10000);
   }
-
+ /*isislab*/
 };
 
 Ethersheet.prototype.undoCommand = function(){
