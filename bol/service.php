@@ -51,7 +51,7 @@ class COCREATION_BOL_Service
             foreach($cols as $col){
                 if(empty($cells[$rows[0]]) || $cells[$rows[0]][$col]['value'] == "") break;
                 $obj = new stdClass();
-                $obj->name =  filter_var(str_replace('"',"",$cells[$rows[0]][$col]['value']), FILTER_SANITIZE_S);
+                $obj->name =  filter_var(str_replace('"',"",$cells[$rows[0]][$col]['value']), FILTER_SANITIZE_STRING);
                 $obj->data = array();
                 array_push($data, $obj);
             }
