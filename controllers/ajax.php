@@ -58,7 +58,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
                     OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'confirmToJoinToRoom') . "?roomId=" . $room->id . "&memberId=" . $u->id . "',
                         {}, function (data, status) {
                            window.location ='" .
-                    str_replace("index/", $room->id, OW::getRouter()->urlFor('COCREATION_CTRL_KnowledgeRoom', 'index')) . "';});";
+                    str_replace("index/", $room->id,  OW::getRouter()->urlFor($room->type == "knowledge" ? 'COCREATION_CTRL_KnowledgeRoom' : 'COCREATION_CTRL_DataRoom' , 'index')) . "';});";
 
                 $message = $clean['invitation_text'] . "<br><br>" . "<span class=\"ow_button\"><input type=\"button\" value=\"Conform to join\" onclick=\"" . $js . "\"></span>";
                 if (OW::getPluginManager()->isPluginActive('mailbox'))
@@ -86,7 +86,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
                 OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'confirmToJoinToRoom') . "?roomId=". $room->id . "&memberId=" . $u->id . "',
                 {}, function (data, status) {
                    window.location ='".
-                str_replace("index/", $room->id, OW::getRouter()->urlFor('COCREATION_CTRL_KnowledgeRoom', 'index')) ."';});";
+                str_replace("index/", $room->id, OW::getRouter()->urlFor($room->type == "knowledge" ? 'COCREATION_CTRL_KnowledgeRoom' : 'COCREATION_CTRL_DataRoom' , 'index')) ."';});";
 
             $message = $room->invitationText . "<br><br>" . "<span class=\"ow_button\"><input type=\"button\" value=\"Confirm to join\" onclick=\"" . $js ."\"></span>";
             if (OW::getPluginManager()->isPluginActive('mailbox'))
