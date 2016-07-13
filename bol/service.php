@@ -34,6 +34,8 @@ class COCREATION_BOL_Service
             $stmt = $this->sheetDBconnection->query("SELECT * FROM store WHERE store.key LIKE '%" . $sheetName . "%'");
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+            if(count($result) == 0) return $data;
+
             $result = json_decode($result[0]['value']);
 
             $stmt = $this->sheetDBconnection->query("SELECT * FROM store WHERE store.key LIKE '" . $result[0] . ":rows'");
@@ -80,6 +82,8 @@ class COCREATION_BOL_Service
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             $result = json_decode($result[0]['value']);
+
+            if(count($result) == 0) return $data;
 
            /* $stmt = $this->sheetDBconnection->query("SELECT * FROM store WHERE store.key LIKE '%" . $result[0] . "%'");
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
