@@ -668,7 +668,7 @@ var Table = module.exports = View.extend({
 
       var width = $selectedCell.outerWidth();
       var left = pos.left + width; //offset;
-      var top = pos.top + $selectedCell.innerHeight();
+      var top = e.clientY;//pos.top + $selectedCell.innerHeight();
       var html = "<div class='es-context-menu es-overlay' style='left:"+left+"px;top:"+top+"px;position: absolute;'></div>";
       var $menu = $(html);
 
