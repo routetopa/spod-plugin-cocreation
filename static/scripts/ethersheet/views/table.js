@@ -72,6 +72,7 @@ var Table = module.exports = View.extend({
     $(window).resize(this.resize.bind(this));
 
     /*isislab*/
+    this.current_cell           = null;
     this.cell_menu_current_cell = null;
     document.oncontextmenu = function() {
       return false;
@@ -226,7 +227,7 @@ var Table = module.exports = View.extend({
 
   onClear: function(cells){
     var table = this;
-    this.removeCellInputs();
+    //this.removeCellInputs();
     _.each(cells, function(cell){
       table.unpaintCell(cell);
     });
@@ -413,6 +414,7 @@ var Table = module.exports = View.extend({
   cellClicked: function(e){
     if (this.isDraggingCell()) return;
     this.selectCell(e);
+    this.current_cell = $(e.currentTarget);
   },
   
   cellMouseDown: function(e){
@@ -662,7 +664,7 @@ var Table = module.exports = View.extend({
       this.clearOverlays();
       this.addCellToSelection(e);
       this.cell_menu_current_cell = $(e.currentTarget);
-      var $selectedCell = $(e.currentTarget)
+      var $selectedCell = $(e.currentTarget);
       var pos = $selectedCell.position();
 
       var width = $selectedCell.outerWidth();
