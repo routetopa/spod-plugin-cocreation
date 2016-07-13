@@ -25,7 +25,7 @@ $(document).ready(function(){
             case 'open-select-merker-map_event':
                 //if(previewFloatBox != 'undefined') previewFloatBox.close();
                 ODE.pluginPreview = "cocreation";
-                previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_AddMarker', {} , {width:'90%', height:'75vh', iconClass:'ow_ic_lens', title:''});
+                previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_AddMarker', {} , {width:'90%', height:'90vh', iconClass:'ow_ic_lens', title:''});
                 break;
         }
     });
