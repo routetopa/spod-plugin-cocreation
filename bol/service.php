@@ -53,7 +53,7 @@ class COCREATION_BOL_Service
             foreach($cols as $col){
                 if($cells[$rows[0]] || $cells[$rows[0]][$col]['value'] == "") break;
                 $obj = new stdClass();
-                $obj->name =  filter_var(str_replace('"',"",$cells[$rows[0]][$col]['value']), FILTER_SANITIZE_STRING);
+                $obj->name =  $cells[$rows[0]][$col]['value'];//filter_var(str_replace('"',"",$cells[$rows[0]][$col]['value']), FILTER_SANITIZE_STRING);
                 $obj->data = array();
                 array_push($data, $obj);
             }
@@ -63,7 +63,7 @@ class COCREATION_BOL_Service
                 for($j = 0; $j < count($data); $j++){
                     if($cells[$rows[$i]][$cols[$j]]['value'] == "") {$wrong_values++; continue;};
                     if($cells[$rows[$i]][$cols[$j]]['type'] == 'string')
-                        array_push($data[$j]->data, filter_var(str_replace('"',"",$cells[$rows[$i]][$cols[$j]]['value']), FILTER_SANITIZE_STRING));
+                        array_push($data[$j]->data,$cells[$rows[$i]][$cols[$j]]['value']);// filter_var(str_replace('"',"",$cells[$rows[$i]][$cols[$j]]['value']), FILTER_SANITIZE_STRING));
                     else
                         array_push($data[$j]->data, floatval($cells[$rows[$i]][$cols[$j]]['value']));
                 }
@@ -107,7 +107,7 @@ class COCREATION_BOL_Service
             $headers = array();
             foreach($cols as $col){
                 if(!isset($cells[$rows[0]][$col]) || $cells[$rows[0]][$col]['value'] == "") break;
-                array_push($headers, filter_var(str_replace('"',"",$cells[$rows[0]][$col]['value']), FILTER_SANITIZE_STRING));
+                array_push($headers, $cells[$rows[0]][$col]['value']);//filter_var(str_replace('"',"",$cells[$rows[0]][$col]['value']), FILTER_SANITIZE_STRING));
             }
 
             for($i = 1; $i < $rows; $i++){
