@@ -76,3 +76,15 @@ color:#111;
 }
 .es-sheet-control#delete-sheet {
 }
+
+div#es-function-icon{
+  display: none;
+}
+
+button#delete-sheet {
+  display: none;
+}
+
+button#rename-sheet{
+  display: none;
+}
