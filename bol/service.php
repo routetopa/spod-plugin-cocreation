@@ -108,7 +108,7 @@ class COCREATION_BOL_Service
             foreach($cols as $col){
                 if(!isset($cells[$rows[0]][$col]) || $cells[$rows[0]][$col]['value'] == "") break;
                 //array_push($headers, filter_var(str_replace('"',"",$cells[$rows[0]][$col]['value']), FILTER_SANITIZE_STRING));
-                array_push($headers, str_replace("'","ˈ",$cells[$rows[0]][$col]['value']));
+                array_push($headers, str_replace("`","ˈ",str_replace("'","ˈ",$cells[$rows[0]][$col]['value'])));
                 //array_push($headers, $cells[$rows[0]][$col]['value']);
             }
 
