@@ -372,16 +372,24 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
         foreach ($datasets as $dataset)
         {
+            $dataset->owners = substr($dataset->owners, 1, -1);
+            $dataset->owners = str_replace('\\', "", $dataset->owners);
+            $users = json_decode($dataset->owners);
+            $avatars = array();
+
+            foreach ($users as $user)
+            {
+                $avatar = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($user));
+                $avatars[] = array("src" => $avatar[$user]["src"], "href" => $avatar[$user]["url"], "user" => $avatar[$user]["title"]);
+            }
+
             $common_core_required_metadata = json_decode($dataset->common_core_required_metadata);
 
             $data[] = array(
-                'w' => 1,
-                'provider_name' => 'p:99',
-                'organization_name' => '',
-                'package_name' => !empty($common_core_required_metadata->title) ? $common_core_required_metadata->title : '',
                 'resource_name' => !empty($common_core_required_metadata->title) ? $common_core_required_metadata->title. " - Ver. " . $dataset->version : "Ver. " . $dataset->version,
                 'url' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getDatasetByRoomIdAndVersion') . "?room_id=" . $dataset->roomId . "&version=" . $dataset->version,
-                'metas' => $dataset->common_core_required_metadata
+                'metas' => $dataset->common_core_required_metadata,
+                'users' => $avatars
             );
         }
 
