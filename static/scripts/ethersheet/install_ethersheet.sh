@@ -78,10 +78,10 @@ installService()
     echo "6. Install Ethersheet service\r\r"
     tput sgr0
     #Commands
-    mkdir /var/log/ethersheet
-    chown -R ethersheet /var/log/ethersheet
     cd ${ABSOLUTE_PATH}
     cp ethersheet.conf /etc/init
+    mkdir /var/log/ethersheet
+    chown -R ethersheet /var/log/ethersheet
     tput setaf 2
     echo "done"
 }

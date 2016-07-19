@@ -681,6 +681,8 @@ var Table = module.exports = View.extend({
       $menu.i18n();
 
       this.$el.append($menu);
+    }else{
+      this.cellMouseDown(e);
     }
   },
   /*end isislab*/

@@ -86,7 +86,8 @@ CREATE TABLE IF NOT EXISTS `' . OW_DB_PREFIX . 'cocreation_dataset` (
   `roomId` int(11) NOT NULL,
   `datasetId` varchar(255) NOT NULL,
   `version` int(11) NOT NULL,
-  `data` mediumtext,
+  `data` à
+  ,
   `notes` text,
   `common_core_required_metadata` text,
   `common_core_if_applicable_metadata` text,

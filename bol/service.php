@@ -53,7 +53,7 @@ class COCREATION_BOL_Service
             foreach($cols as $col){
                 if($cells[$rows[0]] || $cells[$rows[0]][$col]['value'] == "") break;
                 $obj = new stdClass();
-                $obj->name =  filter_var(str_replace('"',"",$cells[$rows[0]][$col]['value']), FILTER_SANITIZE_STRING);
+                $obj->name =  $cells[$rows[0]][$col]['value'];//filter_var(str_replace('"',"",$cells[$rows[0]][$col]['value']), FILTER_SANITIZE_STRING);
                 $obj->data = array();
                 array_push($data, $obj);
             }
@@ -61,9 +61,12 @@ class COCREATION_BOL_Service
             for($i = 1; $i < $rows; $i++){
                 $wrong_values = 0;
                 for($j = 0; $j < count($data); $j++){
-                    if($cells[$rows[$i]][$cols[$j]]['value'] == "") {$wrong_values++; continue;};
+                    if($cells[$rows[$i]][$cols[$j]]['value'] == "") {
+                        array_push($data[$j]->data , "");
+                        $wrong_values++; continue;
+                    };
                     if($cells[$rows[$i]][$cols[$j]]['type'] == 'string')
-                        array_push($data[$j]->data, filter_var(str_replace('"',"",$cells[$rows[$i]][$cols[$j]]['value']), FILTER_SANITIZE_STRING));
+                        array_push($data[$j]->data,$cells[$rows[$i]][$cols[$j]]['value']);// filter_var(str_replace('"',"",$cells[$rows[$i]][$cols[$j]]['value']), FILTER_SANITIZE_STRING));
                     else
                         array_push($data[$j]->data, floatval($cells[$rows[$i]][$cols[$j]]['value']));
                 }
@@ -85,13 +88,6 @@ class COCREATION_BOL_Service
 
             if(count($result) == 0) return $data;
 
-           /* $stmt = $this->sheetDBconnection->query("SELECT * FROM store WHERE store.key LIKE '%" . $result[0] . "%'");
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            $rows = json_decode($result[0]['value'], true);
-            $cols = json_decode($result[1]['value'], true);
-            $cells = json_decode($result[2]['value'], true);*/
-
             $stmt = $this->sheetDBconnection->query("SELECT * FROM store WHERE store.key LIKE '" . $result[0] . ":rows'");
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $rows = json_decode($rows[0]['value'], true);
@@ -107,14 +103,19 @@ class COCREATION_BOL_Service
             $headers = array();
             foreach($cols as $col){
                 if(!isset($cells[$rows[0]][$col]) || $cells[$rows[0]][$col]['value'] == "") break;
-                array_push($headers, filter_var(str_replace('"',"",$cells[$rows[0]][$col]['value']), FILTER_SANITIZE_STRING));
+                //array_push($headers, filter_var(str_replace('"',"",$cells[$rows[0]][$col]['value']), FILTER_SANITIZE_STRING));
+                array_push($headers, str_replace("`","ˈ",str_replace("'","ˈ",$cells[$rows[0]][$col]['value'])));
+                //array_push($headers, $cells[$rows[0]][$col]['value']);
             }
 
             for($i = 1; $i < $rows; $i++){
                 $wrong_values = 0;
                 $obj = new stdClass();
                 for($j = 0; $j < count($headers); $j++){
-                    if(!isset($cells[$rows[$i]][$cols[$j]]) || $cells[$rows[$i]][$cols[$j]]['value'] == "") {$wrong_values++; continue;};
+                    if(!isset($cells[$rows[$i]][$cols[$j]]) || $cells[$rows[$i]][$cols[$j]]['value'] == "") {
+                        $obj->{$headers[$j]} = "";
+                        $wrong_values++; continue;
+                    }
                     if($cells[$rows[$i]][$cols[$j]]['type'] == 'string')
                         $obj->{$headers[$j]} = $cells[$rows[$i]][$cols[$j]]['value'];//filter_var(str_replace('"',"",$cells[$rows[$i]][$cols[$j]]['value']), FILTER_SANITIZE_STRING);
                     else
