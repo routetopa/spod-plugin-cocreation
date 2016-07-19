@@ -10,7 +10,7 @@
     .datalet-container{
         position: relative;
         /*overflow: hidden;*/
-        height: 90%;
+        height: 63vh;
         width: 100%;
     }
 
@@ -78,7 +78,8 @@
         -moz-transform:rotate(4deg);
     }
 
-    .delete{
+    .delete_datalet{
+        display: block;
         position: absolute;
         bottom: 11px;
         right: 66px;
@@ -97,7 +98,7 @@
     {foreach $datalets as $datalet name=alldatalets}
 
     <neon-animatable>
-        <paper-fab class="delete" mini icon="delete" onclick="room._handleDeleteClick('{$datalet->id}')" style="background-color: #b6b6b6;"></paper-fab>
+        <paper-fab class="delete_datalet" mini icon="delete" onclick="room._handleDeleteClick('{$datalet->id}')" style="background-color: #b6b6b6;"></paper-fab>
         <div id="datalet_placeholder_{$smarty.foreach.alldatalets.index}" class="datalet-container">
             <link rel="import" href="{$components_url}datalets/{$datalet->component}/{$datalet->component}.html">
             <{$datalet->component}
