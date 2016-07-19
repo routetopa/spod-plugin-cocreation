@@ -61,7 +61,10 @@ class COCREATION_BOL_Service
             for($i = 1; $i < $rows; $i++){
                 $wrong_values = 0;
                 for($j = 0; $j < count($data); $j++){
-                    if($cells[$rows[$i]][$cols[$j]]['value'] == "") {$wrong_values++; continue;};
+                    if($cells[$rows[$i]][$cols[$j]]['value'] == "") {
+                        array_push($data[$j]->data , "");
+                        $wrong_values++; continue;
+                    };
                     if($cells[$rows[$i]][$cols[$j]]['type'] == 'string')
                         array_push($data[$j]->data,$cells[$rows[$i]][$cols[$j]]['value']);// filter_var(str_replace('"',"",$cells[$rows[$i]][$cols[$j]]['value']), FILTER_SANITIZE_STRING));
                     else
@@ -84,13 +87,6 @@ class COCREATION_BOL_Service
             $result = json_decode($result[0]['value']);
 
             if(count($result) == 0) return $data;
-
-           /* $stmt = $this->sheetDBconnection->query("SELECT * FROM store WHERE store.key LIKE '%" . $result[0] . "%'");
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            $rows = json_decode($result[0]['value'], true);
-            $cols = json_decode($result[1]['value'], true);
-            $cells = json_decode($result[2]['value'], true);*/
 
             $stmt = $this->sheetDBconnection->query("SELECT * FROM store WHERE store.key LIKE '" . $result[0] . ":rows'");
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -116,7 +112,10 @@ class COCREATION_BOL_Service
                 $wrong_values = 0;
                 $obj = new stdClass();
                 for($j = 0; $j < count($headers); $j++){
-                    if(!isset($cells[$rows[$i]][$cols[$j]]) || $cells[$rows[$i]][$cols[$j]]['value'] == "") {$wrong_values++; continue;};
+                    if(!isset($cells[$rows[$i]][$cols[$j]]) || $cells[$rows[$i]][$cols[$j]]['value'] == "") {
+                        $obj->{$headers[$j]} = "";
+                        $wrong_values++; continue;
+                    }
                     if($cells[$rows[$i]][$cols[$j]]['type'] == 'string')
                         $obj->{$headers[$j]} = $cells[$rows[$i]][$cols[$j]]['value'];//filter_var(str_replace('"',"",$cells[$rows[$i]][$cols[$j]]['value']), FILTER_SANITIZE_STRING);
                     else
