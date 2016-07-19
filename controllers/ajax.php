@@ -383,10 +383,10 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
                 $avatars[] = array("src" => $avatar[$user]["src"], "href" => $avatar[$user]["url"], "user" => $avatar[$user]["title"]);
             }
 
-            $common_core_required_metadata = json_decode($dataset->common_core_required_metadata);
+            $room = COCREATION_BOL_Service::getInstance()->getRoomById($dataset->roomId);
 
             $data[] = array(
-                'resource_name' => !empty($common_core_required_metadata->title) ? $common_core_required_metadata->title. " - Ver. " . $dataset->version : "Ver. " . $dataset->version,
+                'resource_name' => $room->name . " - Ver. " . $dataset->version,
                 'url' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getDatasetByRoomIdAndVersion') . "?room_id=" . $dataset->roomId . "&version=" . $dataset->version,
                 'metas' => $dataset->common_core_required_metadata,
                 'users' => $avatars
