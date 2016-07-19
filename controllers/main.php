@@ -46,11 +46,19 @@ class COCREATION_CTRL_Main extends OW_ActionController
             }
         }
 
+        $js = UTIL_JsGenerator::composeJsString('
+                ODE.ajax_coocreation_delete_room = {$ajax_coocreation_delete_room}
+            ', array(
+               'ajax_coocreation_delete_room' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'deleteRoom')
+        ));
+        OW::getDocument()->addOnloadScript($js);
+
         $this->assign('invitations', $invitations);
         $this->assign('cocreation_rooms', $visible_rooms);
        /*$this->assign('partialRoomUrl', str_replace("index/", "", OW::getRouter()->urlFor(($room->type == "data") ? 'COCREATION_CTRL_DataRoom'
                                                                                                                   : 'COCREATION_CTRL_KnowledgeRoom', 'index')));*/
         $this->assign('partialRoomUrl',OW_URL_HOME.'cocreation/');
         $this->assign('isActive', true);
+        $this->assign('userId', OW::getUser()->getId());
     }
 }

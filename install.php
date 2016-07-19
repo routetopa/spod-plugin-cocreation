@@ -74,9 +74,9 @@ CREATE TABLE IF NOT EXISTS `' . OW_DB_PREFIX . 'cocreation_room_sheet` (
 CREATE TABLE IF NOT EXISTS `' . OW_DB_PREFIX . 'cocreation_room_metadata` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `roomId` int(11) NOT NULL,
-  `common_core_required` text,
-  `common_core_if_applicable` text,
-  `expanded` text,
+  `common_core_required` mediumtext,
+  `common_core_if_applicable` mediumtext,
+  `expanded` mediumtext,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
 
@@ -86,12 +86,11 @@ CREATE TABLE IF NOT EXISTS `' . OW_DB_PREFIX . 'cocreation_dataset` (
   `roomId` int(11) NOT NULL,
   `datasetId` varchar(255) NOT NULL,
   `version` int(11) NOT NULL,
-  `data` à
-  ,
-  `notes` text,
-  `common_core_required_metadata` text,
-  `common_core_if_applicable_metadata` text,
-  `expanded_metadata` text,
+  `data` mediumtext,
+  `notes` mediumtext,
+  `common_core_required_metadata` mediumtext,
+  `common_core_if_applicable_metadata` mediumtext,
+  `expanded_metadata` mediumtext,
   `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;

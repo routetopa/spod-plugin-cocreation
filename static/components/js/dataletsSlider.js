@@ -88,3 +88,22 @@ room.initSlider = function(){
         }
     });
 }
+
+room._handleDeleteClick = function(dataletId) {
+    var c = confirm(OW.getLanguageText('cocreation', 'confirm_delete_datalet'));
+    if(c == true) {
+        $.post(ODE.ajax_coocreation_room_delete_datalet,
+            {
+                dataletId: dataletId,
+                roomId: COCREATION.roomId
+            },
+            function (data, status) {
+                data = JSON.parse(data);
+                if (data.status == "ok") {
+                } else {
+                    OW.info(OW.getLanguageText('cocreation', 'datalet_delete_fail'));
+                }
+            }
+        );
+    }
+}

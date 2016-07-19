@@ -14,6 +14,9 @@ room.inviteNewUsers = function(){
 }
 
 room.init = function(){
+    var scope = room;
+    if(COCREATION.room_type == "data") scope = left_data_room;
+
     var socket = io("http://" + window.location.hostname +":3000");
     socket.on('realtime_message_' + COCREATION.entity_type + "_" + COCREATION.roomId, function(rawData) {
         switch(rawData.operation){
@@ -22,9 +25,12 @@ room.init = function(){
                 room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'dataset_successfully_added');
                 room.$.syncToast.show();
                 break;
+            case "deleteDataletFromRoom":
+                room.loadDataletsSlider();
+                scope.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'datalet_successfully_deleted');
+                scope.$.syncToast.show();
+                break;
             case "addDataletToRoom":
-                var scope = room;
-                if(COCREATION.room_type == "data") scope = left_data_room;
                 room.loadDataletsSlider();
                 scope.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'datalet_successfully_added');
                 scope.$.syncToast.show();
@@ -40,6 +46,11 @@ room.init = function(){
                                    JSON.parse(rawData.expanded_metadata ));
                 left_data_room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'metadata_successfully_updated');
                 left_data_room.$.syncToast.show();
+                break;
+            case "deleteRoom":
+                var redirect =  window.location.pathname.split("/");
+                alert(OW.getLanguageText('cocreation', 'current_room_deleted'));
+                window.location.href = window.location.origin + "/cocreation";
                 break;
         }
     });

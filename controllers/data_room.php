@@ -91,6 +91,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                 ODE.ajax_coocreation_room_get_array_sheetdata = {$ajax_coocreation_room_get_array_sheetdata}
                 ODE.ajax_coocreation_room_update_metadata     = {$ajax_coocreation_room_update_metadata}
                 ODE.ajax_coocreation_room_add_datalet         = {$ajax_coocreation_room_add_datalet}
+                ODE.ajax_coocreation_room_delete_datalet      = {$ajax_coocreation_room_delete_datalet}
                 ODE.ajax_coocreation_room_publish_dataset     = {$ajax_coocreation_room_publish_dataset}
                 ODE.ajax_coocreation_room_get_html_note       = {$ajax_coocreation_room_get_html_note}
                 COCREATION.sheetName                          = {$sheetName}
@@ -103,6 +104,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                'ajax_coocreation_room_get_array_sheetdata' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getArrayOfObjectSheetData') . "?sheetName=" . $sheetName,
                'ajax_coocreation_room_update_metadata'     => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'updateMetadata'),
                'ajax_coocreation_room_add_datalet'         => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'addDataletToRoom')          . "?roomId="  . $params['roomId'],
+               'ajax_coocreation_room_delete_datalet'      => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'deleteDataletFromRoom'),
                'ajax_coocreation_room_publish_dataset'     => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'publishDataset'),
                'ajax_coocreation_room_get_html_note'       => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getNoteHTMLByPadIDApiUrl')  . "?noteUrl="  . $noteUrl,
                'sheetName'                                 => $sheetName,
