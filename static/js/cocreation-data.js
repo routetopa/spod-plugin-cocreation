@@ -6,6 +6,24 @@ $(document).ready(function(){
         alert("open map");
     });
 
+    window.addEventListener('cocreation-paper-card-controllet_delete', function(e){
+        var c = confirm(OW.getLanguageText('cocreationep', 'confirm_delete_datalet'));
+        if(c == true) {
+            $.post(ODE.ajax_coocreation_room_delete_datalet,
+                {
+                    roomId: e.detail.roomId
+                },
+                function (data, status) {
+                    data = JSON.parse(data);
+                    if (data.status == "ok") {
+                    } else {
+                        OW.info(OW.getLanguageText('cocreation', 'room_delete_fail'));
+                    }
+                }
+            );
+        }
+    });
+
     window.addEventListener('message', function(e){
         switch(e.data){
             case 'ethersheet_sheet_updated':

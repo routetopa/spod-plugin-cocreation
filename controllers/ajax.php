@@ -70,6 +70,24 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         OW::getApplication()->redirect(OW::getRouter()->urlFor('COCREATION_CTRL_Main', 'index'));
     }
 
+    public function deleteRoom(){
+        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        if ($clean == null){
+            echo json_encode(array("status" => "error", "massage" => 'Insane inputs detected'));
+            OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'insane_user_email_value'));
+            exit;
+        }
+
+        COCREATION_BOL_Service::getInstance()->deleteRoomById($clean['roomId']);
+        OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_delete_room_successful'));
+        echo json_encode(array("status" => "ok", "message" => "dataset successful created in the current room"));
+        SPODNOTIFICATION_CLASS_EventHandler::getInstance()->emitNotification(["plugin" => "cocreation",
+            "operation" => "deleteRoom",
+            "entity_type" => COCREATION_BOL_Service::ROOM_ENTITY_TYPE,
+            "entity_id" => $clean['roomId']]);
+        exit;
+    }
+
     public function addNewMembersToRoom(){
         $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
         if ($clean == null){
@@ -175,6 +193,21 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             echo json_encode(array("status" => "error", "message" => "There are some problems with selected parameters for current datalet"));
             exit;
         }
+    }
+
+    public function deleteDataletFromRoom(){
+        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        if ($clean == null){
+            echo json_encode(array("status" => "error", "massage" => 'Insane inputs detected'));
+            OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'insane_user_email_value'));
+            exit;
+        }
+
+        COCREATION_BOL_Service::getInstance()->deleteDataletFromRoom($clean['roomId'], $clean['dataletId']);
+        OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_delete_datalet_successful'));
+        echo json_encode(array("status" => "ok", "message" => "datalet successful deleted in the current room"));
+        SPODNOTIFICATION_CLASS_EventHandler::getInstance()->emitNotification(["plugin" => "cocreation", "operation" => "deleteDataletFromRoom", "entity_type" => COCREATION_BOL_Service::ROOM_ENTITY_TYPE, "entity_id" => $clean['roomId']]);
+        exit;
     }
 
     public function addPostitToDatalet()

@@ -28,6 +28,8 @@ class COCREATION_BOL_Service
         );
     }
 
+    //SHEET
+
     public function getSheetData($sheetName){
         $data = array();
         try {
@@ -140,6 +142,16 @@ class COCREATION_BOL_Service
         COCREATION_BOL_RoomSheetDao::getInstance()->save($roomSheet);
     }
 
+    public function getSheetByRoomId($roomId)
+    {
+        $example = new OW_Example();
+        $example->andFieldEqual('roomId', $roomId);
+        $result = COCREATION_BOL_RoomSheetDao::getInstance()->findListByExample($example);
+        return $result;
+    }
+
+    //METADATA
+
     public function createMetadataForRoom($roomId){
         $roomMetadata = new COCREATION_BOL_RoomMetadata();
 
@@ -195,14 +207,6 @@ class COCREATION_BOL_Service
         return COCREATION_BOL_RoomMetadataDao::getInstance()->updateMetadata($roomId,$ccr,$ccia, $e);
     }
 
-    public function getSheetByRoomId($roomId)
-    {
-        $example = new OW_Example();
-        $example->andFieldEqual('roomId', $roomId);
-        $result = COCREATION_BOL_RoomSheetDao::getInstance()->findListByExample($example);
-        return $result;
-    }
-
     public function getMetadataByRoomId($roomId)
     {
         $example = new OW_Example();
@@ -211,9 +215,61 @@ class COCREATION_BOL_Service
         return $result;
     }
 
+    //TEMPLATES
+
+    public function addTemplate($name, $description, $url)
+    {
+        $template = new COCREATION_BOL_Template();
+
+        $template->name        = $name;
+        $template->description = $description;
+        $template->url         = $url;
+
+        COCREATION_BOL_TemplateDao::getInstance()->save($template);
+    }
+
     public function getAllTemplates()
     {
         return COCREATION_BOL_TemplateDao::getInstance()->findAll();
+    }
+
+    public function removeTemplate($id)
+    {
+        COCREATION_BOL_TemplateDao::getInstance()->deleteById($id);
+    }
+
+    //ROOMS
+
+    public function addRoom($ownerId, $name, $subject,
+                            $description, $from, $to,
+                            $goal, $invitationText, $isOpen,
+                            $invitedUserArray, $roomType)
+    {
+
+        $room = new COCREATION_BOL_Room();
+
+        $room->ownerId        = $ownerId;
+        $room->name           = $name;
+        $room->subject        = $subject;
+        $room->description    = $description;
+        $room->from           = $from;
+        $room->to             = $to;
+        $room->goal           = $goal;
+        $room->invitationText = $invitationText;
+        $room->isOpen         = $isOpen;
+        $room->type           = $roomType;
+
+        COCREATION_BOL_RoomDao::getInstance()->save($room);
+
+        foreach($invitedUserArray as $user)
+        {
+            $u   = BOL_UserService::getInstance()->findByEmail($user);
+            if($u->id != NULL) $this->addUserToRoom($room->id, $user, $u->id);
+        }
+
+        return $room;
+
+        //$this->addDocToRoom($room->id, $templateId);
     }
 
     public function  getAllRooms()
@@ -228,21 +284,15 @@ class COCREATION_BOL_Service
         return $result;
     }
 
-    public function addTemplate($name, $description, $url)
-    {
-        $template = new COCREATION_BOL_Template();
+    public function deleteRoomById($roomId){
 
-        $template->name        = $name;
-        $template->description = $description;
-        $template->url         = $url;
-
-        COCREATION_BOL_TemplateDao::getInstance()->save($template);
+        COCREATION_BOL_RoomDao::getInstance()->deleteById($roomId);
+        $this->deleteAllDataletsFromRoom($roomId);
+        $this->deleteAllPostitsFromRoom($roomId);
+        $this->deleteDatasetsFromRoom($roomId);
     }
 
-    public function removeTemplate($id)
-    {
-        COCREATION_BOL_TemplateDao::getInstance()->deleteById($id);
-    }
+    //USER AND MEMBER
 
     public function addUserToRoom($roomId, $email, $userId, $isJoined = 0)
     {
@@ -277,6 +327,8 @@ class COCREATION_BOL_Service
         return ($result[0]->isJoined == "1") ? true : false;
     }
 
+    //DOCUMENTS
+
     public function addDocToRoom($roomId, $templateId, $description, $url)
     {
         $roomDoc = new COCREATION_BOL_RoomDoc();
@@ -302,37 +354,7 @@ class COCREATION_BOL_Service
         return $result;
     }
 
-    public function addRoom($ownerId, $name, $subject,
-                            $description, $from, $to,
-                            $goal, $invitationText, $isOpen,
-                            $invitedUserArray, $roomType)
-    {
-
-        $room = new COCREATION_BOL_Room();
-
-        $room->ownerId        = $ownerId;
-        $room->name           = $name;
-        $room->subject        = $subject;
-        $room->description    = $description;
-        $room->from           = $from;
-        $room->to             = $to;
-        $room->goal           = $goal;
-        $room->invitationText = $invitationText;
-        $room->isOpen         = $isOpen;
-        $room->type           = $roomType;
-
-        COCREATION_BOL_RoomDao::getInstance()->save($room);
-
-        foreach($invitedUserArray as $user)
-        {
-            $u   = BOL_UserService::getInstance()->findByEmail($user);
-            if($u->id != NULL) $this->addUserToRoom($room->id, $user, $u->id);
-        }
-
-        return $room;
-
-        //$this->addDocToRoom($room->id, $templateId);
-    }
+    //DATALETS
 
     public function addDataletToRoom($roomId, $dataletId){
         $datalet = new COCREATION_BOL_RoomDatalet();
@@ -344,6 +366,40 @@ class COCREATION_BOL_Service
 
     }
 
+    public function deleteDataletFromRoom($roomId, $dataletId ){
+        $ex = new OW_Example();
+        $ex->andFieldEqual('roomId', $roomId);
+        $ex->andFieldEqual('dataletId', $dataletId);
+
+        if(!empty($dataletId))
+        {
+            $e = new OW_Example();
+            $e->andFieldEqual('id', $dataletId);
+            ODE_BOL_DataletDao::getInstance()->deleteByExample($e);
+        }
+
+        COCREATION_BOL_RoomDataletDao::getInstance()->deleteByExample($ex);
+        $this->deletePostitsFromDatalet($dataletId);
+    }
+
+    public function deleteAllDataletsFromRoom($roomId){
+
+        $datalets = $this->getDataletsByRoomId($roomId);
+
+        if(count($datalets) > 0){
+            foreach($datalets as $datalet) {
+                $e = new OW_Example();
+                $e->andFieldEqual('id', $datalet->dataletId);
+                ODE_BOL_DataletDao::getInstance()->deleteByExample($e);
+            }
+        }
+
+        $ex = new OW_Example();
+        $ex->andFieldEqual('roomId', $roomId);
+        COCREATION_BOL_RoomDataletDao::getInstance()->deleteByExample($ex);
+
+    }
+
     public function getDataletsByRoomId($roomId)
     {
         $example = new OW_Example();
@@ -351,6 +407,8 @@ class COCREATION_BOL_Service
         $result = COCREATION_BOL_RoomDataletDao::getInstance()->findListByExample($example);
         return $result;
     }
+
+    //DATASETS
 
     public function addDatasetToRoom($roomId, $url, $name, $description, $fields){
         $dataset = new COCREATION_BOL_RoomDataset();
@@ -372,6 +430,14 @@ class COCREATION_BOL_Service
         return $result;
     }
 
+    public function deleteDatasetsFromRoom($roomId){
+        $example = new OW_Example();
+        $example->andFieldEqual('roomId', $roomId);
+        COCREATION_BOL_RoomDatasetDao::getInstance()->deleteByExample($example);
+    }
+
+    //POSTITS
+
     public function addPostitToDataletInRoom($roomId, $dataletId, $title, $content){
 
         $postit = new COCREATION_BOL_RoomPostit();
@@ -392,6 +458,20 @@ class COCREATION_BOL_Service
         for($i=0;$i < count($result);$i++) $result[$i]->content = htmlspecialchars($result[$i]->content);
         return $result;
     }
+
+    public function deletePostitsFromDatalet($dataletId){
+        $example = new OW_Example();
+        $example->andFieldEqual('dataletId', $dataletId);
+        COCREATION_BOL_RoomPostitDao::getInstance()->deleteByExample($example);
+    }
+
+    public function deleteAllPostitsFromRoom($roomId){
+        $example = new OW_Example();
+        $example->andFieldEqual('roomId', $roomId);
+        COCREATION_BOL_RoomPostitDao::getInstance()->deleteByExample($example);
+    }
+
+    //COCREATION DATASETS
 
     public function addDataset($roomId,
                                $owners,

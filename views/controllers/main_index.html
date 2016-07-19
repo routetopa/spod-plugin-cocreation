@@ -78,6 +78,28 @@
             }
             ,1000);
 
+    $(document).ready(function(){
+        window.addEventListener('cocreation-paper-card-controllet_delete', function(e){
+            var c = confirm(OW.getLanguageText('cocreation', 'confirm_delete_datalet'));
+            if(c == true) {
+                $.post(ODE.ajax_coocreation_delete_room,
+                        {
+                            roomId: e.detail.roomId
+                        },
+                        function (data, status) {
+                            data = JSON.parse(data);
+                            if (data.status == "ok") {
+                                OW.info(OW.getLanguageText('cocreation', 'room_delete_successful'));
+                                location.reload();
+                            } else {
+                                OW.info(OW.getLanguageText('cocreation', 'room_delete_fail'));
+                            }
+                        }
+                );
+            }
+        });
+    });
+
 </script>
 {/literal}
 
@@ -92,12 +114,16 @@
     <div class="layout" style="margin-top:20px;">
         {foreach $cocreation_rooms as $room}
         <cocreation-paper-card-controllet
+                room-id="{$room->id}"
                 name="{$room->name}"
                 owner="{$room->owner}"
                 from="{$room->from}"
                 to="{$room->to}"
                 goal="{$room->goal}"
                 room-type="{$room->type}"
+                {if $userId == $room->ownerId}
+                is-owner
+                {/if}
                 room-url="{$partialRoomUrl}{$room->type}-room/{$room->id}">
          </cocreation-paper-card-controllet>
         {/foreach}
