@@ -215,6 +215,12 @@ class COCREATION_BOL_Service
         return $result;
     }
 
+    public function deleteMetadataFromRoom($roomId){
+        $example = new OW_Example();
+        $example->andFieldEqual('roomId', $roomId);
+        COCREATION_BOL_RoomMetadataDao::getInstance()->deleteByExample($example);
+    }
+
     //TEMPLATES
 
     public function addTemplate($name, $description, $url)
@@ -290,6 +296,8 @@ class COCREATION_BOL_Service
         $this->deleteAllDataletsFromRoom($roomId);
         $this->deleteAllPostitsFromRoom($roomId);
         $this->deleteDatasetsFromRoom($roomId);
+        $this->deleteMetadataFromRoom($roomId);
+        $this->deleteMembersFromRoom($roomId);
     }
 
     //USER AND MEMBER
@@ -304,6 +312,12 @@ class COCREATION_BOL_Service
         $roomMember->userId   = $userId;
 
         COCREATION_BOL_RoomMemberDao::getInstance()->save($roomMember);
+    }
+
+    public function deleteMembersFromRoom($roomId){
+        $example = new OW_Example();
+        $example->andFieldEqual('roomId', $roomId);
+        COCREATION_BOL_RoomMemberDao::getInstance()->deleteByExample($example);
     }
 
     public function getRoomMembers($roomId)
@@ -504,13 +518,13 @@ class COCREATION_BOL_Service
         COCREATION_BOL_DatasetDao::getInstance()->save($dataset);
     }
 
-    public function  getAllDatasets()
+    public function getAllDatasets()
     {
         $sql = "SELECT * FROM ". OW_DB_PREFIX ."cocreation_dataset order by roomId DESC, version DESC";
         return OW::getDbo()->queryForObjectList($sql, 'COCREATION_BOL_Dataset');
     }
 
-    public function  getDatasetByRoomIdAndVersion($roomId, $version)
+    public function getDatasetByRoomIdAndVersion($roomId, $version)
     {
         $ex = new OW_Example();
         $ex->andFieldEqual('roomId', $roomId);
