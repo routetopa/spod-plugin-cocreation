@@ -419,10 +419,11 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             $room = COCREATION_BOL_Service::getInstance()->getRoomById($dataset->roomId);
 
             $data[] = array(
-                'resource_name' => $room->name . " - Ver. " . $dataset->version,
+                'resource_name' => $room->name,
                 'url' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getDatasetByRoomIdAndVersion') . "?room_id=" . $dataset->roomId . "&version=" . $dataset->version,
                 'metas' => $dataset->common_core_required_metadata,
-                'users' => $avatars
+                'users' => $avatars,
+                'version' => $dataset->version
             );
         }
 
