@@ -121,7 +121,7 @@ EtherSheetService.prototype.sheetToCSV = function(sheet_id,cb){
       _.each(sheet_data.cols, function(col){
         if(sheet_data.cells[row] && sheet_data.cells[row][col]){
           //output += sheet_data.cells[row][col].value + ',';
-          output += '"' +  sheet_data.cells[row][col].value.toString().replace('"','""') + '",';
+          output += '"' +  sheet_data.cells[row][col].value.replace('"','""') + '",';
         } else {
           output += ',';
         }
