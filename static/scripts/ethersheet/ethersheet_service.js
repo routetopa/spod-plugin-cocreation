@@ -122,7 +122,7 @@ EtherSheetService.prototype.sheetToCSV = function(sheet_id,cb){
         if(sheet_data.cells[row] && sheet_data.cells[row][col]){
           output += sheet_data.cells[row][col].value + '|';
         } else {
-          //output += '###';
+          output += '|';
         }
       });
       output += "\n"
