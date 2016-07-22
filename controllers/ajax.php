@@ -290,6 +290,8 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             OW::getFeedback()->info(OW::getLanguage()->text('cocreationes', 'insane_values'));
             exit;
         }
+
+        header("Access-Control-Allow-Origin: *");
         echo json_encode(COCREATION_BOL_Service::getInstance()->getArrayOfObjectSheetData($clean['sheetName']));
         exit;
     }
