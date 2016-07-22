@@ -64,8 +64,8 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
             $this->addComponent('private_room', new SPODPR_CMP_PrivateRoomCard('ow_attachment_btn', array('datalet', 'link')));
         /* ODE */
 
-        $commentCmp = new SPODTCHAT_CMP_Comments($commentsParams, 2, COCREATION_BOL_Service::COMMENT_ENTITY_TYPE, $params['roomId']);
-        $this->addComponent('comments', $commentCmp);
+        /*$commentCmp = new SPODTCHAT_CMP_Comments($commentsParams, 2, COCREATION_BOL_Service::COMMENT_ENTITY_TYPE, $params['roomId']);
+        $this->addComponent('comments', $commentCmp);*/
 
         $sheetUrl = COCREATION_BOL_Service::getInstance()->getSheetByRoomId($params['roomId'])[0]->url;
         $sheetName = explode('/', $sheetUrl)[4];
