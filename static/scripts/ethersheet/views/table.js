@@ -367,7 +367,7 @@ var Table = module.exports = View.extend({
     _.each(this.getSheet().colIds(), function(col_id,index){
       width = view.widthForCol(col_id);
 
-      var header = (view.getSheet().cells[view.getSheet().rows[0]] == undefined) ? h.columnIndexToName(index) : view.getSheet().cells[view.getSheet().rows[0]][col_id].value;
+      var header = (view.getSheet().cells[view.getSheet().rows[0]][col_id] == undefined ) ? h.columnIndexToName(index) : view.getSheet().cells[view.getSheet().rows[0]][col_id].value;
       html +='<th id="es-col-header-'+col_id+'" data-col_id="'+col_id+'" class="es-column-header" style="width:'+width+'px;">'
           //+h.columnIndexToName(index)
           + header
