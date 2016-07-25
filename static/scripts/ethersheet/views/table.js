@@ -358,8 +358,27 @@ var Table = module.exports = View.extend({
 
 
 // ## COLUMN METHODS
-
   drawColHeaders: function(){
+    var view = this;
+    var html = '';
+
+    var width = null;
+
+    _.each(this.getSheet().colIds(), function(col_id,index){
+      width = view.widthForCol(col_id);
+
+      var header = (view.getSheet().cells[view.getSheet().rows[0]] == undefined) ? h.columnIndexToName(index) : view.getSheet().cells[view.getSheet().rows[0]][col_id].value;
+      html +='<th id="es-col-header-'+col_id+'" data-col_id="'+col_id+'" class="es-column-header" style="width:'+width+'px;">'
+          //+h.columnIndexToName(index)
+          + header
+          +'<img src="/es_client/icons/ethersheet-downarrow.png" class="es-menu-arrow">'
+          +'</th>';
+    });
+
+    $('#es-column-headers-'+this.getId(),this.$el).html(html);
+  },
+
+  /*drawColHeaders: function(){
     var view = this;
     var html = '';
 
@@ -374,7 +393,7 @@ var Table = module.exports = View.extend({
     });
 
     $('#es-column-headers-'+this.getId(),this.$el).html(html);
-  },
+  },*/
 
   widthForCol: function(col_id){
     var row_id = this.getSheet().rowAt(0);
