@@ -13,16 +13,7 @@
 {literal}
 <style is="custom-style">
 
-    paper-fab
-    {
-        --paper-fab-background:#2196F3;
-    }
 
-    paper-fab-speed-dial.add-paper-fab {
-        position: absolute;
-        top: 58px;
-        right: 40px;
-    }
 
     body .floatbox_canvas .floatbox_container{ margin-top:110px; }
 
@@ -57,6 +48,45 @@
         position: absolute;
         top: 64px;
         right: 103px;
+    }
+
+    .room_container {
+        position: relative;
+        min-height: calc(100vh - 56px);
+    }
+
+    .ilcos {
+        height: 56px;
+        width: 104px;
+        background: transparent;
+        position: absolute;
+        bottom: 32px;
+        right: 32px;
+        z-index: 11;
+        float: right;
+
+    }
+
+    paper-fab
+    {
+        --paper-fab-background:#2196F3;
+        /*--paper-fab-background:#00BCD4;*/
+    }
+
+    paper-fab#view_datasets {
+        float: left;
+        margin-top: 8px;
+    }
+
+    paper-fab-speed-dial#add_dataset {
+        float: right;
+        margin-left: 48px;
+    }
+
+    paper-fab-speed-dial.add-paper-fab {
+        position: absolute;
+        /*top: 58px;*/
+        /*right: 40px;*/
     }
 
 </style>
@@ -111,7 +141,7 @@
         </div>
     {/if}
 
-    <div class="layout">
+    <div class=" room_container">
         {foreach $cocreation_rooms as $room}
         <cocreation-paper-card-controllet
                 room-id="{$room->id}"
@@ -127,19 +157,32 @@
                 room-url="{$partialRoomUrl}{$room->type}-room/{$room->id}">
          </cocreation-paper-card-controllet>
         {/foreach}
-    </div>
 
-    <paper-fab-speed-dial direction="bottom" class="bottom-right add-paper-fab">
-        <paper-fab icon="add" title='' class="dropdown-trigger"></paper-fab>
-        <div class="dropdown-content">
-            <paper-fab title="Add a cocreation data room" mini icon="assessment" onclick="addCocreationRoom('data')"></paper-fab>
-            <paper-fab title="Add a cocreation knowledge room" mini icon="description" onclick="addCocreationRoom('knowledge')"></paper-fab>
+        <div class="ilcos">
+            <paper-fab-speed-dial id="add_dataset" direction="top" class="bottom-right add-paper-fab">
+                <paper-fab icon="add" title='' class="dropdown-trigger"></paper-fab>
+                <div class="dropdown-content">
+                    <paper-fab title="Add a cocreation data room" mini icon="assessment" onclick="addCocreationRoom('data')"></paper-fab>
+                    <paper-fab title="Add a cocreation knowledge room" mini icon="description" onclick="addCocreationRoom('knowledge')"></paper-fab>
+                </div>
+            </paper-fab-speed-dial>
+
+            <paper-fab id="view_datasets" title="View all datasets" mini icon="view-list" onclick="window.location='/cocreation/data-room-list'"></paper-fab>
         </div>
-    </paper-fab-speed-dial>
-
-    <div class="dataset-list">
-        <paper-fab title="View all datasets" mini icon="view-list" onclick="window.location='/cocreation/data-room-list'"></paper-fab>
     </div>
+
+
+    <!--<paper-fab-speed-dial direction="bottom" class="bottom-right add-paper-fab">-->
+        <!--<paper-fab icon="add" title='' class="dropdown-trigger"></paper-fab>-->
+        <!--<div class="dropdown-content">-->
+            <!--<paper-fab title="Add a cocreation data room" mini icon="assessment" onclick="addCocreationRoom('data')"></paper-fab>-->
+            <!--<paper-fab title="Add a cocreation knowledge room" mini icon="description" onclick="addCocreationRoom('knowledge')"></paper-fab>-->
+        <!--</div>-->
+    <!--</paper-fab-speed-dial>-->
+
+    <!--<div class="dataset-list">-->
+        <!--<paper-fab title="View all datasets" mini icon="view-list" onclick="window.location='/cocreation/data-room-list'"></paper-fab>-->
+    <!--</div>-->
 
     {if {$invitations|@count} > 0}
         <paper-toast id="infoToast" duration="0" text="">
