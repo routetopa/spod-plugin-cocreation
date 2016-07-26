@@ -88,3 +88,7 @@ button#delete-sheet {
 button#rename-sheet{
   display: none;
 }
+
+li#es-add-sheet-button {
+  display: none;
+}
