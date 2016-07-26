@@ -55,11 +55,11 @@
         min-height: calc(100vh - 56px);
     }
 
-    .ilcos {
+    .buttons_container {
         height: 56px;
         width: 104px;
         background: transparent;
-        position: absolute;
+        position: fixed;
         bottom: 32px;
         right: 32px;
         z-index: 11;
@@ -158,7 +158,7 @@
          </cocreation-paper-card-controllet>
         {/foreach}
 
-        <div class="ilcos">
+        <div class="buttons_container">
             <paper-fab-speed-dial id="add_dataset" direction="top" class="bottom-right add-paper-fab">
                 <paper-fab icon="add" title='' class="dropdown-trigger"></paper-fab>
                 <div class="dropdown-content">
