@@ -117,7 +117,7 @@
 
     $(document).ready(function(){
         window.addEventListener('cocreation-paper-card-controllet_delete', function(e){
-            var c = confirm(OW.getLanguageText('cocreation', 'confirm_delete_datalet'));
+            var c = confirm(OW.getLanguageText('cocreation', 'confirm_delete_room'));
             if(c == true) {
                 $.post(ODE.ajax_coocreation_delete_room,
                         {
