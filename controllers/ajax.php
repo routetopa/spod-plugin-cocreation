@@ -421,13 +421,14 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             $room = COCREATION_BOL_Service::getInstance()->getRoomById($dataset->roomId);
             $common_core_required_metadata = json_decode($dataset->common_core_required_metadata);
 
-            if(count($room) > 0)
-            {
-                $resource_name = $room->name;
-            }
-            else if($common_core_required_metadata->title != "")
+
+            if($common_core_required_metadata->title != "")
             {
                 $resource_name = $common_core_required_metadata->title;
+            }
+            else if(count($room) > 0)
+            {
+                $resource_name = $room->name;
             }
             else
             {

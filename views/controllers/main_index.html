@@ -44,11 +44,11 @@
         background-color: rgba(0, 0, 0, 0.4);
     }
 
-    .dataset-list {
-        position: absolute;
-        top: 64px;
-        right: 103px;
-    }
+    /*.dataset-list {*/
+        /*position: absolute;*/
+        /*top: 64px;*/
+        /*right: 103px;*/
+    /*}*/
 
     .room_container {
         position: relative;
@@ -56,15 +56,18 @@
     }
 
     .buttons_container {
-        height: 56px;
-        width: 104px;
-        background: transparent;
         position: fixed;
-        bottom: 32px;
+        bottom: calc(32px + 25px);
         right: 32px;
-        z-index: 11;
-        float: right;
 
+        height: 56px;
+        /*width: 104px;*/
+        width: 120px;
+        background: transparent;
+        z-index: 11;
+        /*float: right;*/
+        display: flex;
+        flex-direction: row;
     }
 
     paper-fab
@@ -73,20 +76,23 @@
         /*--paper-fab-background:#00BCD4;*/
     }
 
+    paper-fab#assessment_fab
+    {
+        --paper-fab-background:#4CAF50;
+    }
+
+    paper-fab#description_fab
+    {
+        /*--paper-fab-background:#2196F3;*/
+    }
+
     paper-fab#view_datasets {
-        float: left;
-        margin-top: 8px;
+        padding: 8px;
+        margin: 8px;
     }
 
     paper-fab-speed-dial#add_dataset {
-        float: right;
-        margin-left: 48px;
-    }
-
-    paper-fab-speed-dial.add-paper-fab {
-        position: absolute;
-        /*top: 58px;*/
-        /*right: 40px;*/
+        margin-left: 8px;
     }
 
 </style>
@@ -159,30 +165,18 @@
         {/foreach}
 
         <div class="buttons_container">
+            <paper-fab id="view_datasets" title="View all datasets" mini icon="view-list" onclick="window.location='/cocreation/data-room-list'"></paper-fab>
+
             <paper-fab-speed-dial id="add_dataset" direction="top" class="bottom-right add-paper-fab">
-                <paper-fab icon="add" title='' class="dropdown-trigger"></paper-fab>
+                <paper-fab id="add_fab" icon="add" title='' class="dropdown-trigger"></paper-fab>
                 <div class="dropdown-content">
-                    <paper-fab title="Add a cocreation data room" mini icon="assessment" onclick="addCocreationRoom('data')"></paper-fab>
-                    <paper-fab title="Add a cocreation knowledge room" mini icon="description" onclick="addCocreationRoom('knowledge')"></paper-fab>
+                    <paper-fab id="assessment_fab" title="Add a cocreation data room" mini icon="assessment" onclick="addCocreationRoom('data')"></paper-fab>
+                    <paper-fab id="description_fab" title="Add a cocreation knowledge room" mini icon="description" onclick="addCocreationRoom('knowledge')"></paper-fab>
                 </div>
             </paper-fab-speed-dial>
-
-            <paper-fab id="view_datasets" title="View all datasets" mini icon="view-list" onclick="window.location='/cocreation/data-room-list'"></paper-fab>
         </div>
     </div>
 
-
-    <!--<paper-fab-speed-dial direction="bottom" class="bottom-right add-paper-fab">-->
-        <!--<paper-fab icon="add" title='' class="dropdown-trigger"></paper-fab>-->
-        <!--<div class="dropdown-content">-->
-            <!--<paper-fab title="Add a cocreation data room" mini icon="assessment" onclick="addCocreationRoom('data')"></paper-fab>-->
-            <!--<paper-fab title="Add a cocreation knowledge room" mini icon="description" onclick="addCocreationRoom('knowledge')"></paper-fab>-->
-        <!--</div>-->
-    <!--</paper-fab-speed-dial>-->
-
-    <!--<div class="dataset-list">-->
-        <!--<paper-fab title="View all datasets" mini icon="view-list" onclick="window.location='/cocreation/data-room-list'"></paper-fab>-->
-    <!--</div>-->
 
     {if {$invitations|@count} > 0}
         <paper-toast id="infoToast" duration="0" text="">
