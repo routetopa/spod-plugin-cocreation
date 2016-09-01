@@ -113,12 +113,13 @@ EtherSheetService.prototype.getSheet = function(sheet_id,cb){
   });
 }; 
 
-EtherSheetService.prototype.sheetToCSV = function(sheet_id,cb){
+/*EtherSheetService.prototype.sheetToCSV = function(sheet_id,cb){
   var es = this;
   es.getSheet(sheet_id,function(err,sheet_data){
     var output = '';
     _.each(sheet_data.rows, function(row){
       _.each(sheet_data.cols, function(col){
+        debugger;
         if(sheet_data.cells[row] && sheet_data.cells[row][col]){
           output += sheet_data.cells[row][col].value + ',';
         } else {
@@ -128,6 +129,39 @@ EtherSheetService.prototype.sheetToCSV = function(sheet_id,cb){
       output += "\n"
     });
 
+    cb(null, output);
+  });
+};*/
+
+EtherSheetService.prototype.sheetToCSV = function(sheet_id,cb){
+  var es = this;
+  es.getSheet(sheet_id,function(err,sheet_data){
+    var output = '';
+
+    var frow = sheet_data.rows[0];
+    var lcol;
+    for(lcol = 0; lcol < sheet_data.cols.length; lcol++ ){
+      if(sheet_data.cells[frow][sheet_data.cols[lcol]] == undefined)
+        break;
+      else
+        output += sheet_data.cells[frow][sheet_data.cols[lcol]].value + ',';
+    }
+    output = output.substr(0, output.length - 1) + "\n";
+
+    var empty_cols_count, temp_output;
+    for(var r = 1;r < sheet_data.rows.length;r++){
+      empty_cols_count = 0;
+      temp_output = '';
+      for(var c = 0;c < lcol;c++){
+        if(sheet_data.cells[sheet_data.rows[r]] && sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]]){
+          temp_output += sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value + ',';
+        } else {
+          empty_cols_count++;
+          temp_output += ',';
+        }
+      }
+      if(empty_cols_count != lcol) output += temp_output.substr(0 , temp_output.length - 1) + "\n";
+    }
     cb(null, output);
   });
 };
