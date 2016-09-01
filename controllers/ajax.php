@@ -99,16 +99,18 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         $room = COCREATION_BOL_Service::getInstance()->getRoomById($clean['roomId']);
         foreach($clean['users_value'] as $user){
             $u   = BOL_UserService::getInstance()->findByEmail($user);
-            COCREATION_BOL_Service::getInstance()->addUserToRoom($room->id, $user, $u->id);
-            $js="$.post('" .
-                OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'confirmToJoinToRoom') . "?roomId=". $room->id . "&memberId=" . $u->id . "',
-                {}, function (data, status) {
-                   window.location ='".
-                str_replace("index/", $room->id, OW::getRouter()->urlFor($room->type == "knowledge" ? 'COCREATION_CTRL_KnowledgeRoom' : 'COCREATION_CTRL_DataRoom' , 'index')) ."';});";
+            if(!COCREATION_BOL_Service::getInstance()->isMemberJoinedToRoom($u->id, $room->id)) {
+                COCREATION_BOL_Service::getInstance()->addUserToRoom($room->id, $user, $u->id);
+                $js = "$.post('" .
+                    OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'confirmToJoinToRoom') . "?roomId=" . $room->id . "&memberId=" . $u->id . "',
+                    {}, function (data, status) {
+                       window.location ='" .
+                    str_replace("index/", $room->id, OW::getRouter()->urlFor($room->type == "knowledge" ? 'COCREATION_CTRL_KnowledgeRoom' : 'COCREATION_CTRL_DataRoom', 'index')) . "';});";
 
-            $message = $room->invitationText . "<br><br>" . "<span class=\"ow_button\"><input type=\"button\" value=\"Confirm to join\" onclick=\"" . $js ."\"></span>";
-            if (OW::getPluginManager()->isPluginActive('mailbox'))
-               MAILBOX_BOL_ConversationService::getInstance()->createConversation(OW::getUser()->getId(), $u->id, "Join to co-creation room : " . $room->name , $message);
+                $message = $room->invitationText . "<br><br>" . "<span class=\"ow_button\"><input type=\"button\" value=\"Confirm to join\" onclick=\"" . $js . "\"></span>";
+                if (OW::getPluginManager()->isPluginActive('mailbox'))
+                    MAILBOX_BOL_ConversationService::getInstance()->createConversation(OW::getUser()->getId(), $u->id, "Join to co-creation room : " . $room->name, $message);
+            }
         }
 
         OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_members_add_successful'));
