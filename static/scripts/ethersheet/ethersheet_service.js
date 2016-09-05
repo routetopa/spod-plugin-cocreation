@@ -162,8 +162,32 @@ EtherSheetService.prototype.sheetToCSV = function(sheet_id,cb){
       }
       if(empty_cols_count != lcol) output += temp_output.substr(0 , temp_output.length - 1) + "\n";
     }
-    cb(null, output);
+    debugger;
+    cb(null, output.substr(0 , output.length - 1));
   });
+};
+
+EtherSheetService.prototype.guessDelimiter = function(data){
+  debugger;
+  var lines = data.split('\n');
+  try{
+    //check if ',' is the delimiter
+    var c1 = lines[0].split(',');
+    var c2 = lines[1].split(',');
+    if(c1.length > 1 && c1.length == c2.length)
+      return ',';
+
+    //check if ';' is the delimiter
+    c1 = lines[0].split(';');
+    c2 = lines[1].split(';');
+    if(c1.length > 1 && c1.length == c2.length)
+      return ';';
+
+    return null;
+  }catch(e){
+    console.log(e);
+    return null;
+  }
 };
 
 EtherSheetService.prototype.createSheetFromCSV = function(sheet_id,data,cb){
@@ -177,41 +201,47 @@ EtherSheetService.prototype.createSheetFromCSV = function(sheet_id,data,cb){
 
   //make the data
   var colmap = {};
-  csv().from(data.toString())
-  .transform( function(row, row_id){
-    if(row_id == 0){
-      for(var i = 0; i < row.length; i++){
-        colmap[i] = uuid();
-        sheet.cols.push(colmap[i]);
-      }
-    }
-    var row_uuid = uuid();
-    sheet.rows.push(row_uuid);
-    sheet.cells[row_uuid] = {}
-    for(var col_idx = 0; col_idx < sheet.cols.length; col_idx++){
-      var col_uuid = colmap[col_idx];
-      var cell = {value:row[col_idx], type:Sheet.getCellType(row[col_idx])};
-      if(cell.type == 'function'){
-        cell.value = Sheet.preprocessValue(cell.value);
-      }
-      sheet.cells[row_uuid][col_uuid] = cell;
-    }
-  })
-  .on('end', function(count){
-    for(var i = 0; i < es.config.default_row_count; i++){
-      sheet.rows.push(uuid());
-    }
-    for(var i = 0; i < es.config.default_col_count; i++){
-      sheet.cols.push(uuid());
-    }
-    es.deleteSheet(sheet_id, function(){
-      es.createSheet(sheet_id,sheet,cb);
-    });
-  })
-  .on('error', function(error){
-    console.log(error);
-    cb(error);
-  });
+  var csv_parser = csv();
+  var delimiter = es.guessDelimiter(data.toString());
+  if(delimiter != null)
+    csv_parser.options.from.delimiter = delimiter;
+  else
+    throw new Error("Invalid csv format");
+  csv_parser.from(data.toString())
+      .transform( function(row, row_id){
+        if(row_id == 0){
+          for(var i = 0; i < row.length; i++){
+            colmap[i] = uuid();
+            sheet.cols.push(colmap[i]);
+          }
+        }
+        var row_uuid = uuid();
+        sheet.rows.push(row_uuid);
+        sheet.cells[row_uuid] = {}
+        for(var col_idx = 0; col_idx < sheet.cols.length; col_idx++){
+          var col_uuid = colmap[col_idx];
+          var cell = {value:row[col_idx], type:Sheet.getCellType(row[col_idx])};
+          if(cell.type == 'function'){
+            cell.value = Sheet.preprocessValue(cell.value);
+          }
+          sheet.cells[row_uuid][col_uuid] = cell;
+        }
+      })
+      .on('end', function(count){
+        for(var i = 0; i < es.config.default_row_count; i++){
+          sheet.rows.push(uuid());
+        }
+        for(var i = 0; i < es.config.default_col_count; i++){
+          sheet.cols.push(uuid());
+        }
+        es.deleteSheet(sheet_id, function(){
+          es.createSheet(sheet_id,sheet,cb);
+        });
+      })
+      .on('error', function(error){
+        console.log(error);
+        cb(error);
+      });
 
 };
 
