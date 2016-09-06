@@ -32,6 +32,7 @@ cloneRepository()
     #sh dev_install.sh
     npm install module
     npm install csv@0.2.0
+    npm install csv-sniffer
     tput setaf 2
     echo "done"
 }

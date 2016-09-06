@@ -3,8 +3,8 @@ var events = require("events");
 var ueberDB = require("ueberdb2");
 var uuid = require('node-uuid').v4;
 var async = require('async');
-var async = require('async');
 var csv = require('csv');
+var CSVSniffer  = require('csv-sniffer')();
 var _ = require('underscore');
 var Sheet = require('./models/sheet');
 var SheetCollection = require('./models/sheet_collection');
@@ -154,6 +154,10 @@ EtherSheetService.prototype.sheetToCSV = function(sheet_id,cb){
       temp_output = '';
       for(var c = 0;c < lcol;c++){
         if(sheet_data.cells[sheet_data.rows[r]] && sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]]){
+          if(sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value.indexOf(',') !== -1){
+            sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value = sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value.replace(new RegExp('"', 'g'), '""');
+            sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value = '"' + sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value + '"';
+          }
           temp_output += sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value + ',';
         } else {
           empty_cols_count++;
@@ -172,16 +176,19 @@ EtherSheetService.prototype.guessDelimiter = function(data){
   var lines = data.split('\n');
   try{
     //check if ',' is the delimiter
-    var c1 = lines[0].split(',');
-    var c2 = lines[1].split(',');
-    if(c1.length > 1 && c1.length == c2.length)
+    var header = lines[0].split(',');
+    if(header.length > 1)
       return ',';
 
     //check if ';' is the delimiter
-    c1 = lines[0].split(';');
-    c2 = lines[1].split(';');
-    if(c1.length > 1 && c1.length == c2.length)
+    header = lines[0].split(';');
+    if(header.length > 1)
       return ';';
+
+    //check if '\t' is the delimiter
+    header = lines[0].split('\t');
+    if(header.length > 1)
+      return '\t';
 
     return null;
   }catch(e){
@@ -200,13 +207,17 @@ EtherSheetService.prototype.createSheetFromCSV = function(sheet_id,data,cb){
   };
 
   //make the data
+  debugger;
   var colmap = {};
   var csv_parser = csv();
-  var delimiter = es.guessDelimiter(data.toString());
+  var sniffer = new CSVSniffer([';',',','\t']);
+  var sniffResult = sniffer.sniff(data.toString(), {quoteChar:'"', hasHeader: true});
+  var delimiter = (sniffResult.delimiter == null) ? es.guessDelimiter(data.toString()) : sniffResult.delimiter;
   if(delimiter != null)
     csv_parser.options.from.delimiter = delimiter;
   else
     throw new Error("Invalid csv format");
+
   csv_parser.from(data.toString())
       .transform( function(row, row_id){
         if(row_id == 0){
