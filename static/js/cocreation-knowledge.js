@@ -21,13 +21,32 @@ $( document ).ready(function() {
         }
     });
 
-    window.addEventListener('dataset-selection-controllet_data-url', function(e){
+    window.addEventListener('data-ready', function(e) {
+        if(e.detail.ready) {
+            room.$.slider_dataset.chevronRight(true);
+            room.$.dataset_selection.$.selected_url.invalid = false;
+        }
+        else
+            room.$.dataset_selection.$.selected_url.invalid = true;
+
+        room.$.dataset_selection.showDatasetInfo();
+    });
+
+    window.addEventListener('select-dataset-controllet_data-url', function(e){
         //To get all entry for selected dataset
         /*var f = Object.create(providerFactory);
         var provider = f.getProvider(e.detail.url);
         var dataUrl = provider.addLimit(e.detail.url);*/
 
-        room.$.select_data_controllet.dataUrl =  e.detail.url;
+        /*room.$.select_data_controllet.dataUrl =  e.detail.url;
+        room.$.select_data_controllet.init();*/
+        room.$.slider_dataset.chevronRight(false);
+
+        /*var f = Object.create(providerFactory);
+        var provider = f.getProvider(e.detail.url);
+        var dataUrl = provider.addLimit(e.detail.url);*/
+
+        room.$.select_data_controllet.dataUrl = e.detail.url;
         room.$.select_data_controllet.init();
     });
 

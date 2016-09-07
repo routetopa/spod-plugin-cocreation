@@ -10,8 +10,17 @@ class COCREATION_CMP_DatasetsLibrary extends OW_Component
 {
     public function __construct($roomId)
     {
+        //selectedfields="[{"field":"Column","value":"Citta","index":1},{"field":"Column","value":"Descrizione","index":2}]"
         //get all dataset for current room
         $datasets = COCREATION_BOL_Service::getInstance()->getDatasetsByRoomId($roomId);
+        foreach($datasets as $d){
+            $d->selectedfields = "[";
+            $d->fields = json_decode($d->fields);
+            for($i=0; $i < count($d->fields);$i++)
+                $d->selectedfields .= '{"field":"Column","value":"'. $d->fields[$i] .'","index":'. ($i+1) . '},';
+            $d->selectedfields[strlen($d->selectedfields) - 1] = ']';
+
+        }
         $this->assign('datasets', $datasets);
 
         $suggested_datasets = array();

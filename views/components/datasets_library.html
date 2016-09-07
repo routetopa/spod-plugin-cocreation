@@ -38,7 +38,7 @@
 {/literal}
 
 <div id="dataset-grid-container">
-    {foreach $datasets as $dataset }
+    {foreach $datasets as $dataset name=cycle}
     <paper-card-controllet
             card-type="datalet"
             card-title="{$dataset->name}"
@@ -49,7 +49,7 @@
                 data-url="{$dataset->url}"
                 description="{$dataset->description}"
                 title="{$dataset->name}"
-                fields='{$dataset->fields}'>
+                selectedfields='{$dataset->selectedfields}'>
         </datatable-datalet>
     </paper-card-controllet>
     {/foreach}
