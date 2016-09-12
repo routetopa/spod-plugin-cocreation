@@ -92,7 +92,7 @@
         position: relative;
     }
 
-    paper-tabs{
+   /* paper-tabs{
         width: 50%;
         position: fixed;
         bottom: 0;
@@ -113,11 +113,47 @@
     }
 
     paper-tab:hover {
-        /*color: #2196F3;*/
+        /!*color: #2196F3;*!/
     }
 
     paper-tab[disabled] {
         color: #B6B6B6;
+    }*/
+
+    paper-tabs#cocreation_tab {
+        width: 50%;
+        position: fixed;
+        bottom: 2px;
+        left: 2px;
+    }
+
+    paper-tabs#data_tab {
+        width: 50%;
+        position: fixed;
+        bottom: 2px;
+        left: 2px;
+    }
+
+    paper-tabs {
+        background: #B6B6B6;
+    }
+
+    paper-tab {
+        font-weight: 700;
+        border-right: 2px solid #FFFFFF;
+    }
+
+    paper-tab:nth-last-child(2) {
+        border-right: 0;
+    }
+
+    paper-tab.iron-selected {
+        color: #FFFFFF;
+        background: #2196F3;;
+    }
+
+    paper-tab:not(.iron-selected):hover {
+        color: #2196F3;
     }
 
     h5#mode{
@@ -360,7 +396,7 @@
                          </div>
                      </iron-pages>
 
-                     <paper-tabs id="data_tab" selected="[[selectedTab_data]]">
+                     <paper-tabs id="data_tab" selected="[[selectedTab_data]]" no-bar>
                          <paper-tab noink on-click="_tabClicked_data" id="0">{text key="cocreation+room_entrance"}</paper-tab>
                          <paper-tab noink on-click="_tabClicked_data" id="1">{text key="cocreation+room_add_dataset"}</paper-tab>
                          <paper-tab noink on-click="_tabClicked_data" id="2">{text key="cocreation+room_view_datalibrary"}</paper-tab>
@@ -411,7 +447,7 @@
 
                     </paper-material>
 
-                    <paper-tabs id="cocreation_tab" selected="[[selectedTab_cocreation]]">
+                    <paper-tabs id="cocreation_tab" selected="[[selectedTab_cocreation]]" no-bar>
                        <paper-tab noink on-click="_tabClicked_cocreation" id="0">{text key="cocreation+room_explore"}</paper-tab>
                        <paper-tab noink on-click="_tabClicked_cocreation" id="1">{text key="cocreation+room_ideas"}</paper-tab>
                        <paper-tab noink on-click="_tabClicked_cocreation" id="2">{text key="cocreation+room_outcome"}</paper-tab>
