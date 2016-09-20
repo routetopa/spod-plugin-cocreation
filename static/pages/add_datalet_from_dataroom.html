@@ -62,11 +62,15 @@
             addedJs++;
             loadScript(dynamicAddedJs[addedJs], onLoadCallback);
 
-            $(document).ready(function(){
+            window.addEventListener("data-sevc-controllet.dataletCreated", function(e){
+                parent.ODE.savedDataletListener(e);
+            });
+
+            /*$(document).ready(function(){
                 window.addEventListener("data-sevc-controllet.dataletCreated", function(e){
                     parent.ODE.savedDataletListener(e);
                 });
-            });
+            });*/
         };
 
         loadScript(dynamicAddedJs[addedJs], onLoadCallback);
