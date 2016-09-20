@@ -9,5 +9,7 @@ class COCREATION_CMP_AddDataletFromDataRoom extends OW_Component
         $this->assign('deepUrl', ODE_DEEP_URL);
         $this->assign('dataletListUrl', ODE_DEEP_DATALET_LIST);
 
+
+
     }
 }
