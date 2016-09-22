@@ -222,7 +222,7 @@ room.loadMetadata = function(core_common_required_metadata, common_core_if_appli
 var left_data_room = document.querySelector('#left_data_room');
 left_data_room.selectedTab           = 0;
 left_data_room._tabClicked = function(e){
-    left_data_room.selectedTab = e.currentTarget.id;
+    left_data_room.selectedTab = e.currentTarget.id.split("_")[1];
 }
 
 left_data_room.addMetadata = function(){

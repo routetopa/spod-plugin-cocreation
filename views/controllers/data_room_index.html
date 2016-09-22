@@ -325,8 +325,11 @@
         <!--<search-panel-controllet right-direction="true"></search-panel-controllet>-->
         <div id="cocreation_view_modes" class="layout horizontal">
             <paper-fab id="cc_mode_0" class="cocreation_view_modes_button" mini icon="image:grid-on" on-click="_handleCcModeClick" style="background-color:#B6B6B6"></paper-fab>
+            <paper-tooltip for="cc_mode_0">{text key="cocreation+room_cc_spreadsheet"}</paper-tooltip>
             <paper-fab id="cc_mode_1" class="cocreation_view_modes_button" mini icon="view-agenda" on-click="_handleCcModeClick" style="background-color:#00BCD4"></paper-fab>
+            <paper-tooltip for="cc_mode_1">{text key="cocreation+room_cc_uniform"}</paper-tooltip>
             <paper-fab id="cc_mode_2" class="cocreation_view_modes_button" mini icon="assessment" on-click="_handleCcModeClick" style="background-color:#B6B6B6"></paper-fab>
+            <paper-tooltip for="cc_mode_2">{text key="cocreation+room_cc_datalet"}</paper-tooltip>
         </div>
     </paper-toolbar>
 
@@ -650,12 +653,12 @@
 
                 </iron-pages>
                 <paper-tabs id="data_tab" selected="[[selectedTab]]">
-                    <paper-tab noink on-click="_tabClicked" id="0">{text key="cocreation+room_dataset_tab_label"}</paper-tab>
-                    <paper-tooltip for="0">{text key="cocreation+room_dataset_tooltip"}</paper-tooltip>
-                    <paper-tab noink on-click="_tabClicked" id="1">{text key="cocreation+room_notes_tab_label"}</paper-tab>
-                    <paper-tooltip for="1">{text key="cocreation+room_notes_tooltip"}</paper-tooltip>
-                    <paper-tab noink on-click="_tabClicked" id="2">{text key="cocreation+room_metadata_tab_label"}</paper-tab>
-                    <paper-tooltip for="2">{text key="cocreation+room_metadata_tooltip"}</paper-tooltip>
+                    <paper-tab noink on-click="_tabClicked" id="t_0">{text key="cocreation+room_dataset_tab_label"}</paper-tab>
+                    <paper-tooltip for="t_0">{text key="cocreation+room_dataset_tooltip"}</paper-tooltip>
+                    <paper-tab noink on-click="_tabClicked" id="t_1">{text key="cocreation+room_notes_tab_label"}</paper-tab>
+                    <paper-tooltip for="t_1">{text key="cocreation+room_notes_tooltip"}</paper-tooltip>
+                    <paper-tab noink on-click="_tabClicked" id="t_2">{text key="cocreation+room_metadata_tab_label"}</paper-tab>
+                    <paper-tooltip for="t_2">{text key="cocreation+room_metadata_tooltip"}</paper-tooltip>
                 </paper-tabs>
             </div>
 
