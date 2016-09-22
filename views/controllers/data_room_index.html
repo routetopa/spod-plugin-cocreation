@@ -95,7 +95,7 @@
         position: relative;
     }
 
-    paper-tabs{
+   /* paper-tabs{
         position: relative;
         top: 0;
         left:0;
@@ -115,7 +115,7 @@
     }
 
     paper-tab:hover {
-        /*color: #2196F3;*/
+        /!*color: #2196F3;*!/
     }
 
     paper-tab[disabled] {
@@ -125,7 +125,7 @@
     paper-fab.sentiment-button
     {
         float: left;
-        /*--paper-fab-background:#2196F3;*/
+        /!*--paper-fab-background:#2196F3;*!/
         --iron-icon-height: 16px;
         --iron-icon-width:  16px;
         height: 20px;
@@ -134,6 +134,34 @@
         background-color: #2196F3;
 
         box-shadow:none;
+    }*/
+
+    paper-tabs#data_tab {
+        position: relative;
+        top: 0;
+        left:0;
+    }
+
+    paper-tabs {
+        background: #B6B6B6;
+    }
+
+    paper-tab {
+        font-weight: 700;
+        border-right: 2px solid #FFFFFF;
+    }
+
+    paper-tab:nth-last-child(2) {
+        border-right: 0;
+    }
+
+    paper-tab.iron-selected {
+        color: #FFFFFF;
+        background: #2196F3;;
+    }
+
+    paper-tab:not(.iron-selected):hover {
+        color: #2196F3;
     }
 
     #dialog_info {
