@@ -31,7 +31,6 @@
 <link rel="import" href="{$components_url}bower_components/paper-button/paper-button.html">
 <link rel="import" href="{$components_url}bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="{$components_url}bower_components/paper-styles/color.html">
-<link rel="import" href="{$components_url}bower_components/paper-tooltip/paper-tooltip.html">
 
 <script src="{$components_url}locales/controllet_ln.js" type="text/javascript"></script>
 <script src="{$components_url}locales/paper_card_controllet_ln.js" type="text/javascript"></script>
@@ -342,22 +341,17 @@
     {/if}
 {if $isMember == true}
     <paper-toolbar class="toolbar-main">
-        <paper-icon-button id="info_room_button" icon="info" on-tap="_openInfo"></paper-icon-button>
-        <paper-tooltip for="info_room_button" position="right">{text key="cocreation+room_info_tooltip"}</paper-tooltip>
-        <paper-icon-button id="publish_dataset_button" icon="editor:publish" on-tap="_publishDataset"></paper-icon-button>
-        <paper-tooltip for="publish_dataset_button" position="right">{text key="cocreation+room_publish_dataset_tooltip"}</paper-tooltip>
+        <paper-icon-button id="info_room_button" title='{text key="cocreation+room_info_tooltip"}' icon="info" on-tap="_openInfo"></paper-icon-button>
+        <paper-icon-button id="publish_dataset_button"  title='{text key="cocreation+room_info_tooltip"}' icon="editor:publish" on-tap="_publishDataset"></paper-icon-button>
         <!--<paper-button raised id="publish_dataset_button">Publish dataset</paper-button>-->
         <div class="title">
             <h5 id="mode">{text key="cocreation+room_menu_cocreation"}</h5>
         </div>
         <!--<search-panel-controllet right-direction="true"></search-panel-controllet>-->
         <div id="cocreation_view_modes" class="layout horizontal">
-            <paper-fab id="cc_mode_0" class="cocreation_view_modes_button" mini icon="image:grid-on" on-click="_handleCcModeClick" style="background-color:#B6B6B6"></paper-fab>
-            <paper-tooltip for="cc_mode_0" position="left">{text key="cocreation+room_cc_spreadsheet"}</paper-tooltip>
-            <paper-fab id="cc_mode_1" class="cocreation_view_modes_button" mini icon="view-agenda" on-click="_handleCcModeClick" style="background-color:#00BCD4"></paper-fab>
-            <paper-tooltip for="cc_mode_1" position="left">{text key="cocreation+room_cc_uniform"}</paper-tooltip>
-            <paper-fab id="cc_mode_2" class="cocreation_view_modes_button" mini icon="assessment" on-click="_handleCcModeClick" style="background-color:#B6B6B6"></paper-fab>
-            <paper-tooltip for="cc_mode_2" position="left">{text key="cocreation+room_cc_datalet"}</paper-tooltip>
+            <paper-fab id="cc_mode_0" title='{text key="cocreation+room_cc_spreadsheet"}' class="cocreation_view_modes_button" mini icon="image:grid-on" on-click="_handleCcModeClick" style="background-color:#B6B6B6"></paper-fab>
+            <paper-fab id="cc_mode_1" title='{text key="cocreation+room_cc_uniform"}' class="cocreation_view_modes_button" mini icon="view-agenda" on-click="_handleCcModeClick" style="background-color:#00BCD4"></paper-fab>
+            <paper-fab id="cc_mode_2" title='{text key="cocreation+room_cc_datalet"}' class="cocreation_view_modes_button" mini icon="assessment" on-click="_handleCcModeClick" style="background-color:#B6B6B6"></paper-fab>
         </div>
     </paper-toolbar>
 
@@ -674,19 +668,15 @@
                             </div>
                        </div>
 
-                       <paper-fab id="saveMetadataButton" mini icon="save" on-click="saveMetadata"></paper-fab>
-                       <paper-tooltip for="saveMetadataButton">{text key="cocreation+room_save_metadata_tooltip"}</paper-tooltip>
+                       <paper-fab id="saveMetadataButton" title='{text key="cocreation+room_save_metadata_tooltip"}' mini icon="save" on-click="saveMetadata"></paper-fab>
 
                     </paper-material>
 
                 </iron-pages>
                 <paper-tabs id="data_tab" selected="[[selectedTab]]">
-                    <paper-tab noink on-click="_tabClicked" id="t_0">{text key="cocreation+room_dataset_tab_label"}</paper-tab>
-                    <paper-tooltip for="t_0" position="top left">{text key="cocreation+room_dataset_tooltip"}</paper-tooltip>
-                    <paper-tab noink on-click="_tabClicked" id="t_1">{text key="cocreation+room_notes_tab_label"}</paper-tab>
-                    <paper-tooltip for="t_1" position="top left">{text key="cocreation+room_notes_tooltip"}</paper-tooltip>
-                    <paper-tab noink on-click="_tabClicked" id="t_2">{text key="cocreation+room_metadata_tab_label"}</paper-tab>
-                    <paper-tooltip for="t_2" position="top left">{text key="cocreation+room_metadata_tooltip"}</paper-tooltip>
+                    <paper-tab noink on-click="_tabClicked" title='{text key="cocreation+room_dataset_tooltip"}' id="t_0">{text key="cocreation+room_dataset_tab_label"}</paper-tab>
+                    <paper-tab noink on-click="_tabClicked" title='{text key="cocreation+room_dataset_tooltip"}' id="t_1">{text key="cocreation+room_notes_tab_label"}</paper-tab>
+                    <paper-tab noink on-click="_tabClicked" title='{text key="cocreation+room_metadata_tooltip"}' id="t_2">{text key="cocreation+room_metadata_tab_label"}</paper-tab>
                 </paper-tabs>
             </div>
 
