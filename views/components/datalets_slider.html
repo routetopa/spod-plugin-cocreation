@@ -99,8 +99,8 @@
     {foreach $datalets as $datalet name=alldatalets}
 
     <neon-animatable>
-        <paper-fab class="delete_datalet" mini icon="delete" onclick="room._handleDeleteClick('{$datalet->id}')" style="background-color: #b6b6b6;"></paper-fab>
-        <paper-tooltip for="delete_datalet">{text key="cocreation+delete_datalet_tooltip"}</paper-tooltip>
+        <paper-fab id="delete_datalet_button" class="delete_datalet" mini icon="delete" title='{text key="cocreation+delete_datalet_tooltip"}' onclick="room._handleDeleteClick('{$datalet->id}')" style="background-color: #b6b6b6;"></paper-fab>
+        <paper-tooltip for="delete_datalet_button" position="bottom left">{text key="cocreation+delete_datalet_tooltip"}</paper-tooltip>
         <div id="datalet_placeholder_{$smarty.foreach.alldatalets.index}" class="datalet-container">
             <link rel="import" href="{$components_url}datalets/{$datalet->component}/{$datalet->component}.html">
             <{$datalet->component}
@@ -121,6 +121,6 @@
 </page-slider-controllet>
 
 
-<iron-icon class="add_new_datalet" mini icon="assessment" onclick="room._addDatalet(COCREATION.room_type);"></iron-icon>
-<paper-tooltip for="add_new_datalet">{text key="cocreation+add_new_datalet_tooltip"}</paper-tooltip>
+<iron-icon id="add_new_datalet_button" class="add_new_datalet" title='{text key="cocreation+add_new_datalet_tooltip"}' mini icon="assessment" onclick="room._addDatalet(COCREATION.room_type);"></iron-icon>
+<paper-tooltip for="add_new_datalet_button" position="top left">{text key="cocreation+add_new_datalet_tooltip"}</paper-tooltip>
 {$private_room}

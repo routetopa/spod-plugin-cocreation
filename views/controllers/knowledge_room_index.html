@@ -339,18 +339,18 @@
             <paper-toolbar class="toolbar-main">
                 <paper-icon-button paper-drawer-toggle icon="menu"></paper-icon-button>
                 <paper-icon-button id="info_room_button" icon="info" on-tap="_openInfo"></paper-icon-button>
-                <paper-tooltip for="info_room_button">{text key="cocreation+room_info_tooltip"}</paper-tooltip>
+                <paper-tooltip for="info_room_button" position="right">{text key="cocreation+room_info_tooltip"}</paper-tooltip>
                 <div class="title">
                     <h5 id="mode">{text key="cocreation+room_menu_cocreation"}</h5>
                 </div>
                 <!--<search-panel-controllet right-direction="true"></search-panel-controllet>-->
                 <div id="cocreation_view_modes" class="layout horizontal">
                     <paper-fab id="cc_mode_0" class="cocreation_view_modes_button" mini icon="description" on-click="_handleCcModeClick" style="background-color:#B6B6B6"></paper-fab>
-                    <paper-tooltip for="cc_mode_0">{text key="cocreation+room_cc_document"}</paper-tooltip>
+                    <paper-tooltip for="cc_mode_0" position="left">{text key="cocreation+room_cc_document"}</paper-tooltip>
                     <paper-fab id="cc_mode_1" class="cocreation_view_modes_button" mini icon="view-agenda" on-click="_handleCcModeClick" style="background-color:#00BCD4"></paper-fab>
-                    <paper-tooltip for="cc_mode_1">{text key="cocreation+room_cc_uniform"}</paper-tooltip>
+                    <paper-tooltip for="cc_mode_1" position="left">{text key="cocreation+room_cc_uniform"}</paper-tooltip>
                     <paper-fab id="cc_mode_2" class="cocreation_view_modes_button" mini icon="assessment" on-click="_handleCcModeClick" style="background-color:#B6B6B6"></paper-fab>
-                    <paper-tooltip for="cc_mode_2">{text key="cocreation+room_cc_datalet"}</paper-tooltip>
+                    <paper-tooltip for="cc_mode_2" position="left">{text key="cocreation+room_cc_datalet"}</paper-tooltip>
                 </div>
             </paper-toolbar>
 
