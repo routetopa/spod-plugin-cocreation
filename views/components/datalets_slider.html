@@ -1,6 +1,7 @@
 <link rel="import" href="{$components_url}controllets/page-slider-controllet/page-slider-controllet.html"/>
 <link rel="import" href="{$components_url}bower_components/paper-fab-transitions/paper-fab-speed-dial.html">
 <link rel="import" href="{$components_url}controllets/postit-container-controllet/postit-container-controllet.html"/>
+<link rel="import" href="{$components_url}bower_components/paper-tooltip/paper-tooltip.html">
 
 <script src="{$components_url}locales/controllet_ln.js" type="text/javascript"></script>
 <script src="{$components_url}locales/paper_card_controllet_ln.js" type="text/javascript"></script>
@@ -99,6 +100,7 @@
 
     <neon-animatable>
         <paper-fab class="delete_datalet" mini icon="delete" onclick="room._handleDeleteClick('{$datalet->id}')" style="background-color: #b6b6b6;"></paper-fab>
+        <paper-tooltip for="delete_datalet">{text key="cocreation+delete_datalet_tooltip"}</paper-tooltip>
         <div id="datalet_placeholder_{$smarty.foreach.alldatalets.index}" class="datalet-container">
             <link rel="import" href="{$components_url}datalets/{$datalet->component}/{$datalet->component}.html">
             <{$datalet->component}
@@ -120,4 +122,5 @@
 
 
 <iron-icon class="add_new_datalet" mini icon="assessment" onclick="room._addDatalet(COCREATION.room_type);"></iron-icon>
+<paper-tooltip for="add_new_datalet">{text key="cocreation+add_new_datalet_tooltip"}</paper-tooltip>
 {$private_room}

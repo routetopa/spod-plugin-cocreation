@@ -26,6 +26,7 @@
 <link rel="import" href="{$components_url}bower_components/paper-button/paper-button.html">
 <link rel="import" href="{$components_url}bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="{$components_url}bower_components/paper-styles/color.html">
+<link rel="import" href="{$components_url}bower_components/paper-tooltip/paper-tooltip.html">
 
 <script src="{$components_url}locales/controllet_ln.js" type="text/javascript"></script>
 <script src="{$components_url}locales/paper_card_controllet_ln.js" type="text/javascript"></script>
@@ -338,6 +339,7 @@
             <paper-toolbar class="toolbar-main">
                 <paper-icon-button paper-drawer-toggle icon="menu"></paper-icon-button>
                 <paper-icon-button id="info_room_button" icon="info" on-tap="_openInfo"></paper-icon-button>
+                <paper-tooltip for="info_room_button">{text key="cocreation+room_info_tooltip"}</paper-tooltip>
                 <div class="title">
                     <h5 id="mode">{text key="cocreation+room_menu_cocreation"}</h5>
                 </div>

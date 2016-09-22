@@ -31,6 +31,7 @@
 <link rel="import" href="{$components_url}bower_components/paper-button/paper-button.html">
 <link rel="import" href="{$components_url}bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="{$components_url}bower_components/paper-styles/color.html">
+<link rel="import" href="{$components_url}bower_components/paper-tooltip/paper-tooltip.html">
 
 <script src="{$components_url}locales/controllet_ln.js" type="text/javascript"></script>
 <script src="{$components_url}locales/paper_card_controllet_ln.js" type="text/javascript"></script>
@@ -314,7 +315,9 @@
 {if $isMember == true}
     <paper-toolbar class="toolbar-main">
         <paper-icon-button id="info_room_button" icon="info" on-tap="_openInfo"></paper-icon-button>
+        <paper-tooltip for="info_room_button">{text key="cocreation+room_info_tooltip"}</paper-tooltip>
         <paper-icon-button id="publish_dataset_button" icon="editor:publish" on-tap="_publishDataset"></paper-icon-button>
+        <paper-tooltip for="publish_dataset_button">{text key="cocreation+room_publish_dataset_tooltip"}</paper-tooltip>
         <!--<paper-button raised id="publish_dataset_button">Publish dataset</paper-button>-->
         <div class="title">
             <h5 id="mode">{text key="cocreation+room_menu_cocreation"}</h5>
@@ -352,7 +355,7 @@
             <p id="period">{$room->from} / {$room->to}</p>
             <h2>{text key="cocreation+room_members"}</h2>
             {if $ownerUserActive}
-            <span class="ow_button"><input type="button" value='{text key="cocreationep+room_invite_new_members_button"}' id="inviteNewMembers" onclick="room.inviteNewUsers();"></span>
+            <span class="ow_button"><input type="button" value='{text key="cocreation+room_invite_new_members_button"}' id="inviteNewMembers" onclick="room.inviteNewUsers();"></span>
             {/if}
             <div id="members_container">
                 <div class="layout vertical">
@@ -641,14 +644,18 @@
                        </div>
 
                        <paper-fab id="saveMetadataButton" mini icon="save" on-click="saveMetadata"></paper-fab>
+                       <paper-tooltip for="saveMetadataButton">{text key="cocreation+room_save_metadata_tooltip"}</paper-tooltip>
 
                     </paper-material>
 
                 </iron-pages>
                 <paper-tabs id="data_tab" selected="[[selectedTab]]">
                     <paper-tab noink on-click="_tabClicked" id="0">{text key="cocreation+room_dataset_tab_label"}</paper-tab>
+                    <paper-tooltip for="0">{text key="cocreation+room_dataset_tooltip"}</paper-tooltip>
                     <paper-tab noink on-click="_tabClicked" id="1">{text key="cocreation+room_notes_tab_label"}</paper-tab>
+                    <paper-tooltip for="1">{text key="cocreation+room_notes_tooltip"}</paper-tooltip>
                     <paper-tab noink on-click="_tabClicked" id="2">{text key="cocreation+room_metadata_tab_label"}</paper-tab>
+                    <paper-tooltip for="2">{text key="cocreation+room_metadata_tooltip"}</paper-tooltip>
                 </paper-tabs>
             </div>
 
