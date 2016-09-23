@@ -3,7 +3,7 @@ $( document).ready(function(){
 
 window.addEventListener('page-slider-controllet_selected', function (e) {
 
-    if(e.srcElement.id == "slider_datalets") {
+    if(e.srcElement !== undefined && e.srcElement.id == "slider_datalets") {
 
         room.$.slider_datalets = e.srcElement;
 
