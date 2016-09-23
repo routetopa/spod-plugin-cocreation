@@ -118,7 +118,6 @@ room._handleCcModeClick = function(e){
             $("#cc_mode_2").css('background-color', '#B6B6B6');
             $(e.currentTarget).css('background-color', '#00BCD4');
             room.cc_selected_mode = "cc_mode_1";
-            room.refreshDatalet();
             break;
         case "cc_mode_2":
             if(room.cc_selected_mode == "cc_mode_2") break;
@@ -134,7 +133,6 @@ room._handleCcModeClick = function(e){
             $("#cc_mode_1").css('background-color', '#B6B6B6');
             $(e.currentTarget).css('background-color', '#00BCD4');
             room.cc_selected_mode = "cc_mode_2";
-            room.refreshDatalet();
             break;
     }
 }
