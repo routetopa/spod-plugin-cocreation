@@ -92,34 +92,6 @@
         position: relative;
     }
 
-   /* paper-tabs{
-        width: 50%;
-        position: fixed;
-        bottom: 0;
-        left:0;
-        font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        font-size: 16px;
-        font-weight: bold;
-        background-color: #B6B6B6;
-        --paper-tabs-selection-bar-color: #2196F3;
-
-    }
-    paper-tab {
-        transition: all 1.0s;
-    }
-
-    paper-tab.iron-selected {
-        background-color: #2196F3;
-    }
-
-    paper-tab:hover {
-        /!*color: #2196F3;*!/
-    }
-
-    paper-tab[disabled] {
-        color: #B6B6B6;
-    }*/
-
     paper-tabs#cocreation_tab {
         width: 50%;
         position: fixed;
@@ -169,14 +141,6 @@
         top: 10px;
     }
 
-    #grid-container{
-        height: 80vh;
-        position: relative;
-        padding-right : 20px;
-        overflow: auto;
-        margin-top: 10px;
-    }
-
     neon-animatable{
         margin-top: 10px;
     }
@@ -198,19 +162,6 @@
         background-color:#e8e8e8;
         width: 100%;
         height: 100%;
-    }
-
-    .grid
-    {
-        width: 100%;
-        z-index: 0;
-        margin-top : 20px;
-    }
-
-    .grid:after {
-        content: '';
-        display: block;
-        clear: both;
     }
 
     .grid-item {
@@ -240,6 +191,7 @@
         background-color:#ffffff;
         width: 50%;
         overflow: hidden;
+        margin-left: 30px;
     }
 
     .datalet-container{
@@ -304,6 +256,23 @@
         -moz-transform:rotate(90deg);
     }
 
+    #shared_docs{
+        width: 50%;
+    }
+
+    .visible_doc{
+        position: relative;
+        visibility: visible;
+        height: auto;
+        width: 100%;
+        margin: 15px;
+    }
+    .hidden_doc{
+        visibility: hidden;
+        height: 0;
+        width: 0;
+    }
+
 </style>
 
 {/literal}
@@ -328,7 +297,7 @@
             <paper-menu selected="[[selectedMode]]">
                <paper-item id="0" on-tap="_onModeChange">{text key="cocreation+room_menu_data"}</paper-item>
                <paper-item id="1" on-tap="_onModeChange">{text key="cocreation+room_menu_cocreation"}</paper-item>
-               <paper-item id="2">{text key="cocreation+room_menu_tools"}</paper-item>
+               <paper-item id="2" disabled>{text key="cocreation+room_menu_tools"}</paper-item>
             </paper-menu>
 
         </div>
@@ -400,44 +369,43 @@
                          <paper-tab noink on-click="_tabClicked_data" id="0">{text key="cocreation+room_entrance"}</paper-tab>
                          <paper-tab noink on-click="_tabClicked_data" id="1">{text key="cocreation+room_add_dataset"}</paper-tab>
                          <paper-tab noink on-click="_tabClicked_data" id="2">{text key="cocreation+room_view_datalibrary"}</paper-tab>
-                         <paper-tab noink id="3">{text key="cocreation+room_search_dataset"}</paper-tab>
+                         <paper-tab noink id="3" disabled>{text key="cocreation+room_search_dataset"}</paper-tab>
                      </paper-tabs>
                  </div>
                  <!-- CoCreation -->
                  <div id="cocreation" class="layout horizontal modePages">
-                   <iron-pages selected="[[selectedTab_cocreation]]" class="section" id="shared_docs">
-                    <!-- Explore -->
-                    <div class="layout horizontal tabpage">
-                        <document-card-controllet
-                                user-name="{$currentUser['title']}"
-                                resource-url="{$documents[0]}"
-                                show-controls
-                                class="grid-item"
-                                height=74>
-                        </document-card-controllet>
-                    </div>
-                    <!-- Ideas -->
-                    <div class="layout horizontal tabpage">
-                        <document-card-controllet
-                                user-name="{$currentUser['title']}"
-                                resource-url="{$documents[1]}"
-                                show-controls
-                                class="grid-item"
-                                height=74>
-                        </document-card-controllet>
-                    </div>
-                    <!-- Outcome -->
-                    <div class="layout horizontal tabpage">
-                        <document-card-controllet
-                                user-name="{$currentUser['title']}"
-                                resource-url="{$documents[2]}"
-                                show-controls
-                                class="grid-item"
-                                height=74>
-                        </document-card-controllet>
-                    </div>
-                    </iron-pages>
-
+                     <div id="shared_docs">
+                        <!-- Explore -->
+                        <paper-material elevation="2" class="layout horizontal visible_doc" id="doc0">
+                            <document-card-controllet
+                                    user-name="{$currentUser['title']}"
+                                    resource-url="{$documents[0]}"
+                                    show-controls
+                                    class="grid-item"
+                                    height=74>
+                            </document-card-controllet>
+                        </paper-material>
+                        <!-- Ideas -->
+                        <paper-material elevation="2" class="layout horizontal hidden_doc" id="doc1">
+                            <document-card-controllet
+                                    user-name="{$currentUser['title']}"
+                                    resource-url="{$documents[1]}"
+                                    show-controls
+                                    class="grid-item"
+                                    height=74>
+                            </document-card-controllet>
+                        </paper-material>
+                        <!-- Outcome -->
+                        <paper-material elevation="2" class="layout horizontal hidden_doc" id="doc2">
+                            <document-card-controllet
+                                    user-name="{$currentUser['title']}"
+                                    resource-url="{$documents[2]}"
+                                    show-controls
+                                    class="grid-item"
+                                    height=74>
+                            </document-card-controllet>
+                        </paper-material>
+                     </div>
                     <paper-material id="datalets_slider_container" elevation="2" class="layout vertical section">
                         {if !empty($datalets_slider)}
                            {$datalets_slider}

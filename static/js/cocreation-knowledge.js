@@ -88,7 +88,16 @@ room.cc_mode                 = "cc_mode_1";
 room.cc_selected_mode        = "";
 
 room._tabClicked_cocreation = function(e){
+    var last_selected_doc = $("#doc" + room.selectedTab_cocreation);
+    var new_selected_doc  = $("#doc" + e.currentTarget.id);
+    var all_docs          = $("paper-material[id^='doc']");
+    //update selection
     room.selectedTab_cocreation = e.currentTarget.id;
+    //do document switching logic
+    last_selected_doc.removeClass("visible_doc");
+    all_docs.addClass("hidden_doc");
+    new_selected_doc.removeClass("hidden_doc");
+    new_selected_doc.addClass("visible_doc");
 };
 
 room._tabClicked_data = function(e){
@@ -127,7 +136,7 @@ room._addDataset = function(){
 }
 
 room._handleCcModeClick = function(e){
-    room.cc_mode = e.currentTarget.id;
+    /*room.cc_mode = e.currentTarget.id;
     switch(e.currentTarget.id) {
         case "cc_mode_0":
             if(room.cc_selected_mode == "cc_mode_0") break;
@@ -177,7 +186,56 @@ room._handleCcModeClick = function(e){
             $(e.currentTarget).css('background-color', '#00BCD4');
             room.cc_selected_mode = "cc_mode_2";
             break;
-    }
+    }*/
+    if(e.currentTarget.id == room.cc_mode) return;
+    room.cc_mode = e.currentTarget.id;
+
+    var datalets_slider_container = $("#datalets_slider_container");
+    var cc_mode_0_button          = $("#cc_mode_0");
+    var cc_mode_1_button          = $("#cc_mode_1");
+    var cc_mode_2_button          = $("#cc_mode_2");
+    var postit_window             = $(".postitwindow");
+    var shared_docs_container     = $("#shared_docs");
+
+    datalets_slider_container.toggle('blind',
+        { direction: 'top'},
+        function(){
+            switch(room.cc_mode) {
+                case "cc_mode_0":
+                    datalets_slider_container.css('display', 'none');
+                    shared_docs_container.css('display', 'block');
+                    shared_docs_container.css('width', '100%');
+
+                    cc_mode_1_button.css('background-color', '#B6B6B6');
+                    cc_mode_2_button.css('background-color', '#B6B6B6');
+                    cc_mode_0_button.css('background-color', '#00BCD4');
+                    break;
+                case "cc_mode_1":
+                    shared_docs_container.css('display', 'block');
+                    datalets_slider_container.css('display', 'block');
+                    datalets_slider_container.css('width', '50%');
+                    shared_docs_container.css('width', '50%');
+
+                    cc_mode_0_button.css('background-color', '#B6B6B6');
+                    cc_mode_2_button.css('background-color', '#B6B6B6');
+                    cc_mode_1_button.css('background-color', '#00BCD4');
+                    postit_window.css('width', '50%');
+                    postit_window.css('left', '50%');
+                    break;
+                case 'cc_mode_2':
+                    datalets_slider_container.css('width', '100%');
+                    datalets_slider_container.css('display', 'block');
+                    shared_docs_container.css('display', 'none');
+
+                    cc_mode_0_button.css('background-color', '#B6B6B6');
+                    cc_mode_1_button.css('background-color', '#B6B6B6');
+                    cc_mode_2_button.css('background-color', '#00BCD4');
+                    postit_window.css('width', '100%');
+                    postit_window.css('left', '0%');
+                    break;
+            }
+        },
+        500);
 }
 
 room.loadDatasetsLibrary = function() {
