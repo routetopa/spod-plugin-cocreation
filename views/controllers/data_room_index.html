@@ -60,6 +60,8 @@
     paper-toolbar.toolbar-main
     {
         --paper-toolbar-background:#2196F3;
+/*        -moz-box-shadow: 0 0 0px 5px #999;
+        -webkit-box-shadow: 0 0 0px 5px #999;*/
     }
 </style>
 
@@ -94,51 +96,11 @@
         position: relative;
     }
 
-   /* paper-tabs{
-        position: relative;
-        top: 0;
-        left:0;
-        font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        font-size: 16px;
-        font-weight: bold;
-        background-color: #B6B6B6;
-        --paper-tabs-selection-bar-color: #2196F3;
-
-    }
-    paper-tab {
-        transition: all 1.0s;
-    }
-
-    paper-tab.iron-selected {
-        background-color: #2196F3;
-    }
-
-    paper-tab:hover {
-        /!*color: #2196F3;*!/
-    }
-
-    paper-tab[disabled] {
-        color: #B6B6B6;
-    }
-
-    paper-fab.sentiment-button
-    {
-        float: left;
-        /!*--paper-fab-background:#2196F3;*!/
-        --iron-icon-height: 16px;
-        --iron-icon-width:  16px;
-        height: 20px;
-        width:  20px;
-        left: 2px;
-        background-color: #2196F3;
-
-        box-shadow:none;
-    }*/
-
     paper-tabs#data_tab {
-        position: relative;
-        top: 0;
-        left:0;
+        width: 48.6%;
+        position: absolute;
+        bottom: 44px;
+        left: 2px;
     }
 
     paper-tabs {
@@ -249,9 +211,7 @@
 
     #metadata{
         position: relative;
-        overflow-y: scroll;
-        /*overflow-x: hidden;*/
-        height: 60vh;
+        padding: 10px;
     }
 
     #metadata_form{
@@ -327,6 +287,33 @@
 
     iron-icon.myspace.style-scope.animated-button-container-controllet.x-scope.iron-icon-0 {
         display: none;
+    }
+
+    .visible_doc{
+        position: relative;
+        visibility: visible;
+        height: auto;
+        width: 100%;
+        margin: 15px;
+    }
+    .hidden_doc{
+        visibility: hidden;
+        height: 0;
+        width: 0;
+    }
+
+    #datalets_slider_container{
+        padding: 10px;
+        height: 73vh;
+        background-color:#ffffff;
+        width: 50%;
+        overflow: scroll;
+    }
+
+    #shared_spreadsheet{
+        width: 100%;
+        margin-right: 20px;
+        display: block;
     }
 
 </style>
@@ -420,7 +407,7 @@
         </div>
     </paper-dialog>
 </template>
-<div class="layout vertical" style="background-color:#e8e8e8;margin-top: 5px;">
+<div class="layout vertical" style="background-color:#e8e8e8;">
     <paper-material id="comments_container" elevation="5" class="layout vertical">
         <h5 style="position: absolute; margin: 5px; top: 0px; left: 20px;">{text key="cocreation+room_discussion_tab_label"}</h5>
         <paper-fab id="fullscreen-comment-open-button" class="fullscreen-button" mini icon="arrow-drop-up"></paper-fab>
@@ -429,18 +416,17 @@
             {$comments}
         </div>
     </paper-material>
-    <div class="layout horizontal" style="padding: 5px;">
+    <div class="layout horizontal">
         <template id="left_data_room" is="dom-bind">
-            <div id="shared_spreadsheet" style="width: 50%;margin-right:10px;">
-                <iron-pages selected="[[selectedTab]]">
-                    <div class="layout horizontal tabpage">
+            <div id="shared_spreadsheet" class="layout horizontal" style="width: 50%;">
+                    <paper-material elevation="0" class="layout horizontal visible_doc" id="doc0">
                         <spreadsheet-card-controllet
                                 class="data-element"
                                 resource-url="{$spreadsheet}"
                                 height=69>
                         </spreadsheet-card-controllet>
-                    </div>
-                    <div class="layout horizontal tabpage">
+                    </paper-material>
+                    <paper-material elevation="0" class="layout horizontal hidden_doc" id="doc1">
                         <document-card-controllet
                                 class="data-element"
                                 user-name="{$currentUser['title']}"
@@ -449,8 +435,8 @@
                                 class="grid-item"
                                 height=69>
                         </document-card-controllet>
-                    </div>
-                    <paper-material elevation="3" id="metadata_container" class="layout vartical tabpage" style="padding: 10px;height: 66vh;">
+                    </paper-material>
+                    <paper-material elevation="3" id="doc2" class="layout horizontal hidden_doc" style="height: 69vh;overflow-y: scroll">
 
                         <div id="metadata">
                             <h5>"Common Core" Required Fields</h5>
@@ -672,7 +658,6 @@
 
                     </paper-material>
 
-                </iron-pages>
                 <paper-tabs id="data_tab" selected="[[selectedTab]]">
                     <paper-tab noink on-click="_tabClicked" title='{text key="cocreation+room_dataset_tooltip"}' id="t_0">{text key="cocreation+room_dataset_tab_label"}</paper-tab>
                     <paper-tab noink on-click="_tabClicked" title='{text key="cocreation+room_notes_tooltip"}' id="t_1">{text key="cocreation+room_notes_tab_label"}</paper-tab>
@@ -689,7 +674,7 @@
             </paper-toast>
 
         </template>
-        <paper-material id="datalets_slider_container" elevation="3" style="width: 50%;height:73vh;background-color:#FFFFFF;padding:8px;overflow:scroll;">
+        <paper-material id="datalets_slider_container" elevation="3" class="layout vertical section">
             {$datalets_slider}
         </paper-material>
     </div>
