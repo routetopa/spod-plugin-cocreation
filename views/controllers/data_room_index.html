@@ -439,215 +439,215 @@
                     <paper-material elevation="3" id="doc2" class="layout horizontal hidden_doc" style="height: 69vh;overflow-y: scroll">
 
                         <div id="metadata">
-                            <h5>"Common Core" Required Fields</h5>
+                            <h5>{text key="cocreation+core_common_required_metadata_filds"}</h5>
                             <div id="core_common_required_metadata">
                                 <metadata-element-controllet
                                         number="1"
-                                        description="Human-readable name of the asset. Should be in plain English and include sufficient detail to facilitate search and discovery."
-                                        heading="Title"
+                                        description="{text key="cocreation+core_common_required_metadata_title_description"}"
+                                        heading="{text key="cocreation+core_common_required_metadata_title_title"}"
                                         metadata="title"
                                         value="{$core_common_required_metadata->title}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="2"
-                                        description="Human-readable description (e.g., an abstract) with sufficient detail to enable a user to quickly understand whether the asset is of interest."
-                                        heading="Description"
+                                        description="{text key="cocreation+core_common_required_metadata_description_description"}"
+                                        heading="{text key="cocreation+core_common_required_metadata_description_title"}"
                                         metadata="description"
                                         value="{$core_common_required_metadata->description}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="3"
-                                        description="Tags (or keywords) help users discover your dataset; please include terms that would be used by technical and non-technical users."
-                                        heading="Tags"
+                                        description="{text key="cocreation+core_common_required_metadata_tags_description"}"
+                                        heading="{text key="cocreation+core_common_required_metadata_tags_title"}"
                                         metadata="tags"
                                         value="{$core_common_required_metadata->tags}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="4"
-                                        description="Most recent date on which the dataset was changed, updated or modified."
-                                        heading="Last Update"
+                                        description="{text key="cocreation+core_common_required_metadata_last_update_description"}"
+                                        heading="{text key="cocreation+core_common_required_metadata_last_update_title"}"
                                         metadata="last_update"
                                         value="{$core_common_required_metadata->last_update}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="5"
-                                        description="The publishing entity and optionally their parent organization(s)."
-                                        heading="Publisher"
+                                        description="{text key="cocreation+core_common_required_metadata_publisher_description"}"
+                                        heading="{text key="cocreation+core_common_required_metadata_publisher_title"}"
                                         metadata="publisher"
                                         value="{$core_common_required_metadata->publisher}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="6"
-                                        description="Contact person's name for the asset."
-                                        heading="Contact Name"
+                                        description="{text key="cocreation+core_common_required_metadata_contact_name_description"}"
+                                        heading="{text key="cocreation+core_common_required_metadata_contact_name_title"}"
                                         metadata="contact_name"
                                         value="{$core_common_required_metadata->contact_name}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="7"
-                                        description="Contact person's email address."
-                                        heading="Contact Email"
+                                        description="{text key="cocreation+core_common_required_metadata_contact_email_description"}"
+                                        heading="{text key="cocreation+core_common_required_metadata_contact_email_title"}"
                                         metadata="contact_email"
                                         value="{$core_common_required_metadata->contact_email}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="8"
-                                        description="A unique identifier for the dataset or API as maintained within an Agency catalog or database."
-                                        heading="Unique Identifier"
+                                        description="{text key="cocreation+core_common_required_metadata_unique_identifier_description"}"
+                                        heading="{text key="cocreation+core_common_required_metadata_unique_identifier_title"}"
                                         metadata="unique_identifier"
                                         value="{$core_common_required_metadata->unique_identifier}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="9"
-                                        description="The degree to which this dataset could be made publicly-available, regardless of whether it has been made available. Choices: public (Data asset is or could be made publicly available to all without restrictions), restricted public (Data asset is available under certain use restrictions), or non-public (Data asset is not available to members of the public)."
-                                        heading="Public Access Level"
+                                        description="{text key="cocreation+core_common_required_metadata_public_access_level_description"}"
+                                        heading="{text key="cocreation+core_common_required_metadata_public_access_level_title"}"
                                         metadata="public_access_level"
                                         value="{$core_common_required_metadata->public_access_level}"
                                         ></metadata-element-controllet>
                             </div>
-                            <h5>"Common Core" Required-if-Applicable Fields</h5>
+                            <h5>{text key="cocreation+common_core_if_applicable_metadata_title"}</h5>
                             <div id="common_core_if_applicable_metadata">
                                 <metadata-element-controllet
                                         number="1"
-                                        description="Federal agencies, combined agency and bureau code from OMB Circular A-11, Appendix C in the format of 015:11."
-                                        heading="Bureau Code"
+                                        description="{text key="cocreation+common_core_if_applicable_metadata_bureau_code_description"}"
+                                        heading="{text key="cocreation+common_core_if_applicable_metadata_bureau_code_title"}"
                                         metadata="bureau_code"
                                         value="{$common_core_if_applicable_metadata->bureau_code}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="2"
-                                        description="Federal agencies, list the primary program related to this data asset, from the Federal Program Inventory. Use the format of 015:001."
-                                        heading="Program Code"
+                                        description="{text key="cocreation+common_core_if_applicable_metadata_program_code_description"}"
+                                        heading="{text key="cocreation+common_core_if_applicable_metadata_program_code_title"}"
                                         metadata="program_code"
                                         value="{$common_core_if_applicable_metadata->program_code}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="3"
-                                        description='An explanation for the selected "accessLevel" including instructions for how to access a restricted file, if applicable, or explanation for why a "non-public" or "restricted public" data asset is not "public", if applicable. Text, 255 characters..'
-                                        heading="Access Level Comment"
+                                        description="{text key="cocreation+common_core_if_applicable_metadata_access_level_comment_description"}"
+                                        heading="{text key="cocreation+common_core_if_applicable_metadata_access_level_comment_title"}"
                                         metadata="access_level_comment"
                                         value="{$common_core_if_applicable_metadata->access_level_comment}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="4"
-                                        description="URL providing direct access to the downloadable distribution of a dataset."
-                                        heading="Download URL"
+                                        description="{text key="cocreation+common_core_if_applicable_metadata_download_url_description"}"
+                                        heading="{text key="cocreation+common_core_if_applicable_metadata_download_url_title"}"
                                         metadata="download_url"
                                         value="{$common_core_if_applicable_metadata->download_url}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="5"
-                                        description="Endpoint of web service to access dataset."
-                                        heading="Endpoint"
+                                        description="{text key="cocreation+common_core_if_applicable_metadata_endpoint_description"}"
+                                        heading="{text key="cocreation+common_core_if_applicable_metadata_endpoint_title"}"
                                         metadata="endpoint"
                                         value="{$common_core_if_applicable_metadata->endpoint}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="6"
-                                        description="The file format or API type of the distribution."
-                                        heading="Format"
+                                        description="{text key="cocreation+common_core_if_applicable_metadata_format_description"}"
+                                        heading="{text key="cocreation+common_core_if_applicable_metadata_format_title"}"
                                         metadata="format"
                                         value="{$common_core_if_applicable_metadata->format}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="7"
-                                        description="The license with which the dataset or API is published. See Open Licenses for more information."
-                                        heading="License"
+                                        description="{text key="cocreation+common_core_if_applicable_metadata_license_description"}"
+                                        heading="{text key="cocreation+common_core_if_applicable_metadata_license_title"}"
                                         metadata="license"
                                         value="{$common_core_if_applicable_metadata->license}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="8"
-                                        description="The range of spatial applicability of a dataset. Could include a spatial region like a bounding box or a named place."
-                                        heading="Spatial"
+                                        description="{text key="cocreation+common_core_if_applicable_metadata_spatial_description"}"
+                                        heading="{text key="cocreation+common_core_if_applicable_metadata_spatial_title"}"
                                         metadata="spatial"
                                         value="{$common_core_if_applicable_metadata->spatial}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="9"
-                                        description="The range of temporal applicability of a dataset (i.e., a start and end date of applicability for the data)."
-                                        heading="Temporal"
+                                        description="{text key="cocreation+common_core_if_applicable_metadata_temporal_description"}"
+                                        heading="{text key="cocreation+common_core_if_applicable_metadata_temporal_title"}"
                                         metadata="temporal"
                                         value="{$common_core_if_applicable_metadata->temporal}"
                                         ></metadata-element-controllet>
 
                             </div>
-                            <h5>Expanded Fields</h5>
+                            <h5>{text key="cocreation+expanded_metadata_title"}</h5>
                             <div id="expanded_metadata">
                                 <metadata-element-controllet
                                         number="1"
-                                        description="Main thematic category of the dataset."
-                                        heading="Category"
+                                        description="{text key="cocreation+expanded_metadata_category_description"}"
+                                        heading="{text key="cocreation+expanded_metadata_category_title"}"
                                         metadata="category"
                                         value="{$expanded_metadata->category}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="2"
-                                        description="URL to the data dictionary for the dataset or API. Note that documentation other than a data dictionary can be referenced using Related Documents as shown in the expanded fields."
-                                        heading="Data Dictionary"
+                                        description='{text key="cocreation+expanded_metadata_data_dictionary_description"}'
+                                        heading='{text key="cocreation+expanded_metadata_data_dictionary_title"}'
                                         metadata="data_dictionary"
                                         value="{$expanded_metadata->data_dictionary}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="3"
-                                        description="Whether the dataset meets the agency's Information Quality Guidelines (true/false)."
-                                        heading="Data Quality"
+                                        description="{text key="cocreation+expanded_metadata_data_quality_description"}"
+                                        heading="{text key="cocreation+expanded_metadata_data_quality_title"}"
                                         metadata="data_quality"
                                         value="{$expanded_metadata->data_quality}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="4"
-                                        description="Holds multiple download URLs for datasets composed of multiple files and/or file types."
-                                        heading="Distribution"
+                                        description="{text key="cocreation+expanded_metadata_distribution_description"}"
+                                        heading="{text key="cocreation+expanded_metadata_distribution_title"}"
                                         metadata="distribution"
                                         value="{$expanded_metadata->distribution}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="5"
-                                        description="Frequency with which dataset is published."
-                                        heading="Frequency"
+                                        description="{text key="cocreation+expanded_metadata_frequency_description"}"
+                                        heading="{text key="cocreation+expanded_metadata_frequency_title"}"
                                         metadata="frequency"
                                         value="{$expanded_metadata->frequency}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="6"
-                                        description='Alternative landing page used to redirect user to a contextual, Agency-hosted "homepage" for the dataset or API when selecting this resource from the Data.gov user interface.'
-                                        heading="Homepage URL"
+                                        description="{text key="cocreation+expanded_metadata_homepage_url_description"}"
+                                        heading="{text key="cocreation+expanded_metadata_homepage_url_title"}"
                                         metadata="homepage_url"
                                         value="{$expanded_metadata->homepage_url}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="7"
-                                        description="The language of the dataset."
-                                        heading="Language"
+                                        description="{text key="cocreation+expanded_metadata_language_description"}"
+                                        heading="{text key="cocreation+expanded_metadata_language_title"}"
                                         metadata="language"
                                         value="{$expanded_metadata->language}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="8"
-                                        description="For linking a dataset with an IT Unique Investment Identifier (UII)."
-                                        heading="Primary IT Investment UII"
+                                        description="{text key="cocreation+expanded_metadata_primary_IT_investment_UII_description"}"
+                                        heading="{text key="cocreation+expanded_metadata_primary_IT_investment_UII_title"}"
                                         metadata="primary_IT_investment_UII"
                                         value="{$expanded_metadata->primary_IT_investment_UII}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="9"
-                                        description="Related documents such as technical information about a dataset, developer documentation, etc."
-                                        heading="Related Documents"
+                                        description="{text key="cocreation+expanded_metadata_related_documents_description"}"
+                                        heading="{text key="cocreation+expanded_metadata_related_documents_title"}"
                                         metadata="related_documents"
                                         value="{$expanded_metadata->related_documents}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="10"
-                                        description="Date of formal issuance."
-                                        heading="Release Date"
+                                        description="{text key="cocreation+expanded_metadata_release_date_description"}"
+                                        heading="{text key="cocreation+expanded_metadata_release_date_title"}"
                                         metadata="release_date"
                                         value="{$expanded_metadata->release_date}"
                                         ></metadata-element-controllet>
                                 <metadata-element-controllet
                                         number="11"
-                                        description="If the systems is designated as a system of records under the Privacy Act of 1974, provide the URL to the System of Records Notice related to this dataset."
-                                        heading="System of Records"
+                                        description="{text key="cocreation+expanded_metadata_system_of_records_description"}"
+                                        heading="{text key="cocreation+expanded_metadata_system_of_records_title"}"
                                         metadata="system_of_records"
                                         value="{$expanded_metadata->system_of_records}"
                                         ></metadata-element-controllet>
