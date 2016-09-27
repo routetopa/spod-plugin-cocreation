@@ -1,23 +1,23 @@
 {
-  "nameSpreadsheet": "Nome del foglio di calcolo:",
-  "goToSheet": "Vai al foglio di calcolo",
+  "nameSpreadsheet": "Name your spreadsheet:",
+  "goToSheet": "Go to the sheet",
 
-  "manageSheets": "Gestisci fogli di calcolo",
-  "functionHelp": "Mostra funzioni",
+  "manageSheets": "Manage Sheets",
+  "functionHelp": "View Functions",
   "styleSheet": "Style Sheets and Cells",
   "viewTimeline": "View Activities and Timeline",
 
   "format_cell": "Format Cell",
-  "sort_row": "Ordina righe",
-  "remove_row": "Rimuovi riga",
-  "add_row": "Aggiungi riga",
-  "remove_column": "Rimuovi colonna",
-  "add_column": "Aggiungi colonna",
+  "sort_row": "Sort Row",
+  "remove_row": "Remove Row",
+  "add_row": "Add Row",
+  "remove_column": "Remove Column",
+  "add_column": "Add Column",
   
   "newSheet": "New Sheet",
-  "exportCSV": "Esporta come CSV",
+  "exportCSV": "Export CSV",
 
-  "add_geo_point" : "Aggiungi coordinate geografiche",
+  "add_geo_point" : "Add a point from map",
 
   "sum_def": "SUM(num1,num2,...)",
   "sum_desc": "Returns the sum of one or more numbers",
