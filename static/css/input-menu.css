@@ -100,7 +100,7 @@ html .floatbox_header .floatbox_cap
     color: #008000;
 }
 
-.error
+li.error
 {
     color: #FF0000;
 }
