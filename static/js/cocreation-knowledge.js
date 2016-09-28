@@ -33,19 +33,7 @@ $( document ).ready(function() {
     });
 
     window.addEventListener('select-dataset-controllet_data-url', function(e){
-        //To get all entry for selected dataset
-        /*var f = Object.create(providerFactory);
-        var provider = f.getProvider(e.detail.url);
-        var dataUrl = provider.addLimit(e.detail.url);*/
-
-        /*room.$.select_data_controllet.dataUrl =  e.detail.url;
-        room.$.select_data_controllet.init();*/
         room.$.slider_dataset.chevronRight(false);
-
-        /*var f = Object.create(providerFactory);
-        var provider = f.getProvider(e.detail.url);
-        var dataUrl = provider.addLimit(e.detail.url);*/
-
         room.$.select_data_controllet.dataUrl = e.detail.url;
         room.$.select_data_controllet.init();
     });
@@ -136,57 +124,6 @@ room._addDataset = function(){
 }
 
 room._handleCcModeClick = function(e){
-    /*room.cc_mode = e.currentTarget.id;
-    switch(e.currentTarget.id) {
-        case "cc_mode_0":
-            if(room.cc_selected_mode == "cc_mode_0") break;
-            $("#datalets_slider_container").toggle('blind',
-                   { direction: 'top'},
-                     function(){
-                         $("#datalets_slider_container").css('display', 'none');
-                         $("#shared_docs").css('width', '100%');
-                    },
-                500);
-            $("#cc_mode_1").css('background-color', '#B6B6B6');
-            $("#cc_mode_2").css('background-color', '#B6B6B6');
-            $(e.currentTarget).css('background-color', '#00BCD4');
-            room.cc_selected_mode = "cc_mode_0";
-            break;
-        case "cc_mode_1":
-            if(room.cc_selected_mode == "cc_mode_1") break;
-            $("#datalets_slider_container").toggle('blind',
-                { direction: 'top'},
-                function(){
-                    $("#datalets_slider_container").css('width', '50%');
-                    $("#datalets_slider_container").css('display', 'block');
-                    $("#shared_docs").css('width', '50%');
-                },
-                500);
-            $("#cc_mode_0").css('background-color', '#B6B6B6');
-            $("#cc_mode_2").css('background-color', '#B6B6B6');
-            $(".postitwindow").css('width', '50%');
-            $(".postitwindow").css('left', '50%');
-            $(e.currentTarget).css('background-color', '#00BCD4');
-            room.cc_selected_mode = "cc_mode_1";
-            break;
-        case "cc_mode_2":
-            if(room.cc_selected_mode == "cc_mode_2") break;
-            $("#datalets_slider_container").toggle('blind',
-                { direction: 'top'},
-                function(){
-                    $("#datalets_slider_container").css('width', '100%');
-                    $("#datalets_slider_container").css('display', 'block');
-                    $("#shared_docs").css('width', '0px');
-                },
-                500);
-            $("#cc_mode_0").css('background-color', '#B6B6B6');
-            $("#cc_mode_1").css('background-color', '#B6B6B6');
-            $(".postitwindow").css('width', '100%');
-            $(".postitwindow").css('left', '0%');
-            $(e.currentTarget).css('background-color', '#00BCD4');
-            room.cc_selected_mode = "cc_mode_2";
-            break;
-    }*/
     if(e.currentTarget.id == room.cc_mode) return;
     room.cc_mode = e.currentTarget.id;
 
@@ -251,7 +188,7 @@ room.loadDatasetsLibrary = function() {
             $('#data_library').html(data.content);
             previewFloatBox.close();
             room.$.slider_dataset.selected = 0;
-            room.selectedTab_data          = 2;
+            room.selectedTab_data          = 0;
             OW.info(OW.getLanguageText('cocreation', 'dataset_successfully_added'));
         });
 }
