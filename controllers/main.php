@@ -60,5 +60,7 @@ class COCREATION_CTRL_Main extends OW_ActionController
         $this->assign('partialRoomUrl',OW_URL_HOME.'cocreation/');
         $this->assign('isActive', true);
         $this->assign('userId', OW::getUser()->getId());
+
+        OW::getLanguage()->addKeyForJs('cocreation', '  current_room_deleted');
     }
 }

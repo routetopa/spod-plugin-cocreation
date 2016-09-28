@@ -104,7 +104,7 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
                 'ajax_coocreation_room_add_postit'     => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'addPostitToDatalet') . "?roomId="  . $params['roomId'],
                 'numDataletsInRoom'                    => count(COCREATION_BOL_Service::getInstance()->getDataletsByRoomId($params['roomId'])),
                 'roomId'                               => $params['roomId'],
-                'entity_type'                          => COCREATION_BOL_Service::ROOM_ENTITY_TYPE
+                'entity_type'                          => COCREATION_BOL_Service::ROOM_ENTITY_TYPE,
             ));
 
             OW::getDocument()->addOnloadScript($js);
@@ -114,6 +114,12 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
             OW::getLanguage()->addKeyForJs('cocreation', 'room_menu_cocreation');
             OW::getLanguage()->addKeyForJs('cocreation', 'room_menu_data');
             OW::getLanguage()->addKeyForJs('cocreation', 'room_menu_tools');
+            OW::getLanguage()->addKeyForJs('cocreation', 'dataset_add_fail');
+            OW::getLanguage()->addKeyForJs('cocreation', 'dataset_fields_empty');
+            OW::getLanguage()->addKeyForJs('cocreation', 'room_menu_data');
+            OW::getLanguage()->addKeyForJs('cocreation', 'room_menu_cocreation');
+            OW::getLanguage()->addKeyForJs('cocreation', 'room_menu_tools');
+            OW::getLanguage()->addKeyForJs('cocreation', 'dataset_successfully_added');
         }
     }
 }

@@ -40,6 +40,10 @@ class COCREATION_CMP_DataletsSlider extends OW_Component
         ));
 
         OW::getDocument()->addOnloadScript($js);
+
+        OW::getLanguage()->addKeyForJs('cocreation', 'datalet_successfully_deleted');
+        OW::getLanguage()->addKeyForJs('cocreation', 'datalet_successfully_added');
+        OW::getLanguage()->addKeyForJs('cocreation', 'postit_successfully_added');
     }
 
 }

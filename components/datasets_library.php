@@ -47,6 +47,9 @@ class COCREATION_CMP_DatasetsLibrary extends OW_Component
         ));
 
         OW::getDocument()->addOnloadScript($js);
+
+        OW::getLanguage()->addKeyForJs('cocreation', 'dataset_successfully_added');
+        OW::getLanguage()->addKeyForJs('cocreation', 'dataset_successfully_added');
     }
 
 }

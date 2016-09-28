@@ -114,6 +114,12 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         ));
         OW::getDocument()->addOnloadScript($js);
         OW::getDocument()->addOnloadScript("data_room.init()");
+
+        OW::getLanguage()->addKeyForJs('cocreation', 'confirm_delete_datalet');
+        OW::getLanguage()->addKeyForJs('cocreation', 'room_delete_fail');
+        OW::getLanguage()->addKeyForJs('cocreation', 'dataset_successfully_published');
+        OW::getLanguage()->addKeyForJs('cocreation', 'metadata_successfully_saved');
+        OW::getLanguage()->addKeyForJs('cocreation', 'error_metadata_updates');
     }
 
 }
