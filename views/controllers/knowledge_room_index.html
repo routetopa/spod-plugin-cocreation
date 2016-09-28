@@ -297,7 +297,7 @@
             <paper-menu selected="[[selectedMode]]">
                <paper-item id="0" on-tap="_onModeChange">{text key="cocreation+room_menu_data"}</paper-item>
                <paper-item id="1" on-tap="_onModeChange">{text key="cocreation+room_menu_cocreation"}</paper-item>
-               <paper-item id="2" disabled>{text key="cocreation+room_menu_tools"}</paper-item>
+               <!--<paper-item id="2" disabled>{text key="cocreation+room_menu_tools"}</paper-item>-->
             </paper-menu>
 
         </div>
@@ -326,13 +326,17 @@
                  <div id="data" class="modePages">
                      <iron-pages selected="[[selectedTab_data]]">
                          <!-- Entrance -->
-                         <div class="layout horizontal tabpage">
+                         <!--<div class="layout horizontal tabpage">
                              <document-card-controllet
                                      style="width: 100%;"
                                      resource-url="{$outcome_ro_url}"
                                      class="grid-item"
                                      height=80>
                              </document-card-controllet>
+                         </div>-->
+                         <!-- View datalibrary -->
+                         <div id="data_library" class="layout horizontal">
+                             {$datasets_library}
                          </div>
                          <!-- Add dataset -->
                          <div id="add_dataset_container" class="layout horizontal">
@@ -355,21 +359,17 @@
                                  </neon-animatable>
                              </page-slider-controllet>
                          </div>
-                         <!-- View datalibrary -->
-                         <div id="data_library" class="layout horizontal">
-                             {$datasets_library}
-                         </div>
                          <!-- Search datasets -->
-                         <div class="layout horizontal tabpage">
+                         <!--<div class="layout horizontal tabpage">
                              Search datasets
-                         </div>
+                         </div>-->
                      </iron-pages>
 
                      <paper-tabs id="data_tab" selected="[[selectedTab_data]]" no-bar>
-                         <paper-tab noink on-click="_tabClicked_data" id="0">{text key="cocreation+room_entrance"}</paper-tab>
+                         <!--<paper-tab noink on-click="_tabClicked_data" id="0">{text key="cocreation+room_entrance"}</paper-tab>-->
+                         <paper-tab noink on-click="_tabClicked_data" id="0">{text key="cocreation+room_view_datalibrary"}</paper-tab>
                          <paper-tab noink on-click="_tabClicked_data" id="1">{text key="cocreation+room_add_dataset"}</paper-tab>
-                         <paper-tab noink on-click="_tabClicked_data" id="2">{text key="cocreation+room_view_datalibrary"}</paper-tab>
-                         <paper-tab noink id="3" disabled>{text key="cocreation+room_search_dataset"}</paper-tab>
+                         <!--<paper-tab noink id="3" disabled>{text key="cocreation+room_search_dataset"}</paper-tab>-->
                      </paper-tabs>
                  </div>
                  <!-- CoCreation -->

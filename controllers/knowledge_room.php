@@ -66,7 +66,7 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
             //Set room shared documents
             $documents = COCREATION_BOL_Service::getInstance()->getDocumentsByRoomId($params['roomId']);
             $this->assign('documents', array($documents[0]->url, $documents[1]->url, $documents[2]->url));
-            $this->assign('outcome_ro_url', $this->getOutcomeReadonlyPadID($documents[2]->url));
+            //$this->assign('outcome_ro_url', $this->getOutcomeReadonlyPadID($documents[2]->url));
 
             //get all dataset for current room
             $this->addComponent('datasets_library', new COCREATION_CMP_DatasetsLibrary($params['roomId']));
