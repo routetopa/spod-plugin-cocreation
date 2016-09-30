@@ -1,0 +1,150 @@
+<link rel="import" href="{$components_url}bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="{$components_url}bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html">
+<link rel="import" href="{$components_url}bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="{$components_url}bower_components/paper-styles/color.html">
+<link rel="import" href="{$components_url}bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<style>
+    .floatbox_header{
+        display: none;
+    }
+
+    .floatbox_body{
+        font-family: 'Roboto', sans-serif;
+        background-color: #eeeeee;
+        padding : 3px;
+    }
+
+    #scroll_content{
+        position: relative;
+        overflow: scroll;
+    }
+    div.cell{
+        padding: 20px;
+        margin-left: 20px;
+    }
+
+    ul.cell-list {
+        list-style-type: circle;
+    }
+
+    li{
+        margin-left: 20px;
+    }
+
+    .tall {
+        background-color: #2196F3;
+    }
+
+    .tall .title {
+        padding: 20px;
+        font-size: 40px;
+        color: #ffffff;
+        /*width: 30%;*/
+        position: relative;
+        float: left;
+    }
+
+    .tall .description{
+        padding: 20px;
+        font-size: 15px;
+        color: #ffffff;
+        /*width: 70%;*/
+        position: relative;
+        float: left;
+    }
+
+    .sect{
+        border: 1px solid #bebebe; padding: 16px; margin: 16px; border-radius: 5px; background-color: #fff; color: #555;
+    }
+
+    .section-number{
+        display: inline-block; height: 64px; width: 64px; border-radius: 50%; background: #ddd; line-height: 64px; font-size: 30px; color: #666; text-align: center;
+    }
+
+    .section-title{
+        font-size: 22px; padding-top: 18px; color: #888;margin-left: 20px;
+    }
+</style>
+
+<div class="layout vertical">
+
+    <div class="tall">
+        <div class="title">Cocreation Data Room helper</div>
+        <div class="description">
+            This room allows members to collaborate on a shared spreadsheets to create dataset. The process is supported
+            by writing shared notes (with a template that helps the community to write all the relevant information about the process) and shared metadata,
+            that are published with the dataset. Moreover, when published for other SPOD users, several validation euristics are used to show warnings on apparently
+            wrong fields. When published, the dataset can be used (under “Co-created datasets” tab on the first step of the controllet) by all SPOD users in their discussions.
+        </div>
+    </div>
+
+    <div class="content" id="scroll_content">
+        <div class="sect">
+            <div class="horizontal layout cell">
+                <img src="{$staticResourcesUrl}images/data_room_en.png" style="width: 60%; height: 60%;">
+
+                <div class="cell">
+                    <div class="horizontal layout cell">
+                        <div class="section-number">1</div>
+                        <div class="section-title">Features</div>
+                    </div>
+                    <div>
+                            This room features include:
+                        <ul class="cell-list">
+                            <li>
+                                <b>Dataset </b> tab allows to write in collaboration the dataset,  export  and import  of CSV files.
+                            </li>
+                            <li>
+                                <b>Notes </b>  tab allows to write notes on the dataset (like sources etc.).
+                            </li>
+                            <li>
+                                <b>Metadata</b>  tab allows to write metadata that are very important for the dataset that will be also published with the dataset.
+                            </li>
+                            <li>
+                                <b> Discussion room and notifications</b>: in discussion room, a new message is notified with an icon with the counter of number of received and unread message.
+                            </li>
+                        </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sect">
+            <div class="horizontal layout cell">
+                <img src="{$staticResourcesUrl}images/quick_tour_en.gif" style="width: 60%; height: 60%;">
+
+                <div class="cell">
+                    <div class="horizontal layout cell">
+                        <div class="section-number">2</div>
+                        <div class="section-title">A quick tour</div>
+                    </div>
+                    <div>
+                        <p>
+                            A quick tour to create and publish a dataset:
+                        <ol>
+                            <li>1. Create  a dataset 
+                                <ol style="list-style-type: lower-alpha; padding-bottom: 0;">
+                                    <li style="margin-left:2em">Create (or import) a dataset in collaboration </li>
+                                    <li style="margin-left:2em; padding-bottom: 0;">Add note on the dataset (like sources etc.)</li>
+                                    <li style="margin-left:2em; padding-bottom: 0;">Add metadata to the dataset (like title, description, tags etc.) to facilitate search and discovery</li>
+                                    <li style="margin-left:2em; padding-bottom: 0;"> Show the created dataset with a chart (datalet)</li>
+                                </ol>
+                            </li>
+                            <li> 2. Publish the dataset  to all SPOD users to make it accessible  to build a datalet
+                                Publish the dataset  (<paper-icon-button id="publish_dataset_button"  icon="editor:publish"></paper-icon-button>) to all SPOD users to make it accessible  to build a datalet in the traditional ways
+                                (<!-- button (<paper-fab-1 mini icon="assessment" class="assessment" > </paper-fab-1>)--> in What’s new, Agora’s public rooms, etc.).
+                                Notice that each time the same dataset is re-published, a new version is created.
+                            </li>
+                        </ol>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

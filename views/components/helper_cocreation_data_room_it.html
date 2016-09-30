@@ -1,0 +1,150 @@
+<link rel="import" href="{$components_url}bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="{$components_url}bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html">
+<link rel="import" href="{$components_url}bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="{$components_url}bower_components/paper-styles/color.html">
+<link rel="import" href="{$components_url}bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<style>
+    .floatbox_header{
+        display: none;
+    }
+
+    .floatbox_body{
+        font-family: 'Roboto', sans-serif;
+        background-color: #eeeeee;
+        padding : 3px;
+    }
+
+    #scroll_content{
+        position: relative;
+        overflow: scroll;
+    }
+    div.cell{
+        padding: 20px;
+        margin-left: 20px;
+    }
+
+    ul.cell-list {
+        list-style-type: circle;
+    }
+
+    li{
+        margin-left: 20px;
+    }
+
+    .tall {
+        background-color: #2196F3;
+    }
+
+    .tall .title {
+        padding: 20px;
+        font-size: 40px;
+        color: #ffffff;
+        /*width: 30%;*/
+        position: relative;
+        float: left;
+    }
+
+    .tall .description{
+        padding: 20px;
+        font-size: 15px;
+        color: #ffffff;
+        /*width: 70%;*/
+        position: relative;
+        float: left;
+    }
+
+    .sect{
+        border: 1px solid #bebebe; padding: 16px; margin: 16px; border-radius: 5px; background-color: #fff; color: #555;
+    }
+
+    .section-number{
+        display: inline-block; height: 64px; width: 64px; border-radius: 50%; background: #ddd; line-height: 64px; font-size: 30px; color: #666; text-align: center;
+    }
+
+    .section-title{
+        font-size: 22px; padding-top: 18px; color: #888;margin-left: 20px;
+    }
+</style>
+
+<div class="layout vertical">
+
+    <div class="tall">
+        <div class="title">Cocreation Data Room helper</div>
+        <div class="description">
+            Questa  stanza permette al gruppo di utenti di collaborare su di  un foglio di lavoro condiviso , per creare un dataset.
+            Il processo è supportato scrivendo note condivise (con un modello che aiuta la comunità a dare tutte le informazioni rilevanti sul processo) e metadati condivisi,
+            che sono pubblicati con il dataset. Inoltre, quando il dataset  viene pubblicato per gli altri utenti SPOD, diverse euristiche di convalida vengono utilizzati per
+            mostrare le avvertenze sui campi apparentemente sbagliate. Quando  sarà pubblicato, il dataset  può essere utilizzato (nel  tab “Dataset cocreati” nel primo step   della controllet )
+            da tutti gli utenti SPOD nelle loro discussioni.
+        </div>
+    </div>
+
+    <div class="content" id="scroll_content">
+        <div class="sect">
+            <div class="horizontal layout cell">
+                <img src="{$staticResourcesUrl}images/data_room_it.png" style="width: 60%; height: 60%;">
+
+                <div class="cell">
+                    <div class="horizontal layout cell">
+                        <div class="section-number">1</div>
+                        <div class="section-title">Features</div>
+                    </div>
+                    <div>
+                        Caratteristiche della stanza:
+                        <ul class="cell-list">
+                            <li>
+                                La scheda <b>Dataset</b> presenta un foglio di calcolo condiviso  per inserire i dati, importare ed esportare un documento nel formato CSV.
+                            </li>
+                            <li>
+                                Nella scheda <b>Note</b> si possono inserire note al dataset (ad esempio fonti, bibliografie, etc).
+                            </li>
+                            <li>
+                                Nella scheda <b>Metadata</b> si inseriscono  i metadata, importanti per il datasets che saranno pubblicati con il dataset.
+                            </li>
+                            <li>
+                                Una stanza di discussioni e notifiche: Una stanza di discussione è disponibile con notifiche per i messaggi ricevuti e ancora non letti.
+                            </li>
+                        </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sect">
+            <div class="horizontal layout cell">
+                <img src="{$staticResourcesUrl}images/quick_tour_it.gif" style="width: 60%; height: 60%;">
+
+                <div class="cell">
+                    <div class="horizontal layout cell">
+                        <div class="section-number">2</div>
+                        <div class="section-title">A quick tour</div>
+                    </div>
+                    <div>
+                        <p>
+                            Una guida veloce per la creazione e pubblicazione di un datatset:
+                        <ol>
+                            <li>1. Create a dataset
+                                <ol style="list-style-type: lower-alpha; padding-bottom: 0;">
+                                    <li style="margin-left:2em">Creare (o importare) un dataset in collaborazione</li>
+                                    <li style="margin-left:2em; padding-bottom: 0;"> Aggiungere note al dataset (ad es. Fonti etc.)</li>
+                                    <li style="margin-left:2em; padding-bottom: 0;"> Aggiungere i metadata al dataset (come titolo, descrizione, etichette etc..) per facilitare la ricerca</li>
+                                    <li style="margin-left:2em; padding-bottom: 0;">  Il dataset creato può essere visualizzato in un grafico (datalet)</li>
+                                </ol>
+                            </li>
+                            <li> 2.Pubblica il  dataset (<paper-icon-button id="publish_dataset_button"  icon="editor:publish"></paper-icon-button>) per tutti gli utenti di SPOD per renderlo
+                                disponibile per creare una datalet  per discussion nei modi tradizionali (<!--il bottone (<paper-fab mini icon="assessment" class="assessment"> </paper-fab>)-->
+                                    presente in Novità, nelle stanze di discussione dell’ Agora, etc). Si noti che ogni volta che lo stesso dataset viene pubblicato di nuovo, viene creata una nuova versione.
+                            </li>
+                        </ol>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

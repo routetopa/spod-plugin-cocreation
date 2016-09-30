@@ -1,0 +1,201 @@
+<link rel="import" href="{$components_url}bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="{$components_url}bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html">
+<link rel="import" href="{$components_url}bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="{$components_url}bower_components/paper-styles/color.html">
+<link rel="import" href="{$components_url}bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<style>
+    .floatbox_header{
+        display: none;
+    }
+
+    .floatbox_body{
+        font-family: 'Roboto', sans-serif;
+        background-color: #eeeeee;
+        padding : 3px;
+    }
+
+    #scroll_content{
+        position: relative;
+        overflow: scroll;
+    }
+    div.cell{
+        padding: 20px;
+        margin-left: 20px;
+    }
+
+    ul.cell-list {
+        list-style-type: circle;
+    }
+
+    li{
+        margin-left: 20px;
+    }
+    .tall {
+        background-color: #2196F3;
+    }
+
+    .tall .title {
+        padding: 20px;
+        font-size: 40px;
+        color: #ffffff;
+        /*width: 30%;*/
+        position: relative;
+        float: left;
+    }
+
+    .tall .description{
+        padding: 20px;
+        font-size: 15px;
+        color: #ffffff;
+        /*width: 70%;*/
+        position: relative;
+        float: left;
+    }
+
+    .sect{
+        border: 1px solid #bebebe; padding: 16px; margin: 16px; border-radius: 5px; background-color: #fff; color: #555;
+    }
+
+    .section-number{
+        display: inline-block; height: 64px; width: 64px; border-radius: 50%; background: #ddd; line-height: 64px; font-size: 30px; color: #666; text-align: center;
+    }
+
+    .section-title{
+        font-size: 22px; padding-top: 18px; color: #888;margin-left: 20px;
+    }
+     iron-icon.myspace {
+         padding: 2px;
+         margin: 0px;
+         color: #FFFFFF;
+         height: 32px;
+         width: 32px;
+         background-color: #00BCD4;
+         border-radius: 18px;
+         box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+     }
+</style>
+
+<div class="layout vertical">
+
+    <div class="tall">
+        <div class="title"> Cocreation Knowledge room  helper</div>
+        <div class="description">
+            The Cocreation knowledge room  is meant to stimulate reflection on Open Data through three steps process of co-writing document (with a template) for <i>Explore</i>, <i>Ideas</i>, and <i>Outcome</i>>.
+            Datalets can be created and annotated via post-it like comments (notified in real time to participants).
+        </div>
+    </div>
+
+    <div class="content" id="scroll_content">
+        <div class="sect">
+            <div class="horizontal layout cell">
+                <img src="{$staticResourcesUrl}images/cocreation_knowledge_en.gif" style="width: 60%; height: 60%;">
+
+                <div class="cell">
+                    <div class="horizontal layout cell">
+                        <div class="section-number">1</div>
+                        <div class="section-title">Mode</div>
+                    </div>
+                    <div>
+                        <p>
+                            This  button, on the upper left corner, allow to select:
+                        </p>
+                    </div>
+
+                    <ul class="cell-list">
+                        <li> Data </li>
+                        <li> Co-Creation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="sect">
+            <div class="horizontal layout cell">
+                <img src="{$staticResourcesUrl}images/cocreation_knowledge_data.gif" style="width: 60%; height: 60%;">
+
+                <div class="cell">
+                    <div class="horizontal layout cell">
+                        <div class="section-number">2</div>
+                        <div class="section-title">Data</div>
+                    </div>
+                    <div>
+                        <p>
+                        All members can add datasets from open data portal (e.g., @CKAN), these are visible as a list in the Bookshelf list:
+                        <ul class="cell-list">
+                            <li>
+                                <b>Bookshelf </b> shows the datalets inserted in the list.
+                            </li>
+                            <li><b>Add dataset</b>  allows to insert any dataset into the Bookshelf. A wizard will help you  to add a the dataset.
+                            </li>
+
+
+                        </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sect">
+            <div class="horizontal layout cell">
+                <img src="{$staticResourcesUrl}images/cocreation_knowledge_collab_en.gif" style="width: 60%; height: 60%;">
+
+                <div class="cell">
+                    <div class="horizontal layout cell">
+                        <div class="section-number">3</div>
+                        <div class="section-title">Co-creation</div>
+                    </div>
+                    <div>
+                        <p>
+                            In this room  <paper-fab id="description_fab" icon="description"    ></paper-fab></paper-fab> ,
+                            on the left side  a collaborative space allows to edit documents collaboratively in real-time and provides a list of features like:
+                        <ul class="cell-list">
+                            <li> <b>Clear collaboration</b>: it is possible to see changes being made by other users in real time and each participant is
+                                identified by a color and name.</li>
+                            <li> <b>Chat</b>: a synchronous communication is available with other people who are using the document.</li>
+                            <li>
+                                <b>Recording Revisions</b>; it is possible to save specific versions at any time. A time slider shows anyone the history of the shared document.
+                            </li>
+                            <li>
+                                <b> Exporting</b>: a document can  be downloaded in plain text, HTML, Open Document, Microsoft Word or PDF format.
+
+                            </li>
+                        </ul>
+                        </p>
+                        <p>
+                            On the  right side, it is possible to create (a list of) datalets from scratch
+                            (<iron-icon class="myspace" mini icon="assessment"></iron-icon>)
+                            or from MySpace (<iron-icon class="myspace" mini icon="icons:create-new-folder"></iron-icon>).
+                            It is also possible to add notes () on top of each datalet (Post-it like).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sect">
+            <div class="horizontal layout cell">
+                <img src="{$staticResourcesUrl}images/cocreation_knowledge_features_en.gif" style="width: 60%; height: 60%;">
+
+                <div class="cell">
+                    <div class="horizontal layout cell">
+                        <div class="section-number">4</div>
+                        <div class="section-title">Co-creation: features</div>
+                    </div>
+                    <div>
+                        <p>
+                            On the right side, a list of features are available:
+                        <ul class="cell-list">
+                            <li> User Interface allows to enlarge, split the shared document or  the datalet</li>
+                            <li> Add notes </li>
+                            <li> <b>Import from My Space </b> allows to import a datalet from the private space of  user (e.g., My space) </li>
+                        </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
