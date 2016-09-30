@@ -1,5 +1,5 @@
 <?php
-class COCREATION_CMP_HelperCocreationDataRoomEn extends ODE_CMP_Helper
+class COCREATION_CMP_HelperCocreationDataRoomFr extends ODE_CMP_Helper
 {
     public function __construct()
     {
