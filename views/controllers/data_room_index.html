@@ -242,8 +242,9 @@
         color: #ffffff;
         position: absolute;
         float: right;
-        right: 20px;
-        bottom: 5px;
+        right: 25px;
+        bottom: 15px;
+        z-index: 10;
     }
 
     #metadataFormLabel{
@@ -436,9 +437,9 @@
                                 height=69>
                         </document-card-controllet>
                     </paper-material>
-                    <paper-material elevation="3" id="doc2" class="layout horizontal hidden_doc" style="height: 69vh;overflow-y: scroll">
-
-                        <div id="metadata">
+                    <paper-material elevation="3" id="doc2" class="layout horizontal hidden_doc">
+                        <paper-fab id="saveMetadataButton" title='{text key="cocreation+room_save_metadata_tooltip"}' mini icon="save" on-click="saveMetadata"></paper-fab>
+                        <div id="metadata" style="height: 69vh;overflow-y: scroll">
                             <h5>{text key="cocreation+core_common_required_metadata_filds"}</h5>
                             <div id="core_common_required_metadata">
                                 <metadata-element-controllet
@@ -653,8 +654,6 @@
                                         ></metadata-element-controllet>
                             </div>
                        </div>
-
-                       <paper-fab id="saveMetadataButton" title='{text key="cocreation+room_save_metadata_tooltip"}' mini icon="save" on-click="saveMetadata"></paper-fab>
 
                     </paper-material>
 
