@@ -31,6 +31,7 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
         $doc_connection    = @fsockopen('localhost', '9001');
         $spread_connection = @fsockopen('localhost', '8001');
 
+        //Set document and spreasheet server toggle button status
         if (is_resource($doc_connection))
         {
             $this->assign('document_server_status', true);
@@ -53,6 +54,7 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
             $spreadsheet_server_field->setValue("false");
         }
 
+        //Set knowledge and dataset room toggle button status based on saved preferences
         $knowledge_room_status_preference = BOL_PreferenceService::getInstance()->findPreference('knowledge_room_status_preference');
         if(empty($knowledge_room_status_preference) || $knowledge_room_status_preference->defaultValue == "false") {
             $this->assign('knowledge_room_status', false);
@@ -94,14 +96,14 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
                 //is running
                 shell_exec("/usr/bin/sudo /usr/bin/service etherpad-lite stop");
                 $document_server_status_preference->defaultValue = "false";
-                $document_server_field->setValue("true");
+                $document_server_field->setValue("false");
             }
             else
             {
                 //is not running
                 shell_exec("/usr/bin/sudo /usr/bin/service etherpad-lite start");
                 $document_server_status_preference->defaultValue = "true";
-                $document_server_field->setValue("false");
+                $document_server_field->setValue("true");
             }
 
             BOL_PreferenceService::getInstance()->savePreference($document_server_status_preference);
@@ -122,7 +124,7 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
                 //is running
                 shell_exec("/usr/bin/sudo /usr/bin/service ethersheet stop");
                 $spreadsheet_server_status_preference->defaultValue = "false";
-                $spreadsheet_server_field->setValue("true");
+                $spreadsheet_server_field->setValue("false");
             }
             else
             {
@@ -130,7 +132,7 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
                 shell_exec("/usr/bin/sudo /usr/bin/service ethersheet start");
                 $spreadsheet_server_status_preference->defaultValue = "true";
                 $this->assign('spreadsheet_server_status', true);
-                $spreadsheet_server_field->setValue("false");
+                $spreadsheet_server_field->setValue("true");
             }
 
             BOL_PreferenceService::getInstance()->savePreference($spreadsheet_server_status_preference);
