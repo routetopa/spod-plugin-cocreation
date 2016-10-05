@@ -156,6 +156,8 @@ EtherSheetService.prototype.sheetToCSV = function(sheet_id,cb){
         if(sheet_data.cells[sheet_data.rows[r]] && sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]]){
           if(sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value.indexOf(',') !== -1){
             sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value = sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value.replace(new RegExp('"', 'g'), '""');
+            sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value = sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value.replace(new RegExp('\n', 'g'), '');
+            sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value = sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value.replace(new RegExp('\r', 'g'), '');
             sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value = '"' + sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value + '"';
           }
           temp_output += sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value + ',';
