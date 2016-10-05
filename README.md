@@ -31,11 +31,11 @@ To install *CoCreation* plugin:
 * Install SPOD version of Etherpad :
 
   - Run the installation script in *SPOD_INSTALLATION_DIR/COCREATION_PLUGIN_INSTALLATION_DIR/static/script/etherpad/install_etherpad.sh ROOT_DB_PASSWORD* and select *All*.
-    **this script must be run ad root**
+    **This script must be run ad root**
 
 * Install SPOD version of Ethersheet :
   - Run the installation script in *SPOD_INSTALLATION_DIR/COCREATION_PLUGIN_INSTALLATION_DIR/static/script/ethersheet/install_ethersheet.sh ROOT_DB_PASSWORD* and select *All*.
-    **this script must be run ad root**
+    **This script must be run ad root**
 
 After the installation has been successful, the admin user can access to admin panel of CoCreation plugin to verify that document and spreadsheet server work.
 Root user can start/stop the document/spreadsheet server via shell by the command:
