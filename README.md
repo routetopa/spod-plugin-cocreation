@@ -29,8 +29,10 @@ To install *CoCreation* plugin:
 * Clone this project by following the github instruction on *SPOD_INSTALLATION_DIR/ow_plugins*
 * Install the plugin on SPOD by *admin plugins panel*
 * Install SPOD version of Etherpad :
+
   - Run the installation script in *SPOD_INSTALLATION_DIR/COCREATION_PLUGIN_INSTALLATION_DIR/static/script/etherpad/install_etherpad.sh ROOT_DB_PASSWORD* and select *All*.
     **this script must be run ad root**
+
 * Install SPOD version of Ethersheet :
   - Run the installation script in *SPOD_INSTALLATION_DIR/COCREATION_PLUGIN_INSTALLATION_DIR/static/script/ethersheet/install_ethersheet.sh ROOT_DB_PASSWORD* and select *All*.
     **this script must be run ad root**
