@@ -40,12 +40,27 @@ class COCREATION_CTRL_DataRoomList extends OW_ActionController
                 $avatars[] = array("src" => $avatar[$user]["src"], "href" => $avatar[$user]["url"]);
             }
 
+            $room = COCREATION_BOL_Service::getInstance()->getRoomById($data->roomId);
             $common_core_required_metadata = json_decode($data->common_core_required_metadata);
+
+
+            if($common_core_required_metadata->title != "")
+            {
+                $resource_name = $common_core_required_metadata->title;
+            }
+            else if(count($room) > 0)
+            {
+                $resource_name = $room->name;
+            }
+            else
+            {
+                $resource_name = $data->datasetId;
+            }
 
             $dataset[] = array("ID" => $data->roomId,
                                "VER" => $data->version,
                                "USER" => $avatars,
-                               "NAME" => !empty($common_core_required_metadata->title) ? $common_core_required_metadata->title : '',
+                               "NAME" => $resource_name,
                                "DATA" => date('d/m/Y', strtotime($data->timestamp)),
                                "DESCRIPTION" => !empty($common_core_required_metadata->description) ? $common_core_required_metadata->description : ''
                 );
