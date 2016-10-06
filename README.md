@@ -43,5 +43,9 @@ Root user can start/stop the document/spreadsheet server via shell by the comman
 * *service etherpad-lite start/stop/restart*
 * *service ethersheet start/stop/restart*
 
+### Note
+
+*To use this plugin you must install the **TChat plugin (spod-tchat-plugin)**. TChat plugin implements the discussion section in the Data Cocreation Room *
+
 
 
