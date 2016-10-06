@@ -21,8 +21,8 @@ class COCREATION_BOL_Service
     private function __construct()
     {
         $this->sheetDBconnection = new PDO("mysql:host=localhost;dbname=ethersheet;",
-                                           "root",
-                                           "is15rdc",
+                                           "ethersheet",
+                                           "ethersheet",
                                            array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES UTF8;',
                                                  PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true)
         );
