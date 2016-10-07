@@ -32,7 +32,9 @@ exports.createServer = function(config){
   /*app.use(express.bodyParser());
    app.use(express.cookieParser());*/
   app.use(cookieParser());
-  app.use(bodyParser());
+  //app.use(bodyParser());
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({extended: true}));
   app.use(cookieSession({secret: 'app_1'}));
 
   app.use(function(req, res, next) {
