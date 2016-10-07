@@ -62,7 +62,7 @@ class COCREATION_CTRL_DataRoomList extends OW_ActionController
                                "USER" => $avatars,
                                "NAME" => $resource_name,
                                "DATA" => date('d/m/Y', strtotime($data->timestamp)),
-                               "DESCRIPTION" => !empty($common_core_required_metadata->description) ? $common_core_required_metadata->description : ''
+                               "DESCRIPTION" => !empty($common_core_required_metadata->description) ? str_replace("'","ˈ", $common_core_required_metadata->description) : ''
                 );
         }
 
