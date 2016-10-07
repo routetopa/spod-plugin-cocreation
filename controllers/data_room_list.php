@@ -60,7 +60,7 @@ class COCREATION_CTRL_DataRoomList extends OW_ActionController
             $dataset[] = array("ID" => $data->roomId,
                                "VER" => $data->version,
                                "USER" => $avatars,
-                               "NAME" => $resource_name,
+                               "NAME" =>  str_replace("'","ˈ",$resource_name),
                                "DATA" => date('d/m/Y', strtotime($data->timestamp)),
                                "DESCRIPTION" => !empty($common_core_required_metadata->description) ? str_replace("'","ˈ", $common_core_required_metadata->description) : ''
                 );
