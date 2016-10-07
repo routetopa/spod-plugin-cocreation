@@ -34,6 +34,10 @@ cloneRepository()
     npm install
     npm install csv@0.2.0
     npm install csv-sniffer
+    npm install express@4
+    npm install body-parser
+    npm install cookie-parser
+    npm install cookie-session
     tput setaf 2
     echo "done"
 }

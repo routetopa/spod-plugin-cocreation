@@ -6,6 +6,11 @@ var Command = require('es_command');
 var Transactor = require('transactor');
 var EtherSheetService = require('./ethersheet_service');
 var createTransactionHandler = require('./transaction_handler');
+/*ISISLab code*/
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var cookieSession = require('cookie-session');
+/*End ISISLab code*/
 
 var ES_CLIENT_PATH= __dirname + '/../node_modules/es_client';
 var LAYOUT_PATH = __dirname + '/layouts';
@@ -24,8 +29,11 @@ exports.createServer = function(config){
   app.set('views',LAYOUT_PATH);
   app.use(express.logger({ format: ':method :url' }));
   app.use('/es_client',express.static(ES_CLIENT_PATH));
-  app.use(express.bodyParser());
-  app.use(express.cookieParser());
+  /*app.use(express.bodyParser());
+   app.use(express.cookieParser());*/
+  app.use(cookieParser());
+  app.use(bodyParser());
+  app.use(cookieSession({secret: 'app_1'}));
 
   app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
