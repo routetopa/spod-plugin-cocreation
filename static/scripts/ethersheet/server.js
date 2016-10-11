@@ -6,6 +6,12 @@ var Command = require('es_command');
 var Transactor = require('transactor');
 var EtherSheetService = require('./ethersheet_service');
 var createTransactionHandler = require('./transaction_handler');
+/*ISISLab code*/
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var cookieSession = require('cookie-session');
+var formidable = require('formidable');
+/*End ISISLab code*/
 
 var ES_CLIENT_PATH= __dirname + '/../node_modules/es_client';
 var LAYOUT_PATH = __dirname + '/layouts';
@@ -15,17 +21,22 @@ exports.createServer = function(config){
 
 
   /***********************************************
-  * EtherSheet HTTP Server
-  ***********************************************/
+   * EtherSheet HTTP Server
+   ***********************************************/
   var app = express();
   var http_server = http.createServer(app);
-  
+
   // Server Settings
   app.set('views',LAYOUT_PATH);
   app.use(express.logger({ format: ':method :url' }));
   app.use('/es_client',express.static(ES_CLIENT_PATH));
-  app.use(express.bodyParser());
-  app.use(express.cookieParser());
+  /*app.use(express.bodyParser());
+   app.use(express.cookieParser());*/
+  app.use(cookieParser());
+  //app.use(bodyParser());
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({extended: true}));
+  app.use(cookieSession({secret: 'app_1'}));
 
   app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -34,8 +45,8 @@ exports.createServer = function(config){
   });
 
   /***********************************************
-  * EtherSheet DB Client 
-  ***********************************************/
+   * EtherSheet DB Client
+   ***********************************************/
   var es = new EtherSheetService(config);
 
   // listen after setup
@@ -48,8 +59,8 @@ exports.createServer = function(config){
 
 
   /**********************************************
-  * HTTP Routes
-  *********************************************/
+   * HTTP Routes
+   *********************************************/
   //index
   app.get('/', function(req,res){
     res.render('index.ejs', {introText: config.intro_text});
@@ -90,30 +101,33 @@ exports.createServer = function(config){
 
   //import csv
   app.post('/import/csv', function(req,res){
-    var csv_path = req.files.csv_file.path;
-    var sheet_id = req.body.sheet_id;
-    fs.readFile(csv_path, function(err, data){
-      es.createSheetFromCSV(sheet_id, data, function(err){
-        if(err){
-          res.send(500,err.message);
-          return;
-        }
-        res.redirect('back');
-        pub_server.refreshClients(sheet_id); 
-      })
+    var form = new formidable.IncomingForm();
+    form.parse(req, function(err, fields, files){
+      var csv_path = files.csv_file.path;
+      var sheet_id = fields.sheet_id;
+      fs.readFile(csv_path, function(err, data){
+        es.createSheetFromCSV(sheet_id, data, function(err){
+          if(err){
+            res.send(500,err.message);
+            return;
+          }
+          res.redirect('back');
+          pub_server.refreshClients(sheet_id);
+        })
+      });
     });
   });
-  
+
 
   /***********************************************
-  * PubSub Server 
-  ***********************************************/
+   * PubSub Server
+   ***********************************************/
   var pub_server = new Transactor();
   var transactionHandler = createTransactionHandler(es);
 
   pub_server.onTransaction(function(channel,socket,command_string,cb){
     var c = new Command(command_string);
-        
+
     if(c.getDataType()=='user' && c.getAction()=='addUser'){
       var id = c.getParams()[0].id;
       socket.es_user_id = id;
@@ -139,7 +153,7 @@ exports.createServer = function(config){
       id: sheet_id,
       action: 'refreshSheet',
       params:[]
-    }
+    };
     var refresh_command = Command.serialize(refresh_msg);
     console.log('sending refresh command');
     pub_server.broadcast(null,sheet_id,refresh_command);
@@ -147,16 +161,16 @@ exports.createServer = function(config){
 
 
   /***********************************************
-  * Websocket Server
-  ***********************************************/
+   * Websocket Server
+   ***********************************************/
   var ws_server = sockjs.createServer();
 
   ws_server.installHandlers(http_server,{prefix:'.*/pubsub'});
-  
+
   ws_server.on('connection', function(socket){
     var channel = socket.pathname.split('/')[1];
     pub_server.addSocket(channel,socket);
   });
 
   return http_server;
-}
+};
