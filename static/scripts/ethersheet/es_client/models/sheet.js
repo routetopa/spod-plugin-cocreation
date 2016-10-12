@@ -188,7 +188,7 @@ var Sheet = module.exports = ESModel.extend({
        if (typeof value_a === "string" && "".localeCompare) {
          return value_a.localeCompare(value_b);
        }
-        
+
        return value_a === value_b ? 0 : value_a > value_b ? 1 : -1;
     });
 

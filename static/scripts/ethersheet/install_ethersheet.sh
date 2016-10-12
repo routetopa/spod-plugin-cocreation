@@ -68,6 +68,7 @@ copySettings()
     cp config.js /home/ethersheet/ethersheet/EtherSheet
     cp ethersheet_service.js /home/ethersheet/ethersheet/EtherSheet/lib
     cp server.js /home/ethersheet/ethersheet/EtherSheet/lib
+    cp ./models/sheet.js /home/ethersheet/ethersheet/EtherSheet/lib/models
     cp ethersheet.js /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client
     cp templates.js /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client
     mkdir /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client/locales/it
