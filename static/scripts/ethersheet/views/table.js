@@ -282,7 +282,7 @@ var Table = module.exports = View.extend({
     this.resize();
 
     /*isislab code*/
-    if(e != undefined && e.row_id != undefined){
+    if(e != undefined && e.row_id != undefined && this.getSheet().send_enabled){
       $("#es-grid-container-" + e.sheet_id).scrollTop($("[data-row_id='" + e.row_id + "']").offset().top - 100);
     }
     /*end isislab code*/
