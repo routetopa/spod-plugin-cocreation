@@ -258,7 +258,7 @@ var Table = module.exports = View.extend({
     $cell.css('background-color', cell.color);
   },
 
-  render: function(){
+  render: function(e){
     this.$el.empty();
     this.$el.append($(t.sheet_table({id:this.getId()})));
     
@@ -280,6 +280,12 @@ var Table = module.exports = View.extend({
     this.$grid = $(".es-grid-container",this.$el);
     this.is_rendered = true;
     this.resize();
+
+    /*isislab code*/
+    if(e != undefined && e.row_id != undefined){
+      $("#es-grid-container-" + e.sheet_id).scrollTop($("[data-row_id='" + e.row_id + "']").offset().top - 100);
+    }
+    /*end isislab code*/
     return this;
   },
 

@@ -133,7 +133,7 @@ var Sheet = module.exports = ESModel.extend({
     this.rows.splice(position,0,new_id);
     this.trigger('insert_row',{
       row_id:new_id,
-      sheet_id:this.id
+      sheet_id:this.id,
     });
     this.send({
       id: this.id,
@@ -153,7 +153,8 @@ var Sheet = module.exports = ESModel.extend({
     if(row_pos === -1) return false;
     this.rows.splice(row_pos,1);
     this.trigger('delete_row',{
-      row_id:row_id,
+      //row_id:row_id,
+      row_id:$($("[data-row_id='" + row_id + "']").parent()[0]).next().children().attr('data-row_id'),
       sheet_id:this.id
     });
     this.send({
