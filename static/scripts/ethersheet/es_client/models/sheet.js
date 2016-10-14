@@ -152,9 +152,11 @@ var Sheet = module.exports = ESModel.extend({
     var row_pos = _.indexOf(this.rows,row_id);
     if(row_pos === -1) return false;
     this.rows.splice(row_pos,1);
+
+    var ele = $($("[data-row_id='" + row_id + "']").parent()[0]);
     this.trigger('delete_row',{
       //row_id:row_id,
-      row_id:$($("[data-row_id='" + row_id + "']").parent()[0]).next().children().attr('data-row_id'),
+      row_id: (ele.next().length > 0) ? ele.next().children().attr('data-row_id') : ele.prev().children().attr('data-row_id'),
       sheet_id:this.id
     });
     this.send({
