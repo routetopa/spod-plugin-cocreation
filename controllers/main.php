@@ -5,6 +5,12 @@ class COCREATION_CTRL_Main extends OW_ActionController
 
     public function index()
     {
+        //COCOCO
+        if ( !OW::getUser()->isAuthenticated() )
+        {
+            throw new AuthenticateException();
+        }
+
         OW::getDocument()->getMasterPage()->setTemplate(OW::getPluginManager()->getPlugin('cocreation')->getRootDir() . 'master_pages/general.html');
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl() . 'cocreation.js', 'text/javascript');
 

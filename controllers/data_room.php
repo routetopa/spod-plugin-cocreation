@@ -4,6 +4,12 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
 {
     public function index(array $params)
     {
+        //COCOCO
+        if ( !OW::getUser()->isAuthenticated() )
+        {
+            throw new AuthenticateException();
+        }
+
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl() . 'cocreation.js');
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl() . 'cocreation-room.js');
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl() . 'cocreation-data.js');

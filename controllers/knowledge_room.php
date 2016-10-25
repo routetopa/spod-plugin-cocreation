@@ -21,6 +21,12 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
 
     public function index(array $params)
     {
+        //COCOCO
+        if ( !OW::getUser()->isAuthenticated() )
+        {
+            throw new AuthenticateException();
+        }
+
         OW::getDocument()->addStyleSheet(OW::getPluginManager()->getPlugin('cocreation')->getStaticUrl()              . 'css/cocreation-room.css');
         OW::getDocument()->addStyleSheet(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl()            . 'perfect-scrollbar/css/perfect-scrollbar.min.css');
 
