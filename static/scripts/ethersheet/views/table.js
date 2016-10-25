@@ -291,7 +291,8 @@ var Table = module.exports = View.extend({
 
   resize: function(){
     if(!this.is_rendered) return;
-    var grid_height = this.$el.innerHeight() - 18;
+    //var grid_height = this.$el.innerHeight() - 18;
+    var grid_height = this.$el.innerHeight() + 4;
     var grid_width = this.$el.innerWidth() - 45;
     this.$grid.height(grid_height);
     this.$grid.width(grid_width);
@@ -719,7 +720,6 @@ var Table = module.exports = View.extend({
     $headerCell.addClass('es-header-active');
     var pos = $headerCell.position();
     var offset = this.$table_col_headers.position().left + Number(this.$table_col_headers.css("margin-left").replace("px",""));
-    
 
     var left = pos.left + offset;
     var top = pos.top + $headerCell.innerHeight();

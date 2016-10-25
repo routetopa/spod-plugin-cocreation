@@ -75,6 +75,7 @@ copySettings()
     cp -R ./es_client/* /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client
     cp ./views/table.js /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client/views
     cp ./views/cell_menu.js /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client/views
+    cp ./views/ethersheet_container.js /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client/views
     cp ./templates/cell_menu.jst /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client/templates
     cp ./templates/es_container.jst /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client/templates
     cp -R ./styles/* /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client/styles

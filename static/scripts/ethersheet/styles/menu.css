@@ -2,30 +2,47 @@
 #es-menu-container h2{
   margin-top: 0;
 }
+#es-sheet-menu-container ul:first-child {
+  display: none;
+}
+
 .es-menu-list{
-list-style:none;
-margin:0;
-padding:0;
-color:#111;
+  list-style:none;
+  margin:0;
+  padding:0;
+  /*color:#111;*/
 }
 .es-menu-list li{
   background: none repeat scroll 0 0 #FFFFFF;
-  border-bottom: 1px solid #D0D2D3;
+  border-bottom: 1px solid #CCCCCC;
+  /*border-top: none;*/
+  /*border-left: none;*/
+  /*color: red;*/
+  cursor: pointer;
+  padding: 8px;
+  text-decoration: none;
+}
+.es-menu-list li:first-child{
+  /*margin-top: 1px;/!*no buono*!/*/
+}
+
+#es-panel-1 .es-menu-list li {
+  background: none repeat scroll 0 0 #FFFFFF;
+  border: 1px solid #CCCCCC;
+  border-top: none;
+  /*border-left: none;*/
+  /*border-bottom: 1px solid red;*/
   color: #000000;
   cursor: pointer;
-  padding: 10px;
+  padding: 8px;
   text-decoration: none;
 }
-#es-panel-1 .es-menu-list li {
-  background: none repeat scroll 0 0 #2196F3;
-  border-bottom: 1px solid #D0D2D3;
-  color: #dadada;
-  cursor: pointer;
-  padding: 10px;
-  text-decoration: none;
+.es-menu-list li:first-child{
+  margin-top: 1px;/*ddr no buono*/
 }
+
 .es-sheet-name {
- width: 145px;
+  width: 145px;
 }
 .clear{
   clear: both;
@@ -35,13 +52,18 @@ color:#111;
   box-shadow: 5px 5px 5px #888;
 }
 #es-menu-grid li {
-  border-bottom: 1px solid #D0D2D3;
-  border-right: 1px solid #D0D2D3;
+  /*border-bottom: 1px solid #CCCCCC;*/
   display: inline-block;
-  float: left;
-  height: 85px;
+  height: 96px;
   text-align: center;
-  width: 85px;
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+#es-menu-grid li:hover {
+  background: #2196F3;
+  color: #FFFFFF;
 }
 #es-menu-grid img{
   clear: both;
@@ -57,15 +79,25 @@ color:#111;
   padding: 2px 0;
 }
 .es-menu-list li.es-menu-button:hover, .es-menu-list li.es-menu-button.active{
-  background: #00BCD4;
-  border-bottom: 1px solid #0baad4;
-  color: #fcfcfc;
+  background: #2196F3;
+  /*border-bottom: 1px solid #0baad4;*/
+  font-size: 16px;
+  color: #FFFFFF;
 }
 #es-panel-1 .es-menu-list li.es-menu-button:hover{
-  background: #00BCD4;
-  border-bottom: 1px solid #0baad4;
-  color: #fcfcfc;
+  background: #2196F3;
+  /*border-bottom: 1px solid #0baad4;*/
+  color: #FFFFFF;
+  font-size: 16px;
+  /*cursor: pointer;*/
 }
+#es-panel-0 #es-export-csv, #es-panel-0 #es-import-csv {
+  cursor: pointer;
+  border-bottom: 1px solid #CCCCCC;
+  margin-top: -4px;
+}
+
+
 #es-menu-grid a{
   color: #000;
 }

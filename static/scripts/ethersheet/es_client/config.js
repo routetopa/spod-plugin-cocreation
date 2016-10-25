@@ -6,8 +6,8 @@ return {
   DEFAULT_ROW_COUNT: 10,
   DEFAULT_COL_COUNT: 10,
   SOCKET_URL: "http://localhost",
-  DEFAULT_SELECTION_COLOR: '#ccddff',
-  DEFAULT_LOCAL_SELECTION_COLOR: '#2bb573',
+  DEFAULT_SELECTION_COLOR: '#dddddd',
+  DEFAULT_LOCAL_SELECTION_COLOR: '#dddddd',
   DEFAULT_COLOR: '#ffffff'
 };
 
