@@ -1,41 +1,46 @@
 <link rel="import" href="{$components_url}bower_components/paper-drawer-panel/paper-drawer-panel.html">
 <link rel="import" href="{$components_url}bower_components/paper-toolbar/paper-toolbar.html">
 <link rel="import" href="{$components_url}bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="{$components_url}bower_components/paper-toast/paper-toast.html">
+
+<link rel="import" href="{$components_url}bower_components/paper-card/paper-card.html">
+
 <link rel="import" href="{$components_url}bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="{$components_url}bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="{$components_url}bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="{$components_url}bower_components/iron-icons/image-icons.html">
+<link rel="import" href="{$components_url}bower_components/iron-icons/av-icons.html">
 <link rel="import" href="{$components_url}bower_components/iron-icons/social-icons.html">
 <link rel="import" href="{$components_url}bower_components/iron-icons/editor-icons.html">
-<link rel="import" href="{$components_url}bower_components/iron-icons/image-icons.html">
-<link rel="import" href="{$components_url}bower_components/iron-pages/iron-pages.html">
+
+<link rel="import" href="{$components_url}bower_components/paper-button/paper-button.html">
+<link rel="import" href="{$components_url}bower_components/paper-checkbox/paper-checkbox.html">
+
+<link rel="import" href="{$components_url}datalets/leafletjs-datalet/leafletjs-datalet.html">
+
 <link rel="import" href="{$components_url}bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html">
 <link rel="import" href="{$components_url}bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="{$components_url}bower_components/paper-fab-transitions/paper-fab-speed-dial.html">
 <link rel="import" href="{$components_url}bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="{$components_url}bower_components/paper-item/paper-item.html">
-<link rel="import" href="{$components_url}bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="{$components_url}bower_components/paper-material/paper-material.html">
-<link rel="import" href="{$components_url}bower_components/paper-toast/paper-toast.html">
-<link rel="import" href="{$components_url}bower_components/paper-input/paper-input.html">
 
 <link rel="import" href="{$components_url}controllets/paper-card-controllet/paper-card-controllet.html"/>
 <link rel="import" href="{$components_url}controllets/search-panel-controllet/search-panel-controllet.html"/>
-<link rel="import" href="{$components_url}controllets/page-slider-controllet/page-slider-controllet.html"/>
-<link rel="import" href="{$components_url}controllets/postit-container-controllet/postit-container-controllet.html"/>
-<!--<link rel="import" href="{$components_url}controllets/dataset-selection-controllet/dataset-selection-controllet.html"/>-->
-<link rel="import" href="{$components_url}controllets/select-data-controllet/select-data-controllet.html"/>
+<link rel="import" href="{$components_url}controllets/animated-grid-controllet/animated-grid-controllet.html"/>
+<link rel="import" href="{$components_url}controllets/fullsize-page-with-card-controllet/fullsize-page-with-card-controllet.html">
 <link rel="import" href="{$components_url}controllets/text-element-controllet/metadata-element-controllet.html"/>
 
-<link rel="import" href="{$components_url}controllets/document-card-controllet/spreadsheet-card-controllet.html"/>
-<link rel="import" href="{$components_url}controllets/document-card-controllet/document-card-controllet.html"/>
-
-<link rel="import" href="{$components_url}bower_components/paper-card/paper-card.html">
-<link rel="import" href="{$components_url}bower_components/paper-button/paper-button.html">
 <link rel="import" href="{$components_url}bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="{$components_url}bower_components/paper-styles/color.html">
 
-<script src="{$components_url}locales/controllet_ln.js" type="text/javascript"></script>
-<script src="{$components_url}locales/paper_card_controllet_ln.js" type="text/javascript"></script>
 
-<link rel="import" href="{$components_url}controllets/page-slider-controllet/page-slider-controllet.html"/>
+<link rel="import" href="{$components_url}bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="{$components_url}bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="{$components_url}bower_components/neon-animation/neon-animations.html">
+
+<link rel="import" href="{$components_url}bower_components/polymer-element-catalog/app/elements/app-sidebar/app-sidebar.html">
+<link rel="import" href="{$components_url}controllets/datalet-slider-controllet/datalet-slider-controllet.html"/>
+<link rel="import" href="{$components_url}controllets/metadata-list-controllet/metadata-list-controllet.html"/>
 
 <!-- DATALET -->
 <link rel="import" href="{$components_url}datalets/areachart-datalet/areachart-datalet.html">
@@ -53,78 +58,168 @@
 <link rel="import" href="{$components_url}datalets/scatterchart-datalet/scatterchart-datalet.html">
 <link rel="import" href="{$components_url}datalets/treemap-datalet/treemap-datalet.html">
 
+
+<script src="{$components_url}locales/controllet_ln.js" type="text/javascript"></script>
+<script src="{$components_url}locales/paper_card_controllet_ln.js" type="text/javascript"></script>
 <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 
-{literal}
 <style is="custom-style">
-    paper-toolbar.toolbar-main
+
+    .separator
     {
-        --paper-toolbar-background:#2196F3;
-/*        -moz-box-shadow: 0 0 0px 5px #999;
-        -webkit-box-shadow: 0 0 0px 5px #999;*/
+        height: 1px;
+        background: #ddd;
+        margin: 12px 8px;
     }
-</style>
 
-<style>
-    paper-fab.add-paper-fab {
+    paper-item
+    {
+        cursor: pointer;
+    }
+
+    paper-drawer-panel {
+        --paper-drawer-panel-left-drawer-container: {
+            top: 56px;
+        };
+    }
+
+    paper-toolbar
+    {
+        --paper-toolbar-height: 56px;
+        --paper-toolbar-background: #4CAF50;
+    }
+
+    #paperDrawerPanel
+    {
+        top: 60px;
+    }
+
+    #drawer
+    {
+        margin-top: 56px;
+        z-index:0;
+    }
+
+    iron-icon
+    {
+        --iron-icon-height : 32px;
+        --iron-icon-width : 32px;
+        --iron-icon-fill-color: #9E9E9E;
+    }
+
+
+    iron-icon#dataset_icon
+    {
+        --iron-icon-fill-color: #4CAF50;
+    }
+
+    iron-icon#metadata_icon
+    {
+        --iron-icon-fill-color: #FF5722;
+    }
+
+    iron-icon[icon="description"]
+    {
+        --iron-icon-fill-color: #2196F3;
+    }
+
+    iron-icon#discussion_icon
+    {
+    }
+
+    iron-icon[icon="assessment"]
+    {
+    }
+
+    iron-icon#screen_1
+    {
+        --iron-icon-height : 24px;
+        --iron-icon-width : 24px;
+        -o-transform: rotate(-90deg);
+        -webkit-transform: rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+    }
+
+    iron-icon#screen_2
+    {
+        --iron-icon-height : 24px;
+        --iron-icon-width : 24px;
+        -o-transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+        -moz-transform: rotate(90deg);
+    }
+
+    paper-item-body
+    {
+        padding-left: 24px;
+    }
+
+    paper-item-body.no_padding_item
+    {
+        padding-left: 8px;
+    }
+
+    paper-checkbox.checkbox_splitscreen
+    {
         position: absolute;
-        bottom: 25px;
-        right: 50px;
-        --paper-fab-background:#2196F3;
+        right: 32px;
+        top: 15px;
+        --paper-checkbox-checked-color: #4CAF50;
     }
 
-    paper-fab-speed-dial.add-paper-fab {
-        position: absolute;
-        bottom: 45px;
-        right: 40px;
+    paper-fab
+    {
+        --paper-fab-background : #00BCD4;
+        --paper-fab: {
+            height: 40px;
+            width: 40px;
+            padding: 0;
+            margin: 8px;
+        };
     }
 
-    paper-fab{
-        --paper-fab-background:#2196F3;
+    .header_container
+    {
+        width: 100%;
     }
 
-    body .floatbox_canvas .floatbox_container {
-        margin-top: 50px;
+    .hader_title_container
+    {
+        float:left;
     }
 
-    .section{
-        width: 50%;
-        margin: 15px;
+    .header_title
+    {
+        line-height: 56px;
+        font-size: 18px;
     }
 
-    .modePages{
-        position: relative;
+    .right_floater
+    {
+        float: right
     }
 
-    paper-tabs#data_tab {
-        width: 48.6%;
-        position: absolute;
-        bottom: 44px;
-        left: 2px;
+    .hader_title_container > paper-button
+    {
+        --paper-button:{
+            background: #00BCD4;
+            height: 40px;
+            margin-left: 16px;
+        }
     }
 
-    paper-tabs {
-        background: #B6B6B6;
+    .content_container
+    {
+        height: calc(100vh - 158px);
     }
 
-    paper-tab {
-        font-weight: 700;
-        border-right: 2px solid #FFFFFF;
+    .full_size_content
+    {
+        height: 100%;
+        width: 100%;
     }
 
-    paper-tab:nth-last-child(2) {
-        border-right: 0;
-    }
-
-    paper-tab.iron-selected {
-        color: #FFFFFF;
-        background: #2196F3;;
-    }
-
-    paper-tab:not(.iron-selected):hover {
-        color: #2196F3;
-    }
-
+    /*gg style*/
     #dialog_info {
         border: 2px solid #2196F3;
         background-color: #E0E0E0;
@@ -138,103 +233,14 @@
         position: relative;
     }
 
-    #comments_container{
-        margin: 10px 20px 0px 20px;
-        padding: 35px 20px 20px 20px;
-        position: absolute;
-        bottom: -18px;
+    #overlay{
+        z-index: 1;
+        position:absolute;
+        top:0;
         left:0;
-        width: 75%;
-        min-width: 800px;
-        overflow: hidden;
-        z-index: 10;
-        background-color: #E8E8E8;
-    }
-
-    #comments_content{
-        overflow-y: scroll;
-        height: 66vh;
-    }
-
-    paper-fab.fullscreen-button {
-        position: absolute;
-        /*z-index: 10;*/
-        top: 5px;
-        right: 5px;
-        background:#2196F3;
-        padding : 0px;
-        margin: 0px;
-        height: 24px;
-        width: 24px;
-        color: #FFFFFF;
-        z-index: 1;
-    }
-
-    #fullscreen-comment-close-button{
-        display: block;
-    }
-    #fullscreen-comment-open-button{
-        display: none;
-    }
-
-    #info_close_button{
-        z-index: 1;
-        color: #fff;
-        box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
-        -webkit-transition: 0.2s ease-out;
-        -moz-transition: 0.2s ease-out;
-        -o-transition: 0.2s ease-out;
-        transition: 0.2s ease-out;
-        cursor: pointer;
-        background-color: #00BCD4;
-        float: right;
-        top: 20px;
-    }
-
-    .cocreation_view_modes_button{
-        margin-right: 20px;
-    }
-
-    paper-fab#cc_mode_1 iron-icon{
-        -o-transform:rotate(90deg);
-        -webkit-transform:rotate(90deg);
-        -moz-transform:rotate(90deg);
-    }
-
-    .data-element{
         width: 100%;
-    }
-
-    metadata-element-controllet{
-        margin: 10px;
-    }
-
-    #metadata{
-        position: relative;
-        padding: 10px;
-    }
-
-    #metadata_form{
-        position: relative;
-        height: 85px;
-        bottom: 0;
-        left: 0;
-        margin-left: 0px;
-        margin-right: 0px
-    }
-
-    #newMatadataName{
-        margin-left: 20px;
-        width: 50%;
-    }
-
-    #addMetadataButton{
-        background: #2196F3;
-        color: #ffffff;
-        position: absolute;
-        float: right;
-        right: 70px;
-        bottom: 5px;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
     }
 
     #saveMetadataButton{
@@ -247,101 +253,173 @@
         z-index: 10;
     }
 
-    #metadataFormLabel{
-        color: #2196F3;
-        margin: 0;
-        padding: 5px;
-        top: 15px;
-        position: relative;
+    .full_size_card{
+        margin:32px 32px 32px 32px;
+        height: calc(100% - 64px);
+        width: calc(100% - 64px);
+        display:block;
     }
-
-    h5#mode{
-        color: #ffffff;
-        margin-left: 20px;
-        position:  relative;
+    
+    .split_size_card_left{
+        margin:32px 16px 32px 32px;
+        height: calc(100% - 64px);
+        width: calc(50% - 48px);
         float:left;
+        
+    }
+    
+    .split_size_card_right{
+        float: right;
+        margin:32px 32px 32px 16px;
+        height: calc(100% - 64px);
+        width: calc(50% - 48px);
     }
 
-    .postit_container{
-        display: none;
+    .section_header{
+        height: 45px;
+        background: #4CAF50;
+        text-align:center;
+        font-weight: 700;
+        text-transform: capitalize;
     }
-
-    /*#share_from_private_room{
-        display: block;
-    }*/
-
-    iron-icon.add_new_datalet{
-        position: fixed;
-        bottom: 52px;
-        right: 30px;
-    }
-
-    #overlay{
-        z-index: 1;
-        position:absolute;
-        top:0;
-        left:0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.4);
-    }
-
-    iron-icon.myspace.style-scope.animated-button-container-controllet.x-scope.iron-icon-0 {
-        display: none;
-    }
-
-    .visible_doc{
-        position: relative;
-        visibility: visible;
-        height: auto;
-        width: 100%;
-        margin: 15px;
-    }
-    .hidden_doc{
-        visibility: hidden;
-        height: 0;
-        width: 0;
-    }
-
-    #datalets_slider_container{
-        padding: 10px;
-        height: 73vh;
-        background-color:#ffffff;
-        width: 50%;
-        overflow: scroll;
-    }
-
-    #shared_spreadsheet{
-        width: 100%;
-        margin-right: 20px;
-        display: block;
-    }
+    /*end gg style/
 
 </style>
-
-{/literal}
-
 <template id="data_room" is="dom-bind">
     {if $isMember == false}
     <div id="overlay">
         <h1 style="position: relative; top: 25%; left: 10%;">{text key="cocreation+concreation_not_member"}</h1>
     </div>
     {/if}
-{if $isMember == true}
-    <paper-toolbar class="toolbar-main">
-        <paper-icon-button id="info_room_button" title='{text key="cocreation+room_info_tooltip"}' icon="info" on-tap="_openInfo"></paper-icon-button>
-        <paper-icon-button id="publish_dataset_button"  title='{text key="cocreation+room_publish_dataset_tooltip"}' icon="editor:publish" on-tap="_publishDataset"></paper-icon-button>
-        <!--<paper-button raised id="publish_dataset_button">Publish dataset</paper-button>-->
-        <div class="title">
-            <h5 id="mode">{text key="cocreation+room_menu_cocreation"}</h5>
-        </div>
-        <!--<search-panel-controllet right-direction="true"></search-panel-controllet>-->
-        <div id="cocreation_view_modes" class="layout horizontal">
-            <paper-fab id="cc_mode_0" title='{text key="cocreation+room_cc_spreadsheet"}' class="cocreation_view_modes_button" mini icon="image:grid-on" on-click="_handleCcModeClick" style="background-color:#B6B6B6"></paper-fab>
-            <paper-fab id="cc_mode_1" title='{text key="cocreation+room_cc_uniform"}' class="cocreation_view_modes_button" mini icon="view-agenda" on-click="_handleCcModeClick" style="background-color:#00BCD4"></paper-fab>
-            <paper-fab id="cc_mode_2" title='{text key="cocreation+room_cc_datalet"}' class="cocreation_view_modes_button" mini icon="assessment" on-click="_handleCcModeClick" style="background-color:#B6B6B6"></paper-fab>
-        </div>
-    </paper-toolbar>
+    {if $isMember == true}
+    <div style="height: 100%;">
+
+        <paper-drawer-panel id="paperDrawerPanel" force-narrow>
+
+            <paper-header-panel drawer>
+                <div>
+                    <paper-menu>
+
+                        <paper-item id="dataset_menu_item" onclick="room.handleSelectUIMode('dataset')">
+                            <iron-icon id="dataset_icon" icon="image:grid-on"></iron-icon>
+                            <paper-item-body two-lines title='{text key="cocreation+room_dataset_tooltip"}'>
+                                <div>{text key="cocreation+room_dataset_tab_label"}</div>
+                            </paper-item-body>
+                        </paper-item>
+
+                        <paper-item onclick="room.handleSelectUIMode('metadata')">
+                            <iron-icon id="metadata_icon" icon="maps:local-offer"></iron-icon>
+                            <paper-item-body two-lines title='{text key="cocreation+room_metadata_tooltip"}'>
+                                <div>{text key="cocreation+room_metadata_tab_label"}</div>
+                            </paper-item-body>
+                        </paper-item>
+
+                        <paper-item onclick="room.handleSelectUIMode('notes')">
+                            <iron-icon icon="description"></iron-icon>
+                            <paper-item-body two-lines title='{text key="cocreation+room_notes_tooltip"}'>
+                                <div>{text key="cocreation+room_notes_tab_label"}</div>
+                            </paper-item-body>
+                        </paper-item>
+
+                        <div class="separator"></div>
+
+                        <paper-item onclick="room.handleSelectUIMode('discussion')">
+                            <iron-icon id="discussion_icon" icon="communication:forum"></iron-icon>
+                            <paper-item-body two-lines title='{text key="cocreation+room_discussion_tab_label"}'>
+                                <div>{text key="cocreation+room_discussion_tab_label"}</div>
+                            </paper-item-body>
+                        </paper-item>
+
+                        <paper-item onclick="room.handleSelectUIMode('datalets')">
+                            <iron-icon icon="assessment"></iron-icon>
+                            <paper-item-body two-lines title='{text key="cocreation+room_cc_datalet"}'>
+                                <div>Datalets</div>
+                            </paper-item-body>
+                        </paper-item>
+
+
+                        <paper-item onclick="room._openInfo()">
+                            <iron-icon icon="info"></iron-icon>
+                            <paper-item-body two-lines>
+                                <div>Info</div>
+                            </paper-item-body>
+                        </paper-item>
+
+                        <div class="separator"></div>
+
+                        <paper-item onclick="">
+                            <iron-icon id="screen_1" icon="av:airplay"></iron-icon>
+                            <iron-icon id="screen_2" icon="av:airplay"></iron-icon>
+                            <paper-item-body class="no_padding_item" two-lines>
+                                <div>
+                                    Split screen
+                                    <paper-checkbox class="checkbox_splitscreen" onclick="room.handleSplitScreen(this)"></paper-checkbox>
+                                </div>
+                            </paper-item-body>
+                        </paper-item>
+
+                    </paper-menu>
+                </div>
+
+            </paper-header-panel>
+
+            <paper-header-panel main>
+                <paper-toolbar>
+                    <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+                    <div class="header_container">
+
+                        <div class="hader_title_container">
+                            <span class="header_title">{$room->name}</span>
+                            <paper-button raised title='{text key="cocreation+room_publish_dataset_tooltip"}' on-tap="_publishDataset">Publish</paper-button>
+                        </div>
+
+                        <div class="right_floater">
+                            {if $ownerUserActive}
+                               <paper-fab icon="add" onclick="room.inviteNewUsers();" title='{text key="cocreation+room_invite_new_members_button"}'></paper-fab>
+                            {/if}
+                        </div>
+
+                        <div class="right_floater">
+                            <div class="ow_avatar style-scope" title="{$owner['title']}"><a class="style-scope" href="{$owner['url']}"><img alt="" style="max-width: 100%;" class="style-scope dataset-table-controllet" src="{$owner['src']}"></a></div>
+                            {foreach $members as $member}
+                            <div class="ow_avatar style-scope" title="{$member['title']}"><a class="style-scope" href="{$member['url']}"><img alt="" style="max-width: 100%;" class="style-scope dataset-table-controllet" src="{$member['src']}"></a></div>
+                            {/foreach}
+                        </div>
+
+                    </div>
+                </paper-toolbar>
+
+                <!-- FULL SIZE ETHERSHEET -->
+                <div class="content_container">
+                    <div id="full_size_container" class="full_size_content">
+                        <!-- Discussion -->
+                        <paper-card id="discussion" class="full_size_card" style="display:none;" elevation="5">
+                            <div class="section_header">{text key="cocreation+room_discussion_tab_label"}</div>
+                            <div id="discussion_container" style="overflow-y: scroll;overflow-x: hidden;height: calc(100% - 45px)">{$comments}</div>
+                        </paper-card>
+                        <!-- Dataset -->
+                        <paper-card id="spreadsheet" class="full_size_card" elevation="5">
+                           <iframe src="{$spreadsheet}" style="height: 100%; width: 100%;"></iframe>
+                        </paper-card>
+                        <!-- Metadata -->
+                        <paper-card id="metadata" class="full_size_card" style="display:none;" elevation="5">
+                            <metadata-list-controllet id="metadata_component"></metadata-list-controllet>
+                        </paper-card>
+                        <!-- Notes -->
+                        <paper-card id="notes" class="full_size_card" style="display:none;" elevation="5">
+                           <iframe src="{{$notes}}?userName={{$currentUser['title']}}&showControls=true&showLineNumbers=false&pageview=true" style="height: 100%; width: 100%;"></iframe>
+                        </paper-card>
+                        <!-- Datalets -->
+                        <paper-card id="datalets" class="full_size_card" style="display:none;" elevation="5">
+                            <datalet-slider-controllet id="datalets_slider"></datalet-slider-controllet>
+                        </paper-card>
+                    </div>
+                </div>
+            </paper-header-panel>
+
+        </paper-drawer-panel>
+
+    </div>
 
     <paper-dialog id="dialog_info">
         <paper-button id="info_close_button" dialog-confirm autofocus>close</paper-button>
@@ -367,9 +445,9 @@
             <h2>{text key="cocreation+room_period"}</h2>
             <p id="period">{$room->from} / {$room->to}</p>
             <h2>{text key="cocreation+room_members"}</h2>
-            {if $ownerUserActive}
+            <!--{if $ownerUserActive}
             <span class="ow_button"><input type="button" value='{text key="cocreation+room_invite_new_members_button"}' id="inviteNewMembers" onclick="room.inviteNewUsers();"></span>
-            {/if}
+            {/if}-->
             <div id="members_container">
                 <div class="layout vertical">
 
@@ -383,307 +461,19 @@
                             <a href="{$owner['url']}">{$owner['title']}</a>
                         </div>
                     </div>
-
-                    {foreach $members as $member}
-                    <div class="layout horizontal">
-                        <div class="ow_avatar">
-                            <a href="{$member['url']}">
-                                <img alt="" src="{$member['src']}" style="max-width: 100%;">
-                            </a>
-                        </div>
-                        <div class="name" style="margin:15px">
-                            <a href="{$member['url']}">{$member['title']}</a>
-                        </div>
-                        {if $member['isJoined'] == '0'}
-                        <div class="name" style="margin:15px;margin-left: 30px;color:#cd0a0a;">
-                            {text key="cocreation+room_user_not_joined_yet"}
-                        </div>
-                        {/if}
-                    </div>
-                    {/foreach}
-
                 </div>
 
             </div>
         </div>
     </paper-dialog>
-</template>
-<div class="layout vertical" style="background-color:#e8e8e8;">
-    <paper-material id="comments_container" elevation="5" class="layout vertical">
-        <h5 style="position: absolute; margin: 5px; top: 0px; left: 20px;">{text key="cocreation+room_discussion_tab_label"}</h5>
-        <paper-fab id="fullscreen-comment-open-button" class="fullscreen-button" mini icon="arrow-drop-up"></paper-fab>
-        <paper-fab id="fullscreen-comment-close-button" class="fullscreen-button" mini icon="arrow-drop-down"></paper-fab>
-        <div id="comments_content">
-            {$comments}
+
+    <paper-toast id="syncToast" duration="0" text="">
+        <div class="layout horizontal">
+            <h5>{text key="cocreation+room_sync_toast"}</h5>
+            <paper-button onclick="syncToast.toggle()" class="blue-button"><b>x</b></paper-button>
         </div>
-    </paper-material>
-    <div class="layout horizontal">
-        <template id="left_data_room" is="dom-bind">
-            <div id="shared_spreadsheet" class="layout horizontal" style="width: 50%;">
-                    <paper-material elevation="0" class="layout horizontal visible_doc" id="doc0">
-                        <spreadsheet-card-controllet
-                                class="data-element"
-                                resource-url="{$spreadsheet}"
-                                height=69>
-                        </spreadsheet-card-controllet>
-                    </paper-material>
-                    <paper-material elevation="0" class="layout horizontal hidden_doc" id="doc1">
-                        <document-card-controllet
-                                class="data-element"
-                                user-name="{$currentUser['title']}"
-                                resource-url="{$notes}"
-                                show-controls
-                                class="grid-item"
-                                height=69>
-                        </document-card-controllet>
-                    </paper-material>
-                    <paper-material elevation="3" id="doc2" class="layout horizontal hidden_doc">
-                        <paper-fab id="saveMetadataButton" title='{text key="cocreation+room_save_metadata_tooltip"}' mini icon="save" on-click="saveMetadata"></paper-fab>
-                        <div id="metadata" style="height: 69vh;overflow-y: scroll">
-                            <h5>{text key="cocreation+core_common_required_metadata_filds"}</h5>
-                            <div id="core_common_required_metadata">
-                                <metadata-element-controllet
-                                        number="1"
-                                        description="{text key="cocreation+core_common_required_metadata_title_description"}"
-                                        heading="{text key="cocreation+core_common_required_metadata_title_title"}"
-                                        metadata="title"
-                                        value="{$core_common_required_metadata->title}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="2"
-                                        description="{text key="cocreation+core_common_required_metadata_description_description"}"
-                                        heading="{text key="cocreation+core_common_required_metadata_description_title"}"
-                                        metadata="description"
-                                        value="{$core_common_required_metadata->description}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="3"
-                                        description="{text key="cocreation+core_common_required_metadata_tags_description"}"
-                                        heading="{text key="cocreation+core_common_required_metadata_tags_title"}"
-                                        metadata="tags"
-                                        value="{$core_common_required_metadata->tags}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="4"
-                                        description="{text key="cocreation+core_common_required_metadata_last_update_description"}"
-                                        heading="{text key="cocreation+core_common_required_metadata_last_update_title"}"
-                                        metadata="last_update"
-                                        value="{$core_common_required_metadata->last_update}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="5"
-                                        description="{text key="cocreation+core_common_required_metadata_publisher_description"}"
-                                        heading="{text key="cocreation+core_common_required_metadata_publisher_title"}"
-                                        metadata="publisher"
-                                        value="{$core_common_required_metadata->publisher}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="6"
-                                        description="{text key="cocreation+core_common_required_metadata_contact_name_description"}"
-                                        heading="{text key="cocreation+core_common_required_metadata_contact_name_title"}"
-                                        metadata="contact_name"
-                                        value="{$core_common_required_metadata->contact_name}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="7"
-                                        description="{text key="cocreation+core_common_required_metadata_contact_email_description"}"
-                                        heading="{text key="cocreation+core_common_required_metadata_contact_email_title"}"
-                                        metadata="contact_email"
-                                        value="{$core_common_required_metadata->contact_email}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="8"
-                                        description="{text key="cocreation+core_common_required_metadata_unique_identifier_description"}"
-                                        heading="{text key="cocreation+core_common_required_metadata_unique_identifier_title"}"
-                                        metadata="unique_identifier"
-                                        value="{$core_common_required_metadata->unique_identifier}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="9"
-                                        description="{text key="cocreation+core_common_required_metadata_public_access_level_description"}"
-                                        heading="{text key="cocreation+core_common_required_metadata_public_access_level_title"}"
-                                        metadata="public_access_level"
-                                        value="{$core_common_required_metadata->public_access_level}"
-                                        ></metadata-element-controllet>
-                            </div>
-                            <h5>{text key="cocreation+common_core_if_applicable_metadata_title"}</h5>
-                            <div id="common_core_if_applicable_metadata">
-                                <metadata-element-controllet
-                                        number="1"
-                                        description="{text key="cocreation+common_core_if_applicable_metadata_bureau_code_description"}"
-                                        heading="{text key="cocreation+common_core_if_applicable_metadata_bureau_code_title"}"
-                                        metadata="bureau_code"
-                                        value="{$common_core_if_applicable_metadata->bureau_code}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="2"
-                                        description="{text key="cocreation+common_core_if_applicable_metadata_program_code_description"}"
-                                        heading="{text key="cocreation+common_core_if_applicable_metadata_program_code_title"}"
-                                        metadata="program_code"
-                                        value="{$common_core_if_applicable_metadata->program_code}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="3"
-                                        description="{text key="cocreation+common_core_if_applicable_metadata_access_level_comment_description"}"
-                                        heading="{text key="cocreation+common_core_if_applicable_metadata_access_level_comment_title"}"
-                                        metadata="access_level_comment"
-                                        value="{$common_core_if_applicable_metadata->access_level_comment}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="4"
-                                        description="{text key="cocreation+common_core_if_applicable_metadata_download_url_description"}"
-                                        heading="{text key="cocreation+common_core_if_applicable_metadata_download_url_title"}"
-                                        metadata="download_url"
-                                        value="{$common_core_if_applicable_metadata->download_url}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="5"
-                                        description="{text key="cocreation+common_core_if_applicable_metadata_endpoint_description"}"
-                                        heading="{text key="cocreation+common_core_if_applicable_metadata_endpoint_title"}"
-                                        metadata="endpoint"
-                                        value="{$common_core_if_applicable_metadata->endpoint}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="6"
-                                        description="{text key="cocreation+common_core_if_applicable_metadata_format_description"}"
-                                        heading="{text key="cocreation+common_core_if_applicable_metadata_format_title"}"
-                                        metadata="format"
-                                        value="{$common_core_if_applicable_metadata->format}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="7"
-                                        description="{text key="cocreation+common_core_if_applicable_metadata_license_description"}"
-                                        heading="{text key="cocreation+common_core_if_applicable_metadata_license_title"}"
-                                        metadata="license"
-                                        value="{$common_core_if_applicable_metadata->license}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="8"
-                                        description="{text key="cocreation+common_core_if_applicable_metadata_spatial_description"}"
-                                        heading="{text key="cocreation+common_core_if_applicable_metadata_spatial_title"}"
-                                        metadata="spatial"
-                                        value="{$common_core_if_applicable_metadata->spatial}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="9"
-                                        description="{text key="cocreation+common_core_if_applicable_metadata_temporal_description"}"
-                                        heading="{text key="cocreation+common_core_if_applicable_metadata_temporal_title"}"
-                                        metadata="temporal"
-                                        value="{$common_core_if_applicable_metadata->temporal}"
-                                        ></metadata-element-controllet>
+        <div class="layout vertical" id="syncMessage"></div>
+    </paper-toast>
 
-                            </div>
-                            <h5>{text key="cocreation+expanded_metadata_title"}</h5>
-                            <div id="expanded_metadata">
-                                <metadata-element-controllet
-                                        number="1"
-                                        description="{text key="cocreation+expanded_metadata_category_description"}"
-                                        heading="{text key="cocreation+expanded_metadata_category_title"}"
-                                        metadata="category"
-                                        value="{$expanded_metadata->category}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="2"
-                                        description='{text key="cocreation+expanded_metadata_data_dictionary_description"}'
-                                        heading='{text key="cocreation+expanded_metadata_data_dictionary_title"}'
-                                        metadata="data_dictionary"
-                                        value="{$expanded_metadata->data_dictionary}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="3"
-                                        description="{text key="cocreation+expanded_metadata_data_quality_description"}"
-                                        heading="{text key="cocreation+expanded_metadata_data_quality_title"}"
-                                        metadata="data_quality"
-                                        value="{$expanded_metadata->data_quality}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="4"
-                                        description="{text key="cocreation+expanded_metadata_distribution_description"}"
-                                        heading="{text key="cocreation+expanded_metadata_distribution_title"}"
-                                        metadata="distribution"
-                                        value="{$expanded_metadata->distribution}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="5"
-                                        description="{text key="cocreation+expanded_metadata_frequency_description"}"
-                                        heading="{text key="cocreation+expanded_metadata_frequency_title"}"
-                                        metadata="frequency"
-                                        value="{$expanded_metadata->frequency}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="6"
-                                        description="{text key="cocreation+expanded_metadata_homepage_url_description"}"
-                                        heading="{text key="cocreation+expanded_metadata_homepage_url_title"}"
-                                        metadata="homepage_url"
-                                        value="{$expanded_metadata->homepage_url}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="7"
-                                        description="{text key="cocreation+expanded_metadata_language_description"}"
-                                        heading="{text key="cocreation+expanded_metadata_language_title"}"
-                                        metadata="language"
-                                        value="{$expanded_metadata->language}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="8"
-                                        description="{text key="cocreation+expanded_metadata_primary_IT_investment_UII_description"}"
-                                        heading="{text key="cocreation+expanded_metadata_primary_IT_investment_UII_title"}"
-                                        metadata="primary_IT_investment_UII"
-                                        value="{$expanded_metadata->primary_IT_investment_UII}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="9"
-                                        description="{text key="cocreation+expanded_metadata_related_documents_description"}"
-                                        heading="{text key="cocreation+expanded_metadata_related_documents_title"}"
-                                        metadata="related_documents"
-                                        value="{$expanded_metadata->related_documents}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="10"
-                                        description="{text key="cocreation+expanded_metadata_release_date_description"}"
-                                        heading="{text key="cocreation+expanded_metadata_release_date_title"}"
-                                        metadata="release_date"
-                                        value="{$expanded_metadata->release_date}"
-                                        ></metadata-element-controllet>
-                                <metadata-element-controllet
-                                        number="11"
-                                        description="{text key="cocreation+expanded_metadata_system_of_records_description"}"
-                                        heading="{text key="cocreation+expanded_metadata_system_of_records_title"}"
-                                        metadata="system_of_records"
-                                        value="{$expanded_metadata->system_of_records}"
-                                        ></metadata-element-controllet>
-                            </div>
-                       </div>
-
-                    </paper-material>
-
-                <paper-tabs id="data_tab" selected="[[selectedTab]]">
-                    <paper-tab noink on-click="_tabClicked" title='{text key="cocreation+room_dataset_tooltip"}' id="t_0">{text key="cocreation+room_dataset_tab_label"}</paper-tab>
-                    <paper-tab noink on-click="_tabClicked" title='{text key="cocreation+room_notes_tooltip"}' id="t_1">{text key="cocreation+room_notes_tab_label"}</paper-tab>
-                    <paper-tab noink on-click="_tabClicked" title='{text key="cocreation+room_metadata_tooltip"}' id="t_2">{text key="cocreation+room_metadata_tab_label"}</paper-tab>
-                </paper-tabs>
-            </div>
-
-            <paper-toast id="syncToast" duration="0" text="">
-                <div class="layout horizontal">
-                    <h5>{text key="cocreation+room_sync_toast"}</h5>
-                    <paper-button onclick="syncToast.toggle()" class="blue-button"><b>x</b></paper-button>
-                </div>
-                <div class="layout vertical" id="syncMessage"></div>
-            </paper-toast>
-
-        </template>
-        <paper-material id="datalets_slider_container" elevation="3" class="layout vertical section">
-            {$datalets_slider}
-        </paper-material>
-    </div>
-</div>
+</template>
 {/if}
-
-<!-- ODE PRIVATE-ROOM -->
-<div>
-    {if isset($private_room)}
-    {$private_room}
-    {/if}
-</div>
-<!-- ODE PRIVATE-ROOM -->

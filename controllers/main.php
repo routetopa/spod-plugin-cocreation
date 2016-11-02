@@ -11,7 +11,7 @@ class COCREATION_CTRL_Main extends OW_ActionController
             throw new AuthenticateException();
         }
 
-        OW::getDocument()->getMasterPage()->setTemplate(OW::getPluginManager()->getPlugin('cocreation')->getRootDir() . 'master_pages/general.html');
+        OW::getDocument()->getMasterPage()->setTemplate(OW::getPluginManager()->getPlugin('cocreation')->getRootDir() . 'master_pages/general_main.html');
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl() . 'cocreation.js', 'text/javascript');
 
         $this->assign('components_url', SPODPR_COMPONENTS_URL);

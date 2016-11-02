@@ -163,7 +163,6 @@ room._handleCcModeClick = function(e){
                     datalets_slider_container.css('width', '100%');
                     datalets_slider_container.css('display', 'block');
                     shared_docs_container.css('display', 'none');
-
                     cc_mode_0_button.css('background-color', '#B6B6B6');
                     cc_mode_1_button.css('background-color', '#B6B6B6');
                     cc_mode_2_button.css('background-color', '#00BCD4');

@@ -418,6 +418,7 @@ class COCREATION_BOL_Service
     {
         $example = new OW_Example();
         $example->andFieldEqual('roomId', $roomId);
+        $example->setOrder("dataletId");
         $result = COCREATION_BOL_RoomDataletDao::getInstance()->findListByExample($example);
         return $result;
     }
