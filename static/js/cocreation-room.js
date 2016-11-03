@@ -1,9 +1,5 @@
 var room = document.querySelector('template[is="dom-bind"]');
 
-room._openInfo = function(){
-    room.$.dialog_info.open();
-};
-
 room.inviteNewUsers = function() {
     previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_AddMembers', {roomId: window.location.pathname.split("/")[window.location.pathname.split("/").length - 1]}, {
         width: '40%',

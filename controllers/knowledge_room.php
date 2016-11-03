@@ -29,13 +29,11 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
 
         OW::getDocument()->addStyleSheet(OW::getPluginManager()->getPlugin('cocreation')->getStaticUrl()              . 'css/cocreation-room.css');
         OW::getDocument()->addStyleSheet(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl()            . 'perfect-scrollbar/css/perfect-scrollbar.min.css');
-
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl()                . 'cocreation.js', 'text/javascript');
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl()                . 'masonry.pkgd.min.js', 'text/javascript');
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl()                . 'cocreation-room.js', 'text/javascript');
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl()                . 'cocreation-knowledge.js', 'text/javascript');
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl()                . 'perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js', 'text/javascript');
-        OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticUrl()                  . 'components/js/' . 'dataletsSlider.js', 'text/javascript');
         OW::getDocument()->getMasterPage()->setTemplate(OW::getPluginManager()->getPlugin('cocreation')->getRootDir() . 'master_pages/general.html');
 
         if ( isset($params['roomId'])){
@@ -63,10 +61,22 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
             foreach($room_members as $member) {
                 $user   = BOL_UserService::getInstance()->findByEmail($member->email);
                 $avatar = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($user->id))[$user->id];
-                $avatar['isJoined'] = $member->isJoined;
+                $avatar['isJoined'] = $member->isJoined == "1" ? true : false;
                 array_push($members, $avatar);
             }
-            $this->assign('members', $members);
+
+            $info                 = new stdClass();
+            $info->name           = $room->name;
+            $info->subject        = $room->subject;
+            $info->description    = $room->description;
+            $info->from           = $room->from;
+            $info->to             = $room->to;
+            $info->goal           = $room->goal;
+            $info->invitationText = $room->invitationText;
+            $info->owner = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($room->ownerId))[$room->ownerId];
+            $info->members = $members;
+            //$this->assign('members', $members);
+
             $this->assign('currentUser' , BOL_AvatarService::getInstance()->getDataForUserAvatars(array(OW::getUser()->getId()))[OW::getUser()->getId()]);
 
             //Set room shared documents
@@ -76,10 +86,21 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
 
             //get all dataset for current room
             $this->addComponent('datasets_library', new COCREATION_CMP_DatasetsLibrary($params['roomId']));
-            if(strpos($_SERVER['HTTP_USER_AGENT'],'Firefox'))
-            {
-                //get all datalets for current room
-                $this->addComponent('datalets_slider', new COCREATION_CMP_DataletsSlider($params['roomId']));
+
+            $datalets = COCREATION_BOL_Service::getInstance()->getDataletsByRoomId($params['roomId']);
+            $room_datalets = array();
+            foreach($datalets as $d){
+                $datalet         =  ODE_BOL_Service::getInstance()->getDataletById($d->dataletId);
+                $datalet->params = json_decode($datalet->params);
+                $datalet->data   = str_replace("'","&#39;", $datalet->data);
+                $datalet->fields = str_replace("'","&#39;", $datalet->fields);
+
+                $datalet_string = "<" . $datalet->component . " datalet-id='". $datalet->id ."' fields='[" . rtrim(ltrim($datalet->fields, "}"), "{") . "]'";
+                foreach($datalet->params as $key => $value)
+                    $datalet_string .= " " . $key . "='" . $value . "'";
+                $datalet_string .= "></" . $datalet->component . ">";
+
+                array_push($room_datalets, $datalet_string);
             }
 
             $this->assign('components_url', SPODPR_COMPONENTS_URL);
@@ -96,10 +117,13 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
                 ODE.numDataletsInCocreationRooom         = {$numDataletsInRoom}
                 ODE.pluginPreview                        = "cocreation"
                 SPODPUBLICROOM = {}
-                /*SPODPUBLICROOM.suggested_datasets     = {$cocreation_room_suggested_datasets}*/
-                COCREATION.roomId                       = {$roomId}
-                COCREATION.entity_type                  = {$entity_type}
-                COCREATION.room_type                    = "knowledge"
+                /*SPODPUBLICROOM.suggested_datasets      = {$cocreation_room_suggested_datasets}*/
+                COCREATION.roomId                        = {$roomId}
+                COCREATION.entity_type                   = {$entity_type}
+                COCREATION.room_type                     = "knowledge"
+                COCREATION.datalets                      = {$roomDatalets}
+                COCREATION.info                          = {$roomInfo}
+                COCREATION.user_id                       = {$userId}
             ', array(
                 'current_room_url'                     => str_replace("/index", "", OW::getRouter()->urlFor('COCREATION_CTRL_KnowledgeRoom', 'index')) . $params['roomId'],
                 'ajax_coocreation_room_add_dataset'    => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'addDatasetToRoom')   . "?roomId="  . $params['roomId'],
@@ -111,11 +135,13 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
                 'numDataletsInRoom'                    => count(COCREATION_BOL_Service::getInstance()->getDataletsByRoomId($params['roomId'])),
                 'roomId'                               => $params['roomId'],
                 'entity_type'                          => COCREATION_BOL_Service::ROOM_ENTITY_TYPE,
+                'roomDatalets'                         => $room_datalets,
+                'roomInfo'                             => json_encode($info),
+                'userId'                               => OW::getUser()->getId(),
             ));
 
             OW::getDocument()->addOnloadScript($js);
             OW::getDocument()->addOnloadScript("room.init()");
-            OW::getDocument()->addOnloadScript("room.initSlider()");
 
             OW::getLanguage()->addKeyForJs('cocreation', 'room_menu_cocreation');
             OW::getLanguage()->addKeyForJs('cocreation', 'room_menu_data');

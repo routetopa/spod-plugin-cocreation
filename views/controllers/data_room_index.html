@@ -29,6 +29,7 @@
 <link rel="import" href="{$components_url}controllets/animated-grid-controllet/animated-grid-controllet.html"/>
 <link rel="import" href="{$components_url}controllets/fullsize-page-with-card-controllet/fullsize-page-with-card-controllet.html">
 <link rel="import" href="{$components_url}controllets/text-element-controllet/metadata-element-controllet.html"/>
+<link rel="import" href="{$components_url}controllets/info-list-controllet/info-list-controllet.html"/>
 
 <link rel="import" href="{$components_url}bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="{$components_url}bower_components/paper-styles/color.html">
@@ -338,7 +339,7 @@
                         </paper-item>
 
 
-                        <paper-item onclick="room._openInfo()">
+                        <paper-item id="info_menu_item" onclick="room.handleSelectUIMode('info')">
                             <iron-icon icon="info"></iron-icon>
                             <paper-item-body two-lines>
                                 <div>Info</div>
@@ -395,7 +396,8 @@
                         <!-- Discussion -->
                         <paper-card id="discussion" class="full_size_card" style="display:none;" elevation="5">
                             <div class="section_header">{text key="cocreation+room_discussion_tab_label"}</div>
-                            <div id="discussion_container" style="overflow-y: scroll;overflow-x: hidden;height: calc(100% - 45px)">{$comments}</div>
+                            <div id="discussion_container" style="overflow-y: scroll;overflow-x: hidden;height: calc(100% - 45px)">
+                            </div>
                         </paper-card>
                         <!-- Dataset -->
                         <paper-card id="spreadsheet" class="full_size_card" elevation="5">
@@ -412,6 +414,10 @@
                         <!-- Datalets -->
                         <paper-card id="datalets" class="full_size_card" style="display:none;" elevation="5">
                             <datalet-slider-controllet id="datalets_slider"></datalet-slider-controllet>
+                        </paper-card>
+                        <!-- Info -->
+                        <paper-card id="info" class="full_size_card" style="display:none;" elevation="5">
+                            <info-list-controllet id="info_list_controllet"></info-list-controllet>
                         </paper-card>
                     </div>
                 </div>

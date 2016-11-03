@@ -63,7 +63,18 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
             array_push($members, $avatar);
             array_push($membersIds, $user->id);
         }
-        $this->assign('members', $members);
+
+        $info                 = new stdClass();
+        $info->name           = $room->name;
+        $info->subject        = $room->subject;
+        $info->description    = $room->description;
+        $info->from           = $room->from;
+        $info->to             = $room->to;
+        $info->goal           = $room->goal;
+        $info->invitationText = $room->invitationText;
+        $info->owner = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($room->ownerId))[$room->ownerId];
+        $info->members = $members;
+
         $this->assign('currentUser' , BOL_AvatarService::getInstance()->getDataForUserAvatars(array(OW::getUser()->getId()))[OW::getUser()->getId()]);
 
         $sheetUrl = COCREATION_BOL_Service::getInstance()->getSheetByRoomId($params['roomId'])[0]->url;
@@ -85,7 +96,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         $metadataObj->CC_RAF = json_decode($metadata[0]->common_core_if_applicable);
         $metadataObj->EF = json_decode($metadata[0]->expanded);
 
-        $this->addComponent("comments", new COCREATION_CMP_DiscussionWrapper($params['roomId']));
+        //$this->addComponent("comments", new COCREATION_CMP_DiscussionWrapper($params['roomId']));
 
         $js = UTIL_JsGenerator::composeJsString('
                 ODE.ajax_coocreation_room_get_sheetdata       = {$ajax_coocreation_room_get_sheetdata}
@@ -103,6 +114,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                 COCREATION.datalets                           = {$roomDatalets}
                 COCREATION.metadata                           = {$room_metadata}
                 COCREATION.user_id                            = {$userId}
+                COCREATION.info                               = {$roomInfo}
             ', array(
                'ajax_coocreation_room_get_sheetdata'       => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getSheetData')              . "?sheetName=" . $sheetName,
                'ajax_coocreation_room_get_array_sheetdata' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getArrayOfObjectSheetData') . "?sheetName=" . $sheetName,
@@ -117,7 +129,8 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                'room_members'                              => json_encode($membersIds),
                'roomDatalets'                              => $room_datalets,
                'room_metadata'                             => json_encode($metadataObj),
-               'userId'                                    => OW::getUser()->getId()
+               'userId'                                    => OW::getUser()->getId(),
+               'roomInfo'                                  => json_encode($info),
         ));
         OW::getDocument()->addOnloadScript($js);
         OW::getDocument()->addOnloadScript("data_room.init();");

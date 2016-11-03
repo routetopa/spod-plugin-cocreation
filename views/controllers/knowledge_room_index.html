@@ -1,37 +1,53 @@
 <link rel="import" href="{$components_url}bower_components/paper-drawer-panel/paper-drawer-panel.html">
 <link rel="import" href="{$components_url}bower_components/paper-toolbar/paper-toolbar.html">
 <link rel="import" href="{$components_url}bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="{$components_url}bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="{$components_url}bower_components/paper-toast/paper-toast.html">
+
+<link rel="import" href="{$components_url}bower_components/paper-card/paper-card.html">
+<link rel="import" href="{$components_url}bower_components/paper-tabs/paper-tabs.html">
+
 <link rel="import" href="{$components_url}bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="{$components_url}bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="{$components_url}bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="{$components_url}bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="{$components_url}bower_components/iron-icons/image-icons.html">
+<link rel="import" href="{$components_url}bower_components/iron-icons/av-icons.html">
+<link rel="import" href="{$components_url}bower_components/iron-icons/social-icons.html">
+<link rel="import" href="{$components_url}bower_components/iron-icons/editor-icons.html">
+
+<link rel="import" href="{$components_url}bower_components/paper-button/paper-button.html">
+<link rel="import" href="{$components_url}bower_components/paper-checkbox/paper-checkbox.html">
+
+<link rel="import" href="{$components_url}datalets/leafletjs-datalet/leafletjs-datalet.html">
+
 <link rel="import" href="{$components_url}bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html">
 <link rel="import" href="{$components_url}bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="{$components_url}bower_components/paper-fab-transitions/paper-fab-speed-dial.html">
 <link rel="import" href="{$components_url}bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="{$components_url}bower_components/paper-item/paper-item.html">
-<link rel="import" href="{$components_url}bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="{$components_url}bower_components/paper-material/paper-material.html">
-<link rel="import" href="{$components_url}bower_components/paper-toast/paper-toast.html">
 
 <link rel="import" href="{$components_url}controllets/paper-card-controllet/paper-card-controllet.html"/>
 <link rel="import" href="{$components_url}controllets/search-panel-controllet/search-panel-controllet.html"/>
+<link rel="import" href="{$components_url}controllets/animated-grid-controllet/animated-grid-controllet.html"/>
+<link rel="import" href="{$components_url}controllets/fullsize-page-with-card-controllet/fullsize-page-with-card-controllet.html">
+<link rel="import" href="{$components_url}controllets/text-element-controllet/metadata-element-controllet.html"/>
+<link rel="import" href="{$components_url}controllets/datalet-slider-controllet/datalet-slider-controllet.html"/>
+<link rel="import" href="{$components_url}controllets/metadata-list-controllet/metadata-list-controllet.html"/>
 <link rel="import" href="{$components_url}controllets/page-slider-controllet/page-slider-controllet.html"/>
-<link rel="import" href="{$components_url}controllets/postit-container-controllet/postit-container-controllet.html"/>
-<!--<link rel="import" href="{$components_url}controllets/dataset-selection-controllet/dataset-selection-controllet.html"/>-->
 <link rel="import" href="{$components_url}controllets/select-dataset-controllet/select-dataset-controllet.html"/>
 <link rel="import" href="{$components_url}controllets/select-data-controllet/select-data-controllet.html"/>
+<link rel="import" href="{$components_url}controllets/info-list-controllet/info-list-controllet.html"/>
 
-<link rel="import" href="{$components_url}controllets/document-card-controllet/document-card-controllet.html"/>
 
-<link rel="import" href="{$components_url}bower_components/paper-card/paper-card.html">
-<link rel="import" href="{$components_url}bower_components/paper-button/paper-button.html">
 <link rel="import" href="{$components_url}bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="{$components_url}bower_components/paper-styles/color.html">
 
-<script src="{$components_url}locales/controllet_ln.js" type="text/javascript"></script>
-<script src="{$components_url}locales/paper_card_controllet_ln.js" type="text/javascript"></script>
 
-<link rel="import" href="{$components_url}controllets/page-slider-controllet/page-slider-controllet.html"/>
-<link rel="import" href="{$components_url}controllets/postit-container-controllet/postit-container-controllet.html"/>
+<link rel="import" href="{$components_url}bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="{$components_url}bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="{$components_url}bower_components/neon-animation/neon-animations.html">
+
+<link rel="import" href="{$components_url}bower_components/polymer-element-catalog/app/elements/app-sidebar/app-sidebar.html">
 
 <!-- DATALET -->
 <link rel="import" href="{$components_url}datalets/areachart-datalet/areachart-datalet.html">
@@ -49,20 +65,257 @@
 <link rel="import" href="{$components_url}datalets/scatterchart-datalet/scatterchart-datalet.html">
 <link rel="import" href="{$components_url}datalets/treemap-datalet/treemap-datalet.html">
 
+
+<script src="{$components_url}locales/controllet_ln.js" type="text/javascript"></script>
+<script src="{$components_url}locales/paper_card_controllet_ln.js" type="text/javascript"></script>
 <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 
 {literal}
 <style is="custom-style">
-    paper-toolbar.toolbar-main
+    .separator
     {
-        --paper-toolbar-background:#2196F3;
-        -moz-box-shadow: 0 0 20px 5px #999;
-        -webkit-box-shadow: 0 0 20px 5px #999;
+        height: 1px;
+        background: #ddd;
+        margin: 12px 8px;
     }
+
+    paper-item
+    {
+        cursor: pointer;
+    }
+
+    paper-drawer-panel {
+    --paper-drawer-panel-left-drawer-container: {
+         top: 56px;
+     };
+    }
+
+    paper-toolbar
+    {
+        --paper-toolbar-height: 56px;
+        --paper-toolbar-background: #2196F3;
+    }
+
+    #paperDrawerPanel
+    {
+        top: 60px;
+    }
+
+    #drawer
+    {
+        margin-top: 56px;
+        z-index:0;
+    }
+
+    iron-icon
+    {
+        --iron-icon-height : 32px;
+        --iron-icon-width : 32px;
+        --iron-icon-fill-color: #9E9E9E;
+    }
+
+
+    iron-icon#dataset_icon
+    {
+        --iron-icon-fill-color: #4CAF50;
+    }
+
+    iron-icon#metadata_icon
+    {
+        --iron-icon-fill-color: #FF5722;
+    }
+
+    iron-icon[icon="description"]
+    {
+        --iron-icon-fill-color: #2196F3;
+    }
+
+    iron-icon#discussion_icon
+    {
+    }
+
+    iron-icon[icon="assessment"]
+    {
+    }
+
+    iron-icon#screen_1
+    {
+        --iron-icon-height : 24px;
+        --iron-icon-width : 24px;
+        -o-transform: rotate(-90deg);
+        -webkit-transform: rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+    }
+
+    iron-icon#screen_2
+    {
+        --iron-icon-height : 24px;
+        --iron-icon-width : 24px;
+        -o-transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+        -moz-transform: rotate(90deg);
+    }
+
+    paper-item-body
+    {
+        padding-left: 24px;
+    }
+
+    paper-item-body.no_padding_item
+    {
+        padding-left: 8px;
+    }
+
+    paper-checkbox.checkbox_splitscreen
+    {
+        position: absolute;
+        right: 32px;
+        top: 15px;
+        --paper-checkbox-checked-color: #4CAF50;
+    }
+
+    paper-fab
+    {
+        --paper-fab-background : #00BCD4;
+    --paper-fab: {
+         height: 40px;
+         width: 40px;
+         padding: 0;
+         margin: 8px;
+     };
+    }
+
+    .header_container
+    {
+        width: 100%;
+    }
+
+    .hader_title_container
+    {
+        float:left;
+    }
+
+    .header_title
+    {
+        line-height: 56px;
+        font-size: 18px;
+    }
+
+    .right_floater
+    {
+        float: right
+    }
+
+    .hader_title_container > paper-button
+    {
+    --paper-button:{
+         background: #00BCD4;
+         height: 40px;
+         margin-left: 16px;
+     }
+    }
+
+    .content_container
+    {
+        height: calc(100vh - 158px);
+    }
+
+    .full_size_content
+    {
+        height: 100%;
+        width: 100%;
+    }
+
+    .full_size_card{
+        margin:32px 32px 32px 32px;
+        height: calc(100% - 64px - 20px);
+        width: calc(100% - 64px);
+        display:block;
+    }
+
+    .split_size_card_left{
+        margin:32px 16px 32px 32px;
+        height: calc(100% - 64px  - 20px);
+        width: calc(50% - 48px);
+        float:left;
+
+    }
+
+    .split_size_card_right{
+        float: right;
+        margin:32px 32px 32px 16px;
+        height: calc(100% - 64px);
+        width: calc(50% - 48px);
+    }
+
+    .section_header{
+        height: 20px;
+        background: #2196F3;
+        text-align:center;
+        font-weight: 700;
+        text-transform: capitalize;
+    }
+
+    paper-tabs {
+        background: #B6B6B6;
+    }
+
+    paper-tab {
+        font-weight: 700;
+        border-right: 2px solid #FFFFFF;
+    }
+
+    paper-tab:nth-last-child(2) {
+        border-right: 0;
+    }
+
+    paper-tab.iron-selected {
+        color: #FFFFFF;
+        background: #2196F3;;
+    }
+
+    paper-tab:not(.iron-selected):hover {
+        color: #2196F3;
+    }
+
+    iron-pages{
+        height: 100%;
+    }
+
+    #dataset_library{
+        height: 100%;
+    }
+
+    #add_dataset_container{
+        height: 100%;
+        overflow: scroll;
+    }
+
+    search-panel-controllet{
+        position : absolute;
+        right: 10px;
+        top: 10px;
+    }
+
+    neon-animatable{
+        margin-top: 10px;
+    }
+
+    #select_dataset_container.select-dataset-controllet .header_block.select-dataset-controllet{
+        position: relative;
+        bottom: 16px;
+    }
+
+    #addDataset{
+        position: absolute;
+        top: -60px;
+        right: 30px;
+    }
+
 </style>
 
 <style>
-    paper-fab.add-paper-fab {
+    /*paper-fab.add-paper-fab {
         position: absolute;
         bottom: 25px;
         right: 50px;
@@ -168,7 +421,6 @@
         float: left;
         position: relative;
         overflow: auto;
-        /*margin: 10px;*/
     }
 
     document-card-controllet{
@@ -271,7 +523,7 @@
         visibility: hidden;
         height: 0;
         width: 0;
-    }
+    }*/
 
 </style>
 
@@ -286,152 +538,164 @@
     {/if}
     {if $isMember == true}
 
-       <paper-drawer-panel force-narrow>
+    <div style="height: 100%;">
 
-        <div drawer>
+        <paper-drawer-panel id="paperDrawerPanel" force-narrow>
 
-            <paper-toolbar class="toolbar-drawer">
-                <div class="title">MODE</div>
-            </paper-toolbar>
+            <paper-header-panel drawer>
+                <div>
+                    <paper-menu>
 
-            <paper-menu selected="[[selectedMode]]">
-               <paper-item id="0" on-tap="_onModeChange">{text key="cocreation+room_menu_data"}</paper-item>
-               <paper-item id="1" on-tap="_onModeChange">{text key="cocreation+room_menu_cocreation"}</paper-item>
-               <!--<paper-item id="2" disabled>{text key="cocreation+room_menu_tools"}</paper-item>-->
-            </paper-menu>
+                        <paper-item id="explore_menu_item" onclick="room.handleSelectUIMode('explore')">
+                            <iron-icon  icon="description"></iron-icon>
+                            <paper-item-body two-lines title='{text key="cocreation+room_dataset_tooltip"}'>
+                                <div>{text key="cocreation+room_explore"}</div>
+                            </paper-item-body>
+                        </paper-item>
 
-        </div>
+                        <paper-item onclick="room.handleSelectUIMode('ideas')">
+                            <iron-icon icon="description"></iron-icon>
+                            <paper-item-body two-lines title='{text key="cocreation+room_metadata_tooltip"}'>
+                                <div>{text key="cocreation+room_ideas"}</div>
+                            </paper-item-body>
+                        </paper-item>
 
-        <div main class="fullbleed layout vertical" style="background-color:#e8e8e8;height: 113vh;">
+                        <paper-item onclick="room.handleSelectUIMode('outcome')">
+                            <iron-icon icon="description"></iron-icon>
+                            <paper-item-body two-lines title='{text key="cocreation+room_notes_tooltip"}'>
+                                <div>{text key="cocreation+room_outcome"}</div>
+                            </paper-item-body>
+                        </paper-item>
 
-            <paper-toolbar class="toolbar-main">
-                <paper-icon-button paper-drawer-toggle icon="menu"></paper-icon-button>
-                <paper-icon-button title='{text key="cocreation+room_info_tooltip"}' id="info_room_button" icon="info" on-tap="_openInfo"></paper-icon-button>
-                <div class="title">
-                    <h5 id="mode">{text key="cocreation+room_menu_cocreation"}</h5>
+                        <div class="separator"></div>
+
+                        <paper-item id="library_menu_item" onclick="room.handleSelectUIMode('library')">
+                            <iron-icon icon="view-list"></iron-icon>
+                            <paper-item-body two-lines title='{text key="cocreation+room_discussion_tab_label"}'>
+                                <div>{text key="cocreation+room_view_datalibrary"}</div>
+                            </paper-item-body>
+                        </paper-item>
+
+                        <paper-item id="explore_menu_item" onclick="room.handleSelectUIMode('datalets')">
+                            <iron-icon icon="assessment"></iron-icon>
+                            <paper-item-body two-lines title='{text key="cocreation+room_cc_datalet"}'>
+                                <div>Datalets</div>
+                            </paper-item-body>
+                        </paper-item>
+
+
+                        <paper-item id="info_menu_item" onclick="room.handleSelectUIMode('info')">
+                            <iron-icon icon="info"></iron-icon>
+                            <paper-item-body two-lines>
+                                <div>Info</div>
+                            </paper-item-body>
+                        </paper-item>
+
+                        <div class="separator"></div>
+
+                        <paper-item onclick="">
+                            <iron-icon id="screen_1" icon="av:airplay"></iron-icon>
+                            <iron-icon id="screen_2" icon="av:airplay"></iron-icon>
+                            <paper-item-body class="no_padding_item" two-lines>
+                                <div>
+                                    Split screen
+                                    <paper-checkbox class="checkbox_splitscreen" onclick="room.handleSplitScreen(this)"></paper-checkbox>
+                                </div>
+                            </paper-item-body>
+                        </paper-item>
+
+                    </paper-menu>
                 </div>
-                <!--<search-panel-controllet right-direction="true"></search-panel-controllet>-->
-                <div id="cocreation_view_modes" class="layout horizontal">
-                    <paper-fab  title='{text key="cocreation+room_cc_document"}' id="cc_mode_0" class="cocreation_view_modes_button" mini icon="description" on-click="_handleCcModeClick" style="background-color:#B6B6B6"></paper-fab>
-                    <paper-fab  title='{text key="cocreation+room_cc_uniform"}' id="cc_mode_1" class="cocreation_view_modes_button" mini icon="view-agenda" on-click="_handleCcModeClick" style="background-color:#00BCD4"></paper-fab>
-                    <paper-fab  title='{text key="cocreation+room_cc_datalet"}' id="cc_mode_2" class="cocreation_view_modes_button" mini icon="assessment" on-click="_handleCcModeClick" style="background-color:#B6B6B6"></paper-fab>
+
+            </paper-header-panel>
+
+            <paper-header-panel main>
+                <paper-toolbar>
+                    <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+                    <div class="header_container">
+
+                        <div class="hader_title_container">
+                            <span class="header_title">{$room->name}</span>
+                        </div>
+
+                        <div class="right_floater">
+                            {if $ownerUserActive}
+                            <paper-fab icon="add" onclick="room.inviteNewUsers();" title='{text key="cocreation+room_invite_new_members_button"}'></paper-fab>
+                            {/if}
+                        </div>
+
+                        <div class="right_floater">
+                            <div class="ow_avatar style-scope" title="{$owner['title']}"><a class="style-scope" href="{$owner['url']}"><img alt="" style="max-width: 100%;" class="style-scope dataset-table-controllet" src="{$owner['src']}"></a></div>
+                            {foreach $members as $member}
+                            <div class="ow_avatar style-scope" title="{$member['title']}"><a class="style-scope" href="{$member['url']}"><img alt="" style="max-width: 100%;" class="style-scope dataset-table-controllet" src="{$member['src']}"></a></div>
+                            {/foreach}
+                        </div>
+
+                    </div>
+                </paper-toolbar>
+
+                <!-- FULL SIZE ETHERSHEET -->
+                <div class="content_container">
+                    <!-- Explore -->
+                    <paper-card id="explore" class="full_size_card" style="display:block;" elevation="5">
+                        <div class="section_header">{text key="cocreation+room_explore"}</div>
+                        <iframe src="{$documents[0]}?userName={$currentUser['title']}&showControls=true&showLineNumbers=false&pageview=true" style="height: 100%; width: 100%;"></iframe>
+                    </paper-card>
+                    <!-- Ideas -->
+                    <paper-card id="ideas" class="full_size_card" style="display:none;" elevation="5">
+                        <div class="section_header">{text key="cocreation+room_ideas"}</div>
+                        <iframe src="{$documents[1]}?userName={$currentUser['title']}&showControls=true&showLineNumbers=false&pageview=true" style="height: 100%; width: 100%;"></iframe>
+                    </paper-card>
+                    <!-- Outcome -->
+                    <paper-card id="outcome" class="full_size_card" style="display:none;" elevation="5">
+                        <div class="section_header">{text key="cocreation+room_outcome"}</div>
+                        <iframe src="{$documents[2]}?userName={$currentUser['title']}&showControls=true&showLineNumbers=false&pageview=true" style="height: 100%; width: 100%;"></iframe>
+                    </paper-card>
+                    <!-- Library -->
+                    <paper-card id="library" class="full_size_card" style="display:none;" elevation="5">
+                        <iron-pages selected="[[library_tab_selected]]">
+                            <!-- View datalibrary -->
+                            <div id="dataset_library">
+                                {$datasets_library}
+                            </div>
+                            <!-- Add dataset -->
+                            <div id="add_dataset_container">
+                                <page-slider-controllet id="slider_dataset">
+                                    <neon-animatable id="pass_1">
+                                        <select-dataset-controllet
+                                                id="dataset_selection"
+                                                datasets='{$datasets_list}'>
+                                        </select-dataset-controllet>
+                                    </neon-animatable>
+                                    <neon-animatable id="pass_2">
+                                        <div id="pass_2_select_data_container">
+                                            <select-data-controllet id="select_data_controllet" data-url=[[dataUrl]]></select-data-controllet>
+                                        </div>
+                                        <paper-fab id="addDataset" icon="add" title='{text key="cocreationep+room_add_dataset"}' class="dropdown-trigger" on-click="_addDataset"></paper-fab>
+                                    </neon-animatable>
+                                </page-slider-controllet>
+                            </div>
+                        </iron-pages>
+                        <paper-tabs id="library_tab" selected="[[library_tab_selected]]" no-bar>
+                            <paper-tab noink on-click="_library_tab_clicked" id="0">{text key="cocreation+room_view_datalibrary"}</paper-tab>
+                            <paper-tab noink on-click="_library_tab_clicked" id="1">{text key="cocreation+room_add_dataset"}</paper-tab>
+                        </paper-tabs>
+                    </paper-card>
+                    <!-- Datalets -->
+                    <paper-card id="datalets" class="full_size_card" style="display:none;" elevation="5">
+                        <datalet-slider-controllet id="datalets_slider"></datalet-slider-controllet>
+                    </paper-card>
+                    <!-- Info -->
+                    <paper-card id="info" class="full_size_card" style="display:none;" elevation="5">
+                        <info-list-controllet id="info_list_controllet"></info-list-controllet>
+                    </paper-card>
                 </div>
-            </paper-toolbar>
 
-            <paper-scroll-header-panel class="flex" fixed>
+             </paper-header-panel>
+        </paper-drawer-panel>
+    </div>
 
-             <iron-pages selected="[[selectedMode]]">
-
-                 <!-- Data -->
-                 <div id="data" class="modePages">
-                     <iron-pages selected="[[selectedTab_data]]">
-                         <!-- Entrance -->
-                         <!--<div class="layout horizontal tabpage">
-                             <document-card-controllet
-                                     style="width: 100%;"
-                                     resource-url="{$outcome_ro_url}"
-                                     class="grid-item"
-                                     height=80>
-                             </document-card-controllet>
-                         </div>-->
-                         <!-- View datalibrary -->
-                         <div id="data_library" class="layout horizontal">
-                             {$datasets_library}
-                         </div>
-                         <!-- Add dataset -->
-                         <div id="add_dataset_container" class="layout horizontal">
-                             <page-slider-controllet id="slider_dataset" style="width: 100%; margin-top: 10px;height: 81vh;overflow: scroll">
-                                 <neon-animatable id="pass_1">
-                                         <!--<dataset-selection-controllet id="dataset_selection"
-                                                                       datasets='{$datasets_list}'>
-                                         </dataset-selection-controllet>-->
-                                         <select-dataset-controllet
-                                             id="dataset_selection"
-                                             datasets='{$datasets_list}'>
-                                         </select-dataset-controllet>
-                                 </neon-animatable>
-
-                                 <neon-animatable id="pass_2">
-                                     <div id="pass_2_select_data_container">
-                                         <select-data-controllet id="select_data_controllet" data-url=[[dataUrl]]></select-data-controllet>
-                                     </div>
-                                     <paper-fab id="addDataset" icon="add" title='{text key="cocreationep+room_add_dataset"}' class="dropdown-trigger" on-click="_addDataset"></paper-fab>
-                                 </neon-animatable>
-                             </page-slider-controllet>
-                         </div>
-                         <!-- Search datasets -->
-                         <!--<div class="layout horizontal tabpage">
-                             Search datasets
-                         </div>-->
-                     </iron-pages>
-
-                     <paper-tabs id="data_tab" selected="[[selectedTab_data]]" no-bar>
-                         <!--<paper-tab noink on-click="_tabClicked_data" id="0">{text key="cocreation+room_entrance"}</paper-tab>-->
-                         <paper-tab noink on-click="_tabClicked_data" id="0">{text key="cocreation+room_view_datalibrary"}</paper-tab>
-                         <paper-tab noink on-click="_tabClicked_data" id="1">{text key="cocreation+room_add_dataset"}</paper-tab>
-                         <!--<paper-tab noink id="3" disabled>{text key="cocreation+room_search_dataset"}</paper-tab>-->
-                     </paper-tabs>
-                 </div>
-                 <!-- CoCreation -->
-                 <div id="cocreation" class="layout horizontal modePages">
-                     <div id="shared_docs">
-                        <!-- Explore -->
-                        <paper-material elevation="2" class="layout horizontal visible_doc" id="doc0">
-                            <document-card-controllet
-                                    user-name="{$currentUser['title']}"
-                                    resource-url="{$documents[0]}"
-                                    show-controls
-                                    class="grid-item"
-                                    height=74>
-                            </document-card-controllet>
-                        </paper-material>
-                        <!-- Ideas -->
-                        <paper-material elevation="2" class="layout horizontal hidden_doc" id="doc1">
-                            <document-card-controllet
-                                    user-name="{$currentUser['title']}"
-                                    resource-url="{$documents[1]}"
-                                    show-controls
-                                    class="grid-item"
-                                    height=74>
-                            </document-card-controllet>
-                        </paper-material>
-                        <!-- Outcome -->
-                        <paper-material elevation="2" class="layout horizontal hidden_doc" id="doc2">
-                            <document-card-controllet
-                                    user-name="{$currentUser['title']}"
-                                    resource-url="{$documents[2]}"
-                                    show-controls
-                                    class="grid-item"
-                                    height=74>
-                            </document-card-controllet>
-                        </paper-material>
-                     </div>
-                    <paper-material id="datalets_slider_container" elevation="2" class="layout vertical section">
-                        {if !empty($datalets_slider)}
-                           {$datalets_slider}
-                        {else}
-                           <img id="base_datalet_spin" src="{$components_url}datalets/base-datalet/static/images/spin.svg">
-                        {/if}
-
-                    </paper-material>
-
-                    <paper-tabs id="cocreation_tab" selected="[[selectedTab_cocreation]]" no-bar>
-                       <paper-tab noink on-click="_tabClicked_cocreation" id="0">{text key="cocreation+room_explore"}</paper-tab>
-                       <paper-tab noink on-click="_tabClicked_cocreation" id="1">{text key="cocreation+room_ideas"}</paper-tab>
-                       <paper-tab noink on-click="_tabClicked_cocreation" id="2">{text key="cocreation+room_outcome"}</paper-tab>
-                    </paper-tabs>
-                </div>
-                 <!-- Tools -->
-                 <div id="tools" class="modePages"></div>
-
-             </iron-pages>
-
-            </paper-scroll-header-panel>
-        </div>
-
-    </paper-drawer-panel>
-
-       <paper-dialog id="dialog_info">
+   <!-- <paper-dialog id="dialog_info">
         <paper-button id="info_close_button" dialog-confirm autofocus>close</paper-button>
         <div id="dialog_content">
             <h1>{$room->name}</h1>
@@ -456,10 +720,10 @@
             <p id="period">{$room->from} / {$room->to}</p>
             <h2>{text key="cocreation+room_members"}</h2>
             {if $ownerUserActive}
-               <span class="ow_button"><input type="button" value='{text key="cocreation+room_invite_new_members_button"}' id="inviteNewMembers" onclick="room.inviteNewUsers();"></span>
+            <span class="ow_button"><input type="button" value='{text key="cocreation+room_invite_new_members_button"}' id="inviteNewMembers" onclick="room.inviteNewUsers();"></span>
             {/if}
             <div id="members_container">
-               <div class="layout vertical">
+                <div class="layout vertical">
 
                     <div class="layout horizontal">
                         <div class="ow_avatar">
@@ -472,30 +736,29 @@
                         </div>
                     </div>
 
-                   {foreach $members as $member}
-                   <div class="layout horizontal">
-                       <div class="ow_avatar">
-                           <a href="{$member['url']}">
-                               <img alt="" src="{$member['src']}" style="max-width: 100%;">
-                           </a>
-                       </div>
-                       <div class="name" style="margin:15px">
-                           <a href="{$member['url']}">{$member['title']}</a>
-                       </div>
-                       {if $member['isJoined'] == '0'}
-                           <div class="name" style="margin:15px;margin-left: 30px;color:#cd0a0a;">
-                               {text key="cocreation+room_user_not_joined_yet"}
-                           </div>
-                       {/if}
-                   </div>
-                   {/foreach}
+                    {foreach $members as $member}
+                    <div class="layout horizontal">
+                        <div class="ow_avatar">
+                            <a href="{$member['url']}">
+                                <img alt="" src="{$member['src']}" style="max-width: 100%;">
+                            </a>
+                        </div>
+                        <div class="name" style="margin:15px">
+                            <a href="{$member['url']}">{$member['title']}</a>
+                        </div>
+                        {if $member['isJoined'] == '0'}
+                        <div class="name" style="margin:15px;margin-left: 30px;color:#cd0a0a;">
+                            {text key="cocreation+room_user_not_joined_yet"}
+                        </div>
+                        {/if}
+                    </div>
+                    {/foreach}
 
-               </div>
+                </div>
 
             </div>
         </div>
-    </paper-dialog>
-
+    </paper-dialog>-->
     <paper-toast id="syncToast" duration="0" text="">
         <div class="layout horizontal">
             <h5>{text key="cocreation+room_sync_toast"}</h5>
@@ -503,6 +766,6 @@
         </div>
         <div class="layout vertical" id="syncMessage"></div>
     </paper-toast>
-   {/if}
-
+    {/if}
 </template>
+

@@ -69,32 +69,10 @@ $(document).ready(function() {
         }
     });
 
-    $(".sentiment-button").live("click", function()
-    {
-        var id = $(this).attr('id');
-        switch($(this).attr('icon')){
-            case "face":
-                $(this).attr('icon', 'social:mood');
-                $(this).attr('sentiment', '2');
-                break;
-            case "social:mood":
-                $(this).attr('icon', 'social:mood-bad');
-                $(this).attr('sentiment', '3');
-                break;
-            case "social:mood-bad":
-                $(this).attr('icon', 'face');
-                $(this).attr('sentiment', '1');
-                break;
-        }
-    });
-
-/*
-    $('#discussion').perfectScrollbar();
-*/
-
     setTimeout(function(){
         room.$.datalets_slider.setDatalets(COCREATION.datalets);
         room.$.metadata_component.setMetadata(COCREATION.metadata);
+        room.$.info_list_controllet.setInfo(COCREATION.info);
         /*room.loadDiscussion();*/
     },1000);
 });
@@ -109,6 +87,7 @@ room.handleSelectUIMode = function(mode){
             room.$.notes.style.display       = 'none';
             room.$.discussion.style.display  = 'none';
             room.$.datalets.style.display    = 'none';
+            room.$.info.style.display        = 'none';
             break;
         case 'metadata':
             if(!room.splitScreenActive) room.$.spreadsheet.style.display = "none";
@@ -116,6 +95,7 @@ room.handleSelectUIMode = function(mode){
             room.$.notes.style.display       = 'none';
             room.$.discussion.style.display  = 'none';
             room.$.datalets.style.display    = 'none';
+            room.$.info.style.display        = 'none';
             break;
         case 'notes':
             if(!room.splitScreenActive) room.$.spreadsheet.style.display = "none";
@@ -123,6 +103,7 @@ room.handleSelectUIMode = function(mode){
             room.$.notes.style.display       = 'block';
             room.$.discussion.style.display  = 'none';
             room.$.datalets.style.display    = 'none';
+            room.$.info.style.display        = 'none';
             break;
         case 'discussion':
             if(!room.splitScreenActive) room.$.spreadsheet.style.display = "none";
@@ -130,6 +111,7 @@ room.handleSelectUIMode = function(mode){
             room.$.notes.style.display       = 'none';
             room.$.discussion.style.display  = 'block';
             room.$.datalets.style.display    = 'none';
+            room.$.info.style.display        = 'none';
             break;
         case 'datalets':
             if(!room.splitScreenActive) room.$.spreadsheet.style.display = "none";
@@ -137,7 +119,16 @@ room.handleSelectUIMode = function(mode){
             room.$.notes.style.display       = 'none';
             room.$.discussion.style.display  = 'none';
             room.$.datalets.style.display    = 'block';
+            room.$.info.style.display        = 'none';
             room.$.datalets_slider._refresh();
+            break;
+        case 'info':
+            room.$.spreadsheet.style.display = "none";
+            room.$.metadata.style.display    = 'none';
+            room.$.notes.style.display       = 'none';
+            room.$.discussion.style.display  = 'none';
+            room.$.datalets.style.display    = 'none';
+            room.$.info.style.display        = 'block';
             break;
     }
 
@@ -148,12 +139,14 @@ room.handleSplitScreen = function(e){
    if(room.splitScreenActive){//active split screen
 
        room.$.dataset_menu_item.disabled = true;
+       room.$.info_menu_item.disabled    = true;
 
        room.$.spreadsheet.style.display = "block";
        room.$.metadata.style.display    = 'block';
        room.$.notes.style.display       = 'none';
        room.$.discussion.style.display  = 'none';
        room.$.datalets.style.display    = 'none';
+       room.$.info.style.display        = 'none';
 
        $(room.$.spreadsheet).addClass("split_size_card_left");
        $(room.$.metadata).addClass("split_size_card_right");
@@ -162,12 +155,14 @@ room.handleSplitScreen = function(e){
        $(room.$.datalets).addClass("split_size_card_right");
    }else{
        room.$.dataset_menu_item.disabled = false;
+       room.$.info_menu_item.disabled    = false;
 
        room.$.spreadsheet.style.display = "block";
        room.$.metadata.style.display    = 'none';
        room.$.notes.style.display       = 'none';
        room.$.discussion.style.display  = 'none';
        room.$.datalets.style.display    = 'none';
+       room.$.info.display              = 'none';
 
        $(room.$.spreadsheet).removeClass("split_size_card_left");
        $(room.$.metadata).removeClass("split_size_card_right");
