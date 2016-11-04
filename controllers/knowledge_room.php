@@ -75,14 +75,12 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
             $info->invitationText = $room->invitationText;
             $info->owner = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($room->ownerId))[$room->ownerId];
             $info->members = $members;
-            //$this->assign('members', $members);
 
             $this->assign('currentUser' , BOL_AvatarService::getInstance()->getDataForUserAvatars(array(OW::getUser()->getId()))[OW::getUser()->getId()]);
 
             //Set room shared documents
             $documents = COCREATION_BOL_Service::getInstance()->getDocumentsByRoomId($params['roomId']);
             $this->assign('documents', array($documents[0]->url, $documents[1]->url, $documents[2]->url));
-            //$this->assign('outcome_ro_url', $this->getOutcomeReadonlyPadID($documents[2]->url));
 
             //get all dataset for current room
             $this->addComponent('datasets_library', new COCREATION_CMP_DatasetsLibrary($params['roomId']));

@@ -96,7 +96,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         $metadataObj->CC_RAF = json_decode($metadata[0]->common_core_if_applicable);
         $metadataObj->EF = json_decode($metadata[0]->expanded);
 
-        //$this->addComponent("comments", new COCREATION_CMP_DiscussionWrapper($params['roomId']));
+        $this->addComponent("comments", new COCREATION_CMP_DiscussionWrapper($params['roomId']));
 
         $js = UTIL_JsGenerator::composeJsString('
                 ODE.ajax_coocreation_room_get_sheetdata       = {$ajax_coocreation_room_get_sheetdata}

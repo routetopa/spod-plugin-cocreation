@@ -184,10 +184,10 @@ room.loadDatasetsLibrary = function() {
             onload.setAttribute("type","text/javascript");
             onload.innerHTML = data.onloadScript;
 
-            $('#data_library').html(data.content);
+            $('#dataset_library').html(data.content);
             previewFloatBox.close();
-            room.$.slider_dataset.selected = 0;
-            room.selectedTab_data          = 0;
+            room.$.library_tab.library_tab_selected = 0;
+            room.$.library_tab_selected             = 0;
             OW.info(OW.getLanguageText('cocreation', 'dataset_successfully_added'));
         });
 };
