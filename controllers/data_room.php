@@ -63,6 +63,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
             array_push($members, $avatar);
             array_push($membersIds, $user->id);
         }
+        $this->assign('members', $members);
 
         $info                 = new stdClass();
         $info->name           = $room->name;
