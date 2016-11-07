@@ -31,8 +31,8 @@ class COCREATION_CMP_DiscussionWrapper extends OW_Component
         SPODTCHAT_CLASS_Consts::$NUMBER_OF_NESTED_LEVEL = 2;
 
         /* ODE */
-        /*if (OW::getPluginManager()->isPluginActive('spodpr'))
-            $this->addComponent('private_room', new SPODPR_CMP_PrivateRoomCard('ow_attachment_btn', array('datalet', 'link')));*/
+        if (OW::getPluginManager()->isPluginActive('spodpr'))
+            $this->addComponent('private_room', new SPODPR_CMP_PrivateRoomCard('ow_attachment_btn', array('datalet', 'link')));
         /* ODE */
 
         $commentCmp = new SPODTCHAT_CMP_Comments($commentsParams, 1, COCREATION_BOL_Service::COMMENT_ENTITY_TYPE, $roomId);
