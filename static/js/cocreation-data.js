@@ -194,7 +194,7 @@ room._publishDataset = function(){
         function (data, status) {
             room.current_dataset = data;
             ODE.pluginPreview = "cocreation";
-            previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_PublishDataset', {data: data} , {width:'90%', height:'90vh', iconClass:'ow_ic_lens', title:''});
+            previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_PublishDataset', {data: data} , {width:'90%', height:'80vh', iconClass:'ow_ic_lens', title:''});
         }
     );
 };

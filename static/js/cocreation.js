@@ -54,12 +54,13 @@ COCREATION.autocomplete = function()
 
             $("#suggested_friends_table").empty();
 
-            var parentPosition = $("#parent").offset();
-            var containerHeight = $("#added_suggested_contact_container").height();
+            // var parentPosition = $("#parent").offset();
+            var labelHeight = $("#add_label").height();
+            var labelWidht = $("#add_label").width();
 
             list.css({
-                top: parentPosition.top + containerHeight + 50,
-                left: parentPosition.left,
+                top: labelHeight + 28,
+                left: labelWidht + 40,
                 position: 'absolute'
             });
 

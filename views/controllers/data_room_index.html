@@ -143,6 +143,8 @@
         -o-transform: rotate(-90deg);
         -webkit-transform: rotate(-90deg);
         -moz-transform: rotate(-90deg);
+
+        --iron-icon-fill-color: #000000;
     }
 
     iron-icon#screen_2
@@ -152,6 +154,8 @@
         -o-transform: rotate(90deg);
         -webkit-transform: rotate(90deg);
         -moz-transform: rotate(90deg);
+
+        --iron-icon-fill-color: #000000;
     }
 
     paper-item-body
@@ -243,6 +247,7 @@
         width: calc(100% - 24px);
         padding: 12px;
         background-color: transparent;
+        color: #FFFFFF;
         font-weight: 700;
         text-align: center;
         text-transform: uppercase;
@@ -260,6 +265,7 @@
 
     #notes .screen_header {
         background-color: #2196F3;
+        color: #FFFFFF;
     }
 
     #notes {
@@ -394,7 +400,7 @@
                         <iron-icon id="screen_2" icon="av:airplay"></iron-icon>
                         <paper-item-body class="no_padding_item" two-lines>
                             <div>
-                                Split screen
+                                <span style="font-weight: 700">Split screen</span>
                                 <paper-checkbox id="split_checkbox" class="checkbox_splitscreen" onclick="room.handleSelectUIMode('split')"></paper-checkbox>
                             </div>
                         </paper-item-body>
