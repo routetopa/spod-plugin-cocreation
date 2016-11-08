@@ -74,8 +74,10 @@ $( document ).ready(function() {
     },1500);
 });
 
-room.splitScreenActive    = false;
-room.library_tab_selected = 0;
+room.splitScreenActive          = false;
+room.library_tab_selected       = 0;
+room.current_selected_container = null;
+room.current_selected_document  = null;
 
 room._library_tab_clicked = function(e){
     room.library_tab_selected = e.currentTarget.id;
@@ -84,28 +86,40 @@ room._library_tab_clicked = function(e){
 room.handleSelectUIMode = function(mode){
     switch(mode){
         case 'explore':
-            room.$.explore.style.display  = "block";
-            room.$.ideas.style.display    = 'none';
-            room.$.outcome.style.display  = 'none';
-            room.$.library.style.display  = 'none';
-            room.$.info.style.display     = 'none';
-            if(!room.splitScreenActive) room.$.datalets.style.display = 'none';
+            room.current_selected_document = room.$.explore;
+            room.$.section_menu.selected   = 0;
+            room.$.explore.style.display   = "block";
+            room.$.ideas.style.display     = 'none';
+            room.$.outcome.style.display   = 'none';
+            room.$.library.style.display   = 'none';
+            if(!room.splitScreenActive){
+                room.$.datalets.style.display = 'none';
+                room.$.info.style.display     = 'none';
+            }
             break;
         case 'ideas':
-            room.$.explore.style.display  = "none";
-            room.$.ideas.style.display    = 'block';
-            room.$.outcome.style.display  = 'none';
-            room.$.library.style.display  = 'none';
-            room.$.info.style.display     = 'none';
-            if(!room.splitScreenActive) room.$.datalets.style.display = 'none';
+            room.current_selected_document = room.$.ideas;
+            room.$.section_menu.selected   = 1;
+            room.$.explore.style.display   = "none";
+            room.$.ideas.style.display     = 'block';
+            room.$.outcome.style.display   = 'none';
+            room.$.library.style.display   = 'none';
+            if(!room.splitScreenActive){
+                room.$.datalets.style.display = 'none';
+                room.$.info.style.display     = 'none';
+            }
             break;
         case 'outcome':
-            room.$.explore.style.display  = "none";
-            room.$.ideas.style.display    = 'none';
-            room.$.outcome.style.display  = 'block';
-            room.$.library.style.display  = 'none';
-            room.$.info.style.display     = 'none';
-            if(!room.splitScreenActive) room.$.datalets.style.display = 'none';
+            room.current_selected_document = room.$.outcome;
+            room.$.section_menu.selected   = 2;
+            room.$.explore.style.display   = "none";
+            room.$.ideas.style.display     = 'none';
+            room.$.outcome.style.display   = 'block';
+            room.$.library.style.display   = 'none';
+            if(!room.splitScreenActive){
+                room.$.datalets.style.display = 'none';
+                room.$.info.style.display     = 'none';
+            }
             break;
         case 'library':
             room.$.explore.style.display  = "none";
@@ -116,55 +130,72 @@ room.handleSelectUIMode = function(mode){
             room.$.info.style.display     = 'none';
             break;
         case 'datalets':
-            room.$.explore.style.display  = "none";
-            room.$.ideas.style.display    = 'none';
-            room.$.outcome.style.display  = 'none';
+            room.current_selected_container = room.$.datalets;
             room.$.library.style.display  = 'none';
             room.$.datalets.style.display = 'block';
             room.$.info.style.display     = 'none';
             room.$.datalets_slider._refresh();
+            if(!room.splitScreenActive){
+                room.$.explore.style.display  = "none";
+                room.$.ideas.style.display    = 'none';
+                room.$.outcome.style.display  = 'none';
+            }
             break;
         case 'info':
-            room.$.explore.style.display  = "none";
-            room.$.ideas.style.display    = 'none';
-            room.$.outcome.style.display  = 'none';
+            room.current_selected_container = room.$.info;
             room.$.library.style.display  = 'none';
             room.$.info.style.display     = 'block';
-            if(!room.splitScreenActive) room.$.datalets.style.display = 'none';
+            room.$.datalets.style.display = 'none';
+            if(!room.splitScreenActive){
+                room.$.explore.style.display  = "none";
+                room.$.ideas.style.display    = 'none';
+                room.$.outcome.style.display  = 'none';
+            }
+            break;
+        case 'split':
+            room.$.split_checkbox.checked = !room.$.split_checkbox.checked;
+            room.handleSplitScreen(room.$.split_checkbox);
             break;
     }
-
 };
 
 room.handleSplitScreen = function(e){
-    room.splitScreenActive  = !e.checked;
+    room.splitScreenActive  = e.checked;
     if(room.splitScreenActive){//active split screen
 
         room.$.library_menu_item.disabled = true;
-        room.$.explore_menu_item.disabled = true;
-        room.$.info_menu_item.disabled    = true;
 
-        room.$.explore.style.display  = "block";
+        room.$.explore.style.display  = "none";
         room.$.ideas.style.display    = 'none';
         room.$.outcome.style.display  = 'none';
         room.$.library.style.display  = 'none';
-        room.$.datalets.style.display = 'block';
+        room.$.datalets.style.display = 'none';
         room.$.info.style.display     = 'none';
 
+        if(room.current_selected_container == null){
+            room.current_selected_container  = room.$.datalets;
+            room.$.section_menu.selected     = 5;
+        }
+        room.current_selected_container.style.display = "block";
+
+        if(room.current_selected_document == null) room.current_selected_document = room.$.explore;
+        room.current_selected_document.style.display = "block";
+
+        $(room.$.info).addClass("split_size_card_right");
         $(room.$.datalets).addClass("split_size_card_right");
         $(room.$.explore).addClass("split_size_card_left");
         $(room.$.ideas).addClass("split_size_card_left");
         $(room.$.outcome).addClass("split_size_card_left");
     }else{
         room.$.library_menu_item.disabled = false;
-        room.$.explore_menu_item.disabled = false;
-        room.$.info_menu_item.disabled    = false;
 
+        $(room.$.info).removeClass("split_size_card_right");
         $(room.$.datalets).removeClass("split_size_card_right");
         $(room.$.explore).removeClass("split_size_card_left");
         $(room.$.ideas).removeClass("split_size_card_left");
         $(room.$.outcome).removeClass("split_size_card_left");
-        room.handleSelectUIMode('explore');
+
+        room.handleSelectUIMode(room.current_selected_document.id);
     }
 };
 

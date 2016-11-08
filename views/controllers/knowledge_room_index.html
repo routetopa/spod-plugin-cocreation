@@ -253,11 +253,17 @@
     }
 
     .section_header{
-        height: 20px;
-        background: #2196F3;
-        text-align:center;
+        height: 24px;
+        width: calc(100% - 24px);
+        padding: 12px;
+        background-color: #2196F3;
         font-weight: 700;
-        text-transform: capitalize;
+        text-align: center;
+        text-transform: uppercase;
+        /*in all*/
+        font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        line-height: 24px;
     }
 
     paper-tabs {
@@ -548,7 +554,7 @@
 
             <paper-header-panel drawer>
                 <div>
-                    <paper-menu>
+                    <paper-menu id="section_menu" selected="0">
 
                         <paper-item id="explore_menu_item" onclick="room.handleSelectUIMode('explore')">
                             <iron-icon  icon="description"></iron-icon>
@@ -580,7 +586,7 @@
                             </paper-item-body>
                         </paper-item>
 
-                        <paper-item id="explore_menu_item" onclick="room.handleSelectUIMode('datalets')">
+                        <paper-item id="datalets_menu_item" onclick="room.handleSelectUIMode('datalets')">
                             <iron-icon icon="assessment"></iron-icon>
                             <paper-item-body two-lines title='{text key="cocreation+room_cc_datalet"}'>
                                 <div>Datalets</div>
@@ -597,18 +603,19 @@
 
                         <div class="separator"></div>
 
-                        <paper-item onclick="">
-                            <iron-icon id="screen_1" icon="av:airplay"></iron-icon>
-                            <iron-icon id="screen_2" icon="av:airplay"></iron-icon>
-                            <paper-item-body class="no_padding_item" two-lines>
-                                <div>
-                                    Split screen
-                                    <paper-checkbox class="checkbox_splitscreen" onclick="room.handleSplitScreen(this)"></paper-checkbox>
-                                </div>
-                            </paper-item-body>
-                        </paper-item>
-
                     </paper-menu>
+
+                    <paper-item onclick="room.handleSelectUIMode('split')">
+                        <iron-icon id="screen_1" icon="av:airplay"></iron-icon>
+                        <iron-icon id="screen_2" icon="av:airplay"></iron-icon>
+                        <paper-item-body class="no_padding_item" two-lines>
+                            <div>
+                                Split screen
+                                <paper-checkbox id="split_checkbox" class="checkbox_splitscreen" onclick="room.handleSelectUIMode('split')"></paper-checkbox>
+                            </div>
+                        </paper-item-body>
+                    </paper-item>
+
                 </div>
 
             </paper-header-panel>

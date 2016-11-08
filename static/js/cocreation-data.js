@@ -74,13 +74,14 @@ $(document).ready(function() {
         room.$.datalets_slider.setDatalets(COCREATION.datalets);
         room.$.metadata_component.setMetadata(COCREATION.metadata);
         room.$.info_list_controllet.setInfo(COCREATION.info);
-        /*room.loadDiscussion();*/
     },1000);
 });
 
-room.splitScreenActive = false;
+room.splitScreenActive          = false;
+room.current_selected_container = null;
 
 room.handleSelectUIMode = function(mode){
+    if(!room.splitScreenActive) room.$.spreadsheet.style.display = "none";
     switch(mode){
         case 'dataset':
             room.$.spreadsheet.style.display = "block";
@@ -91,7 +92,7 @@ room.handleSelectUIMode = function(mode){
             room.$.info.style.display        = 'none';
             break;
         case 'metadata':
-            if(!room.splitScreenActive) room.$.spreadsheet.style.display = "none";
+            room.current_selected_container = room.$.metadata;
             room.$.metadata.style.display    = 'block';
             room.$.notes.style.display       = 'none';
             room.$.discussion.style.display  = 'none';
@@ -99,7 +100,7 @@ room.handleSelectUIMode = function(mode){
             room.$.info.style.display        = 'none';
             break;
         case 'notes':
-            if(!room.splitScreenActive) room.$.spreadsheet.style.display = "none";
+            room.current_selected_container = room.$.notes;
             room.$.metadata.style.display    = 'none';
             room.$.notes.style.display       = 'block';
             room.$.discussion.style.display  = 'none';
@@ -107,7 +108,7 @@ room.handleSelectUIMode = function(mode){
             room.$.info.style.display        = 'none';
             break;
         case 'discussion':
-            if(!room.splitScreenActive) room.$.spreadsheet.style.display = "none";
+            room.current_selected_container = room.$.discussion;
             room.$.metadata.style.display    = 'none';
             room.$.notes.style.display       = 'none';
             room.$.discussion.style.display  = 'block';
@@ -115,7 +116,7 @@ room.handleSelectUIMode = function(mode){
             room.$.info.style.display        = 'none';
             break;
         case 'datalets':
-            if(!room.splitScreenActive) room.$.spreadsheet.style.display = "none";
+            room.current_selected_container = room.$.datalets;
             room.$.metadata.style.display    = 'none';
             room.$.notes.style.display       = 'none';
             room.$.discussion.style.display  = 'none';
@@ -124,39 +125,49 @@ room.handleSelectUIMode = function(mode){
             room.$.datalets_slider._refresh();
             break;
         case 'info':
-            room.$.spreadsheet.style.display = "none";
+            room.current_selected_container  = room.$.info;
             room.$.metadata.style.display    = 'none';
             room.$.notes.style.display       = 'none';
             room.$.discussion.style.display  = 'none';
             room.$.datalets.style.display    = 'none';
             room.$.info.style.display        = 'block';
             break;
+        case 'split':
+            room.$.split_checkbox.checked = !room.$.split_checkbox.checked;
+            room.handleSplitScreen(room.$.split_checkbox);
+            break;
     }
 
 };
 
 room.handleSplitScreen = function(e){
-    room.splitScreenActive  = !e.checked;
+   room.splitScreenActive  = e.checked;
    if(room.splitScreenActive){//active split screen
-
        room.$.dataset_menu_item.disabled = true;
-       room.$.info_menu_item.disabled    = true;
 
        room.$.spreadsheet.style.display = "block";
-       room.$.metadata.style.display    = 'block';
+       room.$.metadata.style.display    = 'none';
        room.$.notes.style.display       = 'none';
        room.$.discussion.style.display  = 'none';
        room.$.datalets.style.display    = 'none';
        room.$.info.style.display        = 'none';
+
+       if(room.current_selected_container == null){
+           room.current_selected_container  = room.$.metadata;
+           room.$.section_menu.selected     = 1;
+       }
+       room.current_selected_container.style.display = "block";
 
        $(room.$.spreadsheet).addClass("split_size_card_left");
        $(room.$.metadata).addClass("split_size_card_right");
        $(room.$.notes).addClass("split_size_card_right");
        $(room.$.discussion).addClass("split_size_card_right");
        $(room.$.datalets).addClass("split_size_card_right");
+       $(room.$.info).addClass("split_size_card_right");
    }else{
        room.$.dataset_menu_item.disabled = false;
-       room.$.info_menu_item.disabled    = false;
+       room.$.section_menu.selected      = 0;
+       room.current_selected_container   = null;
 
        room.$.spreadsheet.style.display = "block";
        room.$.metadata.style.display    = 'none';

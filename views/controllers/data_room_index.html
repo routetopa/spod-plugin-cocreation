@@ -338,7 +338,7 @@
 
             <paper-header-panel drawer>
                 <div>
-                    <paper-menu>
+                    <paper-menu id="section_menu">
 
                         <paper-item id="dataset_menu_item" onclick="room.handleSelectUIMode('dataset')">
                             <iron-icon id="dataset_icon" icon="image:grid-on"></iron-icon>
@@ -347,7 +347,7 @@
                             </paper-item-body>
                         </paper-item>
 
-                        <paper-item onclick="room.handleSelectUIMode('metadata')">
+                        <paper-item id="metadata_menu_item" onclick="room.handleSelectUIMode('metadata')">
                             <iron-icon id="metadata_icon" icon="maps:local-offer"></iron-icon>
                             <paper-item-body two-lines title='{text key="cocreation+room_metadata_tooltip"}'>
                                 <div>{text key="cocreation+room_metadata_tab_label"}</div>
@@ -387,18 +387,19 @@
 
                         <div class="separator"></div>
 
-                        <paper-item onclick="">
-                            <iron-icon id="screen_1" icon="av:airplay"></iron-icon>
-                            <iron-icon id="screen_2" icon="av:airplay"></iron-icon>
-                            <paper-item-body class="no_padding_item" two-lines>
-                                <div>
-                                    Split screen
-                                    <paper-checkbox class="checkbox_splitscreen" onclick="room.handleSplitScreen(this)"></paper-checkbox>
-                                </div>
-                            </paper-item-body>
-                        </paper-item>
-
                     </paper-menu>
+
+                    <paper-item onclick="room.handleSelectUIMode('split')">
+                        <iron-icon id="screen_1" icon="av:airplay"></iron-icon>
+                        <iron-icon id="screen_2" icon="av:airplay"></iron-icon>
+                        <paper-item-body class="no_padding_item" two-lines>
+                            <div>
+                                Split screen
+                                <paper-checkbox id="split_checkbox" class="checkbox_splitscreen" onclick="room.handleSelectUIMode('split')"></paper-checkbox>
+                            </div>
+                        </paper-item-body>
+                    </paper-item>
+
                 </div>
 
             </paper-header-panel>
