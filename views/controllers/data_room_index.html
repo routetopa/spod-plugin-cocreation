@@ -224,6 +224,48 @@
         width: 100%;
     }
 
+    .screen_header {
+        height: 24px;
+        width: calc(100% - 24px);
+        padding: 12px;
+        background-color: #B6B6B6;
+        font-weight: 700;
+        text-align: center;
+        text-transform: uppercase;
+        /*in all*/
+        font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .screen_hidden_header {
+        height: 24px;
+        width: calc(100% - 24px);
+        padding: 12px;
+        background-color: transparent;
+        font-weight: 700;
+        text-align: center;
+        text-transform: uppercase;
+        position: absolute;
+        top: 0;
+        left: 0;
+        /*in all*/
+        font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    /*#discussion .screen_header {*/
+    /*}*/
+
+    #notes .screen_header {
+        background-color: #2196F3;
+    }
+
+    #notes {
+        overflow: hidden;
+    }
+
     /*gg style*/
     #dialog_info {
         border: 2px solid #2196F3;
@@ -280,13 +322,6 @@
         width: calc(50% - 48px);
     }
 
-    .section_header{
-        height: 45px;
-        background: #4CAF50;
-        text-align:center;
-        font-weight: 700;
-        text-transform: capitalize;
-    }
     /*end gg style/
 
 </style>
@@ -399,14 +434,15 @@
                     <div id="full_size_container" class="full_size_content">
                         <!-- Discussion -->
                         <paper-card id="discussion" class="full_size_card" style="display:none;" elevation="5">
-                            <div class="section_header">{text key="cocreation+room_discussion_tab_label"}</div>
+                            <div class="screen_header">{text key="cocreation+room_discussion_tab_label"}</div>
                             <div id="discussion_container" style="overflow-y: scroll;overflow-x: hidden;height: calc(100% - 45px)">
                                 {$comments}
                             </div>
                         </paper-card>
                         <!-- Dataset -->
                         <paper-card id="spreadsheet" class="full_size_card" elevation="5">
-                           <iframe src="{$spreadsheet}" style="height: 100%; width: 100%;"></iframe>
+                            <div class="screen_hidden_header">{text key="cocreation+room_dataset_tab_label"}</div>
+                            <iframe src="{$spreadsheet}" style="height: 100%; width: 100%;"></iframe>
                         </paper-card>
                         <!-- Metadata -->
                         <paper-card id="metadata" class="full_size_card" style="display:none;" elevation="5">
@@ -414,7 +450,8 @@
                         </paper-card>
                         <!-- Notes -->
                         <paper-card id="notes" class="full_size_card" style="display:none;" elevation="5">
-                           <iframe src="{{$notes}}?userName={{$currentUser['title']}}&showControls=true&showLineNumbers=false&pageview=true" style="height: 100%; width: 100%;"></iframe>
+                            <div class="screen_header">{text key="cocreation+room_notes_tab_label"}</div>
+                            <iframe src="{{$notes}}?userName={{$currentUser['title']}}&showControls=true&showLineNumbers=false&pageview=true" style="height: 100%; width: 100%;"></iframe>
                         </paper-card>
                         <!-- Datalets -->
                         <paper-card id="datalets" class="full_size_card" style="display:none;" elevation="5">
