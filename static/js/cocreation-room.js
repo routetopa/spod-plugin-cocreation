@@ -75,7 +75,8 @@ room.init = function(){
                 room.$.syncToast.show();
                 break;
             case "addPostitToDatalet":
-                room._handleCcModeClick({currentTarget : {id : room.cc_mode}});
+                COCREATION.postits[rawData.dataletId] = rawData.postits;
+                room.$.postits_controllet.setPostits(COCREATION.postits[rawData.dataletId]);
                 room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'postit_successfully_added');
                 room.$.syncToast.show();
                 break;

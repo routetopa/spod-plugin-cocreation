@@ -37,7 +37,7 @@
 <link rel="import" href="{$components_url}controllets/select-dataset-controllet/select-dataset-controllet.html"/>
 <link rel="import" href="{$components_url}controllets/select-data-controllet/select-data-controllet.html"/>
 <link rel="import" href="{$components_url}controllets/info-list-controllet/info-list-controllet.html"/>
-
+<link rel="import" href="{$components_url}controllets/postit-container-controllet/postit-container-controllet.html"/>
 
 <link rel="import" href="{$components_url}bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="{$components_url}bower_components/paper-styles/color.html">
@@ -94,6 +94,10 @@
     {
         --paper-toolbar-height: 56px;
         --paper-toolbar-background: #2196F3;
+    }
+
+    paper-header-panel{
+        z-index:0;
     }
 
     #paperDrawerPanel
@@ -684,6 +688,7 @@
                     <!-- Datalets -->
                     <paper-card id="datalets" class="full_size_card" style="display:none;" elevation="5">
                         <datalet-slider-controllet id="datalets_slider"></datalet-slider-controllet>
+                        <postit-container-controllet id="postits_controllet" class="postit"></postit-container-controllet>
                     </paper-card>
                     <!-- Info -->
                     <paper-card id="info" class="full_size_card" style="display:none;" elevation="5">

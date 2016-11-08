@@ -1,23 +1,8 @@
 $( document ).ready(function() {
-   $("#dialog_content").perfectScrollbar();
 
-    window.addEventListener('page-slider-controllet_selected', function(e){
-        ln["localization"] = "en";
+    window.addEventListener('datalet-slider-controllet_selected', function(e){
+        room.$.postits_controllet.setPostits(COCREATION.postits[e.detail.dataletId], e.detail.dataletId);
 
-        if(e.srcElement.id == "slider_dataset") {
-            switch (e.detail.selected) {
-                case 0:
-                    room.$.slider_dataset.setTitle(ln["slide1Title_" + ln["localization"]], ln["slide1Subtitle_" + ln["localization"]]);
-                    room.$.slider_dataset.chevronLeft("invisible");
-                    room.$.slider_dataset.chevronRight(true);
-                    break;
-                case 1:
-                    room.$.slider_dataset.setTitle(ln["slide2Title_" + ln["localization"]], ln["slide2Subtitle_" + ln["localization"]]);
-                    room.$.slider_dataset.chevronLeft(true);
-                    room.$.slider_dataset.chevronRight("invisible");
-                    break;
-            }
-        }
     });
 
     window.addEventListener('data-ready', function(e) {
@@ -64,10 +49,29 @@ $( document ).ready(function() {
         }
     });
 
+    window.addEventListener('postit-container-controllet_create-new-postit', function(e){
+        var dataletId = e.detail.id.replace("postit_","");
+        $.post(ODE.ajax_coocreation_room_add_postit,
+            {
+                dataletId: dataletId,
+                title: e.detail.title,
+                content: e.detail.content
+            },
+            function (data, status) {
+                data = JSON.parse(data);
+                if (data.status == "ok") {
+                }else{
+                    OW.info(OW.getLanguageText('cocreation', 'postit_add_fail'));
+                }
+            }
+        );
+    });
+
     setTimeout(function(){
         room.$.datalets_slider.setDatalets(COCREATION.datalets);
         room.$.info_list_controllet.setInfo(COCREATION.info);
-    },1000);
+        room.$.postits_controllet.setPostits(COCREATION.postits[Object.keys(COCREATION.postits)[0]], Object.keys(COCREATION.postits)[0]);
+    },1500);
 });
 
 room.splitScreenActive    = false;

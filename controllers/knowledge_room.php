@@ -87,6 +87,7 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
 
             $datalets = COCREATION_BOL_Service::getInstance()->getDataletsByRoomId($params['roomId']);
             $room_datalets = array();
+            $postits       = array();
             foreach($datalets as $d){
                 $datalet         =  ODE_BOL_Service::getInstance()->getDataletById($d->dataletId);
                 $datalet->params = json_decode($datalet->params);
@@ -99,6 +100,9 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
                 $datalet_string .= "></" . $datalet->component . ">";
 
                 array_push($room_datalets, $datalet_string);
+
+                $datalet_postits = COCREATION_BOL_Service::getInstance()->getPostitByDataletId($datalet->id);
+                $postits[$datalet->id] = json_encode($datalet_postits);
             }
 
             $this->assign('components_url', SPODPR_COMPONENTS_URL);
@@ -120,6 +124,7 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
                 COCREATION.entity_type                   = {$entity_type}
                 COCREATION.room_type                     = "knowledge"
                 COCREATION.datalets                      = {$roomDatalets}
+                COCREATION.postits                       = {$roomPostits}
                 COCREATION.info                          = {$roomInfo}
                 COCREATION.user_id                       = {$userId}
             ', array(
@@ -134,6 +139,7 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
                 'roomId'                               => $params['roomId'],
                 'entity_type'                          => COCREATION_BOL_Service::ROOM_ENTITY_TYPE,
                 'roomDatalets'                         => $room_datalets,
+                'roomPostits'                          => $postits,
                 'roomInfo'                             => json_encode($info),
                 'userId'                               => OW::getUser()->getId(),
             ));

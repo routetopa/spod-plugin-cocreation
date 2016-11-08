@@ -28,6 +28,7 @@ $(document).ready(function() {
                 expanded_metadata                  : JSON.stringify(metadata.EF)
             },
             function (data, status) {
+                COCREATION.metadata = metadata;
                 /*var response = JSON.parse(data);
                 if(response.status == "ok"){
                     room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'metadata_successfully_saved');
@@ -52,7 +53,7 @@ $(document).ready(function() {
                         for (var i = 1; i < datalet.length; i += 2) {
                             datalet[i].behavior.data = JSON.parse(data);
                         }
-                        room.loadDataletsSlider();
+                        //room.loadDataletsSlider();
                     }
                 );
                 break;
@@ -192,7 +193,7 @@ room.confirmDatasetPublication = function(){
         function (data, status) {
             if(JSON.parse(data).status == "ok")
             {
-                var metadata = room.getMetadata();
+                var metadata = room.$.metadata_component.metadata;
                 $.post(ODE.ajax_coocreation_room_publish_dataset,
                     {
                         roomId                              : COCREATION.roomId,
