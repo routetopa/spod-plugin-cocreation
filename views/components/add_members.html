@@ -11,7 +11,8 @@ display: none;
 
 body .floatbox_body
 {
-padding: 0px 0px 0px 0px;
+padding: 16px;
+position: relative;
 }
 
 #added_suggested_contact_container:after
@@ -27,7 +28,10 @@ clear:both;
 display:none;
 box-shadow:1px 3px 1px #d4d4d5;
 border:1px solid #cacacb;
-width:300px;
+width: 300px;
+max-height: calc(100% - 94px);
+overflow-y: auto;
+overflow-x: hidden;
 }
 
 #suggested_friends table { width:300px; }
@@ -76,7 +80,7 @@ border-color: #b9b9b9;
 display: inline-block;
 width: 12px;
 height: 20px;
-background: no-repeat url(/ow_static/themes/rtpa_matter/images/contactarea_sprite_2.gif) -4px 2px;
+background: no-repeat url(/ow_static/themes/spod_theme_matter/images/contactarea_sprite_2.gif) -4px 2px;
 opacity: .6;
 vertical-align: top;
 cursor: pointer;
@@ -86,6 +90,12 @@ cursor: pointer;
 /*width: 70%;*/
 /*height: 15px;*/
 }
+.submit_button {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+}
+
 {/style}
 
 <style is="custom-style">
@@ -100,26 +110,26 @@ cursor: pointer;
 
 </style>
 
-<div class="ow_superwide ow_automargin">
+<div class="ow_superwide ow_automargin" id="parent">
 
     <input type="hidden" id="friends_info" value='{$friends_info}' />
 
     {form name='CoCreationAddMembersForm'}
     <table class="ow_table_1 ow_form">
         <tr class="ow_alt1">
-            <td class="ow_label">{text key="cocreation+creation_form_members"}</td>
-            <td class="ow_value" id="parent">
+            <td class="ow_label" id="add_label">{text key="cocreation+creation_form_members"}</td>
+            <td class="ow_value" >
                 <div id="added_suggested_contact_container">
                 </div>
                 <input type="text" id="members" name="members" autocomplete="off"
                        onkeyup="COCREATION.autocomplete()"
-                       onblur="COCREATION.hideAutocomplete()"
+                       onblussr="COCREATION.hideAutocomplete()"
                        onfocus="COCREATION.autocomplete()"
-                        >
+                >
             </td>
         </tr>
     </table>
-    <div class="clearfix ow_stdmargin"><div class="ow_right">{submit name='submit' class='ow_ic_new'}</div></div>
+    <div class="clearfix ow_stdmargin"><div class="submit_button">{submit name='submit' class='ow_ic_new'}</div></div>
     {/form}
 
     <!-- suggested -->
