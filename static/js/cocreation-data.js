@@ -182,6 +182,7 @@ room.handleSplitScreen = function(e){
        $(room.$.notes).removeClass("split_size_card_right");
        $(room.$.discussion).removeClass("split_size_card_right");
        $(room.$.datalets).removeClass("split_size_card_right");
+       $(room.$.info).removeClass("split_size_card_right");
    }
 };
 
