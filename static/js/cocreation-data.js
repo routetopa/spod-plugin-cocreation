@@ -212,9 +212,9 @@ room.confirmDatasetPublication = function(){
                         owners                              : COCREATION.room_members,
                         data                                : room.current_dataset,
                         notes                               : data,
-                        common_core_required_metadata       : metadata.core_common_required_metadata,
-                        common_core_if_applicable_metadat   : metadata.core_common_if_applicable_metadata,
-                        expanded_metadata                   : metadata.expanded_metadata
+                        common_core_required_metadata       : metadata.CC_RF,
+                        common_core_if_applicable_metadat   : metadata.CC_RAF,
+                        expanded_metadata                   : metadata.EF
                     },
                     function (data, status) {
                         previewFloatBox.close();
