@@ -44,16 +44,15 @@ $(document).ready(function() {
     window.addEventListener('message', function (e) {
         switch (e.data) {
             case 'ethersheet_sheet_updated':
-                $.post(ODE.ajax_coocreation_room_get_sheetdata,
+                $.post(ODE.ajax_coocreation_room_get_datalets,
                     {
-                        sheetName: COCREATION.sheetName
+                        roomId: COCREATION.roomId
                     },
                     function (data, status) {
-                        var datalet = $('div[id^="datalet_placeholder_"]').children();
-                        for (var i = 1; i < datalet.length; i += 2) {
-                            datalet[i].behavior.data = JSON.parse(data);
-                        }
-                        //room.loadDataletsSlider();
+                        data = JSON.parse(data);
+                        COCREATION.datalets = data.datalets;
+                        room.$.datalets_slider.setDatalets([]);
+                        setTimeout(function(){room.$.datalets_slider.setDatalets(COCREATION.datalets);},100);
                     }
                 );
                 break;
@@ -151,6 +150,8 @@ room.handleSplitScreen = function(e){
        room.$.discussion.style.display  = 'none';
        room.$.datalets.style.display    = 'none';
        room.$.info.style.display        = 'none';
+
+       room.$.datalets_slider._refresh();
 
        if(room.current_selected_container == null){
            room.current_selected_container  = room.$.metadata;

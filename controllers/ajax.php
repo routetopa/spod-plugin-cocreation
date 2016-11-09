@@ -294,14 +294,30 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         $datalets = COCREATION_BOL_Service::getInstance()->getDataletsByRoomId($clean['roomId']);
         $room_datalets = array();
         foreach($datalets as $d){
+            $datalet         =  ODE_BOL_Service::getInstance()->getDataletById($d->dataletId);
+            $datalet->params = json_decode($datalet->params);
+            $datalet->data   = str_replace("'","&#39;", $datalet->data);
+            $datalet->fields = str_replace("'","&#39;", $datalet->fields);
+
+            $datalet_string = "<" . $datalet->component . " datalet-id='". $datalet->id ."' fields='[" . rtrim(ltrim($datalet->fields, "}"), "{") . "]'";
+            foreach($datalet->params as $key => $value)
+                $datalet_string .= " " . $key . "='" . $value . "'";
+            $datalet_string .= "></" . $datalet->component . ">";
+
+            array_push($room_datalets, $datalet_string);
+        }
+
+        /*$datalets = COCREATION_BOL_Service::getInstance()->getDataletsByRoomId($clean['roomId']);
+        $room_datalets = array();
+        foreach($datalets as $d){
             $datalet         = ODE_BOL_Service::getInstance()->getDataletById($d->dataletId);
             $datalet->params = json_decode($datalet->params);
             $datalet->data   = htmlspecialchars($datalet->data);
             $datalet->fields = htmlspecialchars($datalet->fields);
             array_push($room_datalets, $datalet);
-        }
+        }*/
 
-        echo json_encode(array("status" => "ok", "datalets" => json_encode($room_datalets)));
+        echo json_encode(array("status" => "ok", "datalets" => $room_datalets));
         exit;
     }
 
