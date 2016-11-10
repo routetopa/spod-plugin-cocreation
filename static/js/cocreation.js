@@ -54,13 +54,28 @@ COCREATION.autocomplete = function()
 
             $("#suggested_friends_table").empty();
 
-            // var parentPosition = $("#parent").offset();
-            var labelHeight = $("#add_label").height();
-            var labelWidht = $("#add_label").width();
+            var pos = $("#members").position();
+            var h = $("#members").height();
+            // var w = $("#members").width();
+
+            // var top = 0;
+            // var left = 0;
+            //
+            // var l = $("#add_label")[0];
+            // if(l == undefined) {
+            //     top = 48;
+            //     left = 300;
+            // }
+            //
+            // list.css({
+            //     top: pos.top + h + top + 4,
+            //     left: pos.left + left,
+            //     position: 'absolute'
+            // });
 
             list.css({
-                top: labelHeight + 28,
-                left: labelWidht + 40,
+                top: pos.top + h + 4,
+                left: pos.left,
                 position: 'absolute'
             });
 
