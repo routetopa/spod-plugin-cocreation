@@ -202,30 +202,31 @@ room._publishDataset = function(){
 };
 
 room.confirmDatasetPublication = function(){
-    $.get(ODE.ajax_coocreation_room_get_html_note,
-        function (data, status) {
-            if(JSON.parse(data).status == "ok")
-            {
-                var metadata = room.$.metadata_component.metadata;
-                $.post(ODE.ajax_coocreation_room_publish_dataset,
-                    {
-                        roomId                              : COCREATION.roomId,
-                        datasetId                           : COCREATION.sheetName,
-                        owners                              : COCREATION.room_members,
-                        data                                : room.current_dataset,
-                        notes                               : data,
-                        common_core_required_metadata       : metadata.CC_RF,
-                        common_core_if_applicable_metadat   : metadata.CC_RAF,
-                        expanded_metadata                   : metadata.EF
-                    },
-                    function (data, status) {
-                        previewFloatBox.close();
-                        OW.info(OW.getLanguageText('cocreation', 'dataset_successfully_published'));
-                    }
-                );
+    if(confirm("Il dataset creato non contiene informazioni personali e sensibili, in accordo alla vigente legge sulla protezione della privacy (Decreto legislativo 30 giugno 2003, n. 196)."))
+        $.get(ODE.ajax_coocreation_room_get_html_note,
+            function (data, status) {
+                if(JSON.parse(data).status == "ok")
+                {
+                    var metadata = room.$.metadata_component.metadata;
+                    $.post(ODE.ajax_coocreation_room_publish_dataset,
+                        {
+                            roomId                              : COCREATION.roomId,
+                            datasetId                           : COCREATION.sheetName,
+                            owners                              : COCREATION.room_members,
+                            data                                : room.current_dataset,
+                            notes                               : data,
+                            common_core_required_metadata       : metadata.CC_RF,
+                            common_core_if_applicable_metadat   : metadata.CC_RAF,
+                            expanded_metadata                   : metadata.EF
+                        },
+                        function (data, status) {
+                            previewFloatBox.close();
+                            OW.info(OW.getLanguageText('cocreation', 'dataset_successfully_published'));
+                        }
+                    );
+                }
             }
-        }
-    );
+        );
 };
 
 room.loadDiscussion = function(){
