@@ -220,6 +220,10 @@ section > span {
     box-shadow:1px 3px 1px #d4d4d5;
     border:1px solid #cacacb;
     width:300px;
+
+    max-height: calc(100% - 48px - 60px - 50px - 16px);
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 #suggested_friends table { width:300px; }
