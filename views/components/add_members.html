@@ -11,8 +11,9 @@ display: none;
 
 body .floatbox_body
 {
-padding: 16px;
+padding: 0;
 position: relative;
+<!--overflow:hidden;-->
 }
 
 #added_suggested_contact_container:after
@@ -29,7 +30,7 @@ display:none;
 box-shadow:1px 3px 1px #d4d4d5;
 border:1px solid #cacacb;
 width: 300px;
-max-height: calc(100% - 94px);
+max-height: calc(100% - 94px - 48px);
 overflow-y: auto;
 overflow-x: hidden;
 }
@@ -123,6 +124,22 @@ cursor: pointer;
         line-height: 24px;
     }
 
+    .title {
+        font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        line-height: 24px;
+
+        text-transform: uppercase;
+        color: #2196F3;
+        font-weight: 700;
+        padding: 32px 0 0 32px;
+    }
+
+    .input
+    {
+        width: calc(100% - 64px);
+        margin-left: 32px;
+    }
 
 </style>
 
@@ -130,23 +147,36 @@ cursor: pointer;
 
     <div class="cocoreation_add_members">ADD MEMBERS</div>
 
+    <div class="title">
+        <span>{text key="cocreation+creation_form_members"}</span>
+    </div>
+
     <input type="hidden" id="friends_info" value='{$friends_info}' />
 
     {form name='CoCreationAddMembersForm'}
-    <table class="ow_table_1 ow_form">
-        <tr class="ow_alt1">
-            <td class="ow_label" id="add_label">{text key="cocreation+creation_form_members"}</td>
-            <td class="ow_value" >
-                <div id="added_suggested_contact_container">
-                </div>
-                <input type="text" id="members" name="members" autocomplete="off"
-                       onkeyup="COCREATION.autocomplete()"
-                       onblur="COCREATION.hideAutocomplete()"
-                       onfocus="COCREATION.autocomplete()"
-                >
-            </td>
-        </tr>
-    </table>
+    <div class="input">
+        <!--<div id="parent">-->
+            <div id="added_suggested_contact_container"></div>
+            <input type="text" id="members" name="members" autocomplete="off"
+                   onkeyup="COCREATION.autocomplete()"
+                   onblur="COCREATION.hideAutocomplete()"
+                   onfocus="COCREATION.autocomplete()">
+        <!--</div>-->
+    </div>
+
+    <!--<table class="ow_table_1 ow_form">-->
+        <!--<tr class="ow_alt1">-->
+            <!--<td class="ow_label" id="add_label">{text key="cocreation+creation_form_members"}</td>-->
+            <!--<td class="ow_value" >-->
+                <!--<div id="added_suggested_contact_container"></div>-->
+                <!--<input type="text" id="members" name="members" autocomplete="off"-->
+                       <!--onkeyup="COCREATION.autocomplete()"-->
+                       <!--onbsssslur="COCREATION.hideAutocomplete()"-->
+                       <!--onfocus="COCREATION.autocomplete()"-->
+                <!--&gt;-->
+            <!--</td>-->
+        <!--</tr>-->
+    <!--</table>-->
     <div class="clearfix ow_stdmargin"><div class="submit_button">{submit name='submit' class='ow_ic_new'}</div></div>
     {/form}
 

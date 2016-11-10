@@ -3,8 +3,8 @@ var room = document.querySelector('template[is="dom-bind"]');
 room.inviteNewUsers = function() {
     previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_AddMembers', {roomId: window.location.pathname.split("/")[window.location.pathname.split("/").length - 1]}, {
         top: '60px',
-        width: '50vw',
-        height: '40vh',
+        width: '60%',
+        height: '480px',
         iconClass: 'ow_ic_add',
         title: ''
     });
