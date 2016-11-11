@@ -45,8 +45,8 @@ class COCREATION_CTRL_Main extends OW_ActionController
                         str_replace("index/", $room->id, OW::getRouter()->urlFor(($room->type == "data") ? 'COCREATION_CTRL_DataRoom'
                                                                                                          : 'COCREATION_CTRL_KnowledgeRoom', 'index')) . "';});";
 
-                    array_push($invitations, "<b>" . $u->username . "</b> " . OW::getLanguage()->text('cocreation', 'room_invitation_text_toast') . "<b> " . $room->name .
-                        "</b>     <input class=\"confirm_button\" type=\"button\" value=\"" . OW::getLanguage()->text('cocreation', 'room_confirm_to_join') .
+                    array_push($invitations, "&#x25cf;  <b>" . $u->username . "</b> " . OW::getLanguage()->text('cocreation', 'room_invitation_text_toast') . "<b> " . $room->name .
+                        "</b> <input class=\"confirm_button\" type=\"button\" value=\"" . OW::getLanguage()->text('cocreation', 'room_confirm_to_join') .
                         "\" onclick=\"" . $js . "\">");
                 }
             }
