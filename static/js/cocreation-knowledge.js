@@ -67,11 +67,17 @@ $( document ).ready(function() {
         );
     });
 
-    setTimeout(function(){
+    window.addEventListener('datalet-slider-controllet_attached', function(e){
         room.$.datalets_slider.setDatalets(COCREATION.datalets);
+    });
+
+    window.addEventListener('info-list-controllet_attached', function(e){
         room.$.info_list_controllet.setInfo(COCREATION.info);
+    });
+
+    window.addEventListener('postit-container-controllet_attached', function(e){
         room.$.postits_controllet.setPostits(COCREATION.postits[Object.keys(COCREATION.postits)[0]], Object.keys(COCREATION.postits)[0]);
-    },1500);
+    });
 });
 
 room.splitScreenActive          = false;

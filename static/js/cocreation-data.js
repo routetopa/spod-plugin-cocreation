@@ -69,11 +69,18 @@ $(document).ready(function() {
         }
     });
 
-    setTimeout(function(){
+    window.addEventListener('datalet-slider-controllet_attached', function(e){
         room.$.datalets_slider.setDatalets(COCREATION.datalets);
-        room.$.metadata_component.setMetadata(COCREATION.metadata);
+    });
+
+    window.addEventListener('info-list-controllet_attached', function(e){
         room.$.info_list_controllet.setInfo(COCREATION.info);
-    },1000);
+    });
+
+    window.addEventListener('metadata-list-controllet_attached', function(e){
+        room.$.metadata_component.setMetadata(COCREATION.metadata);
+    });
+
 });
 
 room.splitScreenActive          = false;
