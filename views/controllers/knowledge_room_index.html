@@ -231,8 +231,9 @@
     }
 
     .full_size_card{
-        margin:32px 32px 32px 32px;
-        height: calc(100% - 64px - 20px);
+        margin: 32px;
+        /*height: calc(100% - 64px - 20px);*/
+        height: calc(100% - 20px);
         width: calc(100% - 64px);
         display:block;
     }
@@ -273,12 +274,12 @@
 
     paper-tab {
         font-weight: 700;
-        border-right: 2px solid #FFFFFF;
+        /*border-right: 2px solid #FFFFFF;*/
     }
 
-    paper-tab:nth-last-child(2) {
-        border-right: 0;
-    }
+    /*paper-tab:first-child {*/
+        /*border-right: 2px solid #FFFFFF;*/
+    /*}*/
 
     paper-tab.iron-selected {
         color: #FFFFFF;
@@ -298,18 +299,15 @@
     }
 
     #add_dataset_container{
-        height: 100%;
-        overflow: scroll;
+        padding-top: 8px;
+        height: calc(100% - 48px - 8px);
+        overflow-x: scroll;
     }
 
     search-panel-controllet{
         position : absolute;
         right: 10px;
         top: 10px;
-    }
-
-    neon-animatable{
-        margin-top: 10px;
     }
 
     #select_dataset_container.select-dataset-controllet .header_block.select-dataset-controllet{
@@ -322,219 +320,6 @@
         top: -60px;
         right: 30px;
     }
-
-</style>
-
-<style>
-    /*paper-fab.add-paper-fab {
-        position: absolute;
-        bottom: 25px;
-        right: 50px;
-        --paper-fab-background:#2196F3;
-    }
-
-    paper-fab-speed-dial.add-paper-fab {
-        position: absolute;
-        bottom: 45px;
-        right: 40px;
-    }
-
-    paper-fab{
-        --paper-fab-background:#2196F3;
-    }
-
-    body .floatbox_canvas .floatbox_container {
-        margin-top: 50px;
-    }
-
-    .section{
-        width: 50%;
-        margin: 15px;
-    }
-
-    .modePages{
-        position: relative;
-    }
-
-    paper-tabs#cocreation_tab {
-        width: 50%;
-        position: fixed;
-        bottom: 2px;
-        left: 2px;
-    }
-
-    paper-tabs#data_tab {
-        width: 50%;
-        position: fixed;
-        bottom: 2px;
-        left: 2px;
-    }
-
-    paper-tabs {
-        background: #B6B6B6;
-    }
-
-    paper-tab {
-        font-weight: 700;
-        border-right: 2px solid #FFFFFF;
-    }
-
-    paper-tab:nth-last-child(2) {
-        border-right: 0;
-    }
-
-    paper-tab.iron-selected {
-        color: #FFFFFF;
-        background: #2196F3;;
-    }
-
-    paper-tab:not(.iron-selected):hover {
-        color: #2196F3;
-    }
-
-    h5#mode{
-        color: #ffffff;
-        margin-left: 20px;
-        position:  relative;
-        float:left;
-    }
-
-    search-panel-controllet{
-        position : absolute;
-        right: 10px;
-        top: 10px;
-    }
-
-    neon-animatable{
-        margin-top: 10px;
-    }
-
-    #dialog_info {
-        border: 2px solid #2196F3;
-        background-color: #E0E0E0;
-        height: 80vh;
-        width: 80vh;
-        padding: 20px;
-        overflow: auto;
-    }
-
-    #dialog_content{
-        position: relative;
-    }
-
-    .tabpage{
-        background-color:#e8e8e8;
-        width: 100%;
-        height: 100%;
-    }
-
-    .grid-item {
-        float: left;
-        position: relative;
-        overflow: auto;
-    }
-
-    document-card-controllet{
-        width: 100%;
-    }
-+
-    div.leaflet-control-zoom.leaflet-bar.leaflet-control{
-        z-index:0;
-    }
-
-    #addDataset{
-        position: absolute;
-        top: -60px;
-        right: 30px;
-    }
-
-    #datalets_slider_container{
-        padding: 10px;
-        height: 72vh;
-        background-color:#ffffff;
-        width: 50%;
-        overflow: hidden;
-        margin-left: 30px;
-    }
-
-    .datalet-container{
-        position: relative;
-        overflow: hidden;
-        height: 63vh;
-        width: 100%;
-    }
-
-    #addDatalet{
-        position: fixed;
-        bottom: 50px;
-        right: 30px;
-    }
-
-    neon-animatable{
-        width: 100%;
-    }
-
-    #base_datalet_spin{
-        position: absolute;
-        top: 25%;
-        left: 35%;
-    }
-
-    .ow_preloader_content{
-        height: 68vh;
-        top: 23%;
-    }
-
-    #overlay{
-        z-index: 1;
-        position:absolute;
-        top:0;
-        left:0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.4);
-    }
-
-    #info_close_button{
-        z-index: 1;
-        color: #fff;
-        box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
-        -webkit-transition: 0.2s ease-out;
-        -moz-transition: 0.2s ease-out;
-        -o-transition: 0.2s ease-out;
-        transition: 0.2s ease-out;
-        cursor: pointer;
-        background-color: #00BCD4;
-        float: right;
-        top: 20px;
-    }
-
-    .cocreation_view_modes_button{
-        margin-right: 20px;
-    }
-
-    paper-fab#cc_mode_1 iron-icon{
-        -o-transform:rotate(90deg);
-        -webkit-transform:rotate(90deg);
-        -moz-transform:rotate(90deg);
-    }
-
-    #shared_docs{
-        width: 50%;
-    }
-
-    .visible_doc{
-        position: relative;
-        visibility: visible;
-        height: auto;
-        width: 100%;
-        margin: 15px;
-    }
-    .hidden_doc{
-        visibility: hidden;
-        height: 0;
-        width: 0;
-    }*/
 
 </style>
 
@@ -665,6 +450,10 @@
                     </paper-card>
                     <!-- Library -->
                     <paper-card id="library" class="full_size_card" style="display:none;" elevation="5">
+                        <paper-tabs id="library_tab" selected="[[library_tab_selected]]" no-bar>
+                            <paper-tab noink on-click="_library_tab_clicked" id="0">{text key="cocreation+room_view_datalibrary"}</paper-tab>
+                            <paper-tab noink on-click="_library_tab_clicked" id="1">{text key="cocreation+room_add_dataset"}</paper-tab>
+                        </paper-tabs>
                         <iron-pages selected="[[library_tab_selected]]">
                             <!-- View datalibrary -->
                             <div id="dataset_library">
@@ -674,7 +463,7 @@
                             <div id="add_dataset_container">
                                 <page-slider-controllet id="slider_dataset">
                                     <neon-animatable id="pass_1">
-                                        <select-dataset-controllet
+                                        <select-dataset-controllet  style="height: 50vh"
                                                 id="dataset_selection"
                                                 datasets='{$datasets_list}'>
                                         </select-dataset-controllet>
@@ -688,10 +477,6 @@
                                 </page-slider-controllet>
                             </div>
                         </iron-pages>
-                        <paper-tabs id="library_tab" selected="[[library_tab_selected]]" no-bar>
-                            <paper-tab noink on-click="_library_tab_clicked" id="0">{text key="cocreation+room_view_datalibrary"}</paper-tab>
-                            <paper-tab noink on-click="_library_tab_clicked" id="1">{text key="cocreation+room_add_dataset"}</paper-tab>
-                        </paper-tabs>
                     </paper-card>
                     <!-- Datalets -->
                     <paper-card id="datalets" class="full_size_card" style="display:none;" elevation="5">
