@@ -10,10 +10,11 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
             throw new AuthenticateException();
         }
 
+        OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl() . 'perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js');
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl() . 'cocreation.js');
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl() . 'cocreation-room.js');
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl() . 'cocreation-data.js');
-        OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('spodpublic')->getStaticJsUrl() . 'perfect-scrollbar.jquery.js');
+        OW::getDocument()->addStyleSheet(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl() . 'perfect-scrollbar/css/perfect-scrollbar.css');
         OW::getDocument()->getMasterPage()->setTemplate(OW::getPluginManager()->getPlugin('cocreation')->getRootDir() . 'master_pages/general.html');
         $this->assign('components_url', SPODPR_COMPONENTS_URL);
 
@@ -34,6 +35,22 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
 
         $this->assign('room', $room);
 
+        $datalets = COCREATION_BOL_Service::getInstance()->getDataletsByRoomId($params['roomId']);
+        $room_datalets = array();
+        foreach($datalets as $d){
+            $datalet         =  ODE_BOL_Service::getInstance()->getDataletById($d->dataletId);
+            $datalet->params = json_decode($datalet->params);
+            $datalet->data   = str_replace("'","&#39;", $datalet->data);
+            $datalet->fields = str_replace("'","&#39;", $datalet->fields);
+
+            $datalet_string = "<" . $datalet->component . " datalet-id='". $datalet->id ."' fields='[" . rtrim(ltrim($datalet->fields, "}"), "{") . "]'";
+            foreach($datalet->params as $key => $value)
+                $datalet_string .= " " . $key . "='" . $value . "'";
+            $datalet_string .= "></" . $datalet->component . ">";
+
+            array_push($room_datalets, $datalet_string);
+        }
+
         //Get room members
         $room_members = COCREATION_BOL_Service::getInstance()->getRoomMembers($params['roomId']);
         $members    = array();
@@ -47,31 +64,19 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
             array_push($membersIds, $user->id);
         }
         $this->assign('members', $members);
+
+        $info                 = new stdClass();
+        $info->name           = $room->name;
+        $info->subject        = $room->subject;
+        $info->description    = $room->description;
+        $info->from           = $room->from;
+        $info->to             = $room->to;
+        $info->goal           = $room->goal;
+        $info->invitationText = $room->invitationText;
+        $info->owner = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($room->ownerId))[$room->ownerId];
+        $info->members = $members;
+
         $this->assign('currentUser' , BOL_AvatarService::getInstance()->getDataForUserAvatars(array(OW::getUser()->getId()))[OW::getUser()->getId()]);
-
-        //comment and rate
-        $commentsParams = new BASE_CommentsParams('cocreation', COCREATION_BOL_Service::ROOM_ENTITY_TYPE);
-        $commentsParams->setEntityId($params['roomId']);
-        $commentsParams->setDisplayType(BASE_CommentsParams::DISPLAY_TYPE_WITH_LOAD_LIST);
-        $commentsParams->setCommentCountOnPage(5);
-        $commentsParams->setOwnerId((OW::getUser()->getId()));
-        $commentsParams->setAddComment(TRUE);
-        $commentsParams->setWrapInBox(false);
-        $commentsParams->setShowEmptyList(false);
-        $commentsParams->setCommentPreviewMaxCharCount(5000);
-
-        /*if(isset($_REQUEST["comments_pagination"]) && $_REQUEST["comments_pagination"] == "false")
-            $commentsParams->setInitialCommentsCount(100000000);*/
-        $commentsParams->level = 1;
-        $commentsParams->nodeId = 0;
-
-        /* ODE */
-        if (OW::getPluginManager()->isPluginActive('spodpr'))
-            $this->addComponent('private_room', new SPODPR_CMP_PrivateRoomCard('ow_attachment_btn', array('datalet', 'link')));
-        /* ODE */
-
-        $commentCmp = new SPODTCHAT_CMP_Comments($commentsParams, 2, COCREATION_BOL_Service::COMMENT_ENTITY_TYPE, $params['roomId']);
-        $this->addComponent('comments', $commentCmp);
 
         $sheetUrl = COCREATION_BOL_Service::getInstance()->getSheetByRoomId($params['roomId'])[0]->url;
         $sheetName = explode('/', $sheetUrl)[4];
@@ -87,13 +92,15 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
 
         $metadata = COCREATION_BOL_Service::getInstance()->getMetadataByRoomId($params['roomId']);
 
-        $this->assign('core_common_required_metadata', json_decode($metadata[0]->common_core_required));
-        $this->assign('common_core_if_applicable_metadata', json_decode($metadata[0]->common_core_if_applicable));
-        $this->assign('expanded_metadata', json_decode($metadata[0]->expanded));
-        $this->addComponent('datalets_slider', new COCREATION_CMP_DataletsSlider($params['roomId']));
+        $metadataObj = new stdClass();
+        $metadataObj->CC_RF = json_decode($metadata[0]->common_core_required);
+        $metadataObj->CC_RAF = json_decode($metadata[0]->common_core_if_applicable);
+        $metadataObj->EF = json_decode($metadata[0]->expanded);
+
+        $this->addComponent("comments", new COCREATION_CMP_DiscussionWrapper($params['roomId']));
 
         $js = UTIL_JsGenerator::composeJsString('
-                ODE.ajax_coocreation_room_get_sheetdata       = {$ajax_coocreation_room_get_sheetdata}
+                ODE.ajax_coocreation_room_get_datalets        = {$ajax_coocreation_room_get_datalets}
                 ODE.ajax_coocreation_room_get_array_sheetdata = {$ajax_coocreation_room_get_array_sheetdata}
                 ODE.ajax_coocreation_room_update_metadata     = {$ajax_coocreation_room_update_metadata}
                 ODE.ajax_coocreation_room_add_datalet         = {$ajax_coocreation_room_add_datalet}
@@ -105,8 +112,12 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                 COCREATION.room_type                          = "data"
                 COCREATION.entity_type                        = {$entity_type}
                 COCREATION.room_members                       = {$room_members}
+                COCREATION.datalets                           = {$roomDatalets}
+                COCREATION.metadata                           = {$room_metadata}
+                COCREATION.user_id                            = {$userId}
+                COCREATION.info                               = {$roomInfo}
             ', array(
-               'ajax_coocreation_room_get_sheetdata'       => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getSheetData')              . "?sheetName=" . $sheetName,
+               'ajax_coocreation_room_get_datalets'        => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getRoomDatalets'),
                'ajax_coocreation_room_get_array_sheetdata' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getArrayOfObjectSheetData') . "?sheetName=" . $sheetName,
                'ajax_coocreation_room_update_metadata'     => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'updateMetadata'),
                'ajax_coocreation_room_add_datalet'         => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'addDataletToRoom')          . "?roomId="  . $params['roomId'],
@@ -116,10 +127,14 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                'sheetName'                                 => $sheetName,
                'roomId'                                    => $params['roomId'],
                'entity_type'                               => COCREATION_BOL_Service::ROOM_ENTITY_TYPE,
-               'room_members'                              => json_encode($membersIds)
+               'room_members'                              => json_encode($membersIds),
+               'roomDatalets'                              => $room_datalets,
+               'room_metadata'                             => json_encode($metadataObj),
+               'userId'                                    => OW::getUser()->getId(),
+               'roomInfo'                                  => json_encode($info),
         ));
         OW::getDocument()->addOnloadScript($js);
-        OW::getDocument()->addOnloadScript("data_room.init()");
+        OW::getDocument()->addOnloadScript("data_room.init();");
 
         OW::getLanguage()->addKeyForJs('cocreation', 'confirm_delete_datalet');
         OW::getLanguage()->addKeyForJs('cocreation', 'room_delete_fail');

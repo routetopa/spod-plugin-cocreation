@@ -84,12 +84,13 @@
   right: 77px;
   top: 9px;
   height:50px;
+  height:50px;
   background: background-linear-gradient( #F7F7F7, #F1F1F1 80%) repeat scroll 0 0 transparent;
   border-radius:24px;
   cursor:hand;
 }
 #playpause_button_icon:before {
-  line-height:44px;  
+  line-height:44px;
   padding-left:2px;
   font-family: fontawesome-etherpad;
   content: "\e82c";
@@ -104,7 +105,7 @@
   border: solid 1px #666;
 }
 .pause:before {
-  line-height:44px;  
+  line-height:44px;
   padding-left:2px;
   font-family: fontawesome-etherpad;
   content: "\e82e" !important;
@@ -125,7 +126,7 @@
   font-family: fontawesome-etherpad;
   border-radius:2px;
   border: #666 solid 1px;
-/*  line-height:18px; */
+  /*  line-height:18px; */
   text-align:center;
   height:22px;
   color:#666;
@@ -171,7 +172,7 @@ stepper:active{
   background: linear-gradient(#F7F7F7, #F1F1F1 80%) repeat scroll 0% 0% transparent;
   padding:2px;
   border-radius:2px;
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 11px;
   left: 7px;
   position: absolute;
@@ -231,7 +232,7 @@ stepper:active{
 .timeslider-bar #editbar {
   border-bottom: none;
   float: right;
-  width: 180px;
+  width: auto;
 }
 .timeslider-bar h1 {
   margin: 5px
@@ -346,9 +347,5 @@ button::-moz-focus-inner {
 
 button:focus{
   border: 1px solid #666;
-}
-
-h1 span{
-  color: #555;
 }
 

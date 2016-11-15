@@ -1,3 +1,21 @@
+{style}
+body .floatbox_header
+{
+display: none;
+}
+
+body .floatbox_bottom
+{
+display: none;
+}
+
+body .floatbox_body
+{
+position: relative;
+}
+{/style}
+
+
 <style is="custom-style">
 
     .date_period
@@ -89,7 +107,7 @@
                         <span class="data_picker_label">From : </span>
                         <input class="date_period" id="data_from" name="data_from" type="text" on-tap="showDialog" data-args="from" raised value="{{dateFormat(dateFrom, 'LL')}}">
                         <span class="data_picker_label">To : </span>
-                        <input class="date_period" name="data_to" type="text" on-tap="showDialog" data-args="to"   raised value="{{dateFormat(dateTo, 'LL')}}">
+                        <input class="date_period" name="data_to" type="text" on-tap="showDialog" data-args="to" raised value="{{dateFormat(dateTo, 'LL')}}">
                         <paper-dialog id="dialog" class="paper-date-picker-dialog" on-iron-overlay-closed="dismissDialog">
                             <paper-date-picker id="picker"></paper-date-picker>
                             <div class="buttons">
@@ -125,23 +143,23 @@
 
         <!-- ROOM  MEMBERS/SUBMIT-->
         <div class="step in-step-7">
+
             <div class="title">
                 <span>{text key="cocreation+creation_form_members"}</span>
             </div>
             <div class="input">
                 <div id="parent">
-                    <div id="added_suggested_contact_container">
-                    </div>
+                    <div id="added_suggested_contact_container"></div>
                     <input type="text" id="members" name="members" autocomplete="off"
                            onkeyup="COCREATION.autocomplete()"
                            onblur="COCREATION.hideAutocomplete()"
-                           onfocus="COCREATION.autocomplete()"
-                    >
+                           onfocus="COCREATION.autocomplete()">
                 </div>
             </div>
             <div class="submit_container">
                 {submit name='submit' class='ow_ic_new'}
             </div>
+
         </div>
 
     </div>

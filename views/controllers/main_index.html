@@ -22,17 +22,11 @@
         padding: 20px;*/
     }
 
-    .blue-button {
-        text-transform: none;
-        color: #2196F3;
-        margin-top: 8px;
-    }
-
-    .confirm_button{
-        position: relative;
-        float: right;
-        margin-top: -8px;
-    }
+    /*.blue-button {*/
+        /*text-transform: none;*/
+        /*color: #2196F3;*/
+        /*margin-top: 8px;*/
+    /*}*/
 
     #submit_overlay{
         z-index: 1;
@@ -96,6 +90,67 @@
         margin-left: 8px;
     }
 
+    paper-toast {
+        opacity: 0.8;
+        background: #000000;
+    }
+
+    #infoToast br {
+        display: block;
+        margin-top: 8px;
+        content: " ";
+    }
+
+    #infoToast p {
+        margin: 0;
+        padding: 0;
+
+        font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    #infoToast p .title{
+        font-size: 24px;
+        color: #2196F3;
+        padding-right: 56px;
+    }
+
+    #infoToast b {
+        font-weight: 700;
+        color: #00BCD4;
+
+        font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    #infoToast div {
+        line-height: 36px;
+        height: 36px;
+
+        font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 16px;
+    }
+
+    .confirm_button{
+        float: right;
+    }
+
+    #card_container p .description{
+    }
+
+    paper-icon-button.clear {
+        /*width: 24px;*/
+        /*height: 24px;*/
+        /*padding: 0px 4px;*/
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: #F44336;
+        --paper-icon-button-ink-color: #FFFFFF;
+    }
+
 </style>
 {/literal}
 
@@ -104,7 +159,7 @@
 
     function addCocreationRoom(room_type)
     {
-        previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_CreateRoom', {room_type : room_type} , {width:'60%', height:'475px', iconClass: 'ow_ic_add', title: ''});
+        previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_CreateRoom', {room_type : room_type} , {top: '60px', width:'60%', height:'480px', iconClass: 'ow_ic_add', title: ''});
 
     }
 
@@ -180,17 +235,29 @@
 
 
     {if {$invitations|@count} > 0}
-        <paper-toast id="infoToast" duration="0" text="">
-            <div class="layout horizontal">
-                <h5>{text key="cocreation+room_info_toast"}</h5>
-                <paper-button onclick="infoToast.toggle()" class="blue-button"><b>x</b></paper-button>
-            </div>
-            <div class="layout vertical">
+        <paper-toast id="infoToast"  duration="0">
+            <p>
+                <span class="title">{text key="cocreation+room_info_toast"}</span>
                 {foreach $invitations as $invitation}
-                <p>{$invitation}</p>
+                    <br>
+                    <div>{$invitation}</div>
                 {/foreach}
-            </div>
+            </p>
+            <paper-icon-button class="clear" suffix onclick="infoToast.toggle()" icon="clear"></paper-icon-button>
         </paper-toast>
+
+
+        <!--<paper-toast id="infoToast" duration="0" text="">-->
+            <!--<div class="layout horizontal">-->
+                <!--<h5>{text key="cocreation+room_info_toast"}</h5>-->
+                <!--<paper-button onclick="infoToast.toggle()" class="blue-button"><b>x</b></paper-button>-->
+            <!--</div>-->
+            <!--<div class="layout vertical">-->
+                <!--{foreach $invitations as $invitation}-->
+                <!--<p>{$invitation}</p>-->
+                <!--{/foreach}-->
+            <!--</div>-->
+        <!--</paper-toast>-->
     {/if}
 
 </template>

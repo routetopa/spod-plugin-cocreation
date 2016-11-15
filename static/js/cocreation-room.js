@@ -1,22 +1,49 @@
 var room = document.querySelector('template[is="dom-bind"]');
 
-room._openInfo = function(){
-    room.$.dialog_info.open();
-};
-
-room.inviteNewUsers = function(){
-    previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_AddMembers', { roomId : window.location.pathname.split("/")[window.location.pathname.split("/").length - 1]}, {
-        width: '40%',
-        height: '30vh',
+room.inviteNewUsers = function() {
+    previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_AddMembers', {roomId: window.location.pathname.split("/")[window.location.pathname.split("/").length - 1]}, {
+        top: '60px',
+        width: '60%',
+        height: '480px',
         iconClass: 'ow_ic_add',
         title: ''
     });
-}
+};
+
+window.addEventListener('datalet-slider-controllet_add', function (e) {
+    ODE.pluginPreview = "cocreation";
+    switch(COCREATION.room_type)
+    {
+        case "knowledge":
+            previewFloatBox = OW.ajaxFloatBox('ODE_CMP_Preview', {} , {width:'90%', height:'90vh', iconClass:'ow_ic_lens', title:''});
+            break;
+        case "data":
+            previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_AddDataletFromDataRoom', {dataUrl:ODE.ajax_coocreation_room_get_array_sheetdata} , {width:'90%', height:'90vh', iconClass:'ow_ic_lens', title:''});
+            break;
+    }
+});
+
+window.addEventListener('datalet-slider-controllet_delete', function (e) {
+    var c = confirm(OW.getLanguageText('cocreation', 'confirm_delete_datalet'));
+    if(c == true) {
+        $.post(ODE.ajax_coocreation_room_delete_datalet,
+            {
+                dataletId: e.detail.dataletId,
+                roomId: COCREATION.roomId,
+                deletedPosition : room.$.datalets_slider.selected
+            },
+            function (data, status) {
+                data = JSON.parse(data);
+                if (data.status == "ok") {
+                } else {
+                    OW.info(OW.getLanguageText('cocreation', 'datalet_delete_fail'));
+                }
+            }
+        );
+    }
+});
 
 room.init = function(){
-    var scope = room;
-    if(COCREATION.room_type == "data") scope = left_data_room;
-
     var socket = io("http://" + window.location.hostname +":3000");
     socket.on('realtime_message_' + COCREATION.entity_type + "_" + COCREATION.roomId, function(rawData) {
         switch(rawData.operation){
@@ -26,26 +53,42 @@ room.init = function(){
                 room.$.syncToast.show();
                 break;
             case "deleteDataletFromRoom":
-                room.loadDataletsSlider();
-                scope.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'datalet_successfully_deleted');
-                scope.$.syncToast.show();
+                room.$.datalets_slider.setDatalets(rawData.datalets);
+                if(rawData.user_id == COCREATION.user_id)
+                {
+                    if(room.$.datalets_slider.selected == rawData.datalets.length && rawData.datalets.length > 0)
+                       room.$.datalets_slider.setSelected(1);
+                }else{
+                    if(room.$.datalets_slider.selected == parseInt(rawData.deleted_position)) {
+                        if(room.$.datalets_slider.selected == rawData.datalets.length && rawData.datalets.length > 0)
+                            room.$.datalets_slider.setSelected(1);
+                    }else if(room.$.datalets_slider.selected > parseInt(rawData.deleted_position))
+                        room.$.datalets_slider.setSelected(room.$.datalets_slider.selected);
+                }
+
+                room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'datalet_successfully_deleted');
+                room.$.syncToast.show();
                 break;
             case "addDataletToRoom":
-                room.loadDataletsSlider();
-                scope.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'datalet_successfully_added');
-                scope.$.syncToast.show();
+                room.$.datalets_slider.setDatalets(rawData.datalets);
+                if(rawData.user_id == COCREATION.user_id) room.$.datalets_slider.setSelected(rawData.datalets.length);
+                room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'datalet_successfully_added');
+                room.$.syncToast.show();
                 break;
             case "addPostitToDatalet":
-                room._handleCcModeClick({currentTarget : {id : room.cc_mode}});
+                COCREATION.postits[rawData.dataletId] = rawData.postits;
+                room.$.postits_controllet.setPostits(COCREATION.postits[rawData.dataletId]);
                 room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'postit_successfully_added');
                 room.$.syncToast.show();
                 break;
             case "updateMetadata":
-                room.loadMetadata(JSON.parse(rawData.core_common_required_metadata),
-                                   JSON.parse(rawData.common_core_if_applicable_metadata),
-                                   JSON.parse(rawData.expanded_metadata ));
-                left_data_room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'metadata_successfully_updated');
-                left_data_room.$.syncToast.show();
+                COCREATION.metadata = JSON.stringify({"CC_RF":  JSON.parse(rawData.core_common_required_metadata),
+                                                      "CC_RAF": JSON.parse(rawData.common_core_if_applicable_metadata),
+                                                      "EF":     JSON.parse(rawData.expanded_metadata )});
+                room.$.metadata_component.setMetadata(COCREATION.metadata);
+
+                room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'metadata_successfully_updated');
+                room.$.syncToast.show();
                 break;
             case "deleteRoom":
                 var redirect =  window.location.pathname.split("/");
@@ -54,26 +97,4 @@ room.init = function(){
                 break;
         }
     });
-}
-
-room.loadDataletsSlider = function(){
-    $.post(OW.ajaxComponentLoaderRsp + "?cmpClass=COCREATION_CMP_DataletsSlider",
-        //{params: "[\"" + COCREATION.roomId + "\"]"},
-        {params: "[\"" + window.location.pathname.split("/")[window.location.pathname.split("/").length - 1] + "\"]"},
-        function (data, status) {
-            data = JSON.parse(data);
-            //onloadScript
-            var onload = document.createElement('script');
-            onload.setAttribute("type","text/javascript");
-            onload.innerHTML = data.onloadScript;
-            //script files
-            $('#datalets_slider_container').html(data.content);
-            $('#addDatalet').click(function(){room._addDatalet()});
-
-            var event = new CustomEvent('page-slider-controllet_selected',{ detail : {'selected' : ODE.numDataletsInCocreationRooom - 1 }});
-            window.dispatchEvent(event);
-
-            room.sliderRefreshCurrentDatalet();
-        });
-}
-
+};

@@ -28,7 +28,7 @@ exports.createServer = function(config){
 
   // Server Settings
   app.set('views',LAYOUT_PATH);
-  app.use(express.logger({ format: ':method :url' }));
+  //app.use(express.logger({ format: ':method :url' }));
   app.use('/es_client',express.static(ES_CLIENT_PATH));
   /*app.use(express.bodyParser());
    app.use(express.cookieParser());*/

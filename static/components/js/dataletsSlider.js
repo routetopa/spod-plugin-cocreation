@@ -55,7 +55,7 @@ room._addDatalet = function(op){
             previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_AddDataletFromDataRoom', {dataUrl:ODE.ajax_coocreation_room_get_array_sheetdata} , {width:'90%', height:'90vh', iconClass:'ow_ic_lens', title:''});
             break;
     }
-}
+};
 
 //trick8
 room.sliderRefreshCurrentDatalet = function() {
@@ -70,7 +70,7 @@ room.sliderRefreshCurrentDatalet = function() {
                 datalet.behavior.presentData();
         }
     }, 1500);
-}
+};
 
 room.initSlider = function(){
     var socket = io("http://" + window.location.hostname +":3000");
@@ -87,7 +87,7 @@ room.initSlider = function(){
                 break;
         }
     });
-}
+};
 
 room._handleDeleteClick = function(dataletId) {
     var c = confirm(OW.getLanguageText('cocreation', 'confirm_delete_datalet'));
@@ -106,4 +106,4 @@ room._handleDeleteClick = function(dataletId) {
             }
         );
     }
-}
+};

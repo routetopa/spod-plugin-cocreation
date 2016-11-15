@@ -1,24 +1,8 @@
 $( document ).ready(function() {
-   $("#grid-container").perfectScrollbar();
-   $("#dialog_content").perfectScrollbar();
 
-   window.addEventListener('page-slider-controllet_selected', function(e){
-        ln["localization"] = "en";
+    window.addEventListener('datalet-slider-controllet_selected', function(e){
+        room.$.postits_controllet.setPostits(COCREATION.postits[e.detail.dataletId], e.detail.dataletId);
 
-        if(e.srcElement.id == "slider_dataset") {
-            switch (e.detail.selected) {
-                case 0:
-                    room.$.slider_dataset.setTitle(ln["slide1Title_" + ln["localization"]], ln["slide1Subtitle_" + ln["localization"]]);
-                    room.$.slider_dataset.chevronLeft("invisible");
-                    room.$.slider_dataset.chevronRight(true);
-                    break;
-                case 1:
-                    room.$.slider_dataset.setTitle(ln["slide2Title_" + ln["localization"]], ln["slide2Subtitle_" + ln["localization"]]);
-                    room.$.slider_dataset.chevronLeft(true);
-                    room.$.slider_dataset.chevronRight("invisible");
-                    break;
-            }
-        }
     });
 
     window.addEventListener('data-ready', function(e) {
@@ -65,51 +49,159 @@ $( document ).ready(function() {
         }
     });
 
-    room.loadDataletsSlider();
+    window.addEventListener('postit-container-controllet_create-new-postit', function(e){
+        var dataletId = e.detail.id.replace("postit_","");
+        $.post(ODE.ajax_coocreation_room_add_postit,
+            {
+                dataletId: dataletId,
+                title: e.detail.title,
+                content: e.detail.content
+            },
+            function (data, status) {
+                data = JSON.parse(data);
+                if (data.status == "ok") {
+                }else{
+                    OW.info(OW.getLanguageText('cocreation', 'postit_add_fail'));
+                }
+            }
+        );
+    });
+
+    window.addEventListener('datalet-slider-controllet_attached', function(e){
+        room.$.datalets_slider.setDatalets(COCREATION.datalets);
+    });
+
+    window.addEventListener('info-list-controllet_attached', function(e){
+        room.$.info_list_controllet.setInfo(COCREATION.info);
+    });
+
+    window.addEventListener('postit-container-controllet_attached', function(e){
+        room.$.postits_controllet.setPostits(COCREATION.postits[Object.keys(COCREATION.postits)[0]], Object.keys(COCREATION.postits)[0]);
+    });
 });
 
-room.selectedMode            = 1;
-room.selectedTab_cocreation  = 0;
-room.selectedTab_data        = 0;
-room.selectedDatasetFields   = [];
-room.cc_mode                 = "cc_mode_1";
-room.cc_selected_mode        = "";
+room.splitScreenActive          = false;
+room.library_tab_selected       = 0;
+room.current_selected_container = null;
+room.current_selected_document  = null;
 
-room._tabClicked_cocreation = function(e){
-    var last_selected_doc = $("#doc" + room.selectedTab_cocreation);
-    var new_selected_doc  = $("#doc" + e.currentTarget.id);
-    var all_docs          = $("paper-material[id^='doc']");
-    //update selection
-    room.selectedTab_cocreation = e.currentTarget.id;
-    //do document switching logic
-    last_selected_doc.removeClass("visible_doc");
-    all_docs.addClass("hidden_doc");
-    new_selected_doc.removeClass("hidden_doc");
-    new_selected_doc.addClass("visible_doc");
+room._library_tab_clicked = function(e){
+    room.library_tab_selected = e.currentTarget.id;
 };
 
-room._tabClicked_data = function(e){
-    room.selectedTab_data = e.currentTarget.id;
+room.handleSelectUIMode = function(mode){
+    switch(mode){
+        case 'explore':
+            room.current_selected_document = room.$.explore;
+            room.$.section_menu.selected   = 0;
+            room.$.explore.style.display   = "block";
+            room.$.ideas.style.display     = 'none';
+            room.$.outcome.style.display   = 'none';
+            room.$.library.style.display   = 'none';
+            if(!room.splitScreenActive){
+                room.$.datalets.style.display = 'none';
+                room.$.info.style.display     = 'none';
+            }
+            break;
+        case 'ideas':
+            room.current_selected_document = room.$.ideas;
+            room.$.section_menu.selected   = 1;
+            room.$.explore.style.display   = "none";
+            room.$.ideas.style.display     = 'block';
+            room.$.outcome.style.display   = 'none';
+            room.$.library.style.display   = 'none';
+            if(!room.splitScreenActive){
+                room.$.datalets.style.display = 'none';
+                room.$.info.style.display     = 'none';
+            }
+            break;
+        case 'outcome':
+            room.current_selected_document = room.$.outcome;
+            room.$.section_menu.selected   = 2;
+            room.$.explore.style.display   = "none";
+            room.$.ideas.style.display     = 'none';
+            room.$.outcome.style.display   = 'block';
+            room.$.library.style.display   = 'none';
+            if(!room.splitScreenActive){
+                room.$.datalets.style.display = 'none';
+                room.$.info.style.display     = 'none';
+            }
+            break;
+        case 'library':
+            room.$.explore.style.display  = "none";
+            room.$.ideas.style.display    = 'none';
+            room.$.outcome.style.display  = 'none';
+            room.$.library.style.display  = 'block';
+            room.$.datalets.style.display = 'none';
+            room.$.info.style.display     = 'none';
+            break;
+        case 'datalets':
+            room.current_selected_container = room.$.datalets;
+            room.$.library.style.display  = 'none';
+            room.$.datalets.style.display = 'block';
+            room.$.info.style.display     = 'none';
+            room.$.datalets_slider._refresh();
+            if(!room.splitScreenActive){
+                room.$.explore.style.display  = "none";
+                room.$.ideas.style.display    = 'none';
+                room.$.outcome.style.display  = 'none';
+            }
+            break;
+        case 'info':
+            room.current_selected_container = room.$.info;
+            room.$.library.style.display  = 'none';
+            room.$.info.style.display     = 'block';
+            room.$.datalets.style.display = 'none';
+            if(!room.splitScreenActive){
+                room.$.explore.style.display  = "none";
+                room.$.ideas.style.display    = 'none';
+                room.$.outcome.style.display  = 'none';
+            }
+            break;
+        case 'split':
+            room.$.split_checkbox.checked = !room.$.split_checkbox.checked;
+            room.handleSplitScreen(room.$.split_checkbox);
+            break;
+    }
 };
 
-room._onModeChange = function(e){
-    room.selectedMode = e.currentTarget.id;
-    switch(room.selectedMode){
-        case "0" :
-            $("#mode").html(OW.getLanguageText('cocreation', 'room_menu_data'));
-            $("#addDatalet").css('display', 'none');
-            $("#cocreation_view_modes").css('display', 'none');
-            break;
-        case "1":
-            $("#mode").html(OW.getLanguageText('cocreation', 'room_menu_cocreation'));
-            $("#addDatalet").css('display', 'block');
-            $("#cocreation_view_modes").css('display', 'flex');
-            break;
-        case "2":
-            $("#mode").html(OW.getLanguageText('cocreation', 'room_menu_tools'));
-            $("#addDatalet").css('display', 'none');
-            $("#cocreation_view_modes").css('display', 'none');
-            break;
+room.handleSplitScreen = function(e){
+    room.splitScreenActive  = e.checked;
+    if(room.splitScreenActive){//active split screen
+
+        room.$.library_menu_item.disabled = true;
+
+        room.$.explore.style.display  = "none";
+        room.$.ideas.style.display    = 'none';
+        room.$.outcome.style.display  = 'none';
+        room.$.library.style.display  = 'none';
+        room.$.datalets.style.display = 'none';
+        room.$.info.style.display     = 'none';
+
+        if(room.current_selected_container == null){
+            room.current_selected_container  = room.$.datalets;
+            room.$.section_menu.selected     = 5;
+        }
+        room.current_selected_container.style.display = "block";
+
+        if(room.current_selected_document == null) room.current_selected_document = room.$.explore;
+        room.current_selected_document.style.display = "block";
+
+        $(room.$.info).addClass("split_size_card_right");
+        $(room.$.datalets).addClass("split_size_card_right");
+        $(room.$.explore).addClass("split_size_card_left");
+        $(room.$.ideas).addClass("split_size_card_left");
+        $(room.$.outcome).addClass("split_size_card_left");
+    }else{
+        room.$.library_menu_item.disabled = false;
+
+        $(room.$.info).removeClass("split_size_card_right");
+        $(room.$.datalets).removeClass("split_size_card_right");
+        $(room.$.explore).removeClass("split_size_card_left");
+        $(room.$.ideas).removeClass("split_size_card_left");
+        $(room.$.outcome).removeClass("split_size_card_left");
+
+        room.handleSelectUIMode(room.current_selected_document.id);
     }
 };
 
@@ -121,59 +213,7 @@ room._addDataset = function(){
             iconClass: 'ow_ic_add',
             title: ''
         });
-}
-
-room._handleCcModeClick = function(e){
-    if(e.currentTarget.id == room.cc_mode) return;
-    room.cc_mode = e.currentTarget.id;
-
-    var datalets_slider_container = $("#datalets_slider_container");
-    var cc_mode_0_button          = $("#cc_mode_0");
-    var cc_mode_1_button          = $("#cc_mode_1");
-    var cc_mode_2_button          = $("#cc_mode_2");
-    var postit_window             = $(".postitwindow");
-    var shared_docs_container     = $("#shared_docs");
-
-    datalets_slider_container.toggle('blind',
-        { direction: 'top'},
-        function(){
-            switch(room.cc_mode) {
-                case "cc_mode_0":
-                    datalets_slider_container.css('display', 'none');
-                    shared_docs_container.css('display', 'block');
-                    shared_docs_container.css('width', '100%');
-
-                    cc_mode_1_button.css('background-color', '#B6B6B6');
-                    cc_mode_2_button.css('background-color', '#B6B6B6');
-                    cc_mode_0_button.css('background-color', '#00BCD4');
-                    break;
-                case "cc_mode_1":
-                    shared_docs_container.css('display', 'block');
-                    datalets_slider_container.css('display', 'block');
-                    datalets_slider_container.css('width', '50%');
-                    shared_docs_container.css('width', '50%');
-
-                    cc_mode_0_button.css('background-color', '#B6B6B6');
-                    cc_mode_2_button.css('background-color', '#B6B6B6');
-                    cc_mode_1_button.css('background-color', '#00BCD4');
-                    postit_window.css('width', '50%');
-                    postit_window.css('left', '50%');
-                    break;
-                case 'cc_mode_2':
-                    datalets_slider_container.css('width', '100%');
-                    datalets_slider_container.css('display', 'block');
-                    shared_docs_container.css('display', 'none');
-
-                    cc_mode_0_button.css('background-color', '#B6B6B6');
-                    cc_mode_1_button.css('background-color', '#B6B6B6');
-                    cc_mode_2_button.css('background-color', '#00BCD4');
-                    postit_window.css('width', '100%');
-                    postit_window.css('left', '0%');
-                    break;
-            }
-        },
-        500);
-}
+};
 
 room.loadDatasetsLibrary = function() {
     $.post(OW.ajaxComponentLoaderRsp + "?cmpClass=COCREATION_CMP_DatasetsLibrary",
@@ -185,13 +225,13 @@ room.loadDatasetsLibrary = function() {
             onload.setAttribute("type","text/javascript");
             onload.innerHTML = data.onloadScript;
 
-            $('#data_library').html(data.content);
+            $('#dataset_library').html(data.content);
             previewFloatBox.close();
-            room.$.slider_dataset.selected = 0;
-            room.selectedTab_data          = 0;
+            room.$.library_tab.library_tab_selected = 0;
+            room.$.library_tab_selected             = 0;
             OW.info(OW.getLanguageText('cocreation', 'dataset_successfully_added'));
         });
-}
+};
 
 room.refreshDatasets = function(){
     $.post(ODE.ajax_coocreation_room_get_datasets, {} ,
@@ -199,4 +239,4 @@ room.refreshDatasets = function(){
             data = JSON.parse(data);
             SPODPUBLICROOM.suggested_datasets = data.suggested_datasets;
         });
-}
+};
