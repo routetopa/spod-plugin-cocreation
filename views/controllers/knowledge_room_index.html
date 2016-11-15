@@ -115,7 +115,7 @@
     {
         --iron-icon-height : 32px;
         --iron-icon-width : 32px;
-        --iron-icon-fill-color: #9E9E9E;
+        /*--iron-icon-fill-color: #9E9E9E;*/
     }
 
 
@@ -149,6 +149,8 @@
         -o-transform: rotate(-90deg);
         -webkit-transform: rotate(-90deg);
         -moz-transform: rotate(-90deg);
+
+        --iron-icon-fill-color: #00BCD4;
     }
 
     iron-icon#screen_2
@@ -158,6 +160,8 @@
         -o-transform: rotate(90deg);
         -webkit-transform: rotate(90deg);
         -moz-transform: rotate(90deg);
+
+        --iron-icon-fill-color: #00BCD4;
     }
 
     paper-item-body
@@ -203,6 +207,13 @@
     {
         line-height: 56px;
         font-size: 18px;
+
+        max-width: 448px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        float: left;
     }
 
     .right_floater
@@ -452,7 +463,7 @@
                     <div class="header_container">
 
                         <div class="hader_title_container">
-                            <span class="header_title">{$room->name}</span>
+                            <div class="header_title" title="{$room->name}">{$room->name}</div>
                         </div>
 
                         <div class="right_floater">
