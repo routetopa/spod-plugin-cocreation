@@ -115,7 +115,7 @@
     {
         --iron-icon-height : 32px;
         --iron-icon-width : 32px;
-        --iron-icon-fill-color: #9E9E9E;
+        /*--iron-icon-fill-color: #9E9E9E;*/
     }
 
 
@@ -149,6 +149,8 @@
         -o-transform: rotate(-90deg);
         -webkit-transform: rotate(-90deg);
         -moz-transform: rotate(-90deg);
+
+        --iron-icon-fill-color: #00BCD4;
     }
 
     iron-icon#screen_2
@@ -158,6 +160,8 @@
         -o-transform: rotate(90deg);
         -webkit-transform: rotate(90deg);
         -moz-transform: rotate(90deg);
+
+        --iron-icon-fill-color: #00BCD4;
     }
 
     paper-item-body
@@ -203,6 +207,13 @@
     {
         line-height: 56px;
         font-size: 18px;
+
+        max-width: 448px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        float: left;
     }
 
     .right_floater
@@ -231,8 +242,9 @@
     }
 
     .full_size_card{
-        margin:32px 32px 32px 32px;
-        height: calc(100% - 64px - 20px);
+        margin: 32px;
+        /*height: calc(100% - 64px - 20px);*/
+        height: calc(100% - 20px);
         width: calc(100% - 64px);
         display:block;
     }
@@ -273,12 +285,12 @@
 
     paper-tab {
         font-weight: 700;
-        border-right: 2px solid #FFFFFF;
+        /*border-right: 2px solid #FFFFFF;*/
     }
 
-    paper-tab:nth-last-child(2) {
-        border-right: 0;
-    }
+    /*paper-tab:first-child {*/
+        /*border-right: 2px solid #FFFFFF;*/
+    /*}*/
 
     paper-tab.iron-selected {
         color: #FFFFFF;
@@ -298,18 +310,15 @@
     }
 
     #add_dataset_container{
-        height: 100%;
-        overflow: scroll;
+        padding-top: 8px;
+        height: calc(100% - 48px - 8px);
+        overflow-x: scroll;
     }
 
     search-panel-controllet{
         position : absolute;
         right: 10px;
         top: 10px;
-    }
-
-    neon-animatable{
-        margin-top: 10px;
     }
 
     #select_dataset_container.select-dataset-controllet .header_block.select-dataset-controllet{
@@ -323,218 +332,45 @@
         right: 30px;
     }
 
-</style>
-
-<style>
-    /*paper-fab.add-paper-fab {
-        position: absolute;
-        bottom: 25px;
-        right: 50px;
-        --paper-fab-background:#2196F3;
+    paper-toast {
+        opacity: 0.8;
+        background: #000000;
     }
 
-    paper-fab-speed-dial.add-paper-fab {
-        position: absolute;
-        bottom: 45px;
-        right: 40px;
+    #syncToast br {
+        display: block;
+        margin-top: 8px;
+        content: " ";
     }
 
-    paper-fab{
-        --paper-fab-background:#2196F3;
+    #syncToast p {
+        margin: 0;
+        padding: 0;
+
+        font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        line-height: 24px;
     }
 
-    body .floatbox_canvas .floatbox_container {
-        margin-top: 50px;
-    }
-
-    .section{
-        width: 50%;
-        margin: 15px;
-    }
-
-    .modePages{
-        position: relative;
-    }
-
-    paper-tabs#cocreation_tab {
-        width: 50%;
-        position: fixed;
-        bottom: 2px;
-        left: 2px;
-    }
-
-    paper-tabs#data_tab {
-        width: 50%;
-        position: fixed;
-        bottom: 2px;
-        left: 2px;
-    }
-
-    paper-tabs {
-        background: #B6B6B6;
-    }
-
-    paper-tab {
-        font-weight: 700;
-        border-right: 2px solid #FFFFFF;
-    }
-
-    paper-tab:nth-last-child(2) {
-        border-right: 0;
-    }
-
-    paper-tab.iron-selected {
-        color: #FFFFFF;
-        background: #2196F3;;
-    }
-
-    paper-tab:not(.iron-selected):hover {
+    #syncToast p .title{
+        font-size: 24px;
         color: #2196F3;
+        padding-right: 56px;
     }
 
-    h5#mode{
-        color: #ffffff;
-        margin-left: 20px;
-        position:  relative;
-        float:left;
+    #card_container p .description{
     }
 
-    search-panel-controllet{
-        position : absolute;
-        right: 10px;
-        top: 10px;
-    }
-
-    neon-animatable{
-        margin-top: 10px;
-    }
-
-    #dialog_info {
-        border: 2px solid #2196F3;
-        background-color: #E0E0E0;
-        height: 80vh;
-        width: 80vh;
-        padding: 20px;
-        overflow: auto;
-    }
-
-    #dialog_content{
-        position: relative;
-    }
-
-    .tabpage{
-        background-color:#e8e8e8;
-        width: 100%;
-        height: 100%;
-    }
-
-    .grid-item {
-        float: left;
-        position: relative;
-        overflow: auto;
-    }
-
-    document-card-controllet{
-        width: 100%;
-    }
-+
-    div.leaflet-control-zoom.leaflet-bar.leaflet-control{
-        z-index:0;
-    }
-
-    #addDataset{
+    paper-icon-button.clear {
+        /*width: 24px;*/
+        /*height: 24px;*/
+        /*padding: 0px 4px;*/
         position: absolute;
-        top: -60px;
-        right: 30px;
+        top: 0;
+        right: 0;
+        color: #F44336;
+        --paper-icon-button-ink-color: #FFFFFF;
     }
-
-    #datalets_slider_container{
-        padding: 10px;
-        height: 72vh;
-        background-color:#ffffff;
-        width: 50%;
-        overflow: hidden;
-        margin-left: 30px;
-    }
-
-    .datalet-container{
-        position: relative;
-        overflow: hidden;
-        height: 63vh;
-        width: 100%;
-    }
-
-    #addDatalet{
-        position: fixed;
-        bottom: 50px;
-        right: 30px;
-    }
-
-    neon-animatable{
-        width: 100%;
-    }
-
-    #base_datalet_spin{
-        position: absolute;
-        top: 25%;
-        left: 35%;
-    }
-
-    .ow_preloader_content{
-        height: 68vh;
-        top: 23%;
-    }
-
-    #overlay{
-        z-index: 1;
-        position:absolute;
-        top:0;
-        left:0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.4);
-    }
-
-    #info_close_button{
-        z-index: 1;
-        color: #fff;
-        box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
-        -webkit-transition: 0.2s ease-out;
-        -moz-transition: 0.2s ease-out;
-        -o-transition: 0.2s ease-out;
-        transition: 0.2s ease-out;
-        cursor: pointer;
-        background-color: #00BCD4;
-        float: right;
-        top: 20px;
-    }
-
-    .cocreation_view_modes_button{
-        margin-right: 20px;
-    }
-
-    paper-fab#cc_mode_1 iron-icon{
-        -o-transform:rotate(90deg);
-        -webkit-transform:rotate(90deg);
-        -moz-transform:rotate(90deg);
-    }
-
-    #shared_docs{
-        width: 50%;
-    }
-
-    .visible_doc{
-        position: relative;
-        visibility: visible;
-        height: auto;
-        width: 100%;
-        margin: 15px;
-    }
-    .hidden_doc{
-        visibility: hidden;
-        height: 0;
-        width: 0;
-    }*/
 
 </style>
 
@@ -627,7 +463,7 @@
                     <div class="header_container">
 
                         <div class="hader_title_container">
-                            <span class="header_title">{$room->name}</span>
+                            <div class="header_title" title="{$room->name}">{$room->name}</div>
                         </div>
 
                         <div class="right_floater">
@@ -665,6 +501,10 @@
                     </paper-card>
                     <!-- Library -->
                     <paper-card id="library" class="full_size_card" style="display:none;" elevation="5">
+                        <paper-tabs id="library_tab" selected="[[library_tab_selected]]" no-bar>
+                            <paper-tab noink on-click="_library_tab_clicked" id="0">{text key="cocreation+room_view_datalibrary"}</paper-tab>
+                            <paper-tab noink on-click="_library_tab_clicked" id="1">{text key="cocreation+room_add_dataset"}</paper-tab>
+                        </paper-tabs>
                         <iron-pages selected="[[library_tab_selected]]">
                             <!-- View datalibrary -->
                             <div id="dataset_library">
@@ -674,7 +514,7 @@
                             <div id="add_dataset_container">
                                 <page-slider-controllet id="slider_dataset">
                                     <neon-animatable id="pass_1">
-                                        <select-dataset-controllet
+                                        <select-dataset-controllet  style="height: 50vh"
                                                 id="dataset_selection"
                                                 datasets='{$datasets_list}'>
                                         </select-dataset-controllet>
@@ -688,10 +528,6 @@
                                 </page-slider-controllet>
                             </div>
                         </iron-pages>
-                        <paper-tabs id="library_tab" selected="[[library_tab_selected]]" no-bar>
-                            <paper-tab noink on-click="_library_tab_clicked" id="0">{text key="cocreation+room_view_datalibrary"}</paper-tab>
-                            <paper-tab noink on-click="_library_tab_clicked" id="1">{text key="cocreation+room_add_dataset"}</paper-tab>
-                        </paper-tabs>
                     </paper-card>
                     <!-- Datalets -->
                     <paper-card id="datalets" class="full_size_card" style="display:none;" elevation="5">
@@ -708,13 +544,15 @@
         </paper-drawer-panel>
     </div>
 
-    <paper-toast id="syncToast" duration="0" text="">
-        <div class="layout horizontal">
-            <h5>{text key="cocreation+room_sync_toast"}</h5>
-            <paper-button onclick="syncToast.toggle()" class="blue-button"><b>x</b></paper-button>
-        </div>
-        <div class="layout vertical" id="syncMessage"></div>
+    <paper-toast id="syncToast" duration="0">
+        <p>
+            <span class="title">{text key="cocreation+room_sync_toast"}</span>
+            <br>
+            <span class="description" id="syncMessage">Le stanze dell'Agora sono pubbliche. Le discussioni saranno visibili anche all'esterno di SPOD.</span>
+        </p>
+        <paper-icon-button class="clear" suffix onclick="syncToast.toggle()" icon="clear"></paper-icon-button>
     </paper-toast>
+
     {/if}
 </template>
 
