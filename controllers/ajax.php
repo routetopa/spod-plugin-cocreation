@@ -37,14 +37,14 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
         if($clean['room_type'] == "knowledge")
         {
-            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 0, "explore", rtrim(OW_URL_HOME,"/")  . ":9001" . "/p/explore_room_" .$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 0, "explore", rtrim(OW_URL_HOME,"/") . ":9001" . "/p/explore_room_" .$room->id."_".$randomString);
             COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "ideas",   rtrim(OW_URL_HOME,"/") . ":9001" . "/p/ideas_room_"   .$room->id."_".$randomString);
             COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 2, "outcome", rtrim(OW_URL_HOME,"/") . ":9001" . "/p/outcome_room_" .$room->id."_".$randomString);
         }else{
             //create the sheet for the CoCreation Data room
             //Document for notes related to the dataset
-            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "notes",  rtrim(OW_URL_HOME,"/")   . ":9001" . "/p/notes_room_"  .$room->id."_".$randomString);
-            COCREATION_BOL_Service::getInstance()->addSheetToRoom($room->id, "dataset", rtrim(OW_URL_HOME,"/")   . ":8001" . "/s/dataset_room_".$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "notes",  rtrim(OW_URL_HOME,"/") . ":9001" . "/p/notes_room_"  .$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addSheetToRoom($room->id, "dataset", rtrim(OW_URL_HOME,"/") . ":8001" . "/s/dataset_room_".$room->id."_".$randomString);
             COCREATION_BOL_Service::getInstance()->createMetadataForRoom($room->id);
         }
 
