@@ -1,5 +1,24 @@
 $( document ).ready(function() {
 
+    window.addEventListener('page-slider-controllet_selected', function(e){
+        ln["localization"] = "en";
+
+        if(e.srcElement.id == "slider_dataset") {
+            switch (e.detail.selected) {
+                case 0:
+                    room.$.slider_dataset.setTitle(ln["slide1Title_" + ln["localization"]], ln["slide1Subtitle_" + ln["localization"]]);
+                    room.$.slider_dataset.chevronLeft("invisible");
+                    (room.$.dataset_selection.$.selected_url.invalid) ? room.$.slider_dataset.chevronRight(true) : room.$.slider_dataset.chevronRight(false);
+                    break;
+                case 1:
+                    room.$.slider_dataset.setTitle(ln["slide2Title_" + ln["localization"]], ln["slide2Subtitle_" + ln["localization"]]);
+                    room.$.slider_dataset.chevronLeft(true);
+                    room.$.slider_dataset.chevronRight("invisible");
+                    break;
+            }
+        }
+    });
+
     window.addEventListener('datalet-slider-controllet_selected', function(e){
         room.$.postits_controllet.setPostits(COCREATION.postits[e.detail.dataletId], e.detail.dataletId);
 
