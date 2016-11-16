@@ -246,8 +246,8 @@ room.loadDatasetsLibrary = function() {
 
             $('#dataset_library').html(data.content);
             previewFloatBox.close();
-            room.$.library_tab.library_tab_selected = 0;
-            room.$.library_tab_selected             = 0;
+            room.library_tab_selected  = 0;
+            room.$.library_tab.selected  = 0;
             OW.info(OW.getLanguageText('cocreation', 'dataset_successfully_added'));
         });
 };
