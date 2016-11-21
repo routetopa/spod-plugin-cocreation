@@ -521,7 +521,9 @@ class COCREATION_BOL_Service
 
     public function getAllDatasets()
     {
-        $sql = "SELECT * FROM ". OW_DB_PREFIX ."cocreation_dataset order by roomId DESC, version DESC";
+        $sql = "SELECT * FROM ". OW_DB_PREFIX ."cocreation_dataset LEFT JOIN ". OW_DB_PREFIX ."cocreation_room 
+                ON ". OW_DB_PREFIX ."cocreation_room.id = roomId 
+                order by roomId DESC, version DESC";
         return OW::getDbo()->queryForObjectList($sql, 'COCREATION_BOL_Dataset');
     }
 
