@@ -332,6 +332,15 @@ class COCREATION_BOL_Service
         COCREATION_BOL_RoomMemberDao::getInstance()->updateJoin($memberId, $roomId);
     }
 
+    public function isMemberInvitedToRoom($memberId, $roomId) {
+        $example = new OW_Example();
+        $example->andFieldEqual('userId', intval($memberId));
+        $example->andFieldEqual('roomId', intval($roomId));
+        $result = COCREATION_BOL_RoomMemberDao::getInstance()->findListByExample($example);
+        if(count($result) == 0) return false;
+        else return true;
+    }
+
     public function isMemberJoinedToRoom($memberId, $roomId){
         $example = new OW_Example();
         $example->andFieldEqual('userId', intval($memberId));

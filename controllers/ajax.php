@@ -53,16 +53,20 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         {
             $u = BOL_UserService::getInstance()->findByEmail($user);
             if($u->id != NULL) {
-                COCREATION_BOL_Service::getInstance()->addUserToRoom($room->id, $user, $u->id);
-                $js = "$.post('" .
-                    OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'confirmToJoinToRoom') . "?roomId=" . $room->id . "&memberId=" . $u->id . "',
-                        {}, function (data, status) {
-                           window.location ='" .
-                    str_replace("index/", $room->id,  OW::getRouter()->urlFor($room->type == "knowledge" ? 'COCREATION_CTRL_KnowledgeRoom' : 'COCREATION_CTRL_DataRoom' , 'index')) . "';});";
+                if(!COCREATION_BOL_Service::getInstance()->isMemberInvitedToRoom($u->id, $room->id)) {
+                    COCREATION_BOL_Service::getInstance()->addUserToRoom($room->id, $user, $u->id);
+                    $js = "$.post('" .
+                        OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'confirmToJoinToRoom') . "?roomId=" . $room->id . "&memberId=" . $u->id . "',
+                            {}, function (data, status) {
+                               window.location ='" .
+                        str_replace("index/", $room->id, OW::getRouter()->urlFor($room->type == "knowledge" ? 'COCREATION_CTRL_KnowledgeRoom' : 'COCREATION_CTRL_DataRoom', 'index')) . "';});";
 
-                $message = $clean['invitation_text'] . "<br><br>" . "<span class=\"ow_button\"><input type=\"button\" value=\"Conform to join\" onclick=\"" . $js . "\"></span>";
-                if (OW::getPluginManager()->isPluginActive('mailbox'))
-                   MAILBOX_BOL_ConversationService::getInstance()->createConversation(OW::getUser()->getId(), $u->id, "Join to co-creation room : " . $clean['name'], $message);
+                    $message = $clean['invitation_text'] . "<br><br>" . "<span class=\"ow_button\"><input type=\"button\" value=\"Conform to join\" onclick=\"" . $js . "\"></span>";
+                    if (OW::getPluginManager()->isPluginActive('mailbox'))
+                        MAILBOX_BOL_ConversationService::getInstance()->createConversation(OW::getUser()->getId(), $u->id, "Join to co-creation room : " . $clean['name'], $message);
+                }else{
+                    OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_member_already_added'));
+                }
             }
         }
 
@@ -99,17 +103,21 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         $room = COCREATION_BOL_Service::getInstance()->getRoomById($clean['roomId']);
         foreach($clean['users_value'] as $user){
             $u   = BOL_UserService::getInstance()->findByEmail($user);
-            if(!COCREATION_BOL_Service::getInstance()->isMemberJoinedToRoom($u->id, $room->id)) {
-                COCREATION_BOL_Service::getInstance()->addUserToRoom($room->id, $user, $u->id);
-                $js = "$.post('" .
-                    OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'confirmToJoinToRoom') . "?roomId=" . $room->id . "&memberId=" . $u->id . "',
-                    {}, function (data, status) {
-                       window.location ='" .
-                    str_replace("index/", $room->id, OW::getRouter()->urlFor($room->type == "knowledge" ? 'COCREATION_CTRL_KnowledgeRoom' : 'COCREATION_CTRL_DataRoom', 'index')) . "';});";
+            if(!COCREATION_BOL_Service::getInstance()->isMemberInvitedToRoom($u->id, $room->id)) {
+                if (!COCREATION_BOL_Service::getInstance()->isMemberJoinedToRoom($u->id, $room->id)) {
+                    COCREATION_BOL_Service::getInstance()->addUserToRoom($room->id, $user, $u->id);
+                    $js = "$.post('" .
+                        OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'confirmToJoinToRoom') . "?roomId=" . $room->id . "&memberId=" . $u->id . "',
+                        {}, function (data, status) {
+                           window.location ='" .
+                        str_replace("index/", $room->id, OW::getRouter()->urlFor($room->type == "knowledge" ? 'COCREATION_CTRL_KnowledgeRoom' : 'COCREATION_CTRL_DataRoom', 'index')) . "';});";
 
-                $message = $room->invitationText . "<br><br>" . "<span class=\"ow_button\"><input type=\"button\" value=\"Confirm to join\" onclick=\"" . $js . "\"></span>";
-                if (OW::getPluginManager()->isPluginActive('mailbox'))
-                    MAILBOX_BOL_ConversationService::getInstance()->createConversation(OW::getUser()->getId(), $u->id, "Join to co-creation room : " . $room->name, $message);
+                    $message = $room->invitationText . "<br><br>" . "<span class=\"ow_button\"><input type=\"button\" value=\"Confirm to join\" onclick=\"" . $js . "\"></span>";
+                    if (OW::getPluginManager()->isPluginActive('mailbox'))
+                        MAILBOX_BOL_ConversationService::getInstance()->createConversation(OW::getUser()->getId(), $u->id, "Join to co-creation room : " . $room->name, $message);
+                }
+            }else{
+                OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_member_already_added'));
             }
         }
 
