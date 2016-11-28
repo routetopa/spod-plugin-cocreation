@@ -106,7 +106,7 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
             }
 
             $this->assign('components_url', SPODPR_COMPONENTS_URL);
-            $this->assign('datasets_list', ODE_BOL_Service::getInstance()->getSettingByKey('openwall_dataset_list')->value);
+            $this->assign('datasets_list', ODE_BOL_Service::getInstance()->getSettingByKey('ode_datasets_list')->value);
 
             $js = UTIL_JsGenerator::composeJsString('
                 ODE.current_room_url                     = {$current_room_url}
