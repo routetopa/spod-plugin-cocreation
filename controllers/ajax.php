@@ -463,6 +463,37 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
     }
 
     /* AND */
+    public function getDatasetById()
+    {
+        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        if ($clean == null){
+            OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'insane_user_email_value'));
+            exit;
+        }
+
+        header("Access-Control-Allow-Origin: *");
+        $dataset = COCREATION_BOL_Service::getInstance()->getDatasetById($clean['id']);
+
+        $dataset->owners = substr($dataset->owners, 1, -1);
+        $dataset->owners = str_replace('\\', "", $dataset->owners);
+        $users = json_decode($dataset->owners);
+        $avatars = array();
+
+        foreach ($users as $user)
+        {
+            $avatar = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($user));
+            $avatars[] = array("src" => $avatar[$user]["src"], "href" => $avatar[$user]["url"], "user" => $avatar[$user]["title"]);
+        }
+
+        $room = COCREATION_BOL_Service::getInstance()->getRoomById($dataset->roomId);
+
+        echo json_encode(array('resourceUrl' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getDatasetByRoomIdAndVersion') . "?room_id=" . $dataset->roomId . "&version=" . $dataset->version,
+            "users"=>$avatars,
+            "metas"=>$dataset->common_core_required_metadata,
+            "roomName" => $room->name ? $room->name : OW::getLanguage()->text('cocreation', 'deteted_room')));
+        exit;
+    }
+
     public function getDatasetByRoomIdAndVersion()
     {
         $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
@@ -498,7 +529,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
         foreach ($datasets as $dataset)
         {
-            $dataset->owners = substr($dataset->owners, 1, -1);
+            /*$dataset->owners = substr($dataset->owners, 1, -1);
             $dataset->owners = str_replace('\\', "", $dataset->owners);
             $users = json_decode($dataset->owners);
             $avatars = array();
@@ -508,7 +539,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
                 $avatar = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($user));
                 $avatars[] = array("src" => $avatar[$user]["src"], "href" => $avatar[$user]["url"], "user" => $avatar[$user]["title"]);
             }
-
+            */
             $room = COCREATION_BOL_Service::getInstance()->getRoomById($dataset->roomId);
             $common_core_required_metadata = json_decode($dataset->common_core_required_metadata);
 
@@ -527,12 +558,12 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             }
 
             $data[] = array(
-                'resource_name' => $resource_name,
-                'url' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getDatasetByRoomIdAndVersion') . "?room_id=" . $dataset->roomId . "&version=" . $dataset->version,
-                'metas' => $dataset->common_core_required_metadata,
-                'users' => $avatars,
+                'name' => $resource_name,
+                'id' => $dataset->id,
+                'p' => 'SPOD_X',
                 'version' => $dataset->version
             );
+
         }
 
         header("Access-Control-Allow-Origin: *");
