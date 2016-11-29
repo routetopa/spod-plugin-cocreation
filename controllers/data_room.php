@@ -107,6 +107,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                 ODE.ajax_coocreation_room_delete_datalet      = {$ajax_coocreation_room_delete_datalet}
                 ODE.ajax_coocreation_room_publish_dataset     = {$ajax_coocreation_room_publish_dataset}
                 ODE.ajax_coocreation_room_get_html_note       = {$ajax_coocreation_room_get_html_note}
+                ODE.ajax_coocreation_room_delete_user         = {$ajax_coocreation_room_delete_user}
                 COCREATION.sheetName                          = {$sheetName}
                 COCREATION.roomId                             = {$roomId}
                 COCREATION.room_type                          = "data"
@@ -124,6 +125,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                'ajax_coocreation_room_delete_datalet'      => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'deleteDataletFromRoom'),
                'ajax_coocreation_room_publish_dataset'     => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'publishDataset'),
                'ajax_coocreation_room_get_html_note'       => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getNoteHTMLByPadIDApiUrl')  . "?noteUrl="  . $noteUrl,
+               'ajax_coocreation_room_delete_user'         => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'deleteMemberFromRoom'),
                'sheetName'                                 => $sheetName,
                'roomId'                                    => $params['roomId'],
                'entity_type'                               => COCREATION_BOL_Service::ROOM_ENTITY_TYPE,
