@@ -125,6 +125,27 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         $this->redirect(str_replace("index/", $room->id, $room->type == "knowledge" ? OW::getRouter()->urlFor('COCREATION_CTRL_KnowledgeRoom', 'index') : OW::getRouter()->urlFor('COCREATION_CTRL_DataRoom', 'index') ));
     }
 
+    public function deleteMemberFromRoom()
+    {
+        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        if ($clean == null) {
+            OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'insane_inputs_detected'));
+            exit;
+        }
+
+        COCREATION_BOL_Service::getInstance()->deleteMembersFromRoom($clean['userId']);
+
+        SPODNOTIFICATION_CLASS_EventHandler::getInstance()->emitNotification([
+            "plugin"      => "cocreation",
+            "operation"   => "deleteUser",
+            "user_name"   => BOL_AvatarService::getInstance()->getDataForUserAvatars(array($clean['userId']))[$clean['userId']]['title'],
+            "entity_type" => COCREATION_BOL_Service::ROOM_ENTITY_TYPE]);
+        echo json_encode(array("status" => "ok", "message" => "users has been deleted from this room"));
+        OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_delete_room_user'));
+        //$this->redirect(str_replace("index/", $clean['roomId'], $clean['roomType'] == "knowledge" ? OW::getRouter()->urlFor('COCREATION_CTRL_KnowledgeRoom', 'index') : OW::getRouter()->urlFor('COCREATION_CTRL_DataRoom', 'index') ));
+        exit;
+    }
+
     public function addDatasetToRoom()
     {
         $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
@@ -142,10 +163,10 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
 
         echo json_encode(array("status" => "ok", "message" => "dataset successful created in the current room"));
-        SPODNOTIFICATION_CLASS_EventHandler::getInstance()->emitNotification(["plugin" => "cocreation",
-                                                                              "operation" => "addDatasetToRoom",
+        SPODNOTIFICATION_CLASS_EventHandler::getInstance()->emitNotification(["plugin"      => "cocreation",
+                                                                              "operation"   => "addDatasetToRoom",
                                                                               "entity_type" => COCREATION_BOL_Service::ROOM_ENTITY_TYPE,
-                                                                              "entity_id" => $clean['roomId']]);
+                                                                              "entity_id"   => $clean['roomId']]);
         exit;
 
     }

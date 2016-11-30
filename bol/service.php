@@ -314,9 +314,9 @@ class COCREATION_BOL_Service
         COCREATION_BOL_RoomMemberDao::getInstance()->save($roomMember);
     }
 
-    public function deleteMembersFromRoom($roomId){
+    public function deleteMembersFromRoom($userId){
         $example = new OW_Example();
-        $example->andFieldEqual('roomId', $roomId);
+        $example->andFieldEqual('userId', $userId);
         COCREATION_BOL_RoomMemberDao::getInstance()->deleteByExample($example);
     }
 
