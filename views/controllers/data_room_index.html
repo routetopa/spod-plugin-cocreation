@@ -233,6 +233,8 @@
 
     .full_size_content
     {
+        position: relative;
+
         height: 100%;
         width: 100%;
     }
@@ -356,6 +358,10 @@
     }
 
     .full_size_card{
+        position: absolute;
+        top: 0;
+        left: 0;
+
         margin:32px 32px 32px 32px;
         height: calc(100% - 64px);
         width: calc(100% - 64px);
@@ -366,12 +372,15 @@
         margin:32px 16px 32px 32px;
         height: calc(100% - 64px);
         width: calc(50% - 48px);
-        float:left;
-        
+        /*float:left;*/
+        right: inherit;
+        left: 0px;
     }
     
     .split_size_card_right{
-        float: right;
+        left: inherit;
+        right: 0px;
+        /*float: right;*/
         margin:32px 32px 32px 16px;
         height: calc(100% - 64px);
         width: calc(50% - 48px);
@@ -489,32 +498,32 @@
                 <div class="content_container">
                     <div id="full_size_container" class="full_size_content">
                         <!-- Discussion -->
-                        <paper-card id="discussion" class="full_size_card" style="display:none;" elevation="5">
+                        <paper-card id="discussion" class="full_size_card" style="visibility:hidden;" elevation="5">
                             <div class="screen_header">{text key="cocreation+room_discussion_tab_label"}</div>
                             <div id="discussion_container" style="overflow-y: scroll;overflow-x: hidden;height: calc(100% - 45px)">
                                 {$comments}
                             </div>
                         </paper-card>
                         <!-- Dataset -->
-                        <paper-card id="spreadsheet" class="full_size_card" elevation="5">
+                        <paper-card id="spreadsheet" class="full_size_card" style="visibility:visible;" elevation="5">
                             <div class="screen_hidden_header">{text key="cocreation+room_dataset_tab_label"}</div>
                             <iframe src="{$spreadsheet}" style="height: 100%; width: 100%;"></iframe>
                         </paper-card>
                         <!-- Metadata -->
-                        <paper-card id="metadata" class="full_size_card" style="display:none;" elevation="5">
+                        <paper-card id="metadata" class="full_size_card" style="visibility:hidden;" elevation="5">
                             <metadata-list-controllet id="metadata_component"></metadata-list-controllet>
                         </paper-card>
                         <!-- Notes -->
-                        <paper-card id="notes" class="full_size_card" style="display:none;" elevation="5">
+                        <paper-card id="notes" class="full_size_card" style="visibility:hidden;" elevation="5">
                             <div class="screen_header">{text key="cocreation+room_notes_tab_label"}</div>
                             <iframe src="{{$notes}}?userName={{$currentUser['title']}}&showControls=true&showLineNumbers=false&pageview=true" style="height: 100%; width: 100%;"></iframe>
                         </paper-card>
                         <!-- Datalets -->
-                        <paper-card id="datalets" class="full_size_card" style="display:none;" elevation="5">
+                        <paper-card id="datalets" class="full_size_card" style="visibility:hidden;" elevation="5">
                             <datalet-slider-controllet id="datalets_slider"></datalet-slider-controllet>
                         </paper-card>
                         <!-- Info -->
-                        <paper-card id="info" class="full_size_card" style="display:none;" elevation="5">
+                        <paper-card id="info" class="full_size_card" style="visibility:hidden;" elevation="5">
                             <info-list-controllet id="info_list_controllet"></info-list-controllet>
                         </paper-card>
                     </div>
