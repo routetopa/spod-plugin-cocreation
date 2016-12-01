@@ -65,6 +65,8 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
                 array_push($members, $avatar);
             }
 
+            $this->assign('members', $members);
+
             $info                 = new stdClass();
             $info->name           = $room->name;
             $info->subject        = $room->subject;

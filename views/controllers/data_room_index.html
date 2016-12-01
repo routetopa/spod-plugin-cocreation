@@ -67,7 +67,6 @@
 <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 
 <style is="custom-style">
-
     .separator
     {
         height: 1px;
@@ -197,6 +196,8 @@
     .hader_title_container
     {
         float:left;
+        max-width: calc(50% - 120px);
+        overflow: hidden;
     }
 
     .header_title
@@ -214,7 +215,10 @@
 
     .right_floater
     {
-        float: right
+        float: right;
+        height: 56px;
+        overflow-y: auto;
+        max-width: 50%;
     }
 
     .hader_title_container > paper-button
@@ -478,7 +482,7 @@
                             <paper-button raised title='{text key="cocreation+room_publish_dataset_tooltip"}' on-tap="_publishDataset">{text key="cocreation+publish_dataset_button_label"}</paper-button>
                         </div>
 
-                        <div class="right_floater">
+                        <div style="float: right">
                             {if $ownerUserActive}
                                <paper-fab icon="add" onclick="room.inviteNewUsers();" title='{text key="cocreation+room_invite_new_members_button"}'></paper-fab>
                             {/if}
@@ -487,7 +491,9 @@
                         <div class="right_floater">
                             <div class="ow_avatar style-scope" title="{$owner['title']}"><a class="style-scope" href="{$owner['url']}"><img alt="" style="max-width: 100%;" class="style-scope dataset-table-controllet" src="{$owner['src']}"></a></div>
                             {foreach $members as $member}
-                            <div class="ow_avatar style-scope" title="{$member['title']}"><a class="style-scope" href="{$member['url']}"><img alt="" style="max-width: 100%;" class="style-scope dataset-table-controllet" src="{$member['src']}"></a></div>
+                                {if $member['isJoined']}
+                                    <div class="ow_avatar style-scope" title="{$member['title']}"><a class="style-scope" href="{$member['url']}"><img alt="" style="max-width: 100%;" class="style-scope dataset-table-controllet" src="{$member['src']}"></a></div>
+                                {/if}
                             {/foreach}
                         </div>
 

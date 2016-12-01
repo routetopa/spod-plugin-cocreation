@@ -113,68 +113,68 @@ room.handleSelectUIMode = function(mode){
         case 'explore':
             room.current_selected_document = room.$.explore;
             room.$.section_menu.selected   = 0;
-            room.$.explore.style.display   = "block";
-            room.$.ideas.style.display     = 'none';
-            room.$.outcome.style.display   = 'none';
-            room.$.library.style.display   = 'none';
+            room.$.explore.style.visibility   = "visible";
+            room.$.ideas.style.visibility     = 'hidden';
+            room.$.outcome.style.visibility   = 'hidden';
+            room.$.library.style.visibility   = 'hidden';
             if(!room.splitScreenActive){
-                room.$.datalets.style.display = 'none';
-                room.$.info.style.display     = 'none';
+                room.$.datalets.style.visibility = 'hidden';
+                room.$.info.style.visibility     = 'hidden';
             }
             break;
         case 'ideas':
             room.current_selected_document = room.$.ideas;
             room.$.section_menu.selected   = 1;
-            room.$.explore.style.display   = "none";
-            room.$.ideas.style.display     = 'block';
-            room.$.outcome.style.display   = 'none';
-            room.$.library.style.display   = 'none';
+            room.$.explore.style.visibility   = 'hidden';
+            room.$.ideas.style.visibility     = 'visible';
+            room.$.outcome.style.visibility   = 'hidden';
+            room.$.library.style.visibility   = 'hidden';
             if(!room.splitScreenActive){
-                room.$.datalets.style.display = 'none';
-                room.$.info.style.display     = 'none';
+                room.$.datalets.style.visibility = 'hidden';
+                room.$.info.style.visibility     = 'hidden';
             }
             break;
         case 'outcome':
             room.current_selected_document = room.$.outcome;
             room.$.section_menu.selected   = 2;
-            room.$.explore.style.display   = "none";
-            room.$.ideas.style.display     = 'none';
-            room.$.outcome.style.display   = 'block';
-            room.$.library.style.display   = 'none';
+            room.$.explore.style.visibility   = "hidden";
+            room.$.ideas.style.visibility     = 'hidden';
+            room.$.outcome.style.visibility   = 'visible';
+            room.$.library.style.visibility   = 'hidden';
             if(!room.splitScreenActive){
-                room.$.datalets.style.display = 'none';
-                room.$.info.style.display     = 'none';
+                room.$.datalets.style.visibility = 'hidden';
+                room.$.info.style.visibility     = 'hidden';
             }
             break;
         case 'library':
-            room.$.explore.style.display  = "none";
-            room.$.ideas.style.display    = 'none';
-            room.$.outcome.style.display  = 'none';
-            room.$.library.style.display  = 'block';
-            room.$.datalets.style.display = 'none';
-            room.$.info.style.display     = 'none';
+            room.$.explore.style.visibility  = "hidden";
+            room.$.ideas.style.visibility    = 'hidden';
+            room.$.outcome.style.visibility  = 'hidden';
+            room.$.library.style.visibility  = 'visible';
+            room.$.datalets.style.visibility = 'hidden';
+            room.$.info.style.visibility     = 'hidden';
             break;
         case 'datalets':
             room.current_selected_container = room.$.datalets;
-            room.$.library.style.display  = 'none';
-            room.$.datalets.style.display = 'block';
-            room.$.info.style.display     = 'none';
+            room.$.library.style.visibility  = 'hidden';
+            room.$.datalets.style.visibility = 'visible';
+            room.$.info.style.visibility     = 'hidden';
             room.$.datalets_slider._refresh();
             if(!room.splitScreenActive){
-                room.$.explore.style.display  = "none";
-                room.$.ideas.style.display    = 'none';
-                room.$.outcome.style.display  = 'none';
+                room.$.explore.style.visibility  = "hidden";
+                room.$.ideas.style.visibility    = 'hidden';
+                room.$.outcome.style.visibility  = 'hidden';
             }
             break;
         case 'info':
             room.current_selected_container = room.$.info;
-            room.$.library.style.display  = 'none';
-            room.$.info.style.display     = 'block';
-            room.$.datalets.style.display = 'none';
+            room.$.library.style.visibility  = 'hidden';
+            room.$.info.style.visibility     = 'visible';
+            room.$.datalets.style.visibility = 'hidden';
             if(!room.splitScreenActive){
-                room.$.explore.style.display  = "none";
-                room.$.ideas.style.display    = 'none';
-                room.$.outcome.style.display  = 'none';
+                room.$.explore.style.visibility  = "hidden";
+                room.$.ideas.style.visibility    = 'hidden';
+                room.$.outcome.style.visibility  = 'hidden';
             }
             break;
         case 'split':
@@ -190,21 +190,21 @@ room.handleSplitScreen = function(e){
 
         room.$.library_menu_item.disabled = true;
 
-        room.$.explore.style.display  = "none";
-        room.$.ideas.style.display    = 'none';
-        room.$.outcome.style.display  = 'none';
-        room.$.library.style.display  = 'none';
-        room.$.datalets.style.display = 'none';
-        room.$.info.style.display     = 'none';
+        room.$.explore.style.visibility  = "hidden";
+        room.$.ideas.style.visibility    = 'hidden';
+        room.$.outcome.style.visibility  = 'hidden';
+        room.$.library.style.visibility  = 'hidden';
+        room.$.datalets.style.visibility = 'hidden';
+        room.$.info.style.visibility     = 'hidden';
 
         if(room.current_selected_container == null){
             room.current_selected_container  = room.$.datalets;
             room.$.section_menu.selected     = 5;
         }
-        room.current_selected_container.style.display = "block";
+        room.current_selected_container.style.visibility = "visible";
 
         if(room.current_selected_document == null) room.current_selected_document = room.$.explore;
-        room.current_selected_document.style.display = "block";
+        room.current_selected_document.style.visibility = "visible";
 
         $(room.$.info).addClass("split_size_card_right");
         $(room.$.datalets).addClass("split_size_card_right");

@@ -36,7 +36,7 @@ class COCREATION_CMP_DatasetsLibrary extends OW_Component
         }
 
         $this->assign('components_url', SPODPR_COMPONENTS_URL);
-        $this->assign('datasets_list', ODE_DATASET_LIST);
+        //$this->assign('datasets_list', ODE_BOL_Service::getInstance()->getSettingByKey('ode_datasets_list'));
 
         $js = UTIL_JsGenerator::composeJsString('
                 SPODPUBLICROOM = {}
