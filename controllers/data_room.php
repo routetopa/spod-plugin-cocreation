@@ -99,7 +99,29 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         $metadataObj->CC_RAF = json_decode($metadata[0]->common_core_if_applicable);
         $metadataObj->EF = json_decode($metadata[0]->expanded);
 
-        $this->addComponent("comments", new COCREATION_CMP_DiscussionWrapper($params['roomId']));
+        //DISCUSSION
+        //$this->addComponent("comments", new COCREATION_CMP_DiscussionWrapper($params['roomId']));
+        $commentsParams = new BASE_CommentsParams('cocreation', COCREATION_BOL_Service::ROOM_ENTITY_TYPE);
+        $commentsParams->setEntityId($params['roomId']);
+        $commentsParams->setDisplayType(BASE_CommentsParams::DISPLAY_TYPE_WITH_LOAD_LIST);
+        //$commentsParams->setCommentCountOnPage(5);
+        $commentsParams->setOwnerId((OW::getUser()->getId()));
+        $commentsParams->setAddComment(true);
+        $commentsParams->setWrapInBox(false);
+        $commentsParams->setShowEmptyList(false);
+        $commentsParams->setCommentPreviewMaxCharCount(5000);
+
+        $commentsParams->level  = 0;
+        $commentsParams->nodeId = 0;
+        SPODTCHAT_CLASS_Consts::$NUMBER_OF_NESTED_LEVEL = 2;
+
+        /* ODE */
+        /* if (OW::getPluginManager()->isPluginActive('spodpr'))
+             $this->addComponent('private_room', new SPODPR_CMP_PrivateRoomCard('ow_attachment_btn', array('datalet', 'link')));*/
+        /* ODE */
+
+        $commentCmp = new SPODTCHAT_CMP_Comments($commentsParams, 1, COCREATION_BOL_Service::COMMENT_ENTITY_TYPE, $params['roomId']);
+        $this->addComponent('comments', $commentCmp);
 
         $js = UTIL_JsGenerator::composeJsString('
                 ODE.ajax_coocreation_room_get_datalets        = {$ajax_coocreation_room_get_datalets}
@@ -138,9 +160,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                'roomInfo'                                  => json_encode($info),
         ));
         OW::getDocument()->addOnloadScript($js);
-        OW::getDocument()->addOnloadScript("data_room.init(); $('#comments-list-cocreation_room_entity166803').livequery( function(e){
-
-        });");
+        OW::getDocument()->addOnloadScript("data_room.init();");
 
         OW::getLanguage()->addKeyForJs('cocreation', 'confirm_delete_datalet');
         OW::getLanguage()->addKeyForJs('cocreation', 'room_delete_fail');

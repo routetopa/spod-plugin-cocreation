@@ -80,7 +80,6 @@ $(document).ready(function() {
     window.addEventListener('metadata-list-controllet_attached', function(e){
         room.$.metadata_component.setMetadata(COCREATION.metadata);
     });
-
 });
 
 room.splitScreenActive          = false;

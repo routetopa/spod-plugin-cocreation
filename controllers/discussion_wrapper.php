@@ -14,8 +14,8 @@ class COCREATION_CTRL_DiscussionWrapper extends OW_ActionController
         //comment and rate
         $commentsParams = new BASE_CommentsParams('cocreation', COCREATION_BOL_Service::ROOM_ENTITY_TYPE);
         $commentsParams->setEntityId($params['roomId']);
-        $commentsParams->setDisplayType(BASE_CommentsParams::DISPLAY_TYPE_WITH_LOAD_LIST);
-        $commentsParams->setCommentCountOnPage(5);
+        $commentsParams->setDisplayType(BASE_CommentsParams::DISPLAY_TYPE_WITH_PAGING);
+        //$commentsParams->setCommentCountOnPage(5);
         $commentsParams->setOwnerId((OW::getUser()->getId()));
         $commentsParams->setAddComment(true);
         $commentsParams->setWrapInBox(false);
