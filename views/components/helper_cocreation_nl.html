@@ -73,6 +73,12 @@
         width: 200px;
         height: 200px;
     }*/
+
+    paper-fab#assessment_fab
+    {
+        background:#00BCD4;
+    }
+
 </style>
 
 <div class="layout vertical">
@@ -103,12 +109,12 @@
                     </div>
 
                     <div class="horizontal layout cell">
-                        <paper-fab id="description_fab" mini="" icon="description" ></paper-fab>
+                        <paper-fab id="description_fab" mini="" icon="description"></paper-fab>
                         <p>Cocreation knowledge room</p>
                     </div>
 
                     <div class="horizontal layout cell">
-                        <paper-fab id="assessment_fab"  mini="" icon="assessment"  class="x-scope paper-fab-1"></paper-fab>
+                        <paper-fab id="assessment_fab"  mini="" icon="assessment"  ></paper-fab>
                         <p> Cocreation data room<p>
                     </div>
 
@@ -193,28 +199,36 @@
         </div>
 
 
-    <div class="sect">
-        <div class="horizontal layout cell">
-            <img src="{$staticResourcesUrl}images/aboutroom_en.gif" style="width: 60%; height: 60%;">
+    <div class="content" id="scroll_content">
+        <div class="sect">
+            <div class="horizontal layout cell">
+                <img src="{$staticResourcesUrl}images/aboutroom_it.gif" style="width: 60%; height: 60%;">
 
-            <div class="cell">
-                <div class="horizontal layout cell">
-                    <div class="section-number">5</div>
-                    <paper-icon-button id="info_room_button" icon="info" on-tap="_openInfo"  style="color: #3d64ff;width: 50px;
-                                       height: 50px; "></paper-icon-button>
-                    <div class="section-title">About the room</div>
-                </div>
-                <div>
-                    <p>
-                        When in a room, on the upper left corner, the  button shows some info about the details of the room
-                        and allows also (with the <b>INVITE NEW USERS TO JOIN THIS ROOM</b>) to invite other users in this room. <br> Only the creator
-                        of the room can invite  other users to participate.
-                    </p>
+                <div class="cell">
+                    <div class="horizontal layout cell">
+                        <div class="section-number">5</div>
+                        <div class="section-title">All features</div>
+                    </div>
+
+                    <ul class="cell-list">
+                        <li>
+                            <paper-icon-button icon="menu" style=" width: 50px; height: 50px;"></paper-icon-button>
+                            allows to select all features such as create a dataset, datalets, add metadata, notes, start a discussion etc..)
+                        </li>
+
+                        <li>
+                            <paper-icon-button id="info_room_button" icon="info" on-tap="_openInfo"  style="color: #212121; width: 50px; height: 50px;"></paper-icon-button>
+                            shows information of the room</p>
+                        </li>
+
+                        <li>
+                            <paper-icon-button   icon="add" style="color: #00BCD4;" ></paper-icon-button> allows to invite a new member in the room.
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
-
 
 </div>
 </div>
