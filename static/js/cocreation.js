@@ -83,7 +83,7 @@ COCREATION.autocomplete = function()
                 var elem = COCREATION.friend_info[i];
 
                 for (var property in elem) {
-                    if (elem.hasOwnProperty(property) && COCREATION.searchField.indexOf(property) >= 0 && elem[property].indexOf(searchString) >= 0) {
+                    if (elem.hasOwnProperty(property) && COCREATION.searchField.indexOf(property) >= 0 && elem[property].toLowerCase().indexOf(searchString.toLowerCase()) >= 0) {
                         var tr = COCREATION.createSuggestionList(elem, i);
                         $("#suggested_friends_table").append(tr);
                         needToShow = true;

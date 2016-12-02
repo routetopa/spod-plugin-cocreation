@@ -96,26 +96,26 @@
         --paper-toolbar-background: #2196F3;
     }
 
-    paper-header-panel{
-        z-index:0;
-    }
-
     #paperDrawerPanel
     {
         top: 60px;
     }
 
-    #drawer
+    paper-header-panel{
+        z-index:0;
+    }
+
+/*    #drawer
     {
         margin-top: 56px;
         z-index:0;
-    }
+    }*/
 
     iron-icon
     {
         --iron-icon-height : 32px;
         --iron-icon-width : 32px;
-        --iron-icon-fill-color: #9E9E9E;
+        /*--iron-icon-fill-color: #9E9E9E;*/
     }
 
 
@@ -149,6 +149,8 @@
         -o-transform: rotate(-90deg);
         -webkit-transform: rotate(-90deg);
         -moz-transform: rotate(-90deg);
+
+        --iron-icon-fill-color: #00BCD4;
     }
 
     iron-icon#screen_2
@@ -158,6 +160,8 @@
         -o-transform: rotate(90deg);
         -webkit-transform: rotate(90deg);
         -moz-transform: rotate(90deg);
+
+        --iron-icon-fill-color: #00BCD4;
     }
 
     paper-item-body
@@ -197,17 +201,29 @@
     .hader_title_container
     {
         float:left;
+        max-width: calc(50% - 120px);
+        overflow: hidden;
     }
 
     .header_title
     {
         line-height: 56px;
         font-size: 18px;
+
+        max-width: 448px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        float: left;
     }
 
     .right_floater
     {
-        float: right
+        float: right;
+        height: 56px;
+        overflow-y: auto;
+        max-width: 50%;
     }
 
     .hader_title_container > paper-button
@@ -226,28 +242,38 @@
 
     .full_size_content
     {
+        position: relative;
+
         height: 100%;
         width: 100%;
     }
 
     .full_size_card{
+        position: absolute;
+        top: 0;
+        left: 0;
+
         margin: 32px;
         /*height: calc(100% - 64px - 20px);*/
         height: calc(100% - 20px);
         width: calc(100% - 64px);
         display:block;
+        overflow: hidden;
     }
 
     .split_size_card_left{
         margin:32px 16px 32px 32px;
-        height: calc(100% - 64px  - 20px);
+        height: calc(100% - 64px);
         width: calc(50% - 48px);
-        float:left;
-
+        /*float:left;*/
+        right: inherit;
+        left: 0px;
     }
 
     .split_size_card_right{
-        float: right;
+        left: inherit;
+        right: 0px;
+        /*float: right;*/
         margin:32px 32px 32px 16px;
         height: calc(100% - 64px);
         width: calc(50% - 48px);
@@ -361,6 +387,10 @@
         --paper-icon-button-ink-color: #FFFFFF;
     }
 
+    paper-icon-button#info_provider {
+        bottom: 20px;
+    }
+
 </style>
 
 {/literal}
@@ -452,10 +482,10 @@
                     <div class="header_container">
 
                         <div class="hader_title_container">
-                            <span class="header_title">{$room->name}</span>
+                            <div class="header_title" title="{$room->name}">{$room->name}</div>
                         </div>
 
-                        <div class="right_floater">
+                        <div style="float: right">
                             {if $ownerUserActive}
                             <paper-fab icon="add" onclick="room.inviteNewUsers();" title='{text key="cocreation+room_invite_new_members_button"}'></paper-fab>
                             {/if}
@@ -464,7 +494,9 @@
                         <div class="right_floater">
                             <div class="ow_avatar style-scope" title="{$owner['title']}"><a class="style-scope" href="{$owner['url']}"><img alt="" style="max-width: 100%;" class="style-scope dataset-table-controllet" src="{$owner['src']}"></a></div>
                             {foreach $members as $member}
-                            <div class="ow_avatar style-scope" title="{$member['title']}"><a class="style-scope" href="{$member['url']}"><img alt="" style="max-width: 100%;" class="style-scope dataset-table-controllet" src="{$member['src']}"></a></div>
+                                {if $member['isJoined']}
+                                    <div class="ow_avatar style-scope" title="{$member['title']}"><a class="style-scope" href="{$member['url']}"><img alt="" style="max-width: 100%;" class="style-scope dataset-table-controllet" src="{$member['src']}"></a></div>
+                                {/if}
                             {/foreach}
                         </div>
 
@@ -473,60 +505,64 @@
 
                 <!-- FULL SIZE ETHERSHEET -->
                 <div class="content_container">
-                    <!-- Explore -->
-                    <paper-card id="explore" class="full_size_card" style="display:block;" elevation="5">
-                        <div class="section_header">{text key="cocreation+room_explore"}</div>
-                        <iframe src="{$documents[0]}?userName={$currentUser['title']}&showControls=true&showLineNumbers=false&pageview=true" style="height: 100%; width: 100%;"></iframe>
-                    </paper-card>
-                    <!-- Ideas -->
-                    <paper-card id="ideas" class="full_size_card" style="display:none;" elevation="5">
-                        <div class="section_header">{text key="cocreation+room_ideas"}</div>
-                        <iframe src="{$documents[1]}?userName={$currentUser['title']}&showControls=true&showLineNumbers=false&pageview=true" style="height: 100%; width: 100%;"></iframe>
-                    </paper-card>
-                    <!-- Outcome -->
-                    <paper-card id="outcome" class="full_size_card" style="display:none;" elevation="5">
-                        <div class="section_header">{text key="cocreation+room_outcome"}</div>
-                        <iframe src="{$documents[2]}?userName={$currentUser['title']}&showControls=true&showLineNumbers=false&pageview=true" style="height: 100%; width: 100%;"></iframe>
-                    </paper-card>
-                    <!-- Library -->
-                    <paper-card id="library" class="full_size_card" style="display:none;" elevation="5">
-                        <paper-tabs id="library_tab" selected="[[library_tab_selected]]" no-bar>
-                            <paper-tab noink on-click="_library_tab_clicked" id="0">{text key="cocreation+room_view_datalibrary"}</paper-tab>
-                            <paper-tab noink on-click="_library_tab_clicked" id="1">{text key="cocreation+room_add_dataset"}</paper-tab>
-                        </paper-tabs>
-                        <iron-pages selected="[[library_tab_selected]]">
-                            <!-- View datalibrary -->
-                            <div id="dataset_library">
-                                {$datasets_library}
-                            </div>
-                            <!-- Add dataset -->
-                            <div id="add_dataset_container">
-                                <page-slider-controllet id="slider_dataset">
-                                    <neon-animatable id="pass_1">
-                                        <select-dataset-controllet  style="height: 50vh"
-                                                id="dataset_selection"
-                                                datasets='{$datasets_list}'>
-                                        </select-dataset-controllet>
-                                    </neon-animatable>
-                                    <neon-animatable id="pass_2">
-                                        <div id="pass_2_select_data_container">
-                                            <select-data-controllet id="select_data_controllet" data-url=[[dataUrl]]></select-data-controllet>
-                                        </div>
-                                        <paper-fab id="addDataset" icon="add" title='{text key="cocreationep+room_add_dataset"}' class="dropdown-trigger" on-click="_addDataset"></paper-fab>
-                                    </neon-animatable>
-                                </page-slider-controllet>
-                            </div>
-                        </iron-pages>
-                    </paper-card>
-                    <!-- Datalets -->
-                    <paper-card id="datalets" class="full_size_card" style="display:none;" elevation="5">
-                        <datalet-slider-controllet id="datalets_slider"></datalet-slider-controllet>
-                        <postit-container-controllet id="postits_controllet" class="postit"></postit-container-controllet>
-                    </paper-card>
-                    <!-- Info -->
-                    <paper-card id="info" class="full_size_card" style="display:none;" elevation="5">
-                        <info-list-controllet id="info_list_controllet"></info-list-controllet>
-                    </paper-card>
+                    <div id="full_size_container" class="full_size_content">
+
+                        <!-- Explore -->
+                        <paper-card id="explore" class="full_size_card" style="visibility: visible;" elevation="5">
+                            <div class="section_header">{text key="cocreation+room_explore"}</div>
+                            <iframe src="{$documents[0]}?userName={$currentUser['title']}&showControls=true&showLineNumbers=false&pageview=true" style="height: 100%; width: 100%;"></iframe>
+                        </paper-card>
+                        <!-- Ideas -->
+                        <paper-card id="ideas" class="full_size_card" style="visibility: hidden;" elevation="5">
+                            <div class="section_header">{text key="cocreation+room_ideas"}</div>
+                            <iframe src="{$documents[1]}?userName={$currentUser['title']}&showControls=true&showLineNumbers=false&pageview=true" style="height: 100%; width: 100%;"></iframe>
+                        </paper-card>
+                        <!-- Outcome -->
+                        <paper-card id="outcome" class="full_size_card" style="visibility: hidden;" elevation="5">
+                            <div class="section_header">{text key="cocreation+room_outcome"}</div>
+                            <iframe src="{$documents[2]}?userName={$currentUser['title']}&showControls=true&showLineNumbers=false&pageview=true" style="height: 100%; width: 100%;"></iframe>
+                        </paper-card>
+                        <!-- Library -->
+                        <paper-card id="library" class="full_size_card" style="visibility: hidden;" elevation="5">
+                            <paper-tabs id="library_tab" selected="[[library_tab_selected]]" no-bar>
+                                <paper-tab noink on-click="_library_tab_clicked" id="0">{text key="cocreation+room_view_datalibrary"}</paper-tab>
+                                <paper-tab noink on-click="_library_tab_clicked" id="1">{text key="cocreation+room_add_dataset"}</paper-tab>
+                            </paper-tabs>
+                            <iron-pages selected="[[library_tab_selected]]">
+                                <!-- View datalibrary -->
+                                <div id="dataset_library">
+                                    {$datasets_library}
+                                </div>
+                                <!-- Add dataset -->
+                                <div id="add_dataset_container">
+                                    <page-slider-controllet id="slider_dataset">
+                                        <neon-animatable id="pass_1">
+                                            <select-dataset-controllet  style="height: 50vh"
+                                                    id="dataset_selection"
+                                                    datasets='{$datasets_list}'>
+                                            </select-dataset-controllet>
+                                        </neon-animatable>
+                                        <neon-animatable id="pass_2">
+                                            <div id="pass_2_select_data_container">
+                                                <select-data-controllet id="select_data_controllet" data-url=[[dataUrl]]></select-data-controllet>
+                                            </div>
+                                            <paper-fab id="addDataset" icon="add" title='{text key="cocreationep+room_add_dataset"}' class="dropdown-trigger" on-click="_addDataset"></paper-fab>
+                                        </neon-animatable>
+                                    </page-slider-controllet>
+                                </div>
+                            </iron-pages>
+                        </paper-card>
+                        <!-- Datalets -->
+                        <paper-card id="datalets" class="full_size_card" style="visibility: hidden;" elevation="5">
+                            <datalet-slider-controllet id="datalets_slider"></datalet-slider-controllet>
+                            <postit-container-controllet id="postits_controllet" class="postit"></postit-container-controllet>
+                        </paper-card>
+                        <!-- Info -->
+                        <paper-card id="info" class="full_size_card" style="visibility: hidden;" elevation="5">
+                            <info-list-controllet id="info_list_controllet"></info-list-controllet>
+                        </paper-card>
+
+                    </div>
                 </div>
 
              </paper-header-panel>

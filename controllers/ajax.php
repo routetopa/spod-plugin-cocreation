@@ -37,14 +37,14 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
         if($clean['room_type'] == "knowledge")
         {
-            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 0, "explore", rtrim(OW_URL_HOME,"/")  . ":9001" . "/p/explore_room_" .$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 0, "explore", rtrim(OW_URL_HOME,"/") . ":9001" . "/p/explore_room_" .$room->id."_".$randomString);
             COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "ideas",   rtrim(OW_URL_HOME,"/") . ":9001" . "/p/ideas_room_"   .$room->id."_".$randomString);
             COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 2, "outcome", rtrim(OW_URL_HOME,"/") . ":9001" . "/p/outcome_room_" .$room->id."_".$randomString);
         }else{
             //create the sheet for the CoCreation Data room
             //Document for notes related to the dataset
-            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "notes",  rtrim(OW_URL_HOME,"/")   . ":9001" . "/p/notes_room_"  .$room->id."_".$randomString);
-            COCREATION_BOL_Service::getInstance()->addSheetToRoom($room->id, "dataset", rtrim(OW_URL_HOME,"/")   . ":8001" . "/s/dataset_room_".$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "notes",  rtrim(OW_URL_HOME,"/") . ":9001" . "/p/notes_room_"  .$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addSheetToRoom($room->id, "dataset", rtrim(OW_URL_HOME,"/") . ":8001" . "/s/dataset_room_".$room->id."_".$randomString);
             COCREATION_BOL_Service::getInstance()->createMetadataForRoom($room->id);
         }
 
@@ -53,16 +53,20 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         {
             $u = BOL_UserService::getInstance()->findByEmail($user);
             if($u->id != NULL) {
-                COCREATION_BOL_Service::getInstance()->addUserToRoom($room->id, $user, $u->id);
-                $js = "$.post('" .
-                    OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'confirmToJoinToRoom') . "?roomId=" . $room->id . "&memberId=" . $u->id . "',
-                        {}, function (data, status) {
-                           window.location ='" .
-                    str_replace("index/", $room->id,  OW::getRouter()->urlFor($room->type == "knowledge" ? 'COCREATION_CTRL_KnowledgeRoom' : 'COCREATION_CTRL_DataRoom' , 'index')) . "';});";
+                if(!COCREATION_BOL_Service::getInstance()->isMemberInvitedToRoom($u->id, $room->id)) {
+                    COCREATION_BOL_Service::getInstance()->addUserToRoom($room->id, $user, $u->id);
+                    $js = "$.post('" .
+                        OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'confirmToJoinToRoom') . "?roomId=" . $room->id . "&memberId=" . $u->id . "',
+                            {}, function (data, status) {
+                               window.location ='" .
+                        str_replace("index/", $room->id, OW::getRouter()->urlFor($room->type == "knowledge" ? 'COCREATION_CTRL_KnowledgeRoom' : 'COCREATION_CTRL_DataRoom', 'index')) . "';});";
 
-                $message = $clean['invitation_text'] . "<br><br>" . "<span class=\"ow_button\"><input type=\"button\" value=\"Conform to join\" onclick=\"" . $js . "\"></span>";
-                if (OW::getPluginManager()->isPluginActive('mailbox'))
-                   MAILBOX_BOL_ConversationService::getInstance()->createConversation(OW::getUser()->getId(), $u->id, "Join to co-creation room : " . $clean['name'], $message);
+                    $message = $clean['invitation_text'] . "<br><br>" . "<span class=\"ow_button\"><input type=\"button\" value=\"Conform to join\" onclick=\"" . $js . "\"></span>";
+                    if (OW::getPluginManager()->isPluginActive('mailbox'))
+                        MAILBOX_BOL_ConversationService::getInstance()->createConversation(OW::getUser()->getId(), $u->id, "Join to co-creation room : " . $clean['name'], $message);
+                }else{
+                    OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_member_already_added'));
+                }
             }
         }
 
@@ -99,22 +103,47 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         $room = COCREATION_BOL_Service::getInstance()->getRoomById($clean['roomId']);
         foreach($clean['users_value'] as $user){
             $u   = BOL_UserService::getInstance()->findByEmail($user);
-            if(!COCREATION_BOL_Service::getInstance()->isMemberJoinedToRoom($u->id, $room->id)) {
-                COCREATION_BOL_Service::getInstance()->addUserToRoom($room->id, $user, $u->id);
-                $js = "$.post('" .
-                    OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'confirmToJoinToRoom') . "?roomId=" . $room->id . "&memberId=" . $u->id . "',
-                    {}, function (data, status) {
-                       window.location ='" .
-                    str_replace("index/", $room->id, OW::getRouter()->urlFor($room->type == "knowledge" ? 'COCREATION_CTRL_KnowledgeRoom' : 'COCREATION_CTRL_DataRoom', 'index')) . "';});";
+            if(!COCREATION_BOL_Service::getInstance()->isMemberInvitedToRoom($u->id, $room->id)) {
+                if (!COCREATION_BOL_Service::getInstance()->isMemberJoinedToRoom($u->id, $room->id)) {
+                    COCREATION_BOL_Service::getInstance()->addUserToRoom($room->id, $user, $u->id);
+                    $js = "$.post('" .
+                        OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'confirmToJoinToRoom') . "?roomId=" . $room->id . "&memberId=" . $u->id . "',
+                        {}, function (data, status) {
+                           window.location ='" .
+                        str_replace("index/", $room->id, OW::getRouter()->urlFor($room->type == "knowledge" ? 'COCREATION_CTRL_KnowledgeRoom' : 'COCREATION_CTRL_DataRoom', 'index')) . "';});";
 
-                $message = $room->invitationText . "<br><br>" . "<span class=\"ow_button\"><input type=\"button\" value=\"Confirm to join\" onclick=\"" . $js . "\"></span>";
-                if (OW::getPluginManager()->isPluginActive('mailbox'))
-                    MAILBOX_BOL_ConversationService::getInstance()->createConversation(OW::getUser()->getId(), $u->id, "Join to co-creation room : " . $room->name, $message);
+                    $message = $room->invitationText . "<br><br>" . "<span class=\"ow_button\"><input type=\"button\" value=\"Confirm to join\" onclick=\"" . $js . "\"></span>";
+                    if (OW::getPluginManager()->isPluginActive('mailbox'))
+                        MAILBOX_BOL_ConversationService::getInstance()->createConversation(OW::getUser()->getId(), $u->id, "Join to co-creation room : " . $room->name, $message);
+                }
+            }else{
+                OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_member_already_added'));
             }
         }
 
         OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_members_add_successful'));
         $this->redirect(str_replace("index/", $room->id, $room->type == "knowledge" ? OW::getRouter()->urlFor('COCREATION_CTRL_KnowledgeRoom', 'index') : OW::getRouter()->urlFor('COCREATION_CTRL_DataRoom', 'index') ));
+    }
+
+    public function deleteMemberFromRoom()
+    {
+        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        if ($clean == null) {
+            OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'insane_inputs_detected'));
+            exit;
+        }
+
+        COCREATION_BOL_Service::getInstance()->deleteMembersFromRoom($clean['userId']);
+
+        SPODNOTIFICATION_CLASS_EventHandler::getInstance()->emitNotification([
+            "plugin"      => "cocreation",
+            "operation"   => "deleteUser",
+            "user_name"   => BOL_AvatarService::getInstance()->getDataForUserAvatars(array($clean['userId']))[$clean['userId']]['title'],
+            "entity_type" => COCREATION_BOL_Service::ROOM_ENTITY_TYPE]);
+        echo json_encode(array("status" => "ok", "message" => "users has been deleted from this room"));
+        OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_delete_room_user'));
+        //$this->redirect(str_replace("index/", $clean['roomId'], $clean['roomType'] == "knowledge" ? OW::getRouter()->urlFor('COCREATION_CTRL_KnowledgeRoom', 'index') : OW::getRouter()->urlFor('COCREATION_CTRL_DataRoom', 'index') ));
+        exit;
     }
 
     public function addDatasetToRoom()
@@ -134,10 +163,10 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
 
         echo json_encode(array("status" => "ok", "message" => "dataset successful created in the current room"));
-        SPODNOTIFICATION_CLASS_EventHandler::getInstance()->emitNotification(["plugin" => "cocreation",
-                                                                              "operation" => "addDatasetToRoom",
+        SPODNOTIFICATION_CLASS_EventHandler::getInstance()->emitNotification(["plugin"      => "cocreation",
+                                                                              "operation"   => "addDatasetToRoom",
                                                                               "entity_type" => COCREATION_BOL_Service::ROOM_ENTITY_TYPE,
-                                                                              "entity_id" => $clean['roomId']]);
+                                                                              "entity_id"   => $clean['roomId']]);
         exit;
 
     }
@@ -434,6 +463,37 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
     }
 
     /* AND */
+    public function getDatasetById()
+    {
+        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        if ($clean == null){
+            OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'insane_user_email_value'));
+            exit;
+        }
+
+        header("Access-Control-Allow-Origin: *");
+        $dataset = COCREATION_BOL_Service::getInstance()->getDatasetById($clean['id']);
+
+        $dataset->owners = substr($dataset->owners, 1, -1);
+        $dataset->owners = str_replace('\\', "", $dataset->owners);
+        $users = json_decode($dataset->owners);
+        $avatars = array();
+
+        foreach ($users as $user)
+        {
+            $avatar = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($user));
+            $avatars[] = array("src" => $avatar[$user]["src"], "href" => $avatar[$user]["url"], "user" => $avatar[$user]["title"]);
+        }
+
+        $room = COCREATION_BOL_Service::getInstance()->getRoomById($dataset->roomId);
+
+        echo json_encode(array('resourceUrl' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getDatasetByRoomIdAndVersion') . "?room_id=" . $dataset->roomId . "&version=" . $dataset->version,
+            "users"=>$avatars,
+            "metas"=>$dataset->common_core_required_metadata,
+            "roomName" => $room->name ? $room->name : OW::getLanguage()->text('cocreation', 'deteted_room')));
+        exit;
+    }
+
     public function getDatasetByRoomIdAndVersion()
     {
         $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
@@ -469,7 +529,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
         foreach ($datasets as $dataset)
         {
-            $dataset->owners = substr($dataset->owners, 1, -1);
+            /*$dataset->owners = substr($dataset->owners, 1, -1);
             $dataset->owners = str_replace('\\', "", $dataset->owners);
             $users = json_decode($dataset->owners);
             $avatars = array();
@@ -479,7 +539,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
                 $avatar = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($user));
                 $avatars[] = array("src" => $avatar[$user]["src"], "href" => $avatar[$user]["url"], "user" => $avatar[$user]["title"]);
             }
-
+            */
             $room = COCREATION_BOL_Service::getInstance()->getRoomById($dataset->roomId);
             $common_core_required_metadata = json_decode($dataset->common_core_required_metadata);
 
@@ -498,12 +558,12 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             }
 
             $data[] = array(
-                'resource_name' => $resource_name,
-                'url' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getDatasetByRoomIdAndVersion') . "?room_id=" . $dataset->roomId . "&version=" . $dataset->version,
-                'metas' => $dataset->common_core_required_metadata,
-                'users' => $avatars,
+                'name' => $resource_name,
+                'id' => $dataset->id,
+                'p' => 'SPOD_X',
                 'version' => $dataset->version
             );
+
         }
 
         header("Access-Control-Allow-Origin: *");

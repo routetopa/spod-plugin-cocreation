@@ -314,9 +314,9 @@ class COCREATION_BOL_Service
         COCREATION_BOL_RoomMemberDao::getInstance()->save($roomMember);
     }
 
-    public function deleteMembersFromRoom($roomId){
+    public function deleteMembersFromRoom($userId){
         $example = new OW_Example();
-        $example->andFieldEqual('roomId', $roomId);
+        $example->andFieldEqual('userId', $userId);
         COCREATION_BOL_RoomMemberDao::getInstance()->deleteByExample($example);
     }
 
@@ -330,6 +330,15 @@ class COCREATION_BOL_Service
 
     public function memberJoinToRoom($memberId, $roomId){
         COCREATION_BOL_RoomMemberDao::getInstance()->updateJoin($memberId, $roomId);
+    }
+
+    public function isMemberInvitedToRoom($memberId, $roomId) {
+        $example = new OW_Example();
+        $example->andFieldEqual('userId', intval($memberId));
+        $example->andFieldEqual('roomId', intval($roomId));
+        $result = COCREATION_BOL_RoomMemberDao::getInstance()->findListByExample($example);
+        if(count($result) == 0) return false;
+        else return true;
     }
 
     public function isMemberJoinedToRoom($memberId, $roomId){
@@ -521,8 +530,21 @@ class COCREATION_BOL_Service
 
     public function getAllDatasets()
     {
-        $sql = "SELECT * FROM ". OW_DB_PREFIX ."cocreation_dataset order by roomId DESC, version DESC";
+        $sql = "SELECT t1.id, t1.owners, t1.roomId, t1.datasetId, t2.ownerId, t1.common_core_required_metadata, t1.version, t1.timeStamp
+                FROM ". OW_DB_PREFIX ."cocreation_dataset as t1 LEFT JOIN ". OW_DB_PREFIX ."cocreation_room as t2 ON t2.id = t1.roomId 
+                ORDER BY roomId DESC, version DESC;";
         return OW::getDbo()->queryForObjectList($sql, 'COCREATION_BOL_Dataset');
+    }
+
+//    public function getAllDatasets()
+//    {
+//        $sql = "SELECT * FROM ". OW_DB_PREFIX ."cocreation_dataset order by roomId DESC, version DESC";
+//        return OW::getDbo()->queryForObjectList($sql, 'COCREATION_BOL_Dataset');
+//    }
+
+    public function getDatasetById($datasetId)
+    {
+        return COCREATION_BOL_DatasetDao::getInstance()->findById($datasetId);
     }
 
     public function getDatasetByRoomIdAndVersion($roomId, $version)

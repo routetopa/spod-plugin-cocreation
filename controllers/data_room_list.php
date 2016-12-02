@@ -37,7 +37,7 @@ class COCREATION_CTRL_DataRoomList extends OW_ActionController
             foreach ($users as $user)
             {
                 $avatar = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($user));
-                $avatars[] = array("src" => $avatar[$user]["src"], "href" => $avatar[$user]["url"]);
+                $avatars[] = array("src" => $avatar[$user]["src"], "href" => $avatar[$user]["url"], "isOwner" => (($user == $data->ownerId) ? true : false));
             }
 
             $room = COCREATION_BOL_Service::getInstance()->getRoomById($data->roomId);

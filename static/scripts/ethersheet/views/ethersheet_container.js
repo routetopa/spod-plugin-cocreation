@@ -74,7 +74,7 @@ var EthersheetContainer = module.exports = View.extend({
       $('.menu-container').hide();
       var container = $el.attr('id').replace('icon', 'menu-container');
       $("#" + container).show();
-      if(this.$panel_0.width() <= 0){
+      if(this.$panel_0.width() <= 1){
         this.$menu.animate({'right':'0px'},speed);
         this.$panel_0.animate({'width':'258px'},speed);
         this.$panel_1.animate({'margin-left':'265px'},speed);

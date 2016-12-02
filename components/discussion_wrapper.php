@@ -19,7 +19,7 @@ class COCREATION_CMP_DiscussionWrapper extends OW_Component
         $commentsParams = new BASE_CommentsParams('cocreation', COCREATION_BOL_Service::ROOM_ENTITY_TYPE);
         $commentsParams->setEntityId($roomId);
         $commentsParams->setDisplayType(BASE_CommentsParams::DISPLAY_TYPE_WITH_LOAD_LIST);
-        $commentsParams->setCommentCountOnPage(5);
+        $commentsParams->setCommentCountOnPage(0);
         $commentsParams->setOwnerId((OW::getUser()->getId()));
         $commentsParams->setAddComment(true);
         $commentsParams->setWrapInBox(false);

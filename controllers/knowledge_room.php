@@ -65,6 +65,8 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
                 array_push($members, $avatar);
             }
 
+            $this->assign('members', $members);
+
             $info                 = new stdClass();
             $info->name           = $room->name;
             $info->subject        = $room->subject;
@@ -106,7 +108,7 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
             }
 
             $this->assign('components_url', SPODPR_COMPONENTS_URL);
-            $this->assign('datasets_list', ODE_BOL_Service::getInstance()->getSettingByKey('openwall_dataset_list')->value);
+            $this->assign('datasets_list', ODE_BOL_Service::getInstance()->getSettingByKey('ode_datasets_list')->value);
 
             $js = UTIL_JsGenerator::composeJsString('
                 ODE.current_room_url                     = {$current_room_url}
@@ -116,6 +118,7 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
                 ODE.ajax_coocreation_room_delete_datalet = {$ajax_coocreation_room_delete_datalet}
                 ODE.ajax_coocreation_room_get_datalets   = {$ajax_coocreation_room_get_datalets}
                 ODE.ajax_coocreation_room_add_postit     = {$ajax_coocreation_room_add_postit}
+                ODE.ajax_coocreation_room_delete_user    = {$ajax_coocreation_room_delete_user}
                 ODE.numDataletsInCocreationRooom         = {$numDataletsInRoom}
                 ODE.pluginPreview                        = "cocreation"
                 SPODPUBLICROOM = {}
@@ -135,6 +138,7 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
                 'ajax_coocreation_room_delete_datalet' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'deleteDataletFromRoom'),
                 'ajax_coocreation_room_get_datalets'   => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getRoomDatalets')    . "?roomId="  . $params['roomId'],
                 'ajax_coocreation_room_add_postit'     => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'addPostitToDatalet') . "?roomId="  . $params['roomId'],
+                'ajax_coocreation_room_delete_user'    => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'deleteMemberFromRoom'),
                 'numDataletsInRoom'                    => count(COCREATION_BOL_Service::getInstance()->getDataletsByRoomId($params['roomId'])),
                 'roomId'                               => $params['roomId'],
                 'entity_type'                          => COCREATION_BOL_Service::ROOM_ENTITY_TYPE,

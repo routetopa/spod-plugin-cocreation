@@ -43,6 +43,23 @@ window.addEventListener('datalet-slider-controllet_delete', function (e) {
     }
 });
 
+window.addEventListener('info-list-controllet_delete_user', function(e){
+    $.post(ODE.ajax_coocreation_room_delete_user,
+        {
+            userId:   e.detail.userId,
+            roomId:   COCREATION.roomId,
+            roomType: COCREATION.room_type
+        },
+        function (data, status) {
+            data = JSON.parse(data);
+            if (data.status == "ok") {
+            } else {
+                OW.info(OW.getLanguageText('cocreation', 'user_delete_fail'));
+            }
+        }
+    );
+});
+
 room.init = function(){
     var socket = io("http://" + window.location.hostname +":3000");
     socket.on('realtime_message_' + COCREATION.entity_type + "_" + COCREATION.roomId, function(rawData) {
@@ -94,6 +111,10 @@ room.init = function(){
                 var redirect =  window.location.pathname.split("/");
                 alert(OW.getLanguageText('cocreation', 'current_room_deleted'));
                 window.location.href = window.location.origin + "/cocreation";
+                break;
+            case "deleteUser":
+                room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', rawData.user_name + ' user_successfully_deleted');
+                room.$.syncToast.show();
                 break;
         }
     });

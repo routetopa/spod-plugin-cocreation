@@ -87,56 +87,56 @@ room.splitScreenActive          = false;
 room.current_selected_container = null;
 
 room.handleSelectUIMode = function(mode){
-    if(!room.splitScreenActive) room.$.spreadsheet.style.display = "none";
+    if(!room.splitScreenActive) room.$.spreadsheet.style.visibility = "hidden";
     switch(mode){
         case 'dataset':
-            room.$.spreadsheet.style.display = "block";
-            room.$.metadata.style.display    = 'none';
-            room.$.notes.style.display       = 'none';
-            room.$.discussion.style.display  = 'none';
-            room.$.datalets.style.display    = 'none';
-            room.$.info.style.display        = 'none';
+            room.$.spreadsheet.style.visibility = "visible";
+            room.$.metadata.style.visibility    = 'hidden';
+            room.$.notes.style.visibility       = 'hidden';
+            room.$.discussion.style.visibility  = 'hidden';
+            room.$.datalets.style.visibility    = 'hidden';
+            room.$.info.style.visibility        = 'hidden';
             break;
         case 'metadata':
             room.current_selected_container = room.$.metadata;
-            room.$.metadata.style.display    = 'block';
-            room.$.notes.style.display       = 'none';
-            room.$.discussion.style.display  = 'none';
-            room.$.datalets.style.display    = 'none';
-            room.$.info.style.display        = 'none';
+            room.$.metadata.style.visibility    = 'visible';
+            room.$.notes.style.visibility       = 'hidden';
+            room.$.discussion.style.visibility  = 'hidden';
+            room.$.datalets.style.visibility    = 'hidden';
+            room.$.info.style.visibility        = 'hidden';
             break;
         case 'notes':
             room.current_selected_container = room.$.notes;
-            room.$.metadata.style.display    = 'none';
-            room.$.notes.style.display       = 'block';
-            room.$.discussion.style.display  = 'none';
-            room.$.datalets.style.display    = 'none';
-            room.$.info.style.display        = 'none';
+            room.$.metadata.style.visibility    = 'hidden';
+            room.$.notes.style.visibility       = 'visible';
+            room.$.discussion.style.visibility  = 'hidden';
+            room.$.datalets.style.visibility    = 'hidden';
+            room.$.info.style.visibility        = 'hidden';
             break;
         case 'discussion':
             room.current_selected_container = room.$.discussion;
-            room.$.metadata.style.display    = 'none';
-            room.$.notes.style.display       = 'none';
-            room.$.discussion.style.display  = 'block';
-            room.$.datalets.style.display    = 'none';
-            room.$.info.style.display        = 'none';
+            room.$.metadata.style.visibility    = 'hidden';
+            room.$.notes.style.visibility       = 'hidden';
+            room.$.discussion.style.visibility  = 'visible';
+            room.$.datalets.style.visibility    = 'hidden';
+            room.$.info.style.visibility        = 'hidden';
             break;
         case 'datalets':
             room.current_selected_container = room.$.datalets;
-            room.$.metadata.style.display    = 'none';
-            room.$.notes.style.display       = 'none';
-            room.$.discussion.style.display  = 'none';
-            room.$.datalets.style.display    = 'block';
-            room.$.info.style.display        = 'none';
+            room.$.metadata.style.visibility    = 'hidden';
+            room.$.notes.style.visibility       = 'hidden';
+            room.$.discussion.style.visibility  = 'hidden';
+            room.$.datalets.style.visibility    = 'visible';
+            room.$.info.style.visibility        = 'hidden';
             room.$.datalets_slider._refresh();
             break;
         case 'info':
             room.current_selected_container  = room.$.info;
-            room.$.metadata.style.display    = 'none';
-            room.$.notes.style.display       = 'none';
-            room.$.discussion.style.display  = 'none';
-            room.$.datalets.style.display    = 'none';
-            room.$.info.style.display        = 'block';
+            room.$.metadata.style.visibility    = 'hidden';
+            room.$.notes.style.visibility       = 'hidden';
+            room.$.discussion.style.visibility  = 'hidden';
+            room.$.datalets.style.visibility    = 'hidden';
+            room.$.info.style.visibility        = 'visible';
             break;
         case 'split':
             room.$.split_checkbox.checked = !room.$.split_checkbox.checked;
@@ -151,12 +151,12 @@ room.handleSplitScreen = function(e){
    if(room.splitScreenActive){//active split screen
        room.$.dataset_menu_item.disabled = true;
 
-       room.$.spreadsheet.style.display = "block";
-       room.$.metadata.style.display    = 'none';
-       room.$.notes.style.display       = 'none';
-       room.$.discussion.style.display  = 'none';
-       room.$.datalets.style.display    = 'none';
-       room.$.info.style.display        = 'none';
+       room.$.spreadsheet.style.visibility = "visible";
+       room.$.metadata.style.visibility    = 'hidden';
+       room.$.notes.style.visibility       = 'hidden';
+       room.$.discussion.style.visibility  = 'hidden';
+       room.$.datalets.style.visibility    = 'hidden';
+       room.$.info.style.visibility        = 'hidden';
 
        room.$.datalets_slider._refresh();
 
@@ -164,7 +164,7 @@ room.handleSplitScreen = function(e){
            room.current_selected_container  = room.$.metadata;
            room.$.section_menu.selected     = 1;
        }
-       room.current_selected_container.style.display = "block";
+       room.current_selected_container.style.visibility = "visible";
 
        $(room.$.spreadsheet).addClass("split_size_card_left");
        $(room.$.metadata).addClass("split_size_card_right");
@@ -177,12 +177,12 @@ room.handleSplitScreen = function(e){
        room.$.section_menu.selected      = 0;
        room.current_selected_container   = null;
 
-       room.$.spreadsheet.style.display = "block";
-       room.$.metadata.style.display    = 'none';
-       room.$.notes.style.display       = 'none';
-       room.$.discussion.style.display  = 'none';
-       room.$.datalets.style.display    = 'none';
-       room.$.info.display              = 'none';
+       room.$.spreadsheet.style.visibility = "visible";
+       room.$.metadata.style.visibility    = 'hidden';
+       room.$.notes.style.visibility       = 'hidden';
+       room.$.discussion.style.visibility  = 'hidden';
+       room.$.datalets.style.visibility    = 'hidden';
+       room.$.info.visibility              = 'hidden';
 
        $(room.$.spreadsheet).removeClass("split_size_card_left");
        $(room.$.metadata).removeClass("split_size_card_right");

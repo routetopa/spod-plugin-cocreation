@@ -62,10 +62,11 @@
 
 <script src="{$components_url}locales/controllet_ln.js" type="text/javascript"></script>
 <script src="{$components_url}locales/paper_card_controllet_ln.js" type="text/javascript"></script>
+<script src="{$components_url}locales/datalet-slider_ln.js" type="text/javascript"></script>
+<script src="{$components_url}locales/metadata_list_ln.js" type="text/javascript"></script>
 <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 
 <style is="custom-style">
-
     .separator
     {
         height: 1px;
@@ -109,7 +110,7 @@
     {
         --iron-icon-height : 32px;
         --iron-icon-width : 32px;
-        --iron-icon-fill-color: #9E9E9E;
+        /*--iron-icon-fill-color: #9E9E9E;*/
     }
 
 
@@ -144,7 +145,7 @@
         -webkit-transform: rotate(-90deg);
         -moz-transform: rotate(-90deg);
 
-        --iron-icon-fill-color: #000000;
+        --iron-icon-fill-color: #00BCD4;
     }
 
     iron-icon#screen_2
@@ -155,7 +156,7 @@
         -webkit-transform: rotate(90deg);
         -moz-transform: rotate(90deg);
 
-        --iron-icon-fill-color: #000000;
+        --iron-icon-fill-color: #00BCD4;
     }
 
     paper-item-body
@@ -195,17 +196,29 @@
     .hader_title_container
     {
         float:left;
+        max-width: calc(50% - 120px);
+        overflow: hidden;
     }
 
     .header_title
     {
         line-height: 56px;
         font-size: 18px;
+
+        max-width: 448px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        float: left;
     }
 
     .right_floater
     {
-        float: right
+        float: right;
+        height: 56px;
+        overflow-y: auto;
+        max-width: 50%;
     }
 
     .hader_title_container > paper-button
@@ -213,7 +226,7 @@
         --paper-button:{
             background: #00BCD4;
             height: 40px;
-            margin-left: 16px;
+            margin: 8px 0 8px 24px;
         }
     }
 
@@ -224,6 +237,8 @@
 
     .full_size_content
     {
+        position: relative;
+
         height: 100%;
         width: 100%;
     }
@@ -347,6 +362,10 @@
     }
 
     .full_size_card{
+        position: absolute;
+        top: 0;
+        left: 0;
+
         margin:32px 32px 32px 32px;
         height: calc(100% - 64px);
         width: calc(100% - 64px);
@@ -357,12 +376,15 @@
         margin:32px 16px 32px 32px;
         height: calc(100% - 64px);
         width: calc(50% - 48px);
-        float:left;
-        
+        /*float:left;*/
+        right: inherit;
+        left: 0px;
     }
     
     .split_size_card_right{
-        float: right;
+        left: inherit;
+        right: 0px;
+        /*float: right;*/
         margin:32px 32px 32px 16px;
         height: calc(100% - 64px);
         width: calc(50% - 48px);
@@ -456,11 +478,11 @@
                     <div class="header_container">
 
                         <div class="hader_title_container">
-                            <span class="header_title">{$room->name}</span>
+                            <div class="header_title" title="{$room->name}">{$room->name}</div>
                             <paper-button raised title='{text key="cocreation+room_publish_dataset_tooltip"}' on-tap="_publishDataset">{text key="cocreation+publish_dataset_button_label"}</paper-button>
                         </div>
 
-                        <div class="right_floater">
+                        <div style="float: right">
                             {if $ownerUserActive}
                                <paper-fab icon="add" onclick="room.inviteNewUsers();" title='{text key="cocreation+room_invite_new_members_button"}'></paper-fab>
                             {/if}
@@ -469,7 +491,9 @@
                         <div class="right_floater">
                             <div class="ow_avatar style-scope" title="{$owner['title']}"><a class="style-scope" href="{$owner['url']}"><img alt="" style="max-width: 100%;" class="style-scope dataset-table-controllet" src="{$owner['src']}"></a></div>
                             {foreach $members as $member}
-                            <div class="ow_avatar style-scope" title="{$member['title']}"><a class="style-scope" href="{$member['url']}"><img alt="" style="max-width: 100%;" class="style-scope dataset-table-controllet" src="{$member['src']}"></a></div>
+                                {if $member['isJoined']}
+                                    <div class="ow_avatar style-scope" title="{$member['title']}"><a class="style-scope" href="{$member['url']}"><img alt="" style="max-width: 100%;" class="style-scope dataset-table-controllet" src="{$member['src']}"></a></div>
+                                {/if}
                             {/foreach}
                         </div>
 
@@ -480,32 +504,32 @@
                 <div class="content_container">
                     <div id="full_size_container" class="full_size_content">
                         <!-- Discussion -->
-                        <paper-card id="discussion" class="full_size_card" style="display:none;" elevation="5">
+                        <paper-card id="discussion" class="full_size_card" style="visibility:hidden;" elevation="5">
                             <div class="screen_header">{text key="cocreation+room_discussion_tab_label"}</div>
                             <div id="discussion_container" style="overflow-y: scroll;overflow-x: hidden;height: calc(100% - 45px)">
                                 {$comments}
                             </div>
                         </paper-card>
                         <!-- Dataset -->
-                        <paper-card id="spreadsheet" class="full_size_card" elevation="5">
+                        <paper-card id="spreadsheet" class="full_size_card" style="visibility:visible;" elevation="5">
                             <div class="screen_hidden_header">{text key="cocreation+room_dataset_tab_label"}</div>
                             <iframe src="{$spreadsheet}" style="height: 100%; width: 100%;"></iframe>
                         </paper-card>
                         <!-- Metadata -->
-                        <paper-card id="metadata" class="full_size_card" style="display:none;" elevation="5">
+                        <paper-card id="metadata" class="full_size_card" style="visibility:hidden;" elevation="5">
                             <metadata-list-controllet id="metadata_component"></metadata-list-controllet>
                         </paper-card>
                         <!-- Notes -->
-                        <paper-card id="notes" class="full_size_card" style="display:none;" elevation="5">
+                        <paper-card id="notes" class="full_size_card" style="visibility:hidden;" elevation="5">
                             <div class="screen_header">{text key="cocreation+room_notes_tab_label"}</div>
                             <iframe src="{{$notes}}?userName={{$currentUser['title']}}&showControls=true&showLineNumbers=false&pageview=true" style="height: 100%; width: 100%;"></iframe>
                         </paper-card>
                         <!-- Datalets -->
-                        <paper-card id="datalets" class="full_size_card" style="display:none;" elevation="5">
+                        <paper-card id="datalets" class="full_size_card" style="visibility:hidden;" elevation="5">
                             <datalet-slider-controllet id="datalets_slider"></datalet-slider-controllet>
                         </paper-card>
                         <!-- Info -->
-                        <paper-card id="info" class="full_size_card" style="display:none;" elevation="5">
+                        <paper-card id="info" class="full_size_card" style="visibility:hidden;" elevation="5">
                             <info-list-controllet id="info_list_controllet"></info-list-controllet>
                         </paper-card>
                     </div>
