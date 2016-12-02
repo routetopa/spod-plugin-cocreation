@@ -10,6 +10,8 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
             throw new AuthenticateException();
         }
 
+        OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('spodtchat')->getStaticJsUrl() . 'vendor/livequery-1.1.1/jquery.livequery.js');
+
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl() . 'perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js');
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl() . 'cocreation.js');
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl() . 'cocreation-room.js');
@@ -136,7 +138,9 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                'roomInfo'                                  => json_encode($info),
         ));
         OW::getDocument()->addOnloadScript($js);
-        OW::getDocument()->addOnloadScript("data_room.init();");
+        OW::getDocument()->addOnloadScript("data_room.init(); $('#comments-list-cocreation_room_entity166803').livequery( function(e){
+
+        });");
 
         OW::getLanguage()->addKeyForJs('cocreation', 'confirm_delete_datalet');
         OW::getLanguage()->addKeyForJs('cocreation', 'room_delete_fail');
