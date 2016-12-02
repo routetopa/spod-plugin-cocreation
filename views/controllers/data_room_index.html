@@ -196,7 +196,11 @@
     .hader_title_container
     {
         float:left;
-        max-width: calc(50% - 120px);
+        max-width: calc(50% - 32px);
+        height: 56px;
+        overflow: hidden;
+        /*background: red;*/
+        /*max-width: calc(50% - 64px);*/
         overflow: hidden;
     }
 
@@ -218,7 +222,26 @@
         float: right;
         height: 56px;
         overflow-y: auto;
-        max-width: 50%;
+        max-width: calc(50% - 32px);
+        /*background: red;*/
+
+    }
+
+    #right_floater::-webkit-scrollbar-track
+    {
+        background-color: #00BCD4;
+    }
+
+    #right_floater::-webkit-scrollbar
+    {
+        width: 8px;
+        height: 8px;
+    }
+
+    #right_floater::-webkit-scrollbar-thumb
+    {
+        border-radius: 8px;
+        background-color:  #FFFFFF;
     }
 
     .hader_title_container > paper-button
@@ -390,7 +413,24 @@
         width: calc(50% - 48px);
     }
 
-    /*end gg style/
+    /*end gg style*/
+
+    div.owner_badge {
+        font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 12px;
+        line-height: 18px;
+        font-weight: 700;
+        color: white;
+        background-color: #00BCD4;
+        /*opacity: 0.9;*/
+        position: absolute;
+        bottom: 4px;
+        right: 0;
+        height: 16px;
+        width: 56px;
+        text-align: center;
+    }
+
 
 </style>
 <template id="data_room" is="dom-bind">
@@ -488,8 +528,8 @@
                             {/if}
                         </div>
 
-                        <div class="right_floater">
-                            <div class="ow_avatar style-scope" title="{$owner['title']}"><a class="style-scope" href="{$owner['url']}"><img alt="" style="max-width: 100%;" class="style-scope dataset-table-controllet" src="{$owner['src']}"></a></div>
+                        <div id="right_floater" class="right_floater">
+                            <div class="ow_avatar style-scope" title="{$owner['title']}"><div class="owner_badge">OWNER</div><a class="style-scope" href="{$owner['url']}"><img alt="" style="max-width: 100%;" class="style-scope dataset-table-controllet" src="{$owner['src']}"></a></div>
                             {foreach $members as $member}
                                 {if $member['isJoined']}
                                     <div class="ow_avatar style-scope" title="{$member['title']}"><a class="style-scope" href="{$member['url']}"><img alt="" style="max-width: 100%;" class="style-scope dataset-table-controllet" src="{$member['src']}"></a></div>

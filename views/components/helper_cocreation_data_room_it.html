@@ -65,17 +65,26 @@
     .section-title{
         font-size: 22px; padding-top: 18px; color: #888;margin-left: 20px;
     }
+
+    .iron-icon-8 {
+        fill: #00BCD4;;
+
+    }
+    .paper-button-0 {
+        height: 20px;
+        margin-left: 16px;
+    }
 </style>
 
 <div class="layout vertical">
 
     <div class="tall">
-        <div class="title">Cocreation Data Room helper</div>
+        <div class="title">Helper per la stanza di Cocreazione dei dati</div>
         <div class="description">
-            Questa  stanza permette al gruppo di utenti di collaborare su di  un foglio di lavoro condiviso , per creare un dataset.
+            Questa  stanza permette al gruppo di utenti di collaborare su di  un foglio di lavoro condiviso per creare un dataset.
             Il processo è supportato scrivendo note condivise (con un modello che aiuta la comunità a dare tutte le informazioni rilevanti sul processo) e metadati condivisi,
-            che sono pubblicati con il dataset. Inoltre, quando il dataset  viene pubblicato per gli altri utenti SPOD, diverse euristiche di convalida vengono utilizzati per
-            mostrare le avvertenze sui campi apparentemente sbagliate. Quando  sarà pubblicato, il dataset  può essere utilizzato (nel  tab “Dataset cocreati” nel primo step   della controllet )
+            che sono pubblicati con il dataset. Inoltre, quando il dataset  viene pubblicato per gli altri utenti SPOD, diverse euristiche di convalida vengono utilizzate per
+            mostrare le avvertenze sui campi apparentemente sbagliate. Quando  sarà pubblicato, il dataset  può essere utilizzato (nel tab “Dataset cocreati” nel primo step della controllet )
             da tutti gli utenti SPOD nelle loro discussioni.
         </div>
     </div>
@@ -88,22 +97,50 @@
                 <div class="cell">
                     <div class="horizontal layout cell">
                         <div class="section-number">1</div>
-                        <div class="section-title">Features</div>
+                        <div class="section-title">Caratteristiche della stanza</div>
                     </div>
                     <div>
-                        Caratteristiche della stanza:
                         <ul class="cell-list">
-                            <li>
-                                La scheda <b>Dataset</b> presenta un foglio di calcolo condiviso  per inserire i dati, importare ed esportare un documento nel formato CSV.
+                            <li><paper-icon-button id="publish_dataset_button"  icon="image:grid-on" style='color: #4CAF50' ></paper-icon-button>
+                                 <b>Dataset</b> presenta un foglio di calcolo condiviso  per inserire i dati, importare ed esportare un documento nel formato CSV.
                             </li>
                             <li>
-                                Nella scheda <b>Note</b> si possono inserire note al dataset (ad esempio fonti, bibliografie, etc).
+                                <paper-icon-button   icon="maps:local-offer" style="color:#FF5722;" ></paper-icon-button>
+                                <b>Metadata</b>  presenta una scheda per  inserire i metadati per il dataset.
                             </li>
                             <li>
-                                Nella scheda <b>Metadata</b> si inseriscono  i metadata, importanti per il datasets che saranno pubblicati con il dataset.
+                                <paper-icon-button   icon="description" style="color: #2196F3;" ></paper-icon-button>
+                                 <b>Note</b> è un documento per aggiungere note al dataset (ad esempio fonti, bibliografie, etc).
                             </li>
                             <li>
-                                Una stanza di discussioni e notifiche: Una stanza di discussione è disponibile con notifiche per i messaggi ricevuti e ancora non letti.
+                                <paper-icon-button  icon="communication:forum" style="color: #212121;" ></paper-icon-button>
+                                Uno spazio per le discussioni è disponibile con notifiche per i messaggi ricevuti e ancora non letti.
+                            </li>
+                            <li>
+                                <paper-icon-button   icon="assessment" style="color: #212121;" ></paper-icon-button>
+                                Si possono creare visualizzazioni, cioè grafici (chiamati datalets).
+                            </li>
+                            <li>
+                                <paper-icon-button   icon="info" style="color: #212121;" ></paper-icon-button>
+                                Si possono visualizzare dettagli della stanza (ad esempio, nome, descrizione etc. della stanza)
+                            </li>
+                            <li>
+                                <iron-icon id="screen_1" icon="av:airplay" class="x-scope iron-icon-8"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" class="style-scope iron-icon" style="pointer-events: none; display: block; width: 100%; height: 100%;">
+                                    <g class="style-scope iron-icon"><path d="M6 22h12l-6-6zM21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4v-2H3V5h18v12h-4v2h4c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" class="style-scope iron-icon"></path></g></svg>
+                                </iron-icon>
+                                <iron-icon id="screen_2" icon="av:airplay" class="x-scope iron-icon-8" style="color: #00BCD4;" >
+                                    <svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" class="style-scope iron-icon" style="pointer-events: none; display: block; width: 100%; height: 100%;"><g class="style-scope iron-icon"><path d="M6 22h12l-6-6zM21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4v-2H3V5h18v12h-4v2h4c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" class="style-scope iron-icon"></path></g></svg>
+                                </iron-icon>
+                                Si può scegliere il tipo di visualizzazione, cioè si può visualizzare una funzionalità alla volta (ad esempio solo il foglio di calcolo),
+                                oppure due funzionalità nello stesso tempo (ad esempio il foglio di calcolo e la discussione).
+                            </li>
+                            <li>
+                                <paper-icon-button   icon="add" style="color: #00BCD4;" ></paper-icon-button>
+                                Nuovi utenti possono essere invitati alla stanza.
+                            </li>
+                            <li>
+                                <paper-button raised="" tabindex="0" animated="" aria-disabled="false" elevation="1" class="x-scope paper-button-0">Pubblica il dataset su SPOD  </paper-button>
+                                Pubblicazione del dataset creato per tutti gli utenti di SPOD.
                             </li>
                         </ul>
                         </p>
@@ -120,23 +157,30 @@
                 <div class="cell">
                     <div class="horizontal layout cell">
                         <div class="section-number">2</div>
-                        <div class="section-title">A quick tour</div>
+                        <div class="section-title">Una guida rapida</div>
                     </div>
                     <div>
                         <p>
-                            Una guida veloce per la creazione e pubblicazione di un datatset:
+                            Creazione e pubblicazione di un dataset:
                         <ol>
-                            <li>1. Create a dataset
+                            <li>1. <i> Creare un dataset nel foglio di calcolo: </i>
                                 <ol style="list-style-type: lower-alpha; padding-bottom: 0;">
-                                    <li style="margin-left:2em">Creare (o importare) un dataset in collaborazione</li>
-                                    <li style="margin-left:2em; padding-bottom: 0;"> Aggiungere note al dataset (ad es. Fonti etc.)</li>
-                                    <li style="margin-left:2em; padding-bottom: 0;"> Aggiungere i metadata al dataset (come titolo, descrizione, etichette etc..) per facilitare la ricerca</li>
-                                    <li style="margin-left:2em; padding-bottom: 0;">  Il dataset creato può essere visualizzato in un grafico (datalet)</li>
+                                    <li style="margin-left:2em"> Creare (o importare) un nuovo dataset in collaborazione</li>
+                                    <li style="margin-left:2em; padding-bottom: 0;"> Aggiungere le note al dataset (ad es. fonti etc.)</li>
+                                    <li style="margin-left:2em; padding-bottom: 0;"> Aggiungere i metadati al dataset (come titolo, descrizione, etichette etc..) per facilitare la ricerca </li>
+                                    <li style="margin-left:2em; padding-bottom: 0;"> Il dataset creato può essere visualizzato in un grafico (datalet)</li>
                                 </ol>
                             </li>
-                            <li> 2.Pubblica il  dataset (<paper-icon-button id="publish_dataset_button"  icon="editor:publish"></paper-icon-button>) per tutti gli utenti di SPOD per renderlo
-                                disponibile per creare una datalet  per discussion nei modi tradizionali (<!--il bottone (<paper-fab mini icon="assessment" class="assessment"> </paper-fab>)-->
-                                    presente in Novità, nelle stanze di discussione dell’ Agora, etc). Si noti che ogni volta che lo stesso dataset viene pubblicato di nuovo, viene creata una nuova versione.
+                            <br>
+                            <li> 2. <i>Pubblica il dataset: </i></br>
+                                Clicca sul pulsante <paper-button raised="" tabindex="0" animated="" aria-disabled="false" elevation="1" class="x-scope paper-button-0">Pubblica il dataset su SPOD
+                                   </paper-button>   per mettere a disposizione il  nuovo dataset creato a tutti gli utenti di SPOD e per renderlo
+                                disponibile per creare una datalet  per discussioni nei modi tradizionali,
+                                cioè si potrà condividere sulla pagina  Novità, nelle stanze di discussione dell’ Agora, etc. Si noti che ogni volta che lo stesso dataset viene pubblicato di nuovo, viene creata una nuova versione.
+                            </li>
+                           <br>
+                            <li> 3. <i> Visualizzazione di grafici con il dataset creato:</i>  </br>
+                                Nella controllet della piattaforma di SPOD , nella sezione "DATASET COCREATI",  saranno presenti i dataset creati,
                             </li>
                         </ol>
                         </p>
