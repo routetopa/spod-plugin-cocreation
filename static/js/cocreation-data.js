@@ -17,8 +17,7 @@ $(document).ready(function() {
             );
         }
     });*/
-
-    window.addEventListener('metadata-list-controllet_update-metadata', function(e){
+   window.addEventListener('metadata-list-controllet_update-metadata', function(e){
         var metadata = JSON.parse(e.detail.metadata);
         $.post(ODE.ajax_coocreation_room_update_metadata,
             {

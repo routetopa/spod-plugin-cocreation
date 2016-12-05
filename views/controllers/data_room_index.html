@@ -82,6 +82,7 @@
     paper-drawer-panel {
         --paper-drawer-panel-left-drawer-container: {
             top: 56px;
+            z-index: 1;
         };
     }
 
@@ -95,16 +96,6 @@
     {
         top: 60px;
     }
-
-    paper-header-panel{
-        z-index:0;
-    }
-
-    /*div#drawer
-    {
-        margin-top: 56px;
-        z-index:1;
-    }*/
 
     iron-icon
     {
@@ -543,17 +534,10 @@
                 <!-- FULL SIZE ETHERSHEET -->
                 <div class="content_container">
                     <div id="full_size_container" class="full_size_content">
-                        <!-- Discussion -->
-                        <paper-card id="discussion" class="full_size_card" style="visibility:hidden;" elevation="5">
-                            <div class="screen_header">{text key="cocreation+room_discussion_tab_label"}</div>
-                            <div id="discussion_container" style="overflow-y: scroll;overflow-x: hidden;height: calc(100% - 45px)">
-                                {$comments}
-                            </div>
-                        </paper-card>
-                        <!-- Dataset -->
+                         <!-- Dataset -->
                         <paper-card id="spreadsheet" class="full_size_card" style="visibility:visible;" elevation="5">
                             <div class="screen_hidden_header">{text key="cocreation+room_dataset_tab_label"}</div>
-                            <iframe src="{$spreadsheet}" style="height: 100%; width: 100%;"></iframe>
+                            <iframe id="spreadsheet_container" src="{$spreadsheet}" style="height: 100%; width: 100%;"></iframe>
                         </paper-card>
                         <!-- Metadata -->
                         <paper-card id="metadata" class="full_size_card" style="visibility:hidden;" elevation="5">
@@ -563,6 +547,13 @@
                         <paper-card id="notes" class="full_size_card" style="visibility:hidden;" elevation="5">
                             <div class="screen_header">{text key="cocreation+room_notes_tab_label"}</div>
                             <iframe src="{{$notes}}?userName={{$currentUser['title']}}&showControls=true&showLineNumbers=false&pageview=true" style="height: 100%; width: 100%;"></iframe>
+                        </paper-card>
+                        <!-- Discussion -->
+                        <paper-card id="discussion" class="full_size_card" style="visibility:hidden;" elevation="5">
+                            <div class="screen_header">{text key="cocreation+room_discussion_tab_label"}</div>
+                            <div id="discussion_container" style="overflow-y: scroll;overflow-x: hidden;height: calc(100% - 45px)">
+                                {$comments}
+                            </div>
                         </paper-card>
                         <!-- Datalets -->
                         <paper-card id="datalets" class="full_size_card" style="visibility:hidden;" elevation="5">
