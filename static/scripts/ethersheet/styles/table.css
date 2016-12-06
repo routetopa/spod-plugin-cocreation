@@ -211,3 +211,8 @@ overflow:scroll;
   margin-top: 1px;
   margin-left: 1px;
 }
+
+td.cpselected{
+  background-color: #4CAE50;
+  opacity: 0.6;
+}
