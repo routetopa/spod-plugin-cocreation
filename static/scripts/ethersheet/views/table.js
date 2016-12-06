@@ -115,6 +115,8 @@ define( function(require,exports,module){
         this.current_cell.addClass("cpselected");
         this.cellIndex = this.startCellIndex = this.current_cell.index();
         this.rowIndex  = this.startRowIndex  = this.current_cell.parent().index();
+        this.rowEnd = this.startRowIndex;
+        this.cellEnd = this.startCellIndex;
       }
       return true; // prevent text selection
     },
@@ -177,6 +179,8 @@ define( function(require,exports,module){
         _this.current_cell.addClass("cpselected");
         _this.startCellIndex = _this.cellIndex;
         _this.startRowIndex  = _this.rowIndex;
+        _this.rowEnd = _this.startRowIndex;
+        _this.cellEnd = _this.startCellIndex;
       }
 
       return false;
