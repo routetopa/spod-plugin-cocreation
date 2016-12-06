@@ -79,8 +79,6 @@ $(document).ready(function() {
     window.addEventListener('metadata-list-controllet_attached', function(e){
         room.$.metadata_component.setMetadata(COCREATION.metadata);
     });
-
-    $('#spreadsheet_container').click(function(e){alert("il coso");})
 });
 
 room.splitScreenActive          = false;
