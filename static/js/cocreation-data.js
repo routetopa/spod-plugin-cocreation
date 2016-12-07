@@ -92,7 +92,7 @@ room.handleSelectUIMode = function(mode){
             room.$.metadata.style.visibility    = 'hidden';
             room.$.notes.style.visibility       = 'hidden';
             room.$.discussion.style.visibility  = 'hidden';
-            room.$.datalets.style.visibility    = 'hidden';
+            room.$.datalets.style.display       = 'none';
             room.$.info.style.visibility        = 'hidden';
             break;
         case 'metadata':
@@ -100,7 +100,7 @@ room.handleSelectUIMode = function(mode){
             room.$.metadata.style.visibility    = 'visible';
             room.$.notes.style.visibility       = 'hidden';
             room.$.discussion.style.visibility  = 'hidden';
-            room.$.datalets.style.visibility    = 'hidden';
+            room.$.datalets.style.display       = 'none';
             room.$.info.style.visibility        = 'hidden';
             break;
         case 'notes':
@@ -108,7 +108,7 @@ room.handleSelectUIMode = function(mode){
             room.$.metadata.style.visibility    = 'hidden';
             room.$.notes.style.visibility       = 'visible';
             room.$.discussion.style.visibility  = 'hidden';
-            room.$.datalets.style.visibility    = 'hidden';
+            room.$.datalets.style.display       = 'none';
             room.$.info.style.visibility        = 'hidden';
             break;
         case 'discussion':
@@ -116,7 +116,7 @@ room.handleSelectUIMode = function(mode){
             room.$.metadata.style.visibility    = 'hidden';
             room.$.notes.style.visibility       = 'hidden';
             room.$.discussion.style.visibility  = 'visible';
-            room.$.datalets.style.visibility    = 'hidden';
+            rroom.$.datalets.style.display       = 'none';
             room.$.info.style.visibility        = 'hidden';
             break;
         case 'datalets':
@@ -124,7 +124,7 @@ room.handleSelectUIMode = function(mode){
             room.$.metadata.style.visibility    = 'hidden';
             room.$.notes.style.visibility       = 'hidden';
             room.$.discussion.style.visibility  = 'hidden';
-            room.$.datalets.style.visibility    = 'visible';
+            room.$.datalets.style.display       = 'block';
             room.$.info.style.visibility        = 'hidden';
             room.$.datalets_slider._refresh();
             break;
@@ -133,7 +133,7 @@ room.handleSelectUIMode = function(mode){
             room.$.metadata.style.visibility    = 'hidden';
             room.$.notes.style.visibility       = 'hidden';
             room.$.discussion.style.visibility  = 'hidden';
-            room.$.datalets.style.visibility    = 'hidden';
+            room.$.datalets.style.display       = 'none';
             room.$.info.style.visibility        = 'visible';
             break;
         case 'split':
@@ -153,7 +153,7 @@ room.handleSplitScreen = function(e){
        room.$.metadata.style.visibility    = 'hidden';
        room.$.notes.style.visibility       = 'hidden';
        room.$.discussion.style.visibility  = 'hidden';
-       room.$.datalets.style.visibility    = 'hidden';
+       room.$.datalets.style.display       = 'none';
        room.$.info.style.visibility        = 'hidden';
 
        room.$.datalets_slider._refresh();
@@ -179,7 +179,7 @@ room.handleSplitScreen = function(e){
        room.$.metadata.style.visibility    = 'hidden';
        room.$.notes.style.visibility       = 'hidden';
        room.$.discussion.style.visibility  = 'hidden';
-       room.$.datalets.style.visibility    = 'hidden';
+       room.$.datalets.style.display       = 'none';
        room.$.info.visibility              = 'hidden';
 
        $(room.$.spreadsheet).removeClass("split_size_card_left");
