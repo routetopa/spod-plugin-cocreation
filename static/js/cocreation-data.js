@@ -116,7 +116,7 @@ room.handleSelectUIMode = function(mode){
             room.$.metadata.style.visibility    = 'hidden';
             room.$.notes.style.visibility       = 'hidden';
             room.$.discussion.style.visibility  = 'visible';
-            rroom.$.datalets.style.display       = 'none';
+            room.$.datalets.style.display       = 'none';
             room.$.info.style.visibility        = 'hidden';
             break;
         case 'datalets':
@@ -146,15 +146,16 @@ room.handleSelectUIMode = function(mode){
 
 room.handleSplitScreen = function(e){
    room.splitScreenActive  = e.checked;
+
+    room.$.spreadsheet.style.visibility = "visible";
+    room.$.metadata.style.visibility    = 'hidden';
+    room.$.notes.style.visibility       = 'hidden';
+    room.$.discussion.style.visibility  = 'hidden';
+    room.$.datalets.style.display       = 'none';
+    room.$.info.style.visibility        = 'hidden';
+
    if(room.splitScreenActive){//active split screen
        room.$.dataset_menu_item.disabled = true;
-
-       room.$.spreadsheet.style.visibility = "visible";
-       room.$.metadata.style.visibility    = 'hidden';
-       room.$.notes.style.visibility       = 'hidden';
-       room.$.discussion.style.visibility  = 'hidden';
-       room.$.datalets.style.display       = 'none';
-       room.$.info.style.visibility        = 'hidden';
 
        room.$.datalets_slider._refresh();
 
@@ -162,7 +163,11 @@ room.handleSplitScreen = function(e){
            room.current_selected_container  = room.$.metadata;
            room.$.section_menu.selected     = 1;
        }
-       room.current_selected_container.style.visibility = "visible";
+
+       if(room.current_selected_container == room.$.datalets)
+          room.current_selected_container.style.display = "block";
+       else
+          room.current_selected_container.style.visibility = "visible";
 
        $(room.$.spreadsheet).addClass("split_size_card_left");
        $(room.$.metadata).addClass("split_size_card_right");
@@ -174,13 +179,6 @@ room.handleSplitScreen = function(e){
        room.$.dataset_menu_item.disabled = false;
        room.$.section_menu.selected      = 0;
        room.current_selected_container   = null;
-
-       room.$.spreadsheet.style.visibility = "visible";
-       room.$.metadata.style.visibility    = 'hidden';
-       room.$.notes.style.visibility       = 'hidden';
-       room.$.discussion.style.visibility  = 'hidden';
-       room.$.datalets.style.display       = 'none';
-       room.$.info.visibility              = 'hidden';
 
        $(room.$.spreadsheet).removeClass("split_size_card_left");
        $(room.$.metadata).removeClass("split_size_card_right");
