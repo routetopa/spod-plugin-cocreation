@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin>
-    <name>Co-Creation Space for Knowledge and Data</name>
+    <name>SPOD Co-Creation Space for Knowledge and Data</name>
     <key>cocreation</key>
     <description>SPOD Co-Creation Space for collaborate to create knowledge or dataset</description>
     <author>ISISLAB</author>

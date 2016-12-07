@@ -70,6 +70,8 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             }
         }
 
+        COCREATION_CLASS_EventHandler::getInstance()->sendNotificationRoomCreated($room);
+
         OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_create_room_successful'));
         OW::getApplication()->redirect(OW::getRouter()->urlFor('COCREATION_CTRL_Main', 'index'));
     }
