@@ -28,7 +28,7 @@ class COCREATION_CLASS_EventHandler
             'section'      => 'cocreation',
             'action'       => 'room-created',
             'description'  => OW::getLanguage()->text('cocreation', 'email_notifications_setting_room_created'),
-            'selected'     => true,
+            'selected'     => false,
             'sectionLabel' => $sectionLabel,
             'sectionIcon'  => 'ow_ic_write'
         ));
@@ -37,7 +37,7 @@ class COCREATION_CLASS_EventHandler
             'section'      => 'cocreation',
             'action'       => 'room-comment',
             'description'  => OW::getLanguage()->text('cocreation', 'email_notifications_setting_room_comment'),
-            'selected'     => true,
+            'selected'     => false,
             'sectionLabel' => $sectionLabel,
             'sectionIcon'  => 'ow_ic_write'
         ));
