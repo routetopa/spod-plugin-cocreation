@@ -22,25 +22,27 @@ class COCREATION_CLASS_EventHandler
 
     public function onCollectNotificationActions( BASE_CLASS_EventCollector $e )
     {
-        $sectionLabel = OW::getLanguage()->text('cocreation', 'main_menu_item');
+        if(BOL_AuthorizationService::getInstance()->isModerator() || OW::getUser()->isAdmin()) {
+            $sectionLabel = OW::getLanguage()->text('cocreation', 'main_menu_item');
 
-        $e->add(array(
-            'section'      => 'cocreation',
-            'action'       => 'room-created',
-            'description'  => OW::getLanguage()->text('cocreation', 'email_notifications_setting_room_created'),
-            'selected'     => false,
-            'sectionLabel' => $sectionLabel,
-            'sectionIcon'  => 'ow_ic_write'
-        ));
+            $e->add(array(
+                'section' => 'cocreation',
+                'action' => 'room-created',
+                'description' => OW::getLanguage()->text('cocreation', 'email_notifications_setting_room_created'),
+                'selected' => false,
+                'sectionLabel' => $sectionLabel,
+                'sectionIcon' => 'ow_ic_write'
+            ));
 
-        $e->add(array(
-            'section'      => 'cocreation',
-            'action'       => 'room-comment',
-            'description'  => OW::getLanguage()->text('cocreation', 'email_notifications_setting_room_comment'),
-            'selected'     => false,
-            'sectionLabel' => $sectionLabel,
-            'sectionIcon'  => 'ow_ic_write'
-        ));
+            /*$e->add(array(
+                'section' => 'cocreation',
+                'action' => 'room-comment',
+                'description' => OW::getLanguage()->text('cocreation', 'email_notifications_setting_room_comment'),
+                'selected' => false,
+                'sectionLabel' => $sectionLabel,
+                'sectionIcon' => 'ow_ic_write'
+            ));*/
+        }
     }
 
     //Batch notification
