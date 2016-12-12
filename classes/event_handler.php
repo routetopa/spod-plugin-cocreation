@@ -83,8 +83,6 @@ class COCREATION_CLASS_EventHandler
     {
         $users = BOL_UserService::getInstance()->findList(0,10000);
 
-        //$message = 'L\'utente '. BOL_UserService::getInstance()->getDisplayName($room->ownerId) . ' ha creato la stanza  <b><i>'. $room->name . '</i></b>';
-
         foreach($users as $user) {
 
             $avatars = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($room->ownerId));
@@ -106,8 +104,8 @@ class COCREATION_CLASS_EventHandler
                         'roomname'  => $room->name
                     )
                 ),
-                'url' => 'http://192.168.164.128',//room_url
-                "contentImage" => 'http://192.168.164.128'//new_room_url_image
+                'url' => OW::getRouter()->urlForRoute('mailbox_compose_mail_conversation', array('opponentId'=>$room->ownerId)),
+                "contentImage" => ''
             ));
 
             OW::getEventManager()->trigger($event);
