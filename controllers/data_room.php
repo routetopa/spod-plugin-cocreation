@@ -101,7 +101,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
 
         //DISCUSSION
         //$this->addComponent("comments", new COCREATION_CMP_DiscussionWrapper($params['roomId']));
-        $commentsParams = new BASE_CommentsParams('cocreation', COCREATION_BOL_Service::ROOM_ENTITY_TYPE);
+        $commentsParams = new SPODTCHAT_CLASS_CommentsParams('cocreation', COCREATION_BOL_Service::ROOM_ENTITY_TYPE);
         $commentsParams->setEntityId($params['roomId']);
         $commentsParams->setDisplayType(BASE_CommentsParams::DISPLAY_TYPE_WITH_LOAD_LIST);
         //$commentsParams->setCommentCountOnPage(5);
@@ -110,17 +110,18 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         $commentsParams->setWrapInBox(false);
         $commentsParams->setShowEmptyList(false);
         $commentsParams->setCommentPreviewMaxCharCount(5000);
+        $commentsParams->setCommentEntityType(COCREATION_BOL_Service::COMMENT_ENTITY_TYPE);
+        $commentsParams->setNumberOfNestedLevel(2);
 
         $commentsParams->level  = 0;
         $commentsParams->nodeId = 0;
-        SPODTCHAT_CLASS_Consts::$NUMBER_OF_NESTED_LEVEL = 2;
 
         /* ODE */
         /* if (OW::getPluginManager()->isPluginActive('spodpr'))
              $this->addComponent('private_room', new SPODPR_CMP_PrivateRoomCard('ow_attachment_btn', array('datalet', 'link')));*/
         /* ODE */
 
-        $commentCmp = new SPODTCHAT_CMP_Comments($commentsParams, 1, COCREATION_BOL_Service::COMMENT_ENTITY_TYPE, $params['roomId']);
+        $commentCmp = new SPODTCHAT_CMP_Comments($commentsParams);
         $this->addComponent('comments', $commentCmp);
 
         $js = UTIL_JsGenerator::composeJsString('
