@@ -4,7 +4,6 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
 {
     public function index(array $params)
     {
-        //COCOCO
         if ( !OW::getUser()->isAuthenticated() )
         {
             throw new AuthenticateException();
