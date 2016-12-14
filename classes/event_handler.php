@@ -140,7 +140,8 @@ class COCREATION_CLASS_EventHandler
             array_push($membersIds,$room->ownerId);
             foreach ($membersIds as $memberId) {
                 //send notification
-                $notification_event = new OW_Event('notifications.add', array(
+                $notification_event = new OW_Event('notifications.add',
+                array(
                     'pluginKey'  => 'cocreation',
                     'action'     => 'room-comments-collect',
                     'entityType' => 'room_comments_collect',
