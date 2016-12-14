@@ -8,5 +8,6 @@ OW::getRouter()->addRoute(new OW_Route('cocreation.data.room.list', 'cocreation/
 
 //Admin area
 OW::getRouter()->addRoute(new OW_Route('cocreation-settings', '/cocreation/settings', 'COCREATION_CTRL_Admin', 'settings'));
+OW::getRouter()->addRoute(new OW_Route('cocreation-analysis', '/cocreation/analysis', 'COCREATION_CTRL_Admin', 'analysis'));
 
 COCREATION_CLASS_EventHandler::getInstance()->init();
