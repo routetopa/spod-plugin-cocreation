@@ -2,12 +2,29 @@
 
 class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
 {
+
     public function settings($params)
     {
         $this->assign('components_url', SPODPR_COMPONENTS_URL);
 
-        $this->setPageTitle(OW::getLanguage()->text('cocreation', 'admin_title'));
-        $this->setPageHeading(OW::getLanguage()->text('cocreation', 'admin_heading'));
+        $settingsItem = new BASE_MenuItem();
+        $settingsItem->setLabel('SETTINGS');
+        $settingsItem->setUrl(OW::getRouter()->urlForRoute('cocreation-settings'));
+        $settingsItem->setKey('settings');
+        $settingsItem->setIconClass( 'ow_ic_gear_wheel' );
+        $settingsItem->setOrder( 0 );
+
+        $providersItem = new BASE_MenuItem();
+        $providersItem->setLabel('ANALYSIS');
+        $providersItem->setUrl(OW::getRouter()->urlForRoute('cocreation-analysis'));
+        $providersItem->setKey('analysis');
+        $providersItem->setOrder(1);
+
+        $menu = new BASE_CMP_ContentMenu( array( $settingsItem, $providersItem ) );
+        $this->addComponent( 'menu', $menu );
+
+        $this->setPageTitle("COCREATION SETTINGS");
+        $this->setPageHeading("COCREATION SETTINGS");
 
         $form = new Form('settings');
         $this->addForm($form);
@@ -172,6 +189,83 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
         }
     }
 
+    public function analysis($params){
+        $settingsItem = new BASE_MenuItem();
+        $settingsItem->setLabel('SETTINGS');
+        $settingsItem->setUrl(OW::getRouter()->urlForRoute('cocreation-settings'));
+        $settingsItem->setKey('settings');
+        $settingsItem->setIconClass( 'ow_ic_gear_wheel' );
+        $settingsItem->setOrder( 0 );
+
+        $providersItem = new BASE_MenuItem();
+        $providersItem->setLabel('ANALYSIS');
+        $providersItem->setUrl(OW::getRouter()->urlForRoute('cocreation-analysis'));
+        $providersItem->setKey('analysis');
+        $providersItem->setOrder(1);
+
+        $menu = new BASE_CMP_ContentMenu( array( $settingsItem, $providersItem ) );
+        $this->addComponent( 'menu', $menu );
+
+        $exportUrl = OW::getRouter()->urlFor(__CLASS__, 'export');
+        $this->assign('exportUrl', $exportUrl);
+
+        $this->assign('cocreation_rooms', COCREATION_BOL_Service::getInstance()->getAllRooms());
+
+    }
+
+    public function export()
+    {
+        $comments = array();
+        $this->getFlatComment($_REQUEST["id"], 0, $comments);
+
+        require_once OW::getPluginManager()->getPlugin('spodagoraexporter')->getRootDir() . 'libs/PHPExcel-1.8/Classes/PHPExcel.php';
+
+
+        $objPHPExcel = new PHPExcel();
+
+
+        $objPHPExcel->getProperties()->setCreator("ROUTETOPA Project")
+            ->setLastModifiedBy("ROUTETOPA Project")
+            ->setTitle("Cocreation Snapshot")
+            ->setSubject("Cocreation Snapshot")
+            ->setDescription("Cocreation Snapshot")
+            ->setKeywords("Cocreation Snapshot")
+            ->setCategory("Cocreation Snapshot");
+
+        foreach ($comments as $row => $node)
+        {
+            $level = 'A';
+
+            if($node->level != null)
+            {
+                switch ($node->level)
+                {
+                    case 1 : $level = 'B'; break;
+                    case 2 : $level = 'C'; break;
+                    case 3 : $level = 'D'; break;
+                }
+            }
+
+            $user = BOL_UserService::getInstance()->findUserById($node->userId);
+            $cell = $level . ($row+1);
+            $date = isset($node->createStamp) ? date("d-F-Y , G:i:s", $node->createStamp) : "";
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue($cell, $user->username . " : " . $node->message . " (".$date.")");
+        }
+
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+
+        // We'll be outputting an excel file
+        header('Content-type: application/vnd.ms-excel');
+        // It will be called file.xlsx
+        header('Content-Disposition: attachment; filename="cocreation_room.xlsx"');
+        // Write file to the browser
+        $objWriter->save('php://output');
+        die();
+    }
+
     function liveExecuteCommand($cmd)
     {
 
@@ -200,6 +294,18 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
             'exit_status'  => $matches[0],
             'output'       => str_replace("Exit status : " . $matches[0], '', $complete_output)
         );
+    }
+
+    private function getFlatComment($id, $level=0, &$flat_comment=array())
+    {
+        $comments = BOL_CommentService::getInstance()->findFullCommentList(($level == 0 ) ? COCREATION_BOL_Service::ROOM_ENTITY_TYPE : COCREATION_BOL_Service::COMMENT_ENTITY_TYPE, $id);
+
+        for ($i = 0; $i < count($comments); $i++)
+        {
+            $comments[$i]->level = $level;
+            $flat_comment = array_merge($flat_comment, array($comments[$i]));
+            $this->getFlatComment($comments[$i]->id, $level + 1, $flat_comment);
+        }
     }
 
 }
