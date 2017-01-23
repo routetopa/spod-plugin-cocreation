@@ -25,7 +25,7 @@ class COCREATION_CLASS_EventHandler
     public function onCollectNotificationActions( BASE_CLASS_EventCollector $e )
     {
         $sectionLabel = OW::getLanguage()->text('cocreation', 'main_menu_item');
-
+        //Only for moderator and admin
         if(BOL_AuthorizationService::getInstance()->isModerator() || OW::getUser()->isAdmin()) {
 
             $e->add(array(
@@ -37,7 +37,7 @@ class COCREATION_CLASS_EventHandler
                 'sectionIcon' => 'ow_ic_write'
             ));
         }
-
+        //For all users
         $e->add(array(
             'section' => 'cocreation',
             'action'  => 'room-comments-collect',
