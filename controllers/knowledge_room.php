@@ -5,7 +5,9 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
 
     function getOutcomeReadonlyPadID($url) {
         try {
-            $apiurl = rtrim(OW_URL_HOME, "/") . ":9001/api/1/getReadOnlyID?apikey=e20a517df87a59751b0f01d708e2cb6496cf6a59717ccfde763360f68a7bfcec&padID=" . explode("/", $url)[4];
+            $document_server_port_preference = BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference');
+
+            $apiurl = rtrim(OW_URL_HOME, "/") . ":{$document_server_port_preference}/api/1/getReadOnlyID?apikey=e20a517df87a59751b0f01d708e2cb6496cf6a59717ccfde763360f68a7bfcec&padID=" . explode("/", $url)[4];
             $ch = curl_init();
             // you should put here url of your getinfo.php script
             curl_setopt($ch, CURLOPT_URL, $apiurl);
@@ -13,7 +15,7 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
             $result = curl_exec($ch);
             curl_close($ch);
             $result = json_decode($result);
-            return rtrim(OW_URL_HOME, "/") . ":9001/ro/" . $result->data->readOnlyID;
+            return rtrim(OW_URL_HOME, "/") . ":{$document_server_port_preference}/ro/" . $result->data->readOnlyID;
         }catch(Exception $e){
             return $url;
         }
@@ -82,7 +84,10 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
 
             //Set room shared documents
             $documents = COCREATION_BOL_Service::getInstance()->getDocumentsByRoomId($params['roomId']);
-            $this->assign('documents', array($documents[0]->url, $documents[1]->url, $documents[2]->url));
+            $this->assign('documents', array(
+                preg_replace("/^(http:\/\/)(:)[0-9]*(\/)/", ":" . BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference')->defaultValue, $documents[0]->url),
+                preg_replace("/^(http:\/\/)(:)[0-9]*(\/)/", ":" . BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference')->defaultValue, $documents[1]->url),
+                preg_replace("/^(http:\/\/)(:)[0-9]*(\/)/", ":" . BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference')->defaultValue, $documents[2]->url)));
 
             //get all dataset for current room
             $this->addComponent('datasets_library', new COCREATION_CMP_DatasetsLibrary($params['roomId']));

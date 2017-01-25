@@ -80,8 +80,10 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         $this->assign('currentUser' , BOL_AvatarService::getInstance()->getDataForUserAvatars(array(OW::getUser()->getId()))[OW::getUser()->getId()]);
 
         $sheetUrl = COCREATION_BOL_Service::getInstance()->getSheetByRoomId($params['roomId'])[0]->url;
+        $sheetUrl = preg_replace("/^(http:\/\/)(:)[0-9]*(\/)/", ":" . BOL_PreferenceService::getInstance()->findPreference('spreadsheet_server_port_preference')->defaultValue, $sheetUrl);
         $sheetName = explode('/', $sheetUrl)[4];
         $noteUrl = COCREATION_BOL_Service::getInstance()->getDocumentsByRoomId($params['roomId'])[0]->url;
+        $noteUrl = preg_replace("/^(http:\/\/)(:)[0-9]*(\/)/", ":" . BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference')->defaultValue, $noteUrl);
         $this->assign('spreadsheet', $sheetUrl);
         $this->assign('notes', $noteUrl);
 
@@ -141,6 +143,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                 COCREATION.metadata                           = {$room_metadata}
                 COCREATION.user_id                            = {$userId}
                 COCREATION.info                               = {$roomInfo}
+                COCREATION.spreadsheet_server_port           = {$spreasheet_server_port}
             ', array(
                'ajax_coocreation_room_get_datalets'        => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getRoomDatalets'),
                'ajax_coocreation_room_get_array_sheetdata' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getArrayOfObjectSheetData') . "?sheetName=" . $sheetName,
@@ -158,6 +161,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                'room_metadata'                             => json_encode($metadataObj),
                'userId'                                    => OW::getUser()->getId(),
                'roomInfo'                                  => json_encode($info),
+               'spreasheet_server_port'                    => BOL_PreferenceService::getInstance()->findPreference('spreadsheet_server_port_preference')->defaultValue
         ));
         OW::getDocument()->addOnloadScript($js);
         OW::getDocument()->addOnloadScript("data_room.init();");

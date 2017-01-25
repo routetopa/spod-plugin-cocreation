@@ -66,6 +66,7 @@ copySettings()
     #Commands
     cd ${ABSOLUTE_PATH}
     cp config.js /home/ethersheet/ethersheet/EtherSheet
+    chmod 777 /home/ethersheet/ethersheet/EtherSheet/config.js
     cp ethersheet_service.js /home/ethersheet/ethersheet/EtherSheet/lib
     cp server.js /home/ethersheet/ethersheet/EtherSheet/lib
     cp ./models/sheet.js /home/ethersheet/ethersheet/EtherSheet/lib/models

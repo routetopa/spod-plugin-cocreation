@@ -53,6 +53,7 @@ copySettings()
     #Commands
     cd ${ABSOLUTE_PATH}
     cp settings.json /home/etherpad/etherpad-lite/
+    chmod 777 /home/etherpad/etherpad-lite/settings.json
     cp APIKEY.txt /home/etherpad/etherpad-lite/
     cp pad.css /home/etherpad/etherpad-lite/src/static/css
     cp timeslider.css /home/etherpad/etherpad-lite/src/static/css

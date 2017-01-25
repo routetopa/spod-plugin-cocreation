@@ -40,13 +40,38 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
         $spreadsheet_room_field   = new HiddenField('dataset_room_status');
         $spreadsheet_room_field->setId("dataset_room_status");
 
+        $document_server_port_preference = BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference');
+        if(empty($document_server_port_preference) || $document_server_port_preference->defaultValue == 9001) {
+            $this->assign('document_server_port_preference', 9001);
+        }else{
+            $this->assign('document_server_port_preference', $document_server_port_preference->defaultValue);
+        }
+
+        $document_server_port_field    = new TextField('document_server_port');
+        $document_server_port_field->setId('document_server_port');
+        $document_server_port_field->setValue($document_server_port_preference->defaultValue);
+
+        $spreadsheet_server_port_preference = BOL_PreferenceService::getInstance()->findPreference('spreadsheet_server_port_preference');
+        if(empty($spreadsheet_server_port_preference) || $spreadsheet_server_port_preference->defaultValue == 8001) {
+            $this->assign('spreadsheet_server_port_preference', 8001);
+        }else{
+            $this->assign('spreadsheet_server_port_preference', $spreadsheet_server_port_preference->defaultValue);
+        }
+
+        $spreadsheet_server_port_field = new TextField('spreadsheet_server_port');
+        $spreadsheet_server_port_field->setId('spreadsheet_server_port');
+        $spreadsheet_server_port_field->setValue($spreadsheet_server_port_preference->defaultValue);
+
         $form->addElement($document_server_field);
         $form->addElement($spreadsheet_server_field);
         $form->addElement($document_room_field);
         $form->addElement($spreadsheet_room_field);
 
-        $doc_connection    = @fsockopen('localhost', '9001');
-        $spread_connection = @fsockopen('localhost', '8001');
+        $form->addElement($document_server_port_field);
+        $form->addElement($spreadsheet_server_port_field);
+
+        $doc_connection    = @fsockopen('localhost', '' . $document_server_port_preference->defaultValue);
+        $spread_connection = @fsockopen('localhost', '' . $spreadsheet_server_port_preference->defaultValue);
 
         //Set document and spreasheet server toggle button status
         if (is_resource($doc_connection))
@@ -125,6 +150,24 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
 
             BOL_PreferenceService::getInstance()->savePreference($document_server_status_preference);
 
+            //DOCUMENT SERVER PORT
+            $document_server_port_preference = BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference');
+            if(empty($document_server_port_preference)) {
+                $document_server_port_preference = new BOL_Preference();
+            }
+            $document_server_port_preference->defaultValue = $data['document_server_port'];
+            $document_server_port_preference->key = 'document_server_port_preference';
+            $document_server_port_preference->sortOrder = 1;
+            $document_server_port_preference->sectionName = 'general';
+
+            BOL_PreferenceService::getInstance()->savePreference($document_server_port_preference);
+            $this->assign('document_server_port_preference', $document_server_port_preference->defaultValue);
+
+            $path_to_file = '/home/etherpad/etherpad-lite/settings.json';
+            $file_contents = file_get_contents($path_to_file);
+            $file_contents = preg_replace("/(\"port\" : )[0-9]*/", "port: {$document_server_port_preference->defaultValue}", $file_contents);
+            file_put_contents($path_to_file,$file_contents);
+
             //SPEADSHEET SERVER
             $spreadsheet_server_status_preference = BOL_PreferenceService::getInstance()->findPreference('spreadsheet_server_status_preference');
             if(empty($spreadsheet_server_status_preference)) {
@@ -153,6 +196,24 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
             }
 
             BOL_PreferenceService::getInstance()->savePreference($spreadsheet_server_status_preference);
+
+            //SPREADSHEET SERVER PORT
+            $spreadsheet_server_port_preference = BOL_PreferenceService::getInstance()->findPreference('spreadsheet_server_port_preference');
+            if(empty($spreadsheet_server_port_preference)) {
+                $spreadsheet_server_port_preference = new BOL_Preference();
+            }
+            $spreadsheet_server_port_preference->defaultValue = $data['spreadsheet_server_port'];
+            $spreadsheet_server_port_preference->key = 'spreadsheet_server_port_preference';
+            $spreadsheet_server_port_preference->sortOrder = 1;
+            $spreadsheet_server_port_preference->sectionName = 'general';
+
+            BOL_PreferenceService::getInstance()->savePreference($spreadsheet_server_port_preference);
+            $this->assign('spreadsheet_server_port_preference', $spreadsheet_server_port_preference->defaultValue);
+
+            $path_to_file = '/home/ethersheet/ethersheet/EtherSheet/config.js';
+            $file_contents = file_get_contents($path_to_file);
+            $file_contents = preg_replace("/(port: )[0-9]*/", "port: {$spreadsheet_server_port_preference->defaultValue}", $file_contents);
+            file_put_contents($path_to_file,$file_contents);
 
             //KNOWLEDGE ROOM PREFERENCES
             $knowledge_room_status_preference = BOL_PreferenceService::getInstance()->findPreference('knowledge_room_status_preference');

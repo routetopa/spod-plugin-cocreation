@@ -29,7 +29,7 @@
             }else{
                 data = map.getGeoJSON();
             }
-            $("iframe")[0].contentWindow.postMessage(data, 'http://' + window.location.hostname + ":8001");
+            $("iframe")[0].contentWindow.postMessage(data, 'http://' + window.location.hostname + ":" + COCREATION.spreadsheet_server_port);
             previewFloatBox.close();
         });
     });

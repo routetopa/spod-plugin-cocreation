@@ -35,16 +35,42 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
         $randomString = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 5);
 
+        $document_server_port_preference = BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference');
+        if(empty($document_server_port_preference)) {
+
+            $document_server_port_preference = new BOL_Preference();
+            $document_server_port_preference->defaultValue = 9001;
+            $document_server_port_preference->key = 'document_server_port_preference';
+            $document_server_port_preference->sortOrder = 1;
+            $document_server_port_preference->sectionName = 'general';
+            BOL_PreferenceService::getInstance()->savePreference($document_server_port_preference);
+        }else{
+            $document_server_port_preference = $document_server_port_preference->defaultValue;
+        }
+
+        $spreadsheet_server_port_preference = BOL_PreferenceService::getInstance()->findPreference('spreadsheet_server_port_preference');
+        if(empty($spreadsheet_server_port_preference)) {
+
+            $spreadsheet_server_port_preference = new BOL_Preference();
+            $spreadsheet_server_port_preference->defaultValue = 8001;
+            $spreadsheet_server_port_preference->key = 'spreadsheet_server_port_preference';
+            $spreadsheet_server_port_preference->sortOrder = 1;
+            $spreadsheet_server_port_preference->sectionName = 'general';
+            BOL_PreferenceService::getInstance()->savePreference($spreadsheet_server_port_preference);
+        }else{
+            $spreadsheet_server_port_preference = $spreadsheet_server_port_preference->defaultValue;
+        }
+
         if($clean['room_type'] == "knowledge")
         {
-            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 0, "explore", rtrim(OW_URL_HOME,"/") . ":9001" . "/p/explore_room_" .$room->id."_".$randomString);
-            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "ideas",   rtrim(OW_URL_HOME,"/") . ":9001" . "/p/ideas_room_"   .$room->id."_".$randomString);
-            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 2, "outcome", rtrim(OW_URL_HOME,"/") . ":9001" . "/p/outcome_room_" .$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 0, "explore", rtrim(OW_URL_HOME,"/") . ":{$document_server_port_preference->defaultValue}" . "/p/explore_room_" .$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "ideas",   rtrim(OW_URL_HOME,"/") . ":{$document_server_port_preference->defaultValue}" . "/p/ideas_room_"   .$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 2, "outcome", rtrim(OW_URL_HOME,"/") . ":{$document_server_port_preference->defaultValue}" . "/p/outcome_room_" .$room->id."_".$randomString);
         }else{
             //create the sheet for the CoCreation Data room
             //Document for notes related to the dataset
-            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "notes",  rtrim(OW_URL_HOME,"/") . ":9001" . "/p/notes_room_"  .$room->id."_".$randomString);
-            COCREATION_BOL_Service::getInstance()->addSheetToRoom($room->id, "dataset", rtrim(OW_URL_HOME,"/") . ":8001" . "/s/dataset_room_".$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "notes",  rtrim(OW_URL_HOME,"/") . ":{$document_server_port_preference->defaultValue}" . "/p/notes_room_"  .$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addSheetToRoom($room->id, "dataset", rtrim(OW_URL_HOME,"/") . ":{$spreadsheet_server_port_preference->defaultValue}" . "/s/dataset_room_".$room->id."_".$randomString);
             COCREATION_BOL_Service::getInstance()->createMetadataForRoom($room->id);
         }
 
@@ -445,7 +471,9 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         }
 
         try {
-            $apiurl = rtrim(OW_URL_HOME, "/") . ":9001/api/1/getHTML?apikey=e20a517df87a59751b0f01d708e2cb6496cf6a59717ccfde763360f68a7bfcec&padID=" . explode("/", $clean['noteUrl'])[4];
+            $document_server_port_preference = BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference');
+
+            $apiurl = rtrim(OW_URL_HOME, "/") . ":{{$document_server_port_preference->defaultValue}}/api/1/getHTML?apikey=e20a517df87a59751b0f01d708e2cb6496cf6a59717ccfde763360f68a7bfcec&padID=" . explode("/", $clean['noteUrl'])[4];
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $apiurl);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

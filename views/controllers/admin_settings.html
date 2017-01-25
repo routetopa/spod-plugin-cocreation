@@ -38,6 +38,10 @@
                    <paper-toggle-button class="server_toggle toggle" id="document_server_command" name="document_server_command" on-change="_toggleChanged"></paper-toggle-button>
                </td>
             {/if}
+            <td class="ow_value">Port</td>
+            <td class="ow_value">
+                <input type="number" value="{$document_server_port_preference}" min="1024" max="65535" class="server_toggle toggle" id="document_server_port" name="document_server_port"/>
+            </td>
         </tr>
         <tr class="ow_alt1">
             <td class="ow_value">Spreadsheet server status</td>
@@ -51,6 +55,10 @@
                 <paper-toggle-button class="server_toggle toggle" id="spreadsheet_server_command" name="spreadsheet_server_command" on-change="_toggleChanged"></paper-toggle-button>
             </td>
             {/if}
+            <td class="ow_value">Port</td>
+            <td class="ow_value">
+                <input type="number" value="{$spreadsheet_server_port_preference}" min="1024" max="65535" class="server_toggle toggle" id="spreadsheet_server_port" name="spreadsheet_server_port"/>
+            </td>
         </tr>
         <tr>
             <td colspan="2" class="ow_center">
