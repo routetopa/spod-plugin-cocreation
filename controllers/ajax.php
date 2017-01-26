@@ -61,16 +61,18 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             $spreadsheet_server_port_preference = $spreadsheet_server_port_preference->defaultValue;
         }
 
+        $host = $_SERVER['REQUEST_SCHEME'] . "//" . $_SERVER['HTTP_HOST'];
+
         if($clean['room_type'] == "knowledge")
         {
-            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 0, "explore", rtrim(OW_URL_HOME,"/") . ":{$document_server_port_preference->defaultValue}" . "/p/explore_room_" .$room->id."_".$randomString);
-            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "ideas",   rtrim(OW_URL_HOME,"/") . ":{$document_server_port_preference->defaultValue}" . "/p/ideas_room_"   .$room->id."_".$randomString);
-            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 2, "outcome", rtrim(OW_URL_HOME,"/") . ":{$document_server_port_preference->defaultValue}" . "/p/outcome_room_" .$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 0, "explore", $host . ":{$document_server_port_preference->defaultValue}" . "/p/explore_room_" .$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "ideas",   $host . ":{$document_server_port_preference->defaultValue}" . "/p/ideas_room_"   .$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 2, "outcome", $host . ":{$document_server_port_preference->defaultValue}" . "/p/outcome_room_" .$room->id."_".$randomString);
         }else{
             //create the sheet for the CoCreation Data room
             //Document for notes related to the dataset
-            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "notes",  rtrim(OW_URL_HOME,"/") . ":{$document_server_port_preference->defaultValue}" . "/p/notes_room_"  .$room->id."_".$randomString);
-            COCREATION_BOL_Service::getInstance()->addSheetToRoom($room->id, "dataset", rtrim(OW_URL_HOME,"/") . ":{$spreadsheet_server_port_preference->defaultValue}" . "/s/dataset_room_".$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "notes",  $host . ":{$document_server_port_preference->defaultValue}"    . "/p/notes_room_"  .$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addSheetToRoom($room->id, "dataset", $host . ":{$spreadsheet_server_port_preference->defaultValue}" . "/s/dataset_room_".$room->id."_".$randomString);
             COCREATION_BOL_Service::getInstance()->createMetadataForRoom($room->id);
         }
 
@@ -473,7 +475,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         try {
             $document_server_port_preference = BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference');
 
-            $apiurl = rtrim(OW_URL_HOME, "/") . ":{{$document_server_port_preference->defaultValue}}/api/1/getHTML?apikey=e20a517df87a59751b0f01d708e2cb6496cf6a59717ccfde763360f68a7bfcec&padID=" . explode("/", $clean['noteUrl'])[4];
+            $apiurl = $_SERVER['REQUEST_SCHEME'] . "//" . $_SERVER['HTTP_HOST'] . ":{{$document_server_port_preference->defaultValue}}/api/1/getHTML?apikey=e20a517df87a59751b0f01d708e2cb6496cf6a59717ccfde763360f68a7bfcec&padID=" . explode("/", $clean['noteUrl'])[4];
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $apiurl);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

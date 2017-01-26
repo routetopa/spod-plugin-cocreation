@@ -7,7 +7,7 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
         try {
             $document_server_port_preference = BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference');
 
-            $apiurl = rtrim(OW_URL_HOME, "/") . ":{$document_server_port_preference}/api/1/getReadOnlyID?apikey=e20a517df87a59751b0f01d708e2cb6496cf6a59717ccfde763360f68a7bfcec&padID=" . explode("/", $url)[4];
+            $apiurl = $_SERVER['REQUEST_SCHEME'] . "//" . $_SERVER['HTTP_HOST'] . ":{$document_server_port_preference}/api/1/getReadOnlyID?apikey=e20a517df87a59751b0f01d708e2cb6496cf6a59717ccfde763360f68a7bfcec&padID=" . explode("/", $url)[4];
             $ch = curl_init();
             // you should put here url of your getinfo.php script
             curl_setopt($ch, CURLOPT_URL, $apiurl);
@@ -15,7 +15,7 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
             $result = curl_exec($ch);
             curl_close($ch);
             $result = json_decode($result);
-            return rtrim(OW_URL_HOME, "/") . ":{$document_server_port_preference}/ro/" . $result->data->readOnlyID;
+            return $_SERVER['REQUEST_SCHEME'] . "//" . $_SERVER['HTTP_HOST'] . ":{$document_server_port_preference}/ro/" . $result->data->readOnlyID;
         }catch(Exception $e){
             return $url;
         }
