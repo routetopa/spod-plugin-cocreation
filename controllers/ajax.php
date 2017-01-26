@@ -61,18 +61,18 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             $spreadsheet_server_port_preference = $spreadsheet_server_port_preference->defaultValue;
         }
 
-        $host = $_SERVER['REQUEST_SCHEME'] . "//" . $_SERVER['HTTP_HOST'];
+        $host = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'];
 
         if($clean['room_type'] == "knowledge")
         {
-            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 0, "explore", $host . ":{$document_server_port_preference->defaultValue}" . "/p/explore_room_" .$room->id."_".$randomString);
-            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "ideas",   $host . ":{$document_server_port_preference->defaultValue}" . "/p/ideas_room_"   .$room->id."_".$randomString);
-            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 2, "outcome", $host . ":{$document_server_port_preference->defaultValue}" . "/p/outcome_room_" .$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 0, "explore", $host . ":" . $document_server_port_preference . "/p/explore_room_" .$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "ideas",   $host . ":" . $document_server_port_preference . "/p/ideas_room_"   .$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 2, "outcome", $host . ":" . $document_server_port_preference . "/p/outcome_room_" .$room->id."_".$randomString);
         }else{
             //create the sheet for the CoCreation Data room
             //Document for notes related to the dataset
-            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "notes",  $host . ":{$document_server_port_preference->defaultValue}"    . "/p/notes_room_"  .$room->id."_".$randomString);
-            COCREATION_BOL_Service::getInstance()->addSheetToRoom($room->id, "dataset", $host . ":{$spreadsheet_server_port_preference->defaultValue}" . "/s/dataset_room_".$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "notes",  $host . ":" . $document_server_port_preference    . "/p/notes_room_"  .$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addSheetToRoom($room->id, "dataset", $host . ":" . $spreadsheet_server_port_preference . "/s/dataset_room_".$room->id."_".$randomString);
             COCREATION_BOL_Service::getInstance()->createMetadataForRoom($room->id);
         }
 
