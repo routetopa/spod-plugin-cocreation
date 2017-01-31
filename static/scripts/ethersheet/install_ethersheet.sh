@@ -39,6 +39,7 @@ cloneRepository()
     npm install cookie-parser
     npm install cookie-session
     npm install formidable
+    npm install compression
     tput setaf 2
     echo "done"
 }
@@ -66,6 +67,7 @@ copySettings()
     #Commands
     cd ${ABSOLUTE_PATH}
     cp config.js /home/ethersheet/ethersheet/EtherSheet
+    cp app.js /home/ethersheet/ethersheet/EtherSheet
     chmod 777 /home/ethersheet/ethersheet/EtherSheet/config.js
     cp ethersheet_service.js /home/ethersheet/ethersheet/EtherSheet/lib
     cp server.js /home/ethersheet/ethersheet/EtherSheet/lib
@@ -81,6 +83,7 @@ copySettings()
     cp ./templates/es_container.jst /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client/templates
     cp -R ./styles/* /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client/styles
     cp -R ./it/* /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client/locales
+    export NODE_ENV=production
     tput setaf 2
     echo "done"
 }
