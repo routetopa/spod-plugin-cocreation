@@ -195,7 +195,7 @@ var Sheet = module.exports = ESModel.extend({
   },
   sortRows: function(col_id){
     var sheet = this;
-    var rows = _.clone(this.rows);
+    var rows = _.clone(this.allRows);
 
     var first_row = rows.shift();
 
@@ -218,7 +218,7 @@ var Sheet = module.exports = ESModel.extend({
 
     rows.unshift(first_row);
 
-    this.rows = rows;
+    this.allRows = rows;
 
     this.trigger('sort_rows',{});
     this.send({
