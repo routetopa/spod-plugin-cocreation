@@ -79,12 +79,13 @@ text-align: center;
 }
 .es-logo{
 /*margin-top: 2px;*/
-/*font-size: 12px;*/
+  font-size: 12px;
+  font-weight: bold;
 /*cursor: pointer;*/
   border-top: 1px solid #CCCCCC;
   border-left: 1px solid #CCCCCC;
   background: #DDDDDD;
-  color: #DDDDDD;
+  color: transparent;
 }
 
 th {
@@ -106,7 +107,6 @@ th.es-column-header{
 
 th.es-row-header{
   padding: 0;
-
   /*position: relative;*/
 }
 th.es-column-header:hover, th.es-row-header:hover {

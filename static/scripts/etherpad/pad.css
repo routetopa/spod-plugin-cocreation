@@ -543,7 +543,7 @@ table#otheruserstable {
 
 #chatbox {
   position: absolute;
-  bottom: 0px;
+  bottom: 50px;
   right: 20px;
   width: 180px;
   height: 200px;

@@ -32,7 +32,7 @@ var EthersheetContainer = module.exports = View.extend({
   },
   
   render: function(){
-    var title = this.models.get('sheets').id
+    var title = this.models.get('sheets').id;
     $(this.el).html(t.es_container({title: title}));
     this.$expression = $("#es-expression-editor-container",this.$el);
     this.$table = $("#es-table-container",this.$el);
@@ -46,8 +46,8 @@ var EthersheetContainer = module.exports = View.extend({
 
   resize: function(){
     if(!this.is_rendered) return;
-    var table_height = this.$el.innerHeight() - 70;
-    this.$table.height(table_height);
+    /*var table_height = this.$el.innerHeight() - 118;//(70 + 48(table-function-menu))
+    this.$table.height(table_height);*/
   },
 
   closeModal: function(){
@@ -66,7 +66,7 @@ var EthersheetContainer = module.exports = View.extend({
         $("#es-panel-0").hide();
         $('menu-container').hide();
       });
-      $('#es-panel-1').animate({'margin-left':'0px'},speed);
+      $('#es-panel-1').animate({'margin-left':'10px'},speed);
     }else{
       $('.es-sidebar-toggle').removeClass('active');
       $el.addClass('active');
@@ -74,10 +74,10 @@ var EthersheetContainer = module.exports = View.extend({
       $('.menu-container').hide();
       var container = $el.attr('id').replace('icon', 'menu-container');
       $("#" + container).show();
-      if(this.$panel_0.width() <= 1){
+      if(this.$panel_0.width() <= 0){
         this.$menu.animate({'right':'0px'},speed);
         this.$panel_0.animate({'width':'258px'},speed);
-        this.$panel_1.animate({'margin-left':'265px'},speed);
+        this.$panel_1.animate({'margin-left':'255px'},speed);
       }
        
     }

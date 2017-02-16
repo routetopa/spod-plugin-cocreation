@@ -7,22 +7,57 @@ var Events = require('backbone').Events;
 var SockJS = require('sockjs-client');
 
 var Socket = module.exports = function(channel,socket_id,websocket){
-  this.open_handler = function(){};
-  this.close_handler = function(){
+  var self = this;
+  this.recInterval = null;
+
+  this.open_handler = function(){
+    clearInterval(this.recInterval);
+    $('#es-modal-overlay').show();
+  };
+
+  this.close_handler = function(e){
+
+    if(e.code == 1000 || e.code == 1001 || e.code == 1002 || e.code == 1006){
+      $('#es-modal-box').html("<h1>Your connection to the server has been lost, maybe it could be unreachable :(</h1>");
+      $('#es-modal-overlay').show();
+      return;
+    }
+
     this.initWebsocket(channel,socket_id,websocket);
-    /*$('#es-modal-box').html("<h1>Your connection to the server has been lost, please refresh the page.</h1>");
-    $('#es-modal-overlay').show();*/
+    /*this.recInterval = setInterval(function () {
+      self.initWebsocket(channel,socket_id,websocket);
+    }, 2000);*/
   };
   this.error_handler = function(){};
   this.message_handler = function(){};
+
   this.initWebsocket(channel,socket_id,websocket);
 };
 
 _.extend(Socket.prototype, Events,{
 
+  recInterval : null,
+  channel: null,
+  socket_id: null,
+  websocket: null,
+
   initWebsocket: function(channel,socket_id,websocket){
-    var socket = this;
+    this.channel   = channel;
+    this.socket_id = socket_id;
+    this.websocket = websocket;
     this.ws = websocket || new SockJS(window.location.protocol + '//' + window.location.host +'/'+ channel +'/pubsub/',{debug:false,devel:false});
+    /*this.ws = websocket || new SockJS(window.location.protocol + '//' + window.location.host +'/'+ channel +'/pubsub/', null, {
+          'protocols_whitelist': [
+            'websocket',
+            'xdr-streaming',
+            'xhr-streaming',
+            'iframe-eventsource',
+            'iframe-htmlfile',
+            'xdr-polling',
+            'xhr-polling',
+            'iframe-xhr-polling',
+            'jsonp-polling']
+        });*/
 
     this.ws.onopen = _.bind(this.open,this);
     this.ws.onerror= _.bind(this.error,this);
@@ -63,7 +98,13 @@ _.extend(Socket.prototype, Events,{
   },
 
   send: function(msg){
-    this.ws.send(msg);
+    try {
+      this.ws.send(msg);
+    }catch(e){
+      console.log(e);
+      $('#es-modal-box').html("<h1>There are some problems with server it could be unreachable :(</h1>");
+      $('#es-modal-overlay').show();
+    }
   }
 });
 
