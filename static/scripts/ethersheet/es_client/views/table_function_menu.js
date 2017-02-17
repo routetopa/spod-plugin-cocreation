@@ -12,10 +12,11 @@ define( function(require,exports,module){
      * Table
 
      */
-    var $         = require('jquery');
-    var t         = require('../templates');
-    var config    = require('../config');
-    var RefBinder = require('ref-binder');
+    var $          = require('jquery');
+    var t          = require('../templates');
+    var config     = require('../config');
+    var RefBinder  = require('ref-binder');
+    var hightlight = require('jquery.highlight-5');
     var View = require('backbone').View;
 
     var self;
@@ -52,6 +53,8 @@ define( function(require,exports,module){
         //search
         current_results  : {},//map with current search results
         current_selected_result : 0,
+        search_key : "",
+        previous_result_cells : [],
 
         initialize: function(o){
             this.models = new RefBinder(this);
@@ -85,7 +88,10 @@ define( function(require,exports,module){
         //SEARCH STUFFS
 
         resetSearchBar: function(){
-            $('td.es-table-cell').removeClass('search_highlight');
+            _.each(this.previous_result_cells, function(cell){
+                cell.removeHighlight();
+            });
+
             $('#search_up').removeClass('search_arrows_enabled');
             $('#search_down').removeClass('search_arrows_enabled');
             $('#search_info').html("0 of 0");
@@ -131,14 +137,17 @@ define( function(require,exports,module){
             this.gotoSearchResult();
         },
 
-        searchKeyInCells: function(search_key){
+        searchKeyInCells: function(){
             delete this.current_results;
             this.current_results = {};
             _.each(this.getSheet().getCells(), function (cell,row_key) {
                 _.each(cell, function(c,col_key){
                     if(!(_.isUndefined(c) || _.isEmpty(c))){
                         if(_.has(c, 'value')){
-                            if(c.value.includes(search_key) || c.value.includes(search_key.toUpperCase())){
+                            if(c.value.includes(self.search_key)               ||
+                               c.value.includes(self.search_key.toUpperCase()) ||
+                               c.value.includes(self.search_key.charAt(0).toUpperCase() + self.search_key.slice(1)))
+                            {
                                 self.current_results[row_key + col_key] = {row_id : row_key , col_id : col_key};
                             }
                         }
@@ -149,12 +158,18 @@ define( function(require,exports,module){
         },
 
         highlightSearchResults: function(){
-            $('td.es-table-cell').removeClass('search_highlight');
+            //unhighlight
+            _.each(this.previous_result_cells, function(cell){
+                cell.removeHighlight();
+            });
+            //highlight
+            this.previous_result_cells = [];
             _.each(this.getSheet().rows, function(row){
                 _.each(self.getSheet().cols, function(col){
                     if(row + col in self.current_results){
                         var cell = $('td[data-row_id="' + row + '"][data-col_id="' + col + '"]');
-                        cell.addClass('search_highlight');
+                        cell.highlight(self.search_key);
+                        self.previous_result_cells.push(cell);
                     }
                 })
             });
@@ -166,10 +181,10 @@ define( function(require,exports,module){
                 return;
             }
 
-            var search_key = $("#filter_key").val();
-            this.searchKeyInCells(search_key);
+            this.search_key = $("#filter_key").val();
+            this.searchKeyInCells();
 
-            if(this.current_selected_result == 0 || search_key === ""){
+            if(this.current_selected_result == 0 || this.search_key === ""){
                 this.resetSearchBar();
             }else{
                 this.highlightSearchResults();

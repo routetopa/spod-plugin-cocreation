@@ -271,9 +271,9 @@ color:#111111;
   transform: translateY(2px);
 }
 
-.search_highlight
+.highlight
 {
-  background-color:yellow;
+  background-color:#FFEB3B;
 }
 
 .pagination {

@@ -470,17 +470,13 @@ var Table = module.exports = View.extend({
     this.initializeScrolling();
     this.initializeSelections();
 
-    if(this.table_function_menu_instance == null)
-      this.drawRowHeaders();
-    else
-      this.drawRowHeaders(this.table_function_menu_instance.getFirstRowIndex());
-
+    this.drawRowHeaders()
     this.drawColHeaders();
 
-    /*setTimeout(this.drawRowHeaders.bind(this),100);
+    setTimeout(this.drawRowHeaders.bind(this),100);
     setTimeout(this.drawRowHeaders.bind(this),300);
     setTimeout(this.drawColHeaders.bind(this),100);
-    setTimeout(this.drawColHeaders.bind(this),300);*/
+    setTimeout(this.drawColHeaders.bind(this),300);
     this.$grid = $(".es-grid-container",this.$el);
     this.is_rendered = true;
     this.resize();
@@ -544,9 +540,11 @@ var Table = module.exports = View.extend({
     var html = '';
     var row_name = '';
     var height = null;
+
+    row_headers_offset = (this.table_function_menu_instance == null) ? 0 : this.table_function_menu_instance.getFirstRowIndex();
     
     _.each(this.getSheet().rowIds(), function(row_id,index){
-      row_name = (row_headers_offset == undefined) ? index+1 : row_headers_offset + index + 1;
+      row_name =  row_headers_offset + index + 1;
       height = view.heightForRow(row_id);
       html +='<tr id="es-header-'+row_id+'" style="height:'+height+'px;"><th class="es-row-header"  data-row_id="'+row_id+'">'+row_name+' <img src="/es_client/icons/ethersheet-downarrow.png" class="es-menu-arrow"></th></tr>'
     });
