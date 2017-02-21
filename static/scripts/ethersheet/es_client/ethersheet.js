@@ -23,7 +23,8 @@ var SheetListView = require('./views/sheet_list');
 var initializeExpressionHelpers = require('./lib/expression_helpers');
 
 //ISISLab code
- var TableFunctionMenu = require("./views/table_function_menu");
+var TableFunctionMenu = require("./views/table_function_menu");
+var TableCopyAndPasteFeature = require("./views/table_copy_and_paste");
 //End ISISLab code
 
 // inputs
@@ -114,7 +115,7 @@ Ethersheet.prototype.initializeDisplay = function(o){
     }).render();
     es.expression_editor = new ExpressionEditorView({
       el: $('#es-expression-editor-container', es.$el),
-      data: es.data,
+      data: es.data
     }).render();
     es.table = new TableView({
       el: $('#es-table-container', es.$el),
@@ -122,7 +123,7 @@ Ethersheet.prototype.initializeDisplay = function(o){
     }).render();
     es.menu = new FunctionMenuView({
       el: $('#es-function-menu-container', es.$el),
-      data: es.data,
+      data: es.data
     }).render();
     es.history = new HistoryView({
       el: $('#es-activity-menu-container', es.$el),
@@ -135,12 +136,19 @@ Ethersheet.prototype.initializeDisplay = function(o){
 
     //ISISLab code
     es.table_function_menu = new TableFunctionMenu({
-          el: $('#es-table-function-menu', es.$el),
-          data: es.data,
-          table: es.table
+       el: $('#es-table-function-menu', es.$el),
+       data: es.data,
+       table: es.table
     });
     es.table_function_menu.render();
     es.table.setTableFuncitonMenuInstance(es.table_function_menu);
+
+    es.table_copy_and_paste = new TableCopyAndPasteFeature({
+      el: $('#es-table-container', es.$el),
+      data: es.data,
+      table: es.table,
+      es: es
+    });
     //end ISISLab code
 
     $(".i18n").i18n();
@@ -151,7 +159,7 @@ Ethersheet.prototype.initializeCommands = function(o){
   var es = this;
   this.keyboard.on('meta_90',this.undoCommand.bind(this));
   this.keyboard.on('shift_meta_90',this.redoCommand.bind(this));
-  this.keyboard.on('37',this.table.cellsSelectionKeydown);
+  /*this.keyboard.on('37',this.table.cellsSelectionKeydown);
   this.keyboard.on('38',this.table.cellsSelectionKeydown);
   this.keyboard.on('39',this.table.cellsSelectionKeydown);
   this.keyboard.on('40',this.table.cellsSelectionKeydown);
@@ -163,9 +171,7 @@ Ethersheet.prototype.initializeCommands = function(o){
   //this.keyboard.on('meta_86',this.table.cellsSelectionKeydown);//ctrl + v
   this.keyboard.on('13',this.table.cellsSelectionKeydown);//enter
   //this.keyboard.on('16',this.table.cellsSelectionKeydown);//shift
-  this.keyboard.on('27',this.table.cellsSelectionKeydown);//escape
-
-
+  this.keyboard.on('27',this.table.cellsSelectionKeydown);//escape*/
 };
 
 Ethersheet.prototype.onConnect = function(handler){

@@ -121,6 +121,7 @@ th.es-column-header:hover, th.es-row-header:hover {
   text-overflow: ellipsis;
   padding: 4px;
   line-height: 16px;
+  user-select: none;
 }
 .es-table-cell-input{
 border: 0px;

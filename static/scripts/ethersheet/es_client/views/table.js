@@ -45,179 +45,10 @@ var Table = module.exports = View.extend({
     'contextmenu .es-column-header': 'showColMenu',
     'contextmenu .es-row-header': 'showRowMenu',
     'change .es-table-cell-input': 'changeCell',
-    'keydown': 'inputKeypress',
-    //CELLS SELECTION FEATURE
-    'mousedown .es-table-cell': 'cellsSelectionMousedown',
-    'mouseover .es-table-cell': 'cellsSelectionMouseover',
-    'mouseup .es-table-cell'  : 'cellsSelectionMouseup'
+    //'keydown': 'inputKeypress',
   },
 
   table_function_menu_instance: null,
-
-//CELLS SELECTION FEATURE
-
-  selectTo: function(cell) {
-
-    //var row = cell.parent();
-    var cellIndex = cell.index();
-    cellIndex = (cellIndex < 0) ? this.startCellIndex : cellIndex;
-    var rowIndex = cell.parent().index();
-    rowIndex = (rowIndex < 0) ? this.startRowIndex : rowIndex;
-
-
-    //var rowStart, rowEnd, cellStart, cellEnd;
-
-    if (rowIndex < this.startRowIndex) {
-      this.rowStart = rowIndex;
-      this.rowEnd = this.startRowIndex;
-    } else {
-      this.rowStart = this.startRowIndex;
-      this.rowEnd = rowIndex;
-    }
-
-    if (cellIndex < this.startCellIndex) {
-      this.cellStart = cellIndex;
-      this.cellEnd = this.startCellIndex;
-    } else {
-      this.cellStart = this.startCellIndex;
-      this.cellEnd = cellIndex;
-    }
-
-    for (var i = this.rowStart; i <= this.rowEnd; i++) {
-      var rowCells = $('#es-grid-'+this.getId()).find("tr").eq(i).find("td");
-      for (var j = this.cellStart; j <= this.cellEnd; j++) {
-        rowCells.eq(j).addClass("cpselected");
-      }
-    }
-    //console.log("rowStart: " + rowStart + " rowEnd: " + rowEnd + " cellStart: " + cellStart + " cellEnd: " + cellEnd );
-  },
-
-  cellsSelectionMousedown: function(e){
-    this.setCellDragTarget(e);
-    if (this.isDraggingCell()){
-      return false;
-    }
-
-    if(e.which == 3){
-      $('#es-grid-'+this.getId()).find(".cpselected").removeClass("cpselected"); // deselect everything
-      this.showCellMenu(e);
-      return false;
-    }
-
-    this.clearOverlays();
-    this.isMouseDown = true;
-    this.editingCell = false;
-    this.current_cell = $(e.currentTarget);
-
-    $('#es-grid-'+this.getId()).find(".cpselected").removeClass("cpselected"); // deselect everything
-
-    if (e.shiftKey) {
-      this.selectTo(cell);
-    } else {
-      this.current_cell.addClass("cpselected");
-      this.cellIndex = this.startCellIndex = this.current_cell.index();
-      this.rowIndex  = this.startRowIndex  = this.current_cell.parent().index();
-    }
-    return true; // prevent text selection
-  },
-
-  cellsSelectionMouseover: function(e){
-    if (!this.isMouseDown) return;
-    $('#es-grid-'+this.getId()).find(".cpselected").removeClass("cpselected");
-    //this.selectTo($(this));
-    this.selectTo($(e.currentTarget));
-  },
-
-  cellsSelectionMouseup: function(e){
-    if(this.isDraggingCell()) this.cellMouseUp(e);
-     this.isMouseDown = false;
-  },
-
-  //Keypress when cell in not active. Just for copy & paste feature.
-  cellsSelectionKeydown: function(e){
-    if(_this.editingCell == true){
-      $('textarea')._onKeyDown(e);
-      return false;
-    }
-
-    var code = (e.keyCode ? e.keyCode : e.which);
-    var cells = _this.getLocalSelection().getCells();
-    _.each(cells, function(cell){
-      _this.getSheet().commitCell(cell.row_id.toString(), cell.col_id.toString());
-    }, _this);
-
-    var cell = null;
-    var sheet_table =  $('#es-grid-'+_this.getId());
-    sheet_table.find(".cpselected").removeClass("cpselected");
-    switch(code){
-      case 37://LEFT ARROW
-        cell = sheet_table.find("tr").eq(_this.rowIndex).find("td").eq((_this.cellIndex < 0) ? 0 : --_this.cellIndex);
-        break;
-      case 38://UP ARROW
-        cell = sheet_table.find("tr").eq((_this.rowIndex < 0) ? 0 :  --_this.rowIndex).find("td").eq(_this.cellIndex);
-        break;
-      case 39://RIGHT ARROW
-        cell = sheet_table.find("tr").eq(_this.rowIndex).find("td").eq(++_this.cellIndex);
-        break;
-      case 40://DOWN ARROW
-        cell = sheet_table.find("tr").eq(++_this.rowIndex).find("td").eq(_this.cellIndex);
-        break;
-      case 13://enter
-        if (_this.isDraggingCell()) return;
-        cell = sheet_table.find("tr").eq(_this.rowIndex).find("td").eq(_this.cellIndex);
-        _this.clearOverlays();
-        _this.getLocalSelection().addCell(_this.getSheet().id,$(cell).data().row_id.toString(),$(cell).data().col_id.toString());
-        _this.current_cell = cell;
-        _this.editingCell = true;
-        break;
-    }
-
-    if (e.shiftKey) {
-      _this.selectTo(cell);
-    } else {
-      _this.current_cell = cell;
-      _this.current_cell.addClass("cpselected");
-      _this.startCellIndex = _this.cellIndex;
-      _this.startRowIndex  = _this.rowIndex;
-    }
-
-    return false;
-  },
-
-  onPaste: function(e){
-    var cell = null;
-    try {
-      var clipRows = e.clipboardData.getData('text/plain').split(String.fromCharCode(13));
-      for (var i = 0, ii = this.startRowIndex; (i < clipRows.length && ii < this.getSheet().rowCount()); i++, ii++) {
-        clipRows[i] = clipRows[i].split(String.fromCharCode(9));
-        for (var j = 0, jj = this.startCellIndex; (j < clipRows[i].length && jj < this.getSheet().colCount()); j++, jj++) {
-          cell = $('#es-grid-' + this.getId()).find("tr").eq(ii).find("td").eq(jj);
-          this.getSheet().updateCell($(cell).attr('data-row_id'), $(cell).attr('data-col_id'), clipRows[i][j]);
-        }
-      }
-    }catch(e){
-       console.log("onPaste error : " + e);
-    }
-    //console.log("PASTE " + this.rowIndex + " - " + this.cellIndex);
-  },
-
-  onCopy: function(e){
-    try {
-      var cbData = "";
-      for (var i = this.startRowIndex; i <= this.rowEnd; i++) {
-        var rowCells = $('#es-grid-' + this.getId()).find("tr").eq(i).find("td");
-        for (var j = this.startCellIndex; j <= this.cellEnd; j++)
-          cbData += $(rowCells.eq(j)).html() + ((j != this.cellEnd) ? String.fromCharCode(9) : "");
-        cbData += String.fromCharCode(13) /*"\n"*/;
-      }
-      e.clipboardData.setData('text/plain', cbData);
-      e.preventDefault();
-    }catch(e){
-      console.log("onCopy error : " + e);
-    }
-    //console.log("COPY " + this.rowIndex + " - " + this.cellIndex);
-
-  },
 
 // ## LIFECYCLE
 
@@ -240,36 +71,9 @@ var Table = module.exports = View.extend({
     this.$grid = null;
     $(window).resize(this.resize.bind(this));
 
-    /*isislab*/
-    //CELLS SELECTION FEATURE
-    this.isMouseDown    = false;
-    this.editingCell    = false;
-
-    this.startRowIndex  = null;
-    this.startCellIndex = null;
-    this.cellIndex      = null;
-    this.rowIndex       = null;
-    this.rowStart       = null;
-    this.rowEnd         = null;
-    this.cellStart      = null;
-    this.cellEnd        = null;
-
     this.current_cell           = null;
     this.cell_menu_current_cell = null;
     _this = this;
-
-    ['copy','paste'].forEach(function(event) {
-      document.addEventListener(event, function(e) {
-        switch(event) {
-          case 'copy':
-            _this.onCopy(e);
-            break;
-          case 'paste':
-            _this.onPaste(e);
-             break;
-        }
-      });
-    });
 
     document.oncontextmenu = function() {
       return false;
@@ -816,7 +620,7 @@ var Table = module.exports = View.extend({
     $('.es-table-cell-input').remove();
   },
 
-  inputKeypress: function(e){
+  /*inputKeypress: function(e){
     //return unless code is 'enter' or 'tab' 
     var code = (e.keyCode ? e.keyCode : e.which);
     if(code != 13 && code != 9 && code != 27) return;
@@ -845,7 +649,7 @@ var Table = module.exports = View.extend({
         break;
     }
     return false;
-  },
+  },*/
 
 
 // ## CELL SELECTIONS
