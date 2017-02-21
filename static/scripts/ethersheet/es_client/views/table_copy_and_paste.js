@@ -82,7 +82,6 @@ define( function(require,exports,module){
         },
 
         selectTo: function(cell) {
-            //var row = cell.parent();
             var currentColIndex = cell.index();
             currentColIndex = (currentColIndex < 0) ? this.startColIndex : currentColIndex;
             var currentRowIndex = cell.parent().index();
@@ -196,6 +195,8 @@ define( function(require,exports,module){
             }
 
             var code = (e.keyCode ? e.keyCode : e.which);
+
+            //to fix
             /*var cells = self.table.getLocalSelection();
             _.each(cells, function(cell){
                 self.getSheet().commitCell(cell.row_id.toString(), cell.col_id.toString());
@@ -207,16 +208,16 @@ define( function(require,exports,module){
 
             switch(code){
                 case 37://LEFT ARROW
-                    cell = sheet_table.find("tr").eq(self.rowIndex).find("td").eq((self.colIndex < 0) ? 0 : --self.colIndex);
+                    cell = sheet_table.find("tr").eq(self.rowIndex).find("td").eq( (self.colIndex <= 0) ? 0 : --self.colIndex );
                     break;
                 case 38://UP ARROW
-                    cell = sheet_table.find("tr").eq((self.rowIndex < 0) ? 0 :  --self.rowIndex).find("td").eq(self.colIndex);
+                    cell = sheet_table.find("tr").eq((self.rowIndex <= 0) ? 0 :  --self.rowIndex).find("td").eq(self.colIndex);
                     break;
                 case 39://RIGHT ARROW
-                    cell = sheet_table.find("tr").eq(self.rowIndex).find("td").eq(++self.colIndex);
+                    cell = sheet_table.find("tr").eq(self.rowIndex).find("td").eq( (self.colIndex < self.getSheet().cols.length) ? ++self.colIndex : self.colIndex );
                     break;
                 case 40://DOWN ARROW
-                    cell = sheet_table.find("tr").eq(++self.rowIndex).find("td").eq(self.colIndex);
+                    cell = sheet_table.find("tr").eq( (self.rowIndex < self.getSheet().rows.length) ? ++self.rowIndex : self.rowIndex ).find("td").eq(self.colIndex);
                     break;
                 case 13://ENTER
                     //user's dragging a cell to resize it
