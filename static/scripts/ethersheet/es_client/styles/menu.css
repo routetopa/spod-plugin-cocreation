@@ -37,9 +37,9 @@
   padding: 8px;
   text-decoration: none;
 }
-.es-menu-list li:first-child{
-  margin-top: 1px;/*ddr no buono*/
-}
+/*.es-menu-list li:first-child{
+  margin-top: 1px;/!*ddr no buono*!/
+}*/
 
 .es-sheet-name {
   width: 145px;
@@ -123,4 +123,20 @@ button#rename-sheet{
 
 li#es-add-sheet-button {
   display: none;
+}
+
+ul#add-row-menu{
+  position: absolute;
+  margin-left: 113px;
+  top: 0px;
+  width: 100px;
+  display:none;
+}
+
+#add-row-menu-trigger:hover ~ #add-row-menu{
+  display:block;
+}
+
+#add-row-menu:hover{
+  display:block;
 }

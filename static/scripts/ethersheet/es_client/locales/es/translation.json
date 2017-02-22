@@ -11,6 +11,8 @@
   "sort_row": "Revisar Fila",
   "remove_row": "Quitar Fila",
   "add_row": "Añadir Fila",
+  "add_row_single": "Single row",
+  "add_row_10": "10 rows",
   "remove_column": "Quitar Columna",
   "add_column": "Añadir Columna",
   
