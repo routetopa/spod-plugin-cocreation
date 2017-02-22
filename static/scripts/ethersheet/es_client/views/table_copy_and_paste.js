@@ -14,6 +14,7 @@ define( function(require,exports,module){
             'mousedown .es-table-cell': 'cellsSelectionMousedown',
             'mouseover .es-table-cell': 'cellsSelectionMouseover',
             'mouseup .es-table-cell'  : 'cellsSelectionMouseup',
+            'dblclick .es-table-cell': 'cellClicked',
             'keydown': 'inputKeypress'
         },
 
@@ -154,6 +155,10 @@ define( function(require,exports,module){
         cellsSelectionMouseup: function(e){
             if(this.table.isDraggingCell()) this.table.cellMouseUp(e);
             this.isMouseDown = false;
+        },
+
+        cellClicked: function(e){
+           this.editingCell = true;
         },
 
         //KEYBOARD EVENTS STUFFS
