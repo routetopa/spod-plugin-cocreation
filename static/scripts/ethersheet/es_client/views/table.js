@@ -293,6 +293,11 @@ var Table = module.exports = View.extend({
     return this;
   },
 
+  paginationRender : function(e){
+    this.table_function_menu_instance.getPagination();
+    this.table_function_menu_instance.goToPageInGrid();
+  },
+
   resize: function(){
     if(!this.is_rendered) return;
     //var grid_height = this.$el.innerHeight() - 18;
@@ -330,10 +335,6 @@ var Table = module.exports = View.extend({
 
   setTableFuncitonMenuInstance: function(table_function_menu){
     this.table_function_menu_instance = table_function_menu;
-  },
-
-  paginationRender : function(){
-     this.table_function_menu_instance.pageSelection();
   },
 
 // ## ROW METHODS
@@ -455,7 +456,6 @@ var Table = module.exports = View.extend({
     if (this.isDraggingCell()) return;
     this.selectCell(e);
     this.current_cell = $(e.currentTarget);
-    this.editingCell = true;
   },
   
   cellMouseDown: function(e){
@@ -711,7 +711,6 @@ var Table = module.exports = View.extend({
       e.preventDefault();
       this.clearOverlays();
       this.addCellToSelection(e);
-      this.editingCell = true;
       this.cell_menu_current_cell = $(e.currentTarget);
       var $selectedCell = $(e.currentTarget);
       var pos = $selectedCell.position();

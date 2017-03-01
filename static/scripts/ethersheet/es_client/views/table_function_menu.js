@@ -25,7 +25,6 @@ define( function(require,exports,module){
 
         events: {
             'search #filter_key'     : 'onSearch',
-            //'change #filter_key'     : 'onSearch',
             'keyup #filter_key'            : 'onSearch',
             'click #pagination_prev'       : 'prev',
             'click #pagination_next'       : 'next',
@@ -235,6 +234,8 @@ define( function(require,exports,module){
                 this.last();
             }
             this.code +=  '<a id="pagination_next">&#9658;</a>'; // next button
+
+            $('#pagination_controller').html(this.code);
         },
 
         // previous page
@@ -259,8 +260,8 @@ define( function(require,exports,module){
         pageSelection: function(page){
             if(page != undefined) this.page = page;
             this.getPagination();
-            $('#pagination_controller').html(this.code);
-            self.goToPageInGrid();
+            this.goToPageInGrid();
+            this.table.$grid.scrollTop(this.rows_delta);
         },
 
         onPageSelection: function(e){
@@ -284,9 +285,9 @@ define( function(require,exports,module){
                 this.last_row_index  = offset_last + this.rows_delta;
             }
 
-            this.getSheet().rows = _this.getSheet().allRows.slice(this.first_index_row, this.last_row_index);
+            this.getSheet().rows = this.getSheet().allRows.slice(this.first_index_row, this.last_row_index);
             this.table.render();
-            this.table.$grid.scrollTop(this.rows_delta/* * this.rows_delta * 2*/);
+
             this.highlightSearchResults();
         },
 
