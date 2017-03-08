@@ -6,11 +6,13 @@ var Command = require('es_command');
 var Transactor = require('transactor');
 var EtherSheetService = require('./ethersheet_service');
 var createTransactionHandler = require('./transaction_handler');
-/*ISISLab code*/
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var cookieSession = require('cookie-session');
 var formidable = require('formidable');
+
+/*ISISLab code*/
+var cookieParser  = require('cookie-parser');
+var bodyParser    = require('body-parser');
+var cookieSession = require('cookie-session');
+var compression   = require('compression');
 /*End ISISLab code*/
 
 var ES_CLIENT_PATH= __dirname + '/../node_modules/es_client';
@@ -24,6 +26,9 @@ exports.createServer = function(config){
    * EtherSheet HTTP Server
    ***********************************************/
   var app = express();
+  //improvement preformance
+  app.use(compression());
+
   var http_server = http.createServer(app);
 
   // Server Settings
@@ -37,6 +42,9 @@ exports.createServer = function(config){
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(cookieSession({secret: 'app_1'}));
+
+  //improvement preformance
+  //app.use('view cache', true);
 
   app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -61,7 +69,7 @@ exports.createServer = function(config){
   /**********************************************
    * HTTP Routes
    *********************************************/
-  //index
+    //index
   app.get('/', function(req,res){
     res.render('index.ejs', {introText: config.intro_text});
   });
@@ -118,6 +126,51 @@ exports.createServer = function(config){
     });
   });
 
+  //Upload image from a cell
+  // Post files
+  app.post('/upload/image', function(req, res)
+  {
+    res.setHeader('Content-Type', 'application/json');
+
+    var form = new formidable.IncomingForm();
+    form.parse(req, function(err, fields, files)
+    {
+
+      var sheet_id = fields.sheet_id;
+      var image_name = files.image_file.name;
+
+      fs.readFile(files.image_file.path, function (err, data)
+      {
+        /// If there's an error
+        if(!image_name)
+        {
+          console.log("There was an error");
+          res.send(JSON.stringify({ status: false, massage: "There was an error"}));
+        }else{
+          var dir     = __dirname +  "/uploads/" + sheet_id;
+          //var thumbPath = __dirname + "/uploads/thumbs/" + imageName;
+          if (!fs.existsSync(dir)){
+            fs.mkdirSync(dir);
+          }
+
+          var newPath = dir + "/" + image_name;
+          console.log(newPath);
+
+          fs.writeFile(newPath, data, function (err) {
+            // let's see it
+            console.log("Image uploaded");
+            var image_url = req.protocol + "://" + req.hostname + ":" + config.port + "/images/" + sheet_id + "/" + image_name;
+            res.send(JSON.stringify({ status: true, massage: "Image uploaded", image_url: image_url}));
+          });
+        }
+      });
+
+    });
+  });
+
+  app.get('/images/:sheet_id/:image', function (req, res) {
+    res.sendFile( __dirname +  "/uploads/" +  String(req.params.sheet_id) + "/" +  String(req.params.image));
+  });
 
   /***********************************************
    * PubSub Server
@@ -153,7 +206,7 @@ exports.createServer = function(config){
       id: sheet_id,
       action: 'refreshSheet',
       params:[]
-    };
+    }
     var refresh_command = Command.serialize(refresh_msg);
     console.log('sending refresh command');
     pub_server.broadcast(null,sheet_id,refresh_command);
@@ -173,4 +226,4 @@ exports.createServer = function(config){
   });
 
   return http_server;
-};
+}

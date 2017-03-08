@@ -41,6 +41,7 @@ var Table = module.exports = View.extend({
     'click .es-column-header': 'showColMenu',
     /*isislab*/
     'mousedown .es-table-cell': 'showCellMenu',
+    'mouseover .es-table-cell': 'showCellPreview',
     /*and isislab*/
     'contextmenu .es-column-header': 'showColMenu',
     'contextmenu .es-row-header': 'showRowMenu',
@@ -538,6 +539,30 @@ var Table = module.exports = View.extend({
     this.getSheet().commitCell(data.row_id.toString(), data.col_id.toString());
   },
 
+  showCellPreview: function(e){
+    var cell  = $(e.currentTarget);
+    if((/\.(gif|jpg|jpeg|tiff|png)$/i).test(cell.html())){
+      var xOffset = 10;//-20;
+      var yOffset = 10;
+      var preview = $("#image-preview");
+      if(preview.css('display') == 'none') preview.html("<img src='" + cell.html() + "' alt='Image preview' />");
+      preview.css({
+        "top": (e.pageY - yOffset) + "px",
+        "left": (e.pageX + xOffset) + "px",
+        'display': 'block'
+      });
+
+      cell
+          .on('mouseleave', function (e) {
+            preview.off('click');
+            preview.hide();
+          })
+          /*.on('click', function(){
+            window.open(cell.attr('data-value'));
+          })*/;
+    }
+  },
+
 // ## CELL DRAGGING
 
   isDraggingCell: function(){
@@ -706,8 +731,6 @@ var Table = module.exports = View.extend({
   showCellMenu: function(e){
     if(e.which == 3)//right click
     {
-      /*alert("Right mouse button clicked on cell");
-      console.log(e);*/
       e.preventDefault();
       this.clearOverlays();
       this.addCellToSelection(e);
@@ -717,13 +740,14 @@ var Table = module.exports = View.extend({
 
       var width = $selectedCell.outerWidth();
       var left = pos.left + width; //offset;
-      var top = e.clientY;//pos.top + $selectedCell.innerHeight();
+      var top = e.clientY;//pos.top + $selectedCell.in nerHeight();
       var html = "<div class='es-context-menu es-overlay' style='left:"+left+"px;top:"+top+"px;position: absolute;'></div>";
       var $menu = $(html);
 
       var menu = new CellMenuView({
         el: $menu,
-        cell_id: String($selectedCell.data("cell_id")),
+        cell: $selectedCell,
+        table: this,
         data: this.data,
       }).render();
 

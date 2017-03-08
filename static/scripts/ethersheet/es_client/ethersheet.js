@@ -159,19 +159,6 @@ Ethersheet.prototype.initializeCommands = function(o){
   var es = this;
   this.keyboard.on('meta_90',this.undoCommand.bind(this));
   this.keyboard.on('shift_meta_90',this.redoCommand.bind(this));
-  /*this.keyboard.on('37',this.table.cellsSelectionKeydown);
-  this.keyboard.on('38',this.table.cellsSelectionKeydown);
-  this.keyboard.on('39',this.table.cellsSelectionKeydown);
-  this.keyboard.on('40',this.table.cellsSelectionKeydown);
-  this.keyboard.on('shift_37',this.table.cellsSelectionKeydown);
-  this.keyboard.on('shift_38',this.table.cellsSelectionKeydown);
-  this.keyboard.on('shift_39',this.table.cellsSelectionKeydown);
-  this.keyboard.on('shift_40',this.table.cellsSelectionKeydown);
-  //this.keyboard.on('meta_67',this.table.cellsSelectionKeydown);//ctrl + c
-  //this.keyboard.on('meta_86',this.table.cellsSelectionKeydown);//ctrl + v
-  this.keyboard.on('13',this.table.cellsSelectionKeydown);//enter
-  //this.keyboard.on('16',this.table.cellsSelectionKeydown);//shift
-  this.keyboard.on('27',this.table.cellsSelectionKeydown);//escape*/
 };
 
 Ethersheet.prototype.onConnect = function(handler){

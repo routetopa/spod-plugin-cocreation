@@ -2,7 +2,6 @@ if (typeof define !== 'function') { var define = require('amdefine')(module) }
 define( function(require,exports,module){
 
     var $         = require('jquery');
-    var t         = require('../templates');
     var RefBinder = require('ref-binder');
     var View      = require('backbone').View;
     var self;
@@ -14,7 +13,7 @@ define( function(require,exports,module){
             'mousedown .es-table-cell': 'cellsSelectionMousedown',
             'mouseover .es-table-cell': 'cellsSelectionMouseover',
             'mouseup .es-table-cell'  : 'cellsSelectionMouseup',
-            'dblclick .es-table-cell': 'cellClicked',
+            'dblclick .es-table-cell' : 'cellClicked',
             'keydown': 'inputKeypress'
         },
 

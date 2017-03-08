@@ -16,6 +16,7 @@ define( function(require,exports,module){
     var $ = require('jquery');
     var t = require('../templates');
     var RefBinder = require('ref-binder');
+    var UploadImage = require('../views/upload_image');
     var View = require('backbone').View;
     var _ = require('underscore');
 
@@ -25,14 +26,23 @@ define( function(require,exports,module){
             'click .es-menu-button': 'onButtonClick'
         },
 
+        uploadImageDialog : null,
+
         initialize: function(o){
             this.models = new RefBinder(this);
             this.data = o.data;
-            this.cell_id = o.cell_id;
+            this.cell = o.cell;
+            this.table = o.table,
             this.setSheets(o.data.sheets || null);
             this.setUser(o.data.users.getCurrentUser());
             var current_sheet_id = this.getUser().getCurrentSheetId();
             this.setSheet(o.data.sheets.get(current_sheet_id) || null);
+            
+            this.uploadImageDialog =  new UploadImage({
+                el: $('#es-modal-box'),
+                cell: this.cell,
+                table: this.table
+            });
         },
 
         getSheet: function(){
@@ -72,13 +82,15 @@ define( function(require,exports,module){
         },
 
         onButtonClick: function(e){
-            console.log("CLICKLICKLCIK")
             var action = $(e.currentTarget).data('action');
             switch(action){
                 case 'add_geo_point':
                     this.addGeoPoint();
                     break;
-            };
+                case 'add_image':
+                    this.addImage();
+                    break;
+            }
         },
 
         sortRows:function(){
@@ -87,7 +99,12 @@ define( function(require,exports,module){
 
         addGeoPoint:function(){
             top.postMessage("open-select-merker-map_event", 'http://' + window.location.hostname);
+        },
+
+        addImage: function(){
+            this.uploadImageDialog.render();
         }
+
     });
 
 });
