@@ -159,7 +159,7 @@ exports.createServer = function(config){
           fs.writeFile(newPath, data, function (err) {
             // let's see it
             console.log("Image uploaded");
-            var image_url = req.protocol + "://" + req.hostname + ":" + config.port + "/images/" + sheet_id + "/" + image_name;
+            var image_url = req.protocol + "://" + req.headers.host /*+ ":" + config.port*/ + "/images/" + sheet_id + "/" + image_name;
             res.send(JSON.stringify({ status: true, massage: "Image uploaded", image_url: image_url}));
           });
         }
