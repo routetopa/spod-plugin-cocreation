@@ -385,7 +385,7 @@ color:#111111;
    background-color: #CCCCCC;
 }
 
-input[type="file"] {
+#image_file {
   display: none;
 }
 
