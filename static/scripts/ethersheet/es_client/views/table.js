@@ -20,6 +20,7 @@ var ColMenuView = require('./col_menu');
 var RowMenuView = require('./row_menu');
 /*Isislab*/
 var CellMenuView = require('./cell_menu');
+var MapView = require('./map_view');
 /*and Isislab*/
 var _ = require('underscore');
 var h = require('es_client/helpers');
@@ -87,6 +88,7 @@ var Table = module.exports = View.extend({
       _this.updateCellInput($cell);
 
     });
+
     /*end isislab*/
   },
 
@@ -275,7 +277,7 @@ var Table = module.exports = View.extend({
     this.initializeScrolling();
     this.initializeSelections();
 
-    this.drawRowHeaders()
+    this.drawRowHeaders();
     this.drawColHeaders();
 
     setTimeout(this.drawRowHeaders.bind(this),100);
@@ -541,26 +543,37 @@ var Table = module.exports = View.extend({
 
   showCellPreview: function(e){
     var cell  = $(e.currentTarget);
-    if((/\.(gif|jpg|jpeg|tiff|png)$/i).test(cell.html())){
-      var xOffset = 10;//-20;
-      var yOffset = 10;
-      var preview = $("#image-preview");
-      if(preview.css('display') == 'none') preview.html("<img src='" + cell.html() + "' alt='Image preview' />");
-      preview.css({
-        "top": (e.pageY - yOffset) + "px",
-        "left": (e.pageX + xOffset) + "px",
-        'display': 'block'
-      });
+    var xOffset = 10;
+    var yOffset = 10;
+    var preview = $("#cell-preview");
 
-      cell
-          .on('mouseleave', function (e) {
-            preview.off('click');
-            preview.hide();
-          })
-          /*.on('click', function(){
-            window.open(cell.attr('data-value'));
-          })*/;
+    if((/\.(gif|jpg|jpeg|tiff|png)$/i).test(cell.html())){//image
+      preview.html("<img src='" + cell.html() + "' alt='Image preview' />");
+    }else if((/[0-9]{2}[.]{1}[0-9]+[,]{1}[0-9]{2}[.]{1}[0-9]+/i).test(cell.html())){//geographic coords
+      var mapPreview = new MapView({
+        el: preview,
+        cell: cell,
+        table: this,
+        coords : cell.html().split(",").map(Number).reverse()
+      });
+    }else{
+      return;
     }
+
+    preview.css({
+      "top": (e.pageY - yOffset) + "px",
+      "left": (e.pageX + xOffset) + "px",
+      'display': 'block'
+    });
+
+    if(!_.isUndefined(mapPreview)){
+      mapPreview.render();
+    }
+
+    cell.on('mouseleave', function (e) {
+      preview.off('click');
+      preview.hide();
+    });
   },
 
 // ## CELL DRAGGING

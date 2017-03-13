@@ -178,6 +178,10 @@ color:#111111;
   height: 38px;
 }
 
+/*************************
+TABLE FUNCTION MENU STUFFS
+*************************/
+
 #es-table-function-menu{
   /*font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;*/
   background-color: #c8e6c9;
@@ -306,25 +310,26 @@ color:#111111;
 
 .pagination a:hover:not(.active) {background-color: #a6a6a6;}
 
-#image-preview{
+/******************
+IMAGE UPLOAD STUFFS
+******************/
+
+#cell-preview{
   top: 0;
   right: 0;
   position: absolute;
-  height: 200px;
+  /*height: 200px;*/
   width: 200px;
   max-width: 200px;
-  max-height: 200px;
-  /*background-size:contain;
-  transform: scale(0.5, 0.5);
-  -ms-transform: scale(0.5, 0.5);
-  -webkit-transform: scale(0.5, 0.5);*/
+  /*max-height: 200px;*/
   display: none;
 }
 
-#image-preview img{
+#cell-preview img{
   height: 100%;
   width: 100%;
   object-fit: contain;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
 #dragzone{
@@ -391,5 +396,29 @@ color:#111111;
 
 h2.es-modal-title{
   color: #555555;
+}
+
+#map{
+  height: 200px;
+  width: 100%;
+  /*border: 1px solid #2196F3;*/
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+
+}
+
+.ol-attribution.ol-unselectable.ol-control.ol-uncollapsible{
+  display: none;
+}
+
+.ol-zoom.ol-unselectable.ol-control{
+  background: #ffffff;
+  border: 1px solid #ccc;
+  position: absolute;
+  top: 2%;
+  right: 1%;
+  z-index: 1;
+}
+.ol-rotate-reset{
+  display: none;
 }
 

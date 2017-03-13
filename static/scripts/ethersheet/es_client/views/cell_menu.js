@@ -1,4 +1,5 @@
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
+
 define( function(require,exports,module){
 
     /*
@@ -17,6 +18,7 @@ define( function(require,exports,module){
     var t = require('../templates');
     var RefBinder = require('ref-binder');
     var UploadImage = require('../views/upload_image');
+    var MapView     = require('../views/map_view');
     var View = require('backbone').View;
     var _ = require('underscore');
 
@@ -27,6 +29,7 @@ define( function(require,exports,module){
         },
 
         uploadImageDialog : null,
+        mapDialog: null,
 
         initialize: function(o){
             this.models = new RefBinder(this);
@@ -43,6 +46,12 @@ define( function(require,exports,module){
                 cell: this.cell,
                 table: this.table
             });
+
+            /*this.mapView =  new MapView({
+                el: $('#es-modal-box'),
+                cell: this.cell,
+                table: this.table
+            });*/
         },
 
         getSheet: function(){
@@ -99,6 +108,7 @@ define( function(require,exports,module){
 
         addGeoPoint:function(){
             top.postMessage("open-select-merker-map_event", 'http://' + window.location.hostname);
+            //this.mapView.render();
         },
 
         addImage: function(){
