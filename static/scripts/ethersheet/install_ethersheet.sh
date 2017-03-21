@@ -69,10 +69,8 @@ copySettings()
     #server
     cp config.js /home/ethersheet/ethersheet/EtherSheet
     cp app.js /home/ethersheet/ethersheet/EtherSheet
-    #chmod 777 /home/ethersheet/ethersheet/EtherSheet/config.js
     cp -Rf ./lib/* /home/ethersheet/ethersheet/EtherSheet/lib
     #client
-    #mkdir /home/ethersheet/ethersheet/EtherSheet/node_modules/es_clien
     cp -Rf ./es_client/* /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client
     mkdir /home/ethersheet/ethersheet/EtherSheet/lib/uploads
     chown -R ethersheet:ethersheet /home/ethersheet/ethersheet/EtherSheet/lib/uploads
