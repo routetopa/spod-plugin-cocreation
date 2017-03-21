@@ -74,7 +74,7 @@ copySettings()
     cp server.js /home/ethersheet/ethersheet/EtherSheet/lib
     cp ./models/sheet.js /home/ethersheet/ethersheet/EtherSheet/lib/models
     #client
-    #mkdir /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client/locales/it
+    #mkdir /home/ethersheet/ethersheet/EtherSheet/node_modules/es_clien
     cp -Rf ./es_client/* /home/ethersheet/ethersheet/EtherSheet/node_modules/es_client
     mkdir /home/ethersheet/ethersheet/EtherSheet/lib/uploads
     chown -R ethersheet:ethersheet /home/ethersheet/ethersheet/EtherSheet/lib/uploads

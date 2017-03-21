@@ -15,6 +15,9 @@
   "add_row_10": "10 rows",
   "remove_column": "Remove Column",
   "add_column": "Add Column",
+  "add_geo_point": "Add geographic information",
+  "add_image": "Add an image",
+  "dragzone_caption" : "Drag a file here",
   
   "newSheet": "New Sheet",
   "exportCSV": "Export CSV",
