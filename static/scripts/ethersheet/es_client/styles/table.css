@@ -122,6 +122,8 @@ th.es-column-header:hover, th.es-row-header:hover {
   padding: 4px;
   line-height: 16px;
   user-select: none;
+  min-height: 14px;
+  height: 14px;
 }
 .es-table-cell-input{
 border: 0px;
@@ -203,17 +205,21 @@ overflow:scroll;
   border: none;
   overflow: auto;
   outline: none;
-
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
-
-  padding: 3px 2px;
+  padding: 4px;
   margin-top: 1px;
   margin-left: 1px;
+  min-height: 14px;
+  line-height: 14px;
 }
 
 td.cpselected{
   background-color: #4CAE50;
   opacity: 0.6;
+}
+
+div#es-logo h1{
+  display: none;
 }
