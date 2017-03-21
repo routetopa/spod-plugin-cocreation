@@ -1,8 +1,6 @@
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
 define( function(require,exports,module){
-
-   var ol          = require('ol');
    var t           = require('../templates');
    var RefBinder   = require('ref-binder');
    var View        = require('backbone').View;
@@ -21,6 +19,7 @@ define( function(require,exports,module){
        layers:  [],
        vectorSource: null,
        coords:[],
+       geojson: "",
        map: null,
 
        events: {
@@ -31,6 +30,7 @@ define( function(require,exports,module){
            this.cell = o.cell;
            this.table = o.table;
            this.coords = o.coords;
+           this.geojson = o.geojson;
            self = this;
 
            this.olview = new ol.View({
@@ -81,8 +81,8 @@ define( function(require,exports,module){
            });
        },
 
-       render: function () {
-           this.$el.html(t.map_view({}));
+       render: function (template) {
+           this.$el.html((_.isUndefined(template)) ? t.map_view({}) : template);
 
            this.map = new ol.Map({
                target:'map',
@@ -103,43 +103,25 @@ define( function(require,exports,module){
                ]
            });
 
-           if(!_.isUndefined(this.coords))
-              this.setMarker(this.coords);
+           if(!_.isUndefined(this.coords)) {
+               this.setMarker(this.coords);
+               this.olview.setCenter(this.coords);
+               this.olview.setZoom(16);
+           }
 
-           //Instantiate with some options and add the Control
-          /* this.geocoder = new Geocoder('nominatim', {
-               provider: 'photon',
-               lang: 'en',
-               placeholder: 'Search for ...',
-               limit: 5,
-               keepOpen: true,
-               preventDefault : true
-           });
+           if(!_.isUndefined(this.geojson)){
+               var vectorSource = new ol.source.Vector({
+                   features: (new ol.format.GeoJSON()).readFeatures(this.geojson)
+               });
 
-           this.overlay = new ol.Overlay({
-               element: document.getElementById('popup'),
-               offset: [0, -40]
-           });
+               var geojsonLayer = new ol.layer.Vector({
+                   source: vectorSource
+               });
 
-           this.map.addControl(this.geocoder);
+               this.map.getLayers().push(geojsonLayer);
+               this.map.getView().fit(vectorSource.getExtent(), this.map.getSize());
 
-           //Listen when an address is chosen
-           this.geocoder.on('addresschosen', function(evt){
-               self.olview.setCenter(evt.coordinate);
-               self.olview.setZoom(16);
-               if(self.selected_interaction == 0) {
-                   self.setMarker(evt.coordinate);
-               }
-
-               //self.$.popup_content.innerHTML = '<p>'+ evt.address.formatted +'</p>';
-               //self.overlay.setPosition(coord);
-           });
-
-           this.map.on('click', function(evt) {
-               if(self.selected_interaction == 0) {
-                   self.setMarker(evt.coordinate);
-               }
-           });*/
+           }
        },
 
        setMarker: function(coords){
@@ -154,10 +136,7 @@ define( function(require,exports,module){
            this.vectorSource.addFeature( iconFeature );
 
            //this.coordinate =  ol.proj.transform([coordinate[1],coordinate[0]], "EPSG:900913", "EPSG:4326");
-           this.coordinate = [coords[1],coords[0]];
-
-           this.olview.setCenter(coords);
-           this.olview.setZoom(16);
+           this.coords = [coords[0],coords[1]];
        }
 
    })

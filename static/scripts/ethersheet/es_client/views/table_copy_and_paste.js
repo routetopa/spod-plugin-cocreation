@@ -194,7 +194,9 @@ define( function(require,exports,module){
         cellsSelectionKeydown: function(e){
 
             if(self.editingCell == true){
-                $('textarea')._onKeyDown(e);
+                try {
+                    $('textarea')._onKeyDown(e);
+                }catch(e){}
                 return false;
             }
 

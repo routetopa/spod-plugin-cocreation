@@ -546,18 +546,26 @@ var Table = module.exports = View.extend({
     var xOffset = 10;
     var yOffset = 10;
     var preview = $("#cell-preview");
+    var mapPreview;
 
     if((/\.(gif|jpg|jpeg|tiff|png)$/i).test(cell.html())){//image
       preview.html("<img src='" + cell.html() + "' alt='Image preview' />");
-    }else if((/[0-9]{2}[.]{1}[0-9]+[,]{1}[0-9]{2}[.]{1}[0-9]+/i).test(cell.html())){//geographic coords
-      var mapPreview = new MapView({
+    }else if((/^[0-9]{2}[.]{1}[0-9]+[,]{1}[0-9]{2}[.]{1}[0-9]+$/g).test(cell.html())){//geographic coords
+      mapPreview = new MapView({
         el: preview,
         cell: cell,
         table: this,
         coords : cell.html().split(",").map(Number).reverse()
       });
+    }else if((/^\{/i).test(cell.html()) && (/\}$/i).test(cell.html())){//geojson
+      mapPreview = new MapView({
+        el: preview,
+        cell: cell,
+        table: this,
+        geojson : cell.html()
+      });
     }else{
-      return;
+      return
     }
 
     preview.css({
