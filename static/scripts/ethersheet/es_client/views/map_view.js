@@ -10,7 +10,7 @@ define( function(require,exports,module){
 
        satLayer:  new ol.layer.Tile({
            title: 'Global Imagery',
-           visible: false,
+           visible: true,
            source: new ol.source.BingMaps({
                key: "AiAjdlCagGtE5269Z4YP3e3VtMkzzAKvowq5cQadahNZjVxttUxdDS40u91Uv8qP",
                imagerySet: 'AerialWithLabels'})
