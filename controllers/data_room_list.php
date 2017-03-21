@@ -5,8 +5,8 @@ class COCREATION_CTRL_DataRoomList extends OW_ActionController
 
     public function index(array $params)
     {
-        OW::getDocument()->addStyleSheet(OW::getPluginManager()->getPlugin('spodpublic')->getStaticCssUrl() . 'perfect-scrollbar.min.css');
-        OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('spodpublic')->getStaticJsUrl() . 'perfect-scrollbar.jquery.js');
+        OW::getDocument()->addStyleSheet(OW::getPluginManager()->getPlugin('spodagora')->getStaticCssUrl() . 'perfect-scrollbar.min.css');
+        OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('spodagora')->getStaticJsUrl() . 'perfect-scrollbar.jquery.js');
 
         $js = UTIL_JsGenerator::composeJsString('
                 ODE.ajax_coocreation_get_dataset      = {$ajax_coocreation_get_dataset}
