@@ -550,7 +550,7 @@ var Table = module.exports = View.extend({
 
     if((/\.(gif|jpg|jpeg|tiff|png)$/i).test(cell.html())){//image
       preview.html("<img src='" + cell.html() + "' alt='Image preview' />");
-    }else if((/^[0-9]{2}[.]{1}[0-9]+[,]{1}[0-9]{2}[.]{1}[0-9]+$/g).test(cell.html())){//geographic coords
+    }else if((/^[0-9]{1,2}[.]{1}[0-9]+[,]{1}[\s]?[0-9]{1,2}[.]{1}[0-9]+$/g).test(cell.html())){//geographic coords
       mapPreview = new MapView({
         el: preview,
         cell: cell,
@@ -565,7 +565,7 @@ var Table = module.exports = View.extend({
         geojson : cell.html()
       });
     }else{
-      return
+      return;
     }
 
     preview.css({
