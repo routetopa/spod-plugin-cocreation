@@ -172,6 +172,11 @@ exports.createServer = function(config){
     res.sendFile( __dirname +  "/uploads/" +  String(req.params.sheet_id) + "/" +  String(req.params.image));
   });
 
+  app.get('/images/:collection_id', function (req, res) {
+    es.
+
+  });
+
   /***********************************************
    * PubSub Server
    ***********************************************/
@@ -206,7 +211,7 @@ exports.createServer = function(config){
       id: sheet_id,
       action: 'refreshSheet',
       params:[]
-    }
+    };
     var refresh_command = Command.serialize(refresh_msg);
     console.log('sending refresh command');
     pub_server.broadcast(null,sheet_id,refresh_command);
@@ -226,4 +231,4 @@ exports.createServer = function(config){
   });
 
   return http_server;
-}
+};
