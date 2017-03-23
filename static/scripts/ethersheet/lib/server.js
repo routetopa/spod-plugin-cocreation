@@ -172,10 +172,10 @@ exports.createServer = function(config){
     res.sendFile( __dirname +  "/uploads/" +  String(req.params.sheet_id) + "/" +  String(req.params.image));
   });
 
-  app.get('/images/:collection_id', function (req, res) {
+  /*app.get('/images/:collection_id', function (req, res) {
     es.
 
-  });
+  });*/
 
   /***********************************************
    * PubSub Server
