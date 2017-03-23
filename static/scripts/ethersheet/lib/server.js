@@ -159,7 +159,7 @@ exports.createServer = function(config){
           fs.writeFile(newPath, data, function (err) {
             // let's see it
             console.log("Image uploaded");
-            var image_url = req.protocol + "://" + req.headers.host /*+ ":" + config.port*/ + "/images/" + sheet_id + "/" + image_name;
+            var image_url = req.protocol + "://" + req.hostname + ":" + config.port + "/images/" + sheet_id + "/" + image_name;
             res.send(JSON.stringify({ status: true, massage: "Image uploaded", image_url: image_url}));
           });
         }
@@ -172,10 +172,18 @@ exports.createServer = function(config){
     res.sendFile( __dirname +  "/uploads/" +  String(req.params.sheet_id) + "/" +  String(req.params.image));
   });
 
-  /*app.get('/images/:collection_id', function (req, res) {
-    es.
-
-  });*/
+  app.get('/images/:collection_id', function (req, res){
+    var collection_id = String(req.params.collection_id);
+    es.getSheetCollectionIds(collection_id, function(err, sheet_ids){
+      var images = [];
+      fs.readdir(__dirname +  "/uploads/" + sheet_ids[0], function(err, files){
+        for(var i in files)
+          images.push(req.protocol + "://" + req.hostname + ":" + config.port + "/images/" + sheet_ids[0] + "/" + files[i]);
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify({ status: true, massage: "Collection fuond", images: images}));
+      });
+    })
+  });
 
   /***********************************************
    * PubSub Server
@@ -211,7 +219,7 @@ exports.createServer = function(config){
       id: sheet_id,
       action: 'refreshSheet',
       params:[]
-    };
+    }
     var refresh_command = Command.serialize(refresh_msg);
     console.log('sending refresh command');
     pub_server.broadcast(null,sheet_id,refresh_command);
@@ -231,4 +239,4 @@ exports.createServer = function(config){
   });
 
   return http_server;
-};
+}

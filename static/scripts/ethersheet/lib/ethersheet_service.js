@@ -1,3 +1,4 @@
+
 var util = require("util");
 var events = require("events");
 var ueberDB = require("ueberdb2");
@@ -18,13 +19,13 @@ var EtherSheetService = module.exports = function(config){
   events.EventEmitter.call(this);
   this.connectionHandler = function(){};
   es.db = new ueberDB.database(
-    es.config.db_type, {
-    socketPath : '/var/run/mysqld/mysqld.sock',
-    user: es.config.db_user, 
-    host: es.config.db_host, 
-    password: es.config.db_password, 
-    database: es.config.db_name 
-  });
+      es.config.db_type, {
+        socketPath : '/var/run/mysqld/mysqld.sock',
+        user: es.config.db_user,
+        host: es.config.db_host,
+        password: es.config.db_password,
+        database: es.config.db_name
+      });
   es.db.init(function(err){
     es.connectionHandler(err);
   });
@@ -65,7 +66,7 @@ EtherSheetService.prototype.getModel = function(type,id){
 };
 
 EtherSheetService.prototype.getRandomColor = function(){
-  var idx = Math.floor(Math.random() * 100);  
+  var idx = Math.floor(Math.random() * 100);
   return EtherSheetService.colors[idx % EtherSheetService.colors.length]
 };
 
@@ -76,6 +77,13 @@ EtherSheetService.prototype.getSheetCollection = function(collection_id,cb){
     sheet_collection.setSheetIds(data);
     sheet_collection.getSheets(cb);
   });
+};
+
+//Get all sheet ids
+EtherSheetService.prototype.getSheetCollectionIds = function(collection_id,cb) {
+  var es = this;
+  var sheet_collection = new SheetCollection(collection_id,es,es.db);
+  sheet_collection.find(collection_id,cb);
 };
 
 EtherSheetService.prototype.getSheet = function(sheet_id,cb){
@@ -111,15 +119,14 @@ EtherSheetService.prototype.getSheet = function(sheet_id,cb){
     sheet.touchAccessTime();
     cb(null,data);
   });
-}; 
+};
 
-/*EtherSheetService.prototype.sheetToCSV = function(sheet_id,cb){
+/*EtherSheetService.prototype.sheetToCSV_org = function(sheet_id,cb){
   var es = this;
   es.getSheet(sheet_id,function(err,sheet_data){
     var output = '';
     _.each(sheet_data.rows, function(row){
       _.each(sheet_data.cols, function(col){
-        debugger;
         if(sheet_data.cells[row] && sheet_data.cells[row][col]){
           output += sheet_data.cells[row][col].value + ',';
         } else {
@@ -134,54 +141,59 @@ EtherSheetService.prototype.getSheet = function(sheet_id,cb){
 };*/
 
 EtherSheetService.prototype.sheetToCSV = function(sheet_id,cb){
-  var es = this;
-  es.getSheet(sheet_id,function(err,sheet_data){
-    var output = '';
+    var es = this;
+    es.getSheet(sheet_id,function(err,sheet_data){
+      var output = '';
 
-    var frow = sheet_data.rows[0];
-    var lcol;
-    for(lcol = 0; lcol < sheet_data.cols.length; lcol++ ){
-      if(sheet_data.cells[frow][sheet_data.cols[lcol]] == undefined)
-        break;
-      else
-        output += sheet_data.cells[frow][sheet_data.cols[lcol]].value + ',';
-    }
-    output = output.substr(0, output.length - 1) + "\n";
-
-    var empty_cols_count, temp_output;
-    for(var r = 1;r < sheet_data.rows.length;r++){
-      empty_cols_count = 0;
-      temp_output = '';
-      for(var c = 0;c < lcol;c++){
-        if(sheet_data.cells[sheet_data.rows[r]] && sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]]){
-          //if(sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value.indexOf(',') !== -1){
-            var line = sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value;
-            sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value = sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value.replace(new RegExp('"', 'g'), '""');
-            sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value = sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value.replace(new RegExp('\n', 'g'), '');
-            sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value = sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value.replace(new RegExp('\r', 'g'), '');
-            sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value = '"' + sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value + '"';
-          //}
-          temp_output += sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value + ',';
-        } else {
-          empty_cols_count++;
-          temp_output += ',';
+      var frow = sheet_data.rows[0];
+      var lcol;
+      for(lcol = 0; lcol < sheet_data.cols.length; lcol++ ){
+        if(sheet_data.cells[frow][sheet_data.cols[lcol]] == undefined)
+           break;
+        else {
+          cell = sheet_data.cells[frow][sheet_data.cols[lcol]].value.toString().trim();
+          cell = cell.replace(new RegExp('"', 'g'), '""');
+          cell = cell.replace(new RegExp('\n', 'g'), '');
+          cell = cell.replace(new RegExp('\r', 'g'), '');
+          cell = '"' + cell + '"';
+          output += cell + ',';
         }
       }
-      if(empty_cols_count != lcol) output += temp_output.substr(0 , temp_output.length - 1) + "\n";
-    }
-    debugger;
-    cb(null, output.substr(0 , output.length - 1));
+      output = output.substr(0, output.length - 1) + "\n";
+
+      var empty_cols_count, temp_output, cell;
+      for(var r = 1;r < sheet_data.rows.length;r++){
+        empty_cols_count = 0;
+        temp_output = '';
+        for(var c = 0;c < lcol;c++){
+          if(sheet_data.cells[sheet_data.rows[r]] && sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]]){
+            //if(sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value.indexOf(',') !== -1){
+            cell = sheet_data.cells[sheet_data.rows[r]][sheet_data.cols[c]].value.toString().trim();
+            cell = cell.replace(new RegExp('"', 'g'), '""');
+            cell = cell.replace(new RegExp('\n', 'g'), '');
+            cell = cell.replace(new RegExp('\r', 'g'), '');
+            cell = '"' + cell + '"';
+            //}
+            temp_output += cell + ',';
+          } else {
+            empty_cols_count++;
+            temp_output += ',';
+          }
+        }
+        if(empty_cols_count != lcol) output += temp_output.substr(0 , temp_output.length - 1) + "\n";
+      }
+      cb(null, output.substr(0 , output.length - 1));
   });
 };
 
 EtherSheetService.prototype.guessDelimiter = function(data){
-  debugger;
+  //Try to guess the delimiter from headers
   var lines = data.split('\n');
   try{
     //check if ',' is the delimiter
     var header = lines[0].split(',');
     if(header.length > 1)
-      return ',';
+       return ',';
 
     //check if ';' is the delimiter
     header = lines[0].split(';');
@@ -217,9 +229,9 @@ EtherSheetService.prototype.createSheetFromCSV = function(sheet_id,data,cb){
   var sniffResult = sniffer.sniff(data.toString(), {quoteChar:'"', hasHeader: true});
   var delimiter = (sniffResult.delimiter == null) ? es.guessDelimiter(data.toString()) : sniffResult.delimiter;
   if(delimiter != null)
-    csv_parser.options.from.delimiter = delimiter;
+     csv_parser.options.from.delimiter = delimiter;
   else
-    throw new Error("Invalid csv format");
+     throw new Error("Invalid csv format");
 
   csv_parser.from(data.toString())
       .transform( function(row, row_id){
@@ -312,22 +324,23 @@ EtherSheetService.prototype.deleteSheet = function(sheet_id,cb){
 };
 
 EtherSheetService.prototype.initializeRows = function(){
-    var es = this;
-    var row_count = es.config.default_row_count;
-    var rows = [];
-    for(var i = 0; i<row_count; i++){
-      rows.push(uuid());
-    }
-    return rows
+  var es = this;
+  var row_count = es.config.default_row_count;
+  var rows = [];
+  for(var i = 0; i<row_count; i++){
+    rows.push(uuid());
+  }
+  return rows
 };
+
 EtherSheetService.prototype.initializeCols = function(){
-    var es = this;
-    var col_count = es.config.default_col_count;
-    var cols = [];
-    for(var i = 0; i<col_count; i++){
-      cols.push(uuid());
-    }
-    return cols;
+  var es = this;
+  var col_count = es.config.default_col_count;
+  var cols = [];
+  for(var i = 0; i<col_count; i++){
+    cols.push(uuid());
+  }
+  return cols;
 };
 
 EtherSheetService.prototype.initializeMeta = function(){
@@ -340,6 +353,7 @@ EtherSheetService.prototype.initializeMeta = function(){
 
 EtherSheetService.prototype.setRowIndex = function(sheet_id,rows,cb){
   var es = this;
+  debugger;
   es.db.set(sheet_id + ':rows', rows, cb);
 };
 
@@ -390,6 +404,7 @@ EtherSheetService.prototype.deleteColIndex = function(sheet_id,cb){
 
 EtherSheetService.prototype.setCells = function(sheet_id, cells, cb){
   var es = this;
+  debugger;
   es.db.set(sheet_id + ':cells', cells, cb);
 };
 
