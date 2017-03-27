@@ -289,7 +289,7 @@ define( function(require,exports,module){
                 for (var i = this.rowStart; i <= this.rowEnd; i++) {
                     var rowCells = this.table.$grid.find("tr").eq(i).find("td");
                     for (var j = this.colStart; j <= this.colEnd; j++)
-                        cbData += $(rowCells.eq(j)).html() + ((j != this.colEnd) ? String.fromCharCode(9) : "");
+                        cbData += $(rowCells.eq(j)).text() + ((j != this.colEnd) ? String.fromCharCode(9) : "");
 
                     if(i != this.rowEnd)cbData += String.fromCharCode(13);
                 }
