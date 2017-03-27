@@ -79,6 +79,17 @@ $(document).ready(function() {
     window.addEventListener('metadata-list-controllet_attached', function(e){
         room.$.metadata_component.setMetadata(COCREATION.metadata);
     });
+
+    window.addEventListener('image-slider-datalet_attached', function(e){
+        $.get(COCREATION.sheet_images_url,
+            function (data, status) {
+                if(data.status)
+                {
+                    room.$.image_slider.setImages(data.images);
+                }
+            }
+        );
+    });
 });
 
 room.splitScreenActive          = false;
@@ -91,6 +102,7 @@ room.handleSelectUIMode = function(mode){
             room.$.spreadsheet.style.visibility = "visible";
             room.$.metadata.style.visibility    = 'hidden';
             room.$.notes.style.visibility       = 'hidden';
+            room.$.images.style.visibility      = 'hidden';
             room.$.discussion.style.visibility  = 'hidden';
             room.$.datalets.style.display       = 'none';
             room.$.info.style.visibility        = 'hidden';
@@ -99,6 +111,7 @@ room.handleSelectUIMode = function(mode){
             room.current_selected_container = room.$.metadata;
             room.$.metadata.style.visibility    = 'visible';
             room.$.notes.style.visibility       = 'hidden';
+            room.$.images.style.visibility      = 'hidden';
             room.$.discussion.style.visibility  = 'hidden';
             room.$.datalets.style.display       = 'none';
             room.$.info.style.visibility        = 'hidden';
@@ -107,6 +120,16 @@ room.handleSelectUIMode = function(mode){
             room.current_selected_container = room.$.notes;
             room.$.metadata.style.visibility    = 'hidden';
             room.$.notes.style.visibility       = 'visible';
+            room.$.images.style.visibility      = 'hidden';
+            room.$.discussion.style.visibility  = 'hidden';
+            room.$.datalets.style.display       = 'none';
+            room.$.info.style.visibility        = 'hidden';
+            break;
+        case 'images':
+            room.current_selected_container = room.$.notes;
+            room.$.metadata.style.visibility    = 'hidden';
+            room.$.notes.style.visibility       = 'hidden';
+            room.$.images.style.visibility      = 'visible';
             room.$.discussion.style.visibility  = 'hidden';
             room.$.datalets.style.display       = 'none';
             room.$.info.style.visibility        = 'hidden';
@@ -115,6 +138,7 @@ room.handleSelectUIMode = function(mode){
             room.current_selected_container = room.$.discussion;
             room.$.metadata.style.visibility    = 'hidden';
             room.$.notes.style.visibility       = 'hidden';
+            room.$.images.style.visibility      = 'hidden';
             room.$.discussion.style.visibility  = 'visible';
             room.$.datalets.style.display       = 'none';
             room.$.info.style.visibility        = 'hidden';
@@ -123,6 +147,7 @@ room.handleSelectUIMode = function(mode){
             room.current_selected_container = room.$.datalets;
             room.$.metadata.style.visibility    = 'hidden';
             room.$.notes.style.visibility       = 'hidden';
+            room.$.images.style.visibility      = 'hidden';
             room.$.discussion.style.visibility  = 'hidden';
             room.$.datalets.style.display       = 'block';
             room.$.info.style.visibility        = 'hidden';
@@ -132,6 +157,7 @@ room.handleSelectUIMode = function(mode){
             room.current_selected_container  = room.$.info;
             room.$.metadata.style.visibility    = 'hidden';
             room.$.notes.style.visibility       = 'hidden';
+            room.$.images.style.visibility      = 'hidden';
             room.$.discussion.style.visibility  = 'hidden';
             room.$.datalets.style.display       = 'none';
             room.$.info.style.visibility        = 'visible';
@@ -150,6 +176,7 @@ room.handleSplitScreen = function(e){
     room.$.spreadsheet.style.visibility = "visible";
     room.$.metadata.style.visibility    = 'hidden';
     room.$.notes.style.visibility       = 'hidden';
+    room.$.images.style.visibility      = 'hidden';
     room.$.discussion.style.visibility  = 'hidden';
     room.$.datalets.style.display       = 'none';
     room.$.info.style.visibility        = 'hidden';
@@ -172,6 +199,7 @@ room.handleSplitScreen = function(e){
        $(room.$.spreadsheet).addClass("split_size_card_left");
        $(room.$.metadata).addClass("split_size_card_right");
        $(room.$.notes).addClass("split_size_card_right");
+       $(room.$.images).addClass("split_size_card_right");
        $(room.$.discussion).addClass("split_size_card_right");
        $(room.$.datalets).addClass("split_size_card_right");
        $(room.$.info).addClass("split_size_card_right");
@@ -183,6 +211,7 @@ room.handleSplitScreen = function(e){
        $(room.$.spreadsheet).removeClass("split_size_card_left");
        $(room.$.metadata).removeClass("split_size_card_right");
        $(room.$.notes).removeClass("split_size_card_right");
+       $(room.$.images).removeClass("split_size_card_right");
        $(room.$.discussion).removeClass("split_size_card_right");
        $(room.$.datalets).removeClass("split_size_card_right");
        $(room.$.info).removeClass("split_size_card_right");

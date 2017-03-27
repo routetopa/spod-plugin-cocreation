@@ -40,8 +40,8 @@ define( function(require,exports,module){
             this.setSheet(o.data.sheets.get(o.data.users.getCurrentUser().getCurrentSheetId()) || null);
             self = this;
 
-            //set copy and paste handlers
-            ['copy','paste'].forEach(function(event) {
+            //set copy,paste and cut handlers
+            ['copy','paste','cut'].forEach(function(event) {
                 document.addEventListener(event, function(e) {
                     switch(event) {
                         case 'copy':
@@ -50,15 +50,17 @@ define( function(require,exports,module){
                         case 'paste':
                             self.onPaste(e);
                             break;
+                        case 'cut':
+                            self.onCut(e);
                     }
                 });
             });
 
             //bind keyword event
-            this.es.keyboard.on('37',this.cellsSelectionKeydown);
-            this.es.keyboard.on('38',this.cellsSelectionKeydown);
-            this.es.keyboard.on('39',this.cellsSelectionKeydown);
-            this.es.keyboard.on('40',this.cellsSelectionKeydown);
+            this.es.keyboard.on('37',this.cellsSelectionKeydown);//left
+            this.es.keyboard.on('38',this.cellsSelectionKeydown);//up
+            this.es.keyboard.on('39',this.cellsSelectionKeydown);//right
+            this.es.keyboard.on('40',this.cellsSelectionKeydown);//down
             this.es.keyboard.on('shift_37',this.cellsSelectionKeydown);
             this.es.keyboard.on('shift_38',this.cellsSelectionKeydown);
             this.es.keyboard.on('shift_39',this.cellsSelectionKeydown);
@@ -112,11 +114,13 @@ define( function(require,exports,module){
         },
 
         resetSelection: function(cell){
-            this.current_cell = cell;
-            this.table.$grid.find(".cpselected").removeClass("cpselected"); // deselect everything
-            cell.addClass("cpselected");
-            this.colIndex  = this.colStart = this.colEnd = this.startColIndex = cell.index();
-            this.rowIndex  = this.rowStart = this.rowEnd = this.startRowIndex = cell.parent().index();
+            try {
+                this.current_cell = cell;
+                this.table.$grid.find(".cpselected").removeClass("cpselected"); // deselect everything
+                cell.addClass("cpselected");
+                this.colIndex = this.colStart = this.colEnd = this.startColIndex = cell.index();
+                this.rowIndex = this.rowStart = this.rowEnd = this.startRowIndex = cell.parent().index();
+            }catch(e){}
         },
 
         cellsSelectionMousedown: function(e)
@@ -236,12 +240,7 @@ define( function(require,exports,module){
                     self.editingCell = true;
                     break;
                 case 46://CANC
-                    for (var i = self.rowStart; i <= self.rowEnd; i++) {
-                        for (var j = self.colStart; j <= self.colEnd; j++) {
-                            cell = self.table.$grid.find("tr").eq(i).find("td").eq(j);
-                            self.getSheet().updateCell($(cell).attr('data-row_id'), $(cell).attr('data-col_id'),"");
-                        }
-                    }
+                    self.deleteCellsContent();
                     break;
             }
 
@@ -252,6 +251,15 @@ define( function(require,exports,module){
             }
 
             return false;
+        },
+
+        deleteCellsContent: function(){
+            for (var i = self.rowStart; i <= self.rowEnd; i++) {
+                for (var j = self.colStart; j <= self.colEnd; j++) {
+                    cell = self.table.$grid.find("tr").eq(i).find("td").eq(j);
+                    self.getSheet().updateCell($(cell).attr('data-row_id'), $(cell).attr('data-col_id'),"");
+                }
+            }
         },
 
         //COPY AND PASTE HANDLERS
@@ -267,6 +275,8 @@ define( function(require,exports,module){
                         this.getSheet().updateCell($(cell).attr('data-row_id'), $(cell).attr('data-col_id'), clipRows[i][j]);
                     }
                 }
+                e.clipboardData.setData('text/plain', "");
+                e.preventDefault();
             }catch(e){
                 console.log("onPaste error : " + e);
             }
@@ -288,6 +298,11 @@ define( function(require,exports,module){
             }catch(e){
                 console.log("onCopy error : " + e);
             }
+        },
+
+        onCut: function(e){
+            this.onCopy(e);
+            this.deleteCellsContent();
         }
 
     })

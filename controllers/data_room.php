@@ -144,7 +144,8 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                 COCREATION.metadata                           = {$room_metadata}
                 COCREATION.user_id                            = {$userId}
                 COCREATION.info                               = {$roomInfo}
-                COCREATION.spreadsheet_server_port           = {$spreasheet_server_port}
+                COCREATION.spreadsheet_server_port            = {$spreasheet_server_port}
+                COCREATION.sheet_images_url                   = {$sheet_images_url}
             ', array(
                'ajax_coocreation_room_get_datalets'        => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getRoomDatalets'),
                'ajax_coocreation_room_get_array_sheetdata' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getArrayOfObjectSheetData') . "?sheetName=" . $sheetName,
@@ -162,7 +163,8 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                'room_metadata'                             => json_encode($metadataObj),
                'userId'                                    => OW::getUser()->getId(),
                'roomInfo'                                  => json_encode($info),
-               'spreasheet_server_port'                    => BOL_PreferenceService::getInstance()->findPreference('spreadsheet_server_port_preference')->defaultValue
+               'spreasheet_server_port'                    => BOL_PreferenceService::getInstance()->findPreference('spreadsheet_server_port_preference')->defaultValue,
+               'sheet_images_url'                          => str_replace("/s/", "/images/", $sheetUrl)
         ));
         OW::getDocument()->addOnloadScript($js);
         OW::getDocument()->addOnloadScript("data_room.init();");

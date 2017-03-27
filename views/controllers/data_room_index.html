@@ -57,6 +57,8 @@
 <link rel="import" href="{$components_url}datalets/scatterchart-datalet/scatterchart-datalet.html">
 <link rel="import" href="{$components_url}datalets/treemap-datalet/treemap-datalet.html">
 
+<link rel="import" href="{$components_url}datalets/image-slider-datalet/image-slider-datalet.html">
+
 
 <script src="{$components_url}locales/controllet_ln.js" type="text/javascript"></script>
 <script src="{$components_url}locales/paper_card_controllet_ln.js" type="text/javascript"></script>
@@ -116,6 +118,9 @@
 
     iron-icon[icon="description"]
     {
+        --iron-icon-fill-color: #2196F3;
+    }
+    iron-icon[icon="image:collections"]{
         --iron-icon-fill-color: #2196F3;
     }
 
@@ -475,6 +480,12 @@
                             </paper-item-body>
                         </paper-item>
 
+                        <paper-item onclick="room.handleSelectUIMode('images')">
+                            <iron-icon icon="image:collections"></iron-icon>
+                            <paper-item-body two-lines title='{text key="cocreation+room_images_tooltip"}'>
+                                <div>{text key="cocreation+room_images_tab_label"}</div>
+                            </paper-item-body>
+                        </paper-item>
 
                         <paper-item id="info_menu_item" onclick="room.handleSelectUIMode('info')">
                             <iron-icon icon="info"></iron-icon>
@@ -557,6 +568,10 @@
                         <!-- Datalets -->
                         <paper-card id="datalets" class="full_size_card" style="display:none;" elevation="5">
                             <datalet-slider-controllet id="datalets_slider"></datalet-slider-controllet>
+                        </paper-card>
+                        <!-- Images -->
+                        <paper-card id="images" class="full_size_card" style="visibility:hidden;" elevation="5">
+                            <image-slider-datalet id="image_slider"></image-slider-datalet>
                         </paper-card>
                         <!-- Info -->
                         <paper-card id="info" class="full_size_card" style="visibility:hidden;" elevation="5">
