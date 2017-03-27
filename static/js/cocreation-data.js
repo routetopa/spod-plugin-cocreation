@@ -96,70 +96,42 @@ room.splitScreenActive          = false;
 room.current_selected_container = null;
 
 room.handleSelectUIMode = function(mode){
-    if(!room.splitScreenActive) room.$.spreadsheet.style.visibility = "hidden";
+    //Standard init
+    room.$.spreadsheet.style.visibility = (!room.splitScreenActive) ?  "hidden" : "visible";
+    room.$.metadata.style.visibility    = 'hidden';
+    room.$.notes.style.visibility       = 'hidden';
+    room.$.images.style.visibility      = 'hidden';
+    room.$.discussion.style.visibility  = 'hidden';
+    room.$.datalets.style.display       = 'none';
+    room.$.info.style.visibility        = 'hidden';
+
     switch(mode){
         case 'dataset':
             room.$.spreadsheet.style.visibility = "visible";
-            room.$.metadata.style.visibility    = 'hidden';
-            room.$.notes.style.visibility       = 'hidden';
-            room.$.images.style.visibility      = 'hidden';
-            room.$.discussion.style.visibility  = 'hidden';
-            room.$.datalets.style.display       = 'none';
-            room.$.info.style.visibility        = 'hidden';
             break;
         case 'metadata':
             room.current_selected_container = room.$.metadata;
             room.$.metadata.style.visibility    = 'visible';
-            room.$.notes.style.visibility       = 'hidden';
-            room.$.images.style.visibility      = 'hidden';
-            room.$.discussion.style.visibility  = 'hidden';
-            room.$.datalets.style.display       = 'none';
-            room.$.info.style.visibility        = 'hidden';
             break;
         case 'notes':
             room.current_selected_container = room.$.notes;
-            room.$.metadata.style.visibility    = 'hidden';
             room.$.notes.style.visibility       = 'visible';
-            room.$.images.style.visibility      = 'hidden';
-            room.$.discussion.style.visibility  = 'hidden';
-            room.$.datalets.style.display       = 'none';
-            room.$.info.style.visibility        = 'hidden';
             break;
         case 'images':
             room.current_selected_container = room.$.notes;
-            room.$.metadata.style.visibility    = 'hidden';
-            room.$.notes.style.visibility       = 'hidden';
             room.$.images.style.visibility      = 'visible';
-            room.$.discussion.style.visibility  = 'hidden';
-            room.$.datalets.style.display       = 'none';
-            room.$.info.style.visibility        = 'hidden';
             break;
         case 'discussion':
             room.current_selected_container = room.$.discussion;
-            room.$.metadata.style.visibility    = 'hidden';
-            room.$.notes.style.visibility       = 'hidden';
-            room.$.images.style.visibility      = 'hidden';
             room.$.discussion.style.visibility  = 'visible';
-            room.$.datalets.style.display       = 'none';
-            room.$.info.style.visibility        = 'hidden';
             break;
         case 'datalets':
             room.current_selected_container = room.$.datalets;
-            room.$.metadata.style.visibility    = 'hidden';
-            room.$.notes.style.visibility       = 'hidden';
-            room.$.images.style.visibility      = 'hidden';
-            room.$.discussion.style.visibility  = 'hidden';
             room.$.datalets.style.display       = 'block';
-            room.$.info.style.visibility        = 'hidden';
             room.$.datalets_slider._refresh();
             break;
         case 'info':
             room.current_selected_container  = room.$.info;
-            room.$.metadata.style.visibility    = 'hidden';
-            room.$.notes.style.visibility       = 'hidden';
-            room.$.images.style.visibility      = 'hidden';
-            room.$.discussion.style.visibility  = 'hidden';
-            room.$.datalets.style.display       = 'none';
             room.$.info.style.visibility        = 'visible';
             break;
         case 'split':
