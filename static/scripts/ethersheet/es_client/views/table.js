@@ -548,21 +548,21 @@ var Table = module.exports = View.extend({
     var preview = $("#cell-preview");
     var mapPreview;
 
-    if((/\.(gif|jpg|jpeg|tiff|png)$/i).test(cell.html())){//image
+    if((/\.(gif|jpg|jpeg|tiff|png)$/i).test(cell.text())){//image
       preview.html("<img src='" + cell.html() + "' alt='Image preview' />");
-    }else if((/^[0-9]{1,2}[.]{1}[0-9]+[,]{1}[\s]?[0-9]{1,2}[.]{1}[0-9]+$/g).test(cell.html())){//geographic coords
+    }else if((/^[-]?[0-9]{1,2}[.]{1}[0-9]+[,]{1}[\s]?[-]?[0-9]{1,2}[.]{1}[0-9]+$/g).test(cell.text())){//geographic coords
       mapPreview = new MapView({
         el: preview,
         cell: cell,
         table: this,
-        coords : cell.html().split(",").map(Number).reverse()
+        coords : cell.text().split(",").map(Number).reverse()
       });
-    }else if((/^\{/i).test(cell.html()) && (/\}$/i).test(cell.html())){//geojson
+    }else if((/^\{/i).test(cell.text()) && (/\}$/i).test(cell.text())){//geojson
       mapPreview = new MapView({
         el: preview,
         cell: cell,
         table: this,
-        geojson : cell.html()
+        geojson : cell.text()
       });
     }else{
       return;
