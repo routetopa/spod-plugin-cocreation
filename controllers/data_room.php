@@ -119,8 +119,8 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         $commentsParams->nodeId = 0;
 
         /* ODE */
-        /* if (OW::getPluginManager()->isPluginActive('spodpr'))
-             $this->addComponent('private_room', new SPODPR_CMP_PrivateRoomCard('ow_attachment_btn', array('datalet', 'link')));*/
+        if (OW::getPluginManager()->isPluginActive('spodpr'))
+             $this->addComponent('private_room', new SPODPR_CMP_PrivateRoomCard('ow_attachment_btn', array('datalet', 'link')));
         /* ODE */
 
         $commentCmp = new SPODTCHAT_CMP_Comments($commentsParams);

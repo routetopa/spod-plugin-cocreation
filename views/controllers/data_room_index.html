@@ -425,8 +425,11 @@
         width: 56px;
         text-align: center;
     }
-
-
+</style>
+<style>
+    .myspace{
+        display: none;
+    }
 </style>
 <template id="data_room" is="dom-bind">
     {if $isMember == false}
@@ -563,6 +566,9 @@
                             <div class="screen_header">{text key="cocreation+room_discussion_tab_label"}</div>
                             <div id="discussion_container" style="overflow-y: scroll;overflow-x: hidden;height: calc(100% - 45px)">
                                 {$comments}
+                                {if isset($private_room)}
+                                {$private_room}
+                                {/if}
                             </div>
                         </paper-card>
                         <!-- Datalets -->
