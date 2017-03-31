@@ -24,7 +24,7 @@ define( function(require,exports,module){
     var FunctionMenuView = module.exports = View.extend({
 
         events: {
-            'search #filter_key'     : 'onSearch',
+            'search #filter_key'           : 'onSearch',
             'keyup #filter_key'            : 'onSearch',
             'click #pagination_prev'       : 'prev',
             'click #pagination_next'       : 'next',
@@ -139,16 +139,14 @@ define( function(require,exports,module){
         searchKeyInCells: function(){
             delete this.current_results;
             this.current_results = {};
+            self.search_key = self.search_key.toLowerCase();
             _.each(this.getSheet().getCells(), function (cell,row_key) {
                 _.each(cell, function(c,col_key){
                     if(!(_.isUndefined(c) || _.isEmpty(c))){
                         if(_.has(c, 'value')){
-                            if(c.value.includes(self.search_key)               ||
-                               c.value.includes(self.search_key.toUpperCase()) ||
-                               c.value.includes(self.search_key.charAt(0).toUpperCase() + self.search_key.slice(1)))
-                            {
+                            var value = c.value.toLowerCase();
+                            if(value.includes(self.search_key))
                                 self.current_results[row_key + col_key] = {row_id : row_key , col_id : col_key};
-                            }
                         }
                     }
                 });

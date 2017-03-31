@@ -46,7 +46,7 @@ var Table = module.exports = View.extend({
     /*and isislab*/
     'contextmenu .es-column-header': 'showColMenu',
     'contextmenu .es-row-header': 'showRowMenu',
-    'change .es-table-cell-input': 'changeCell',
+    'change .es-table-cell-input': 'changeCell'
     //'keydown': 'inputKeypress',
   },
 
@@ -297,8 +297,14 @@ var Table = module.exports = View.extend({
   },
 
   paginationRender : function(e){
-    this.table_function_menu_instance.getPagination();
-    this.table_function_menu_instance.goToPageInGrid();
+    if(!_.isUndefined(e.action)){
+      if(e.action == "sortRows")
+          location.reload();
+          //this.table_function_menu_instance.pageSelection(1);
+    }else {
+      this.table_function_menu_instance.getPagination();
+      this.table_function_menu_instance.goToPageInGrid();
+    }
   },
 
   resize: function(){
@@ -636,7 +642,7 @@ var Table = module.exports = View.extend({
 
     var sheet = this.getSheet();
     $input.on('keyup', function(){
-      sheet.updateCell(row_id, col_id, $input.val()); 
+      sheet.updateCell(row_id, col_id, $input.val());
     });
     this.updateCellInput($input);
     $input.focus();
@@ -798,7 +804,7 @@ var Table = module.exports = View.extend({
     var menu = new ColMenuView({
       el: $menu,
       col_id: String($headerCell.data("col_id")),
-      data: this.data,
+      data: this.data
     }).render();
 
     $menu.i18n();
