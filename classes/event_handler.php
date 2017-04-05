@@ -75,7 +75,7 @@ class COCREATION_CLASS_EventHandler
                                     'roomname' => $room->name
                                 )
                             ),
-                            //'url' => str_replace("index/", $room->id, OW::getRouter()->urlFor($room->type == "knowledge" ? 'COCREATION_CTRL_KnowledgeRoom' : 'COCREATION_CTRL_DataRoom', 'index')),
+                            //'url' => str_replace("index/", $room->id, $room->type == "knowledge" ? OW::getRouter()->urlFor( 'COCREATION_CTRL_KnowledgeRoom' , 'index') :  OW::getRouter()->urlFor( 'COCREATION_CTRL_DataRoom' , 'index')),
                             "contentImage" => ''
                         )));
                 }
@@ -156,7 +156,7 @@ class COCREATION_CLASS_EventHandler
                             'roomname' => $room->name
                         )
                     ),
-                    'url'    => str_replace("index/", $room->id, OW::getRouter()->urlFor($room->type == "knowledge" ? 'COCREATION_CTRL_KnowledgeRoom' : 'COCREATION_CTRL_DataRoom', 'index')),
+                        'url' => str_replace("index/", $room->id, $room->type == "knowledge" ? OW::getRouter()->urlFor( 'COCREATION_CTRL_KnowledgeRoom' , 'index') :  OW::getRouter()->urlFor( 'COCREATION_CTRL_DataRoom' , 'index')),
                     "contentImage" => ''
                 ));
 
