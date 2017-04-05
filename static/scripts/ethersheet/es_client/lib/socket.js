@@ -17,11 +17,11 @@ var Socket = module.exports = function(channel,socket_id,websocket){
 
   this.close_handler = function(e){
 
-    if(e.code == 1000 || e.code == 1001 || e.code == 1002 || e.code == 1006){
+    //if(e.code == 1000 || e.code == 1001 || e.code == 1002 || e.code == 1006){
       $('#es-modal-box').html("<h1>Your connection to the server has been lost, maybe it could be unreachable :(</h1>");
       $('#es-modal-overlay').show();
       return;
-    }
+    //}
 
     this.initWebsocket(channel,socket_id,websocket);
     /*this.recInterval = setInterval(function () {

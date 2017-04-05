@@ -123,7 +123,7 @@ class COCREATION_CLASS_EventHandler
         //$data = $event->getData();
 
         $entity = BOL_CommentService::getInstance()->findCommentEntityById($params['comment']->commentEntityId);
-        $count =  BOL_CommentService::getInstance()->findCommentCount($entity->entityType, $entity->entityId);
+        //$count =  BOL_CommentService::getInstance()->findCommentCount($entity->entityType, $entity->entityId);
 
         while($entity->entityType != COCREATION_BOL_Service::ROOM_ENTITY_TYPE){
             $comment = BOL_CommentService::getInstance()->findComment($entity->entityId);
@@ -132,7 +132,7 @@ class COCREATION_CLASS_EventHandler
 
         $room = COCREATION_BOL_Service::getInstance()->getRoomById($entity->entityId);
 
-        if(in_array($count,  COCREATION_CLASS_EventHandler::$FIBONACCI_FIRST_20_NUMBERS)) {
+        //if(in_array($count,  COCREATION_CLASS_EventHandler::$FIBONACCI_FIRST_20_NUMBERS)) {//USE THIS TO APPLY FIBONACCI DELAY
             $avatars = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($room->ownerId));
             $avatar = $avatars[$room->ownerId];
             $members = COCREATION_BOL_Service::getInstance()->getRoomMembers($room->id);
@@ -162,6 +162,6 @@ class COCREATION_CLASS_EventHandler
 
                 OW::getEventManager()->trigger($notification_event);
             }
-        }
+        //}
     }
 }
