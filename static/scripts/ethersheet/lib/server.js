@@ -69,7 +69,7 @@ exports.createServer = function(config){
   /**********************************************
    * HTTP Routes
    *********************************************/
-    //index
+  //index
   app.get('/', function(req,res){
     res.render('index.ejs', {introText: config.intro_text});
   });
@@ -127,7 +127,7 @@ exports.createServer = function(config){
   });
 
   //Upload image from a cell
-  // Post files
+  //Post files
   app.post('/upload/image', function(req, res)
   {
     res.setHeader('Content-Type', 'application/json');
@@ -136,8 +136,13 @@ exports.createServer = function(config){
     form.parse(req, function(err, fields, files)
     {
 
-      var sheet_id = fields.sheet_id;
-      var image_name = files.image_file.name;
+      try {
+        var sheet_id = fields.sheet_id;
+        var image_name = files.image_file.name;
+      }catch(e){
+        console.log(e);
+        res.send(JSON.stringify({ status: false, massage: "There was an error"}));
+      }
 
       fs.readFile(files.image_file.path, function (err, data)
       {
@@ -148,7 +153,6 @@ exports.createServer = function(config){
           res.send(JSON.stringify({ status: false, massage: "There was an error"}));
         }else{
           var dir     = __dirname +  "/uploads/" + sheet_id;
-          //var thumbPath = __dirname + "/uploads/thumbs/" + imageName;
           if (!fs.existsSync(dir)){
             fs.mkdirSync(dir);
           }
@@ -164,7 +168,6 @@ exports.createServer = function(config){
           });
         }
       });
-
     });
   });
 
