@@ -54,9 +54,9 @@ class COCREATION_CLASS_EventHandler
         /*Send notificatio using fibonacci numbers*/
         $rooms = COCREATION_BOL_Service::getInstance()->getAllRooms();
         foreach($rooms as $room){
-            $count =  BOL_CommentService::getInstance()->findCommentCount(COCREATION_BOL_Service::ROOM_ENTITY_TYPE, $room->id);
+            //$count =  BOL_CommentService::getInstance()->findCommentCount(COCREATION_BOL_Service::ROOM_ENTITY_TYPE, $room->id);
 
-            if(in_array($count, COCREATION_CLASS_EventHandler::$FIBONACCI_FIRST_20_NUMBERS)) {
+            //if(in_array($count, COCREATION_CLASS_EventHandler::$FIBONACCI_FIRST_20_NUMBERS)) {
                 $members = COCREATION_BOL_Service::getInstance()->getRoomMembers($room->id);
                 foreach ($members as $member) {
                     //send notification
@@ -79,7 +79,7 @@ class COCREATION_CLASS_EventHandler
                             "contentImage" => ''
                         )));
                 }
-            }
+            //}
         }
     }
 
