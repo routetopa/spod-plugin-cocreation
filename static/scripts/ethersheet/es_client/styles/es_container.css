@@ -125,13 +125,25 @@ z-index: 1000;
 color:#111111;
 }
 #es-modal-box{
-  min-height: 400px;
+  /*min-height: 400px;
   width: 600px;
   border: 2px solid #333;
   background: #FFF;
   margin: 60px auto;
   padding: 15px;
+  z-index: 1001;*/
+  /* min-height: 400px; */
+  width: 82%;
+  height: 79%;
+  border: 2px solid #333;
+  background: #FFF;
+  margin: 60px auto;
+  padding: 15px;
   z-index: 1001;
+  position: absolute;
+  top: -30px;
+  left: 5%;
+  overflow: hidden;
 }
 #es-modal-close{
   cursor: pointer;

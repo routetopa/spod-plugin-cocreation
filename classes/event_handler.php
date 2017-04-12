@@ -17,8 +17,9 @@ class COCREATION_CLASS_EventHandler
     public function init()
     {
 
-        OW::getEventManager()->bind('notifications.collect_actions', array($this, 'onCollectNotificationActions'));
-        OW::getEventManager()->bind('notifications.send_list',       array($this, 'onCollectNotificationSendList'));
+        //OW::getEventManager()->bind('notifications.collect_actions', array($this, 'onCollectNotificationActions'));
+        OW::getEventManager()->bind('spodnotification.collect_actions', array($this, 'onCollectNotificationActions'));
+        //OW::getEventManager()->bind('notifications.send_list',       array($this, 'onCollectNotificationSendList'));
         OW::getEventManager()->bind('spodtchat.add_comment',         array($this, 'sendNotificationOnCollectComment'));
     }
 
@@ -40,19 +41,18 @@ class COCREATION_CLASS_EventHandler
         //For all users
         $e->add(array(
             'section' => 'cocreation',
-            'action'  => 'room-comments-collect',
+            'action'  => 'add-comment',
             'description' => OW::getLanguage()->text('cocreation', 'email_notifications_setting_room_comment'),
             'selected' => false,
             'sectionLabel' => $sectionLabel,
             'sectionIcon' => 'ow_ic_write'
         ));
     }
-
     //Batch notification
     public function onCollectNotificationSendList( BASE_CLASS_EventCollector $event )
     {
         /*Send notificatio using fibonacci numbers*/
-        $rooms = COCREATION_BOL_Service::getInstance()->getAllRooms();
+        /*$rooms = COCREATION_BOL_Service::getInstance()->getAllRooms();
         foreach($rooms as $room){
             //$count =  BOL_CommentService::getInstance()->findCommentCount(COCREATION_BOL_Service::ROOM_ENTITY_TYPE, $room->id);
 
@@ -68,7 +68,6 @@ class COCREATION_CLASS_EventHandler
                         'userId' => $member->userId,
                         'data' => array(
                             'format' => "text",
-                            /* 'avatar' => $avatar,*/
                             'string' => array(
                                 'key' => 'cocreation+notification_room_comments_collect',
                                 'vars' => array(
@@ -80,9 +79,8 @@ class COCREATION_CLASS_EventHandler
                         )));
                 }
             //}
-        }
+        }*/
     }
-
     //Custom on event notification
     public function sendNotificationRoomCreated($room)
     {
@@ -117,9 +115,34 @@ class COCREATION_CLASS_EventHandler
         }
     }
 
+    private function getCocreationRoomId($commentEntityId){
+        $entity = BOL_CommentService::getInstance()->findCommentEntityById($commentEntityId);
+        while($entity->entityType != COCREATION_BOL_Service::ROOM_ENTITY_TYPE && $entity != null){
+            $comment = BOL_CommentService::getInstance()->findComment($entity->entityId);
+            $entity = BOL_CommentService::getInstance()->findCommentEntityById($comment->commentEntityId);
+        }
+        return $entity->entityId;
+    }
+
     public function sendNotificationOnCollectComment(OW_Event $event)
     {
         $params = $event->getParams();
+        $room = COCREATION_BOL_Service::getInstance()->getRoomById($this->getCocreationRoomId($params['comment']->getCommentEntityId()));
+
+        $message = OW::getLanguage()->text('cocreation','notification_room_comments_collect', ['roomname' => $room->name]) .
+                   " <b><a href=\"" . str_replace("index/", $room->id, OW::getRouter()->urlFor( 'COCREATION_CTRL_DataRoom' , 'index')) . "\">" . $room->name . "</a></b>";
+        $data = array('message' => $message,
+                      'subject' => OW::getLanguage()->text('cocreation','email_notifications_setting_room_comment'));
+
+        $event = new OW_Event('notification_system.add_notification', array(
+            'type'      => "mail",
+            'plugin'    => "cocreation",
+            "action"    => "cocreation.add-comment",
+            'data' => json_encode($data)
+        ));
+        OW::getEventManager()->trigger($event);
+
+        /*$params = $event->getParams();
         //$data = $event->getData();
 
         $entity = BOL_CommentService::getInstance()->findCommentEntityById($params['comment']->commentEntityId);
@@ -156,12 +179,12 @@ class COCREATION_CLASS_EventHandler
                             'roomname' => $room->name
                         )
                     ),
-                        'url' => str_replace("index/", $room->id, $room->type == "knowledge" ? OW::getRouter()->urlFor( 'COCREATION_CTRL_KnowledgeRoom' , 'index') :  OW::getRouter()->urlFor( 'COCREATION_CTRL_DataRoom' , 'index')),
+                    'url' => str_replace("index/", $room->id, $room->type == "knowledge" ? OW::getRouter()->urlFor( 'COCREATION_CTRL_KnowledgeRoom' , 'index') :  OW::getRouter()->urlFor( 'COCREATION_CTRL_DataRoom' , 'index')),
                     "contentImage" => ''
                 ));
 
                 OW::getEventManager()->trigger($notification_event);
             }
-        //}
+        //}*/
     }
 }
