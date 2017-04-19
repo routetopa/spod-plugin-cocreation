@@ -137,7 +137,7 @@ class COCREATION_CLASS_EventHandler
         $event = new OW_Event('notification_system.add_notification', array(
             'type'      => "mail",
             'plugin'    => "cocreation",
-            "action"    => "cocreation.add-comment",
+            "action"    => "add-comment",
             'data' => json_encode($data)
         ));
         OW::getEventManager()->trigger($event);
