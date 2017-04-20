@@ -84,35 +84,19 @@ class COCREATION_CLASS_EventHandler
     //Custom on event notification
     public function sendNotificationRoomCreated($room)
     {
-        $users = BOL_UserService::getInstance()->findList(0,10000);
+        $message = OW::getLanguage()->text('cocreation','notification_room_created', ['ownername' => BOL_UserService::getInstance()->getDisplayName($room->ownerId)]) .
+            " <b><a href=\"" . str_replace("index/", $room->id, OW::getRouter()->urlFor( 'COCREATION_CTRL_DataRoom' , 'index')) . "\">". $room->name ."</a></b>";
+        $data = array('message' => $message,
+            'subject' => OW::getLanguage()->text('cocreation','email_notifications_setting_room_created'));
 
-        foreach($users as $user) {
+        $event = new OW_Event('notification_system.add_notification', array(
+            'type'      => "mail",
+            'plugin'    => "cocreation",
+            "action"    => "room-created",
+            'data' => json_encode($data)
+        ));
+        OW::getEventManager()->trigger($event);
 
-            $avatars = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($room->ownerId));
-            $avatar = $avatars[$room->ownerId];
-
-            $event = new OW_Event('notifications.add', array(
-                'pluginKey' => 'cocreation',
-                'action' => 'room-created',
-                'entityType' => 'new_room_created',
-                'entityId' => $room->id,
-                'userId'   => $user->id,
-            ), array(
-                'format' => "text",
-                'avatar' => $avatar,
-                'string' => array(
-                    'key' => 'cocreation+notification_room_created',
-                    'vars' => array(
-                        'ownername' => BOL_UserService::getInstance()->getDisplayName($room->ownerId),
-                        'roomname'  => $room->name
-                    )
-                ),
-                'url' => OW::getRouter()->urlForRoute('mailbox_compose_mail_conversation', array('opponentId'=>$room->ownerId)),
-                "contentImage" => ''
-            ));
-
-            OW::getEventManager()->trigger($event);
-        }
     }
 
     private function getCocreationRoomId($commentEntityId){
