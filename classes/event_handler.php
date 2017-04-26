@@ -125,50 +125,5 @@ class COCREATION_CLASS_EventHandler
             'data' => json_encode($data)
         ));
         OW::getEventManager()->trigger($event);
-
-        /*$params = $event->getParams();
-        //$data = $event->getData();
-
-        $entity = BOL_CommentService::getInstance()->findCommentEntityById($params['comment']->commentEntityId);
-        //$count =  BOL_CommentService::getInstance()->findCommentCount($entity->entityType, $entity->entityId);
-
-        while($entity->entityType != COCREATION_BOL_Service::ROOM_ENTITY_TYPE){
-            $comment = BOL_CommentService::getInstance()->findComment($entity->entityId);
-            $entity = BOL_CommentService::getInstance()->findCommentEntityById($comment->commentEntityId);
-        }
-
-        $room = COCREATION_BOL_Service::getInstance()->getRoomById($entity->entityId);
-
-        //if(in_array($count,  COCREATION_CLASS_EventHandler::$FIBONACCI_FIRST_20_NUMBERS)) {//USE THIS TO APPLY FIBONACCI DELAY
-            $avatars = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($room->ownerId));
-            $avatar = $avatars[$room->ownerId];
-            $members = COCREATION_BOL_Service::getInstance()->getRoomMembers($room->id);
-            $membersIds = array_map(create_function('$o', 'return $o->userId;'), $members);
-            array_push($membersIds,$room->ownerId);
-            foreach ($membersIds as $memberId) {
-                //send notification
-                $notification_event = new OW_Event('notifications.add',
-                array(
-                    'pluginKey'  => 'cocreation',
-                    'action'     => 'room-comments-collect',
-                    'entityType' => 'room_comments_collect',
-                    'entityId'   => $room->id,
-                    'userId'     => $memberId,
-                ), array(
-                    'format' => "text",
-                    'avatar' => $avatar,
-                    'string' => array(
-                        'key'  => 'cocreation+notification_room_comments_collect',
-                        'vars' => array(
-                            'roomname' => $room->name
-                        )
-                    ),
-                    'url' => str_replace("index/", $room->id, $room->type == "knowledge" ? OW::getRouter()->urlFor( 'COCREATION_CTRL_KnowledgeRoom' , 'index') :  OW::getRouter()->urlFor( 'COCREATION_CTRL_DataRoom' , 'index')),
-                    "contentImage" => ''
-                ));
-
-                OW::getEventManager()->trigger($notification_event);
-            }
-        //}*/
     }
 }
