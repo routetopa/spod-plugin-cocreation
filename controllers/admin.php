@@ -272,6 +272,10 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
 
         $this->assign('cocreation_rooms', COCREATION_BOL_Service::getInstance()->getAllRooms());
 
+        $this->assign('data_room_url',      str_replace("index/", "", OW::getRouter()->urlFor( 'COCREATION_CTRL_DataRoom'      , 'index')));
+        $this->assign('knowledge_room_url', str_replace("index/", "", OW::getRouter()->urlFor( 'COCREATION_CTRL_KnowledgeRoom' , 'index')));
+
+
     }
 
     public function export()
