@@ -20,10 +20,14 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         OW::getDocument()->getMasterPage()->setTemplate(OW::getPluginManager()->getPlugin('cocreation')->getRootDir() . 'master_pages/general.html');
         $this->assign('components_url', SPODPR_COMPONENTS_URL);
 
-        if(COCREATION_BOL_Service::getInstance()->isMemberJoinedToRoom(OW::getUser()->getId(), intval($params['roomId'])))
-            $this->assign('isMember',true);
-        else
-            $this->assign('isMember',false);
+        if(COCREATION_BOL_Service::getInstance()->isMemberJoinedToRoom(OW::getUser()->getId(), intval($params['roomId'])) ||
+            BOL_AuthorizationService::getInstance()->isModerator() ||
+            OW::getUser()->isAdmin()) {
+            $this->assign('isMember', true);
+        }
+        else {
+            $this->assign('isMember', false);
+        }
 
         //Set info for current co-creation room
         $room = COCREATION_BOL_Service::getInstance()->getRoomById($params['roomId']);
