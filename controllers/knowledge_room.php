@@ -40,8 +40,10 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
 
         if ( isset($params['roomId'])){
 
-            if(COCREATION_BOL_Service::getInstance()->isMemberJoinedToRoom(OW::getUser()->getId(), intval($params['roomId'])))
-               $this->assign('isMember',true);
+            if(COCREATION_BOL_Service::getInstance()->isMemberJoinedToRoom(OW::getUser()->getId(), intval($params['roomId'])) ||
+                BOL_AuthorizationService::getInstance()->isModerator() ||
+                OW::getUser()->isAdmin())
+                  $this->assign('isMember',true);
             else
                 $this->assign('isMember',false);
 
