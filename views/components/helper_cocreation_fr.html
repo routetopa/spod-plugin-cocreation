@@ -69,113 +69,105 @@
     .section-paragraph{
         font-size: 18px; padding-top: 18px; color: #888;margin-left: 20px;
     }
-   /* paper-icon-button.huge::shadow #icon {
-        width: 200px;
-        height: 200px;
-    }*/
 
-    paper-fab#assessment_fab
-    {
-        background:#00BCD4;
-    }
 
 </style>
 
 <div class="layout vertical">
 
     <div class="tall">
-        <div class="title">Cocreation helper</div>
+        <div class="title">Tutoriel de la section "Co-Création"</div>
         <div class="description">
-            The CoCreation is a collaborative space to guide users to collaborate in the construction of knowledge or data.
-            The space is meant to be used by small groups, where user are invited to participate by the creator of the room.
-            There are two kinds of room: the Cocreation knowledge room, where the group is invited to reflect on Open Data to
-            answer problems and create awareness of data, and a Cocreation data room, where it is possible to cocreate datasets.
+            La Co-Création est un espace collaboratif pour permettre aux utilisateurs de collaborer et partager des connaissances ou des données.
+            L'espace est destiné à être utilisé par des petits groupes, où les utilisateurs sont invités à participer par le créateur de la salle.
+            Il existe deux sortes de éspaces: une salle "connaissance" de Cocreation, où le groupe est invité à réfléchir sur l'Open Data pour
+            répondre à des problèmes et rendre les données plus simples et accessibles, et une salle "données" de Co-Création, où il est possible de créer en mode collaboratif des jeux de données.
         </div>
     </div>
 
     <div class="content" id="scroll_content">
         <div class="sect">
             <div class="horizontal layout cell">
-                <img src="{$staticResourcesUrl}images/cocreationroom_en.png" style="width: 60%; height: 60%;">
+                <img src="{$staticResourcesUrl}images/cocreationroom_fr.png" style="width: 60%; height: 60%;">
 
                 <div class="cell">
                     <div class="horizontal layout cell">
                         <div class="section-number">1</div>
-                        <div class="section-title">Cocreation</div>
+                        <div class="section-title">Co-Création</div>
                     </div>
                     <div>
-                        <p>
-                            In the Cocreation you can find:</p>
+                        <p>Dans une salle de Co-Création vous pouvez trouver:</p>
                     </div>
 
                     <div class="horizontal layout cell">
                         <paper-fab id="description_fab" mini="" icon="description"></paper-fab>
-                        <p>Cocreation knowledge room</p>
+                        <p>Une salle "connaissance</p>
                     </div>
 
                     <div class="horizontal layout cell">
                         <paper-fab id="assessment_fab"  mini="" icon="assessment"  ></paper-fab>
-                        <p> Cocreation data room<p>
+                        <p> Un salle "données"<p>
                     </div>
 
                     <div class="horizontal layout cell">
                         <paper-fab id="view_datasets"  mini icon="view-list"> </paper-fab>
-                        <p>View all datasets</p>
+                        <p>Un vue sur tous les jeux de données</p>
                     </div>
+
                 </div>
             </div>
         </div>
-    </div>
-    <div class="content" id="scroll_content">
+
 
         <div class="sect">
             <div class="horizontal layout cell">
-                <img src="{$staticResourcesUrl}images/viewalldatasets_en.gif" style="width: 60%; height: 60%;">
+                <img src="{$staticResourcesUrl}images/viewalldatasets_fr.gif" style="width: 60%; height: 60%;">
 
                 <div class="cell">
                         <div class="horizontal layout cell">
                             <div class="section-number">2</div>
                             <paper-fab id="view_datasets"  mini icon="view-list"> </paper-fab>
-                            <div class="section-title">All datasets</div>
+                            <div class="section-title">Tous les jeux de données</div>
                         </div>
                         <div>
                             <p>
-                            This button shows all the datasets cocreated in the data rooms.
-                            For each dataset you can:</p>
+                                Cette fonctionnalité permet de voir tous les jeux de données co-créés dans des salles de co-création.
+                                Pour chaque jeu de données vous pouvez:</p>
                         </div>
 
                         <ul class="cell-list">
-                            <li> Show the dataset  published  in the Cocreation data room, </li>
-                            <li> Download the dataset as CSV file,</li>
-                            <li> Copy (to be later pasted) the address (URL) of the dataset,</li>
-                            <li> download the notes of the dataset as html file.</li>
+                            <li> Visualiser un jeu de données publié dans une calle de Co-Création, </li>
+                            <li> Télécharger un jeu de données en format CSV,</li>
+                            <li> Copier le URL du jeu de données,</li>
+                            <li> Télécharger les notes du jeu de données en format html.</li>
                         </ul>
                 </div>
             </div>
         </div>
-    </div>
 
         <div class="sect">
             <div class="horizontal layout cell">
-                <img src="{$staticResourcesUrl}images/createroom_en.gif" style="width: 60%; height: 60%;">
+                <img src="{$staticResourcesUrl}images/createroom_fr.gif" style="width: 60%; height: 60%;">
 
                 <div class="cell">
                     <div class="horizontal layout cell">
                         <div class="section-number">3</div>
-                        <div class="section-title">Create a room</div>
+                        <div class="section-title">Créer une salle</div>
                     </div>
                     <div>
                         <p>
                         To create a new room, just press the big "+" (Add) button on the bottom right,
                         and insert the required information:
+                        Pour créer une nouvelle salle, cliquer sur le bouton "+" en bas à gauche de la page d'accueil de l'éspace de la co-création,
+                        puis indiquez les informations requises:
                         <ul class="cell-list">
-                            <li> Name of the room, </li>
-                            <li> Subject,</li>
-                            <li> Description, </li>
-                            <li> Period: it is just an indication of the expected activity of the room, not a prescription,</li>
-                            <li> Goal,</li>
-                            <li> Invitation text to be sent to the members invited,</li>
-                            <li> Initial members (you will be able to add more in the room).</li>
+                            <li> Nom de la salle </li>
+                            <li> Sujet </li>
+                            <li> Description </li>
+                            <li> Période (attention c'est une simple estimation)</li>
+                            <li> Objectif </li>
+                            <li> Texte d'invitation </li>
+                            <li> Membres initials </li>
                         </ul>
                     </div>
                 </div>
@@ -184,45 +176,46 @@
 
         <div class="sect">
             <div class="horizontal layout cell">
-                <img src="{$staticResourcesUrl}images/explore_en.gif" style="width: 60%; height: 60%;">
+                <img src="{$staticResourcesUrl}images/explore_fr.gif" style="width: 60%; height: 60%;">
 
                 <div class="cell">
                     <div class="horizontal layout cell">
                         <div class="section-number">4</div>
-                        <div class="section-title">Explore button</div>
+                        <div class="section-title">Explorer</div>
                     </div>
                     <div>
-                        This button allows to open a room.
+                        Cette fonctionnalité permet d'ouvrir une salle.
                     </div>
                 </div>
             </div>
         </div>
 
 
-    <div class="content" id="scroll_content">
+
         <div class="sect">
             <div class="horizontal layout cell">
-                <img src="{$staticResourcesUrl}images/aboutroom_it.gif" style="width: 60%; height: 60%;">
+                <img src="{$staticResourcesUrl}images/aboutroom_fr.gif" style="width: 60%; height: 60%;">
 
                 <div class="cell">
                     <div class="horizontal layout cell">
                         <div class="section-number">5</div>
-                        <div class="section-title">All features</div>
+                        <div class="section-title">Toutes les fonctionnalités</div>
                     </div>
 
                     <ul class="cell-list">
                         <li>
                             <paper-icon-button icon="menu" style=" width: 50px; height: 50px;"></paper-icon-button>
-                            allows to select all features such as create a dataset, datalets, add metadata, notes, start a discussion etc..)
+                            Elle permet de selectionner toutes les fonctionnalités comme créer un jeu de données, un datalet, des metadonnées, des notes, commencer une discussion, etc.
                         </li>
 
                         <li>
                             <paper-icon-button id="info_room_button" icon="info" on-tap="_openInfo"  style="color: #212121; width: 50px; height: 50px;"></paper-icon-button>
-                            shows information of the room</p>
+                            Elle montre les informations d'une salle</p>
                         </li>
 
                         <li>
-                            <paper-icon-button   icon="add" style="color: #00BCD4;" ></paper-icon-button> allows to invite a new member in the room.
+                            <paper-icon-button   icon="add" style="color: #00BCD4;" ></paper-icon-button>
+                            Elle permet de rajouter des membres à une salle.
                         </li>
                     </ul>
                 </div>
@@ -231,4 +224,4 @@
     </div>
 
 </div>
-</div>
+
