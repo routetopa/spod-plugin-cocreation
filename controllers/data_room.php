@@ -21,8 +21,8 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         $this->assign('components_url', SPODPR_COMPONENTS_URL);
 
         if(COCREATION_BOL_Service::getInstance()->isMemberJoinedToRoom(OW::getUser()->getId(), intval($params['roomId'])) ||
-            BOL_AuthorizationService::getInstance()->isModerator() ||
-            OW::getUser()->isAdmin())
+           BOL_AuthorizationService::getInstance()->isModerator() ||
+           OW::getUser()->isAdmin())
             $this->assign('isMember', true);
         else
             $this->assign('isMember', false);
@@ -48,7 +48,8 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
             $datalet->data   = str_replace("'","&#39;", $datalet->data);
             $datalet->fields = str_replace("'","&#39;", $datalet->fields);
 
-            $datalet_string = "<" . $datalet->component . " datalet-id='". $datalet->id ."' fields='[" . rtrim(ltrim($datalet->fields, "}"), "{") . "]'";
+            //$datalet_string = "<" . $datalet->component . " datalet-id='". $datalet->id ."' fields='[" . rtrim(ltrim($datalet->fields, "}"), "{") . "]'";
+            $datalet_string = "<" . $datalet->component . " datalet-id='". $datalet->id ."' disable_my_space";
             foreach($datalet->params as $key => $value)
                 $datalet_string .= " " . $key . "='" . $value . "'";
             $datalet_string .= "></" . $datalet->component . ">";
