@@ -5,8 +5,8 @@ class COCREATION_CTRL_DataRoomList extends OW_ActionController
 
     public function index(array $params)
     {
-        OW::getDocument()->addStyleSheet(OW::getPluginManager()->getPlugin('spodagora')->getStaticCssUrl() . 'perfect-scrollbar.min.css');
-        OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('spodagora')->getStaticJsUrl() . 'perfect-scrollbar.jquery.js');
+        OW::getDocument()->addStyleSheet(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl() . 'perfect-scrollbar/css/perfect-scrollbar.min.css');
+        OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl() . 'perfect-scrollbar/js/perfect-scrollbar.jquery.js');
 
         $js = UTIL_JsGenerator::composeJsString('
                 ODE.ajax_coocreation_get_dataset      = {$ajax_coocreation_get_dataset}
@@ -61,7 +61,7 @@ class COCREATION_CTRL_DataRoomList extends OW_ActionController
                                "VER" => $data->version,
                                "USER" => $avatars,
                                "NAME" =>  str_replace("'","ˈ",$resource_name),
-                               "DATA" => date('d/m/Y', strtotime($data->timestamp)),
+                               "DATA" => $data->timestamp/*date('d/m/Y', strtotime($data->timestamp))*/,
                                "DESCRIPTION" => !empty($common_core_required_metadata->description) ? str_replace("'","ˈ", $common_core_required_metadata->description) : ''
                 );
         }
