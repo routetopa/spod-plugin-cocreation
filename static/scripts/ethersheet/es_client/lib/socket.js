@@ -5,33 +5,56 @@ var _ = require('underscore');
 var $ = require('jquery');
 var Events = require('backbone').Events;
 var SockJS = require('sockjs-client');
+var config = require('../config');
 
-var Socket = module.exports = function(channel,socket_id,websocket){
-  var self = this;
-  this.recInterval = null;
+var Socket = module.exports = function(channel,socket_id,websocket,es){
+    self = this;
+    this.es                 = es;
+    this.connection_is_open = false;
+    //this.retryTime = 0;
+    //this.prevRetryTime = 0;
+    //this.loginTimeout = 15;
 
-  this.open_handler = function(){
-    clearInterval(this.recInterval);
-    $('#es-modal-overlay').show();
-  };
+    this.connectionRetry = function(){
+       //this.retryTime = this.prevRetryTime +(0.08 * this.loginTimeout);
+        $('#connection_status_message').html("Connection lost, try to reconnect ...");
+        $('#es-header').css('background-color', '#F44336');
+        //var timeout = setTimeout(function(){
+            self.initWebsocket(channel,socket_id,websocket);
+          //  clearTimeout(timeout);
+        //}, this.retryTime);
 
-  this.close_handler = function(e){
+    };
 
-    //if(e.code == 1000 || e.code == 1001 || e.code == 1002 || e.code == 1006){
-      $('#es-modal-box').html("<h1>Your connection to the server has been lost, maybe it could be unreachable :(</h1>");
-      $('#es-modal-overlay').show();
-      return;
-    //}
+    this.open_handler = function(){
+        //this.retryTime = 0;
+        //this.prevRetryTime = 0;
+        //this.connection_is_open = true;
+        $('#connection_status_message').html("Online");
+        $('#es-header').css('background-color', '#4CAF50');
+        $('#offline_overlay').css('display','block');
+        //this.es.sendUnsendedCommands();
+    };
+
+    this.close_handler = function(){
+      /*$('#es-modal-box').html("<h1>Your connection to the server has been lost, please refresh the page.</h1>");
+       $('#es-modal-overlay').show();*/
+      this.connection_is_open = false;
+      $('#offline_overlay').css('display','block');
+      //this.prevRetryTime = this.retryTime;
+      this.connectionRetry();
+    };
+
+    this.error_handler = function(){
+        this.connection_is_open = false;
+        //this.prevRetryTime = this.retryTime;
+        this.connectionRetry();
+    };
+
+    this.message_handler = function(){};
 
     this.initWebsocket(channel,socket_id,websocket);
-    /*this.recInterval = setInterval(function () {
-      self.initWebsocket(channel,socket_id,websocket);
-    }, 2000);*/
-  };
-  this.error_handler = function(){};
-  this.message_handler = function(){};
 
-  this.initWebsocket(channel,socket_id,websocket);
 };
 
 _.extend(Socket.prototype, Events,{
@@ -45,8 +68,10 @@ _.extend(Socket.prototype, Events,{
     this.channel   = channel;
     this.socket_id = socket_id;
     this.websocket = websocket;
+
     this.ws = websocket || new SockJS(window.location.protocol + '//' + window.location.host +'/'+ channel +'/pubsub/',{debug:false,devel:false});
-    /*this.ws = websocket || new SockJS(window.location.protocol + '//' + window.location.host +'/'+ channel +'/pubsub/', null, {
+    /*var host = window.location.host.split(':')[0] + ':' + config.port;
+    this.ws = websocket || new SockJS(window.location.protocol + '//' + window.location.host +'/'+ channel +'/pubsub/', null, {
           'protocols_whitelist': [
             'websocket',
             'xdr-streaming',

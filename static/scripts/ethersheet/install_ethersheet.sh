@@ -40,6 +40,7 @@ cloneRepository()
     npm install cookie-session
     npm install formidable
     npm install compression
+    npm install http-proxy
     tput setaf 2
     echo "done"
 }

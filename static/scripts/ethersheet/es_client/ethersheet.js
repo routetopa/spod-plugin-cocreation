@@ -52,12 +52,17 @@ var Ethersheet = module.exports = function(o) {
   this.undoQ = new UndoQ();
   this.keyboard = keyboardEvents();
   this.expressionHelpers = initializeExpressionHelpers(this.data);
+
+  //unsended messages
+  this.unsended_message_queue = [];
+  this.unsended_message_queue_timeout = null;
+
   this.initializeData(o);
   this.initializeSocket(o);
   this.initializeDisplay(o);
   this.initializeCommands(o);
 
-  timer = setInterval(messageDispatcher, 10000)
+  timer = setInterval(messageDispatcher, 10000);
 
 };
 
@@ -86,7 +91,7 @@ Ethersheet.prototype.initializeData = function(o){
 Ethersheet.prototype.initializeSocket = function(o){
   var es = this;
   
-  this.socket = new Socket(o.channel,this.data.users.getCurrentUser().id,o.socket);
+  this.socket = new Socket(o.channel,this.data.users.getCurrentUser().id,o.socket, es);
 
   this.socket.onOpen(function(e){
     es.data.users.replicateCurrentUser();
@@ -94,6 +99,15 @@ Ethersheet.prototype.initializeSocket = function(o){
     es.data.selections.replicateLocalSelection();
     es.data.selections.requestReplicateLocalSelection();
     es.connect();
+
+    this.connection_is_open = true;
+    $('#connection_status_message').html("Online");
+    $('#es-header').css('background-color', '#4CAF50');
+    $('#offline_overlay').css('display','none');
+    /*es.unsended_message_queue_timeout = setInterval(function(){
+      es.sendUnsendedCommands()
+        },3000);*/
+
   });
 
   this.socket.onMessage(function(e){
@@ -190,19 +204,24 @@ Ethersheet.prototype.executeCommand = function(c){
 
 Ethersheet.prototype.sendCommand = function(c){
 
-  if(c.getSerializedMessage){
-    this.socket.send(c.getSerializedMessage());
-  } else {
-    this.socket.send(Command.serialize(c));
-  }
+    if(this.socket.connection_is_open){
+        if(c.getSerializedMessage){
+            this.socket.send(c.getSerializedMessage());
+        } else {
+            this.socket.send(Command.serialize(c));
+        }
 
-  /*isislab*/
-  if(c.type == "sheet" && c.action == "commitCell"){
-    commandQueue.push(1);
-    clearTimeout(timer);
-    timer = setInterval(messageDispatcher, 10000);
-  }
- /*isislab*/
+        if( c.type == "sheet" && c.action == "commitCell"){
+            commandQueue.push(1);
+            clearTimeout(timer);
+            timer = setInterval(messageDispatcher, 10000);
+        }
+        return true;
+    }else{
+        /*this.unsended_message_queue.push(c);
+        console.log(this.unsended_message_queue);*/
+        return false;
+    }
 };
 
 Ethersheet.prototype.undoCommand = function(){
@@ -255,5 +274,15 @@ Ethersheet.prototype.bindDataToSocket = function(){
     });
   }
 };
+
+Ethersheet.prototype.sendUnsendedCommands = function(){
+    for(var i=0; i < this.unsended_message_queue.length; i++){
+        var command = this.unsended_message_queue[i];
+        if(this.sendCommand(command)){
+            this.unsended_message_queue.splice(i,1);
+        }
+    }
+    clearTimeout(this.unsended_message_queue_timeout);
+}
 
 });
