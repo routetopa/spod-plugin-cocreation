@@ -2,6 +2,7 @@ var http           = require('http');
 var cluster        = require('cluster');
 var httpProxy      = require('http-proxy');
 var _              = require('underscore');
+var URL            = require('url');
 var server         = require('./server');
 var config         = require('../config');
 
@@ -10,23 +11,32 @@ exports.createMasterServer = function(config){
     var slaveServers = [];
     var proxy = httpProxy.createProxyServer();
 
+    function getResourceString(url){
+        url = url.replace(/\/s\//, "");
+        url = url.replace(/\/pubsub\/?.*/, "");
+        url = url.replace(/\/es_client\/?.*/, "");
+        return url;
+    };
+
     function assignSlave(request, response)
     {
-        var host = request.headers['host'].split(':')[0];
-        var key = null;
-        if(typeof request.headers.referer === 'undefined'){
-            if(request.url.indexOf("\\s\\")){
-                key = request.url.replace(/\/s\//, "");
-                key = key.replace(/\/pubsub\/?.*/, "");
-            }
-        }else{
-            key = request.headers.referer.split("/")[4];
-            if(key === "styles"){
-                key = Object.keys(slaveServers)[0];
+        var host    = request.headers['host'].split(':')[0];
+        var referer = request.headers.referer;
+        var key;
+        if( _.isUndefined(referer) )//main dataset page request
+        {
+            key = getResourceString(request.url);
+        }else{//request generate from main dataset page
+            key = getResourceString(URL.parse(referer).pathname);
+            if(key === "" || URL.parse(referer).port !== config.port){//static resources
+                var servers_keys = Object.keys(slaveServers);
+                key = servers_keys[Math.floor(Math.random() * servers_keys.length)];
             }
         }
-        if (typeof slaveServers[key] === 'undefined') {
+        //console.log("KEY: " + key);
+        if ( _.isUndefined(slaveServers[key]) ) {
             slaveServers[key] = cluster.fork();
+            //Kill worker when there are not users in the related room
             cluster.on('exit', function(worker, code, signal){
                 var keys = Object.keys(slaveServers);
                 for(var k in keys){
@@ -36,12 +46,11 @@ exports.createMasterServer = function(config){
                     }
                 }
             });
-            //redirect to the related worker - only for the first client
-            if(request.url.indexOf("pubsub") === -1){//Client is being reconnecting so let the server answer to the socket channel
-                response.writeHead(200, {"Content-Type": "text/html"});
-                response.write("<html><head><title></title></head><body><script>setTimeout(function(){location.reload()},1500)</script></body></html>");
-                response.end();
-            }
+            //proxy the request after worker creates the server
+            setTimeout(function (){
+                proxy.web(request, response, {target : "http://" + host + ":" + (config.port + slaveServers[key].process.pid)}, function(e){console.log(e)});
+            },500);
+
         }else{
             proxy.web(request, response, {target : "http://" + host + ":" + (config.port + slaveServers[key].process.pid)}, function(e){});
         }

@@ -41,6 +41,7 @@ cloneRepository()
     npm install formidable
     npm install compression
     npm install http-proxy
+    npm install url
     tput setaf 2
     echo "done"
 }
