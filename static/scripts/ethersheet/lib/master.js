@@ -28,13 +28,13 @@ exports.createMasterServer = function(config){
             key = getResourceString(request.url);
         }else{//request generate from main dataset page
             key = getResourceString(URL.parse(referer).pathname);
-            if(key === "" || URL.parse(referer).port !== config.port){//static resources
+            if(key === "" || parseInt(URL.parse(referer).port) !== config.port){//static resources
                 var servers_keys = Object.keys(slaveServers);
                 key = servers_keys[Math.floor(Math.random() * servers_keys.length)];
             }
         }
         //console.log("KEY: " + key);
-        if ( _.isUndefined(slaveServers[key]) ) {
+        if ( _.isUndefined(slaveServers[key]) ) {qu
             slaveServers[key] = cluster.fork();
             //Kill worker when there are not users in the related room
             cluster.on('exit', function(worker, code, signal){
