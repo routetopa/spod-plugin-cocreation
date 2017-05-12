@@ -204,6 +204,7 @@ exports.createServer = function(config){
     /***********************************************
      * PubSub Server
      ***********************************************/
+    var killTimeout = null;
     var active_clients = 0;
     var pub_server = new Transactor();
     var transactionHandler = createTransactionHandler(es);
@@ -230,9 +231,14 @@ exports.createServer = function(config){
         pub_server.broadcast(socket,channel,close_command);
 
         active_clients--;
-        if(active_clients == 0){
-            process.exit();
+        //console.log("CLIENTS: " + active_clients);
+        if(active_clients === 0) {
+            killTimeout = setTimeout(function () {
+                console.log("kill worker");
+                process.exit();
+            }, 1000 * 60 * 15);
         }
+
         //console.log(active_clients);
     });
     pub_server.refreshClients = function(sheet_id){
@@ -259,6 +265,7 @@ exports.createServer = function(config){
         var channel = socket.pathname.split('/')[1];
         pub_server.addSocket(channel,socket);
         active_clients++;
+        clearTimeout(killTimeout);
         //console.log(active_clients);;
     });
 

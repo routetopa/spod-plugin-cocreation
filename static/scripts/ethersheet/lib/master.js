@@ -49,7 +49,9 @@ exports.createMasterServer = function(config){
             //proxy the request after worker creates the server
             setTimeout(function (){
                 proxy.web(request, response, {target : "http://" + host + ":" + (config.port + slaveServers[key].process.pid)}, function(e){console.log(e)});
-            },500);
+            },1000);
+
+            console.log("WORKERS: " + Object.keys(cluster.workers).length);
 
         }else{
             proxy.web(request, response, {target : "http://" + host + ":" + (config.port + slaveServers[key].process.pid)}, function(e){});
