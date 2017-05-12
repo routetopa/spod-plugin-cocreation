@@ -111,6 +111,15 @@ exports.createServer = function(config){
         });
     });
 
+    //for test porpouse
+    app.get('/sim/:collection_id', function (req,res) {
+        var collection_id = String(req.params.collection_id);
+        es.getSheetCollection(collection_id,function(err,sheet_data){
+            if(err) return res.send(500,String(err));
+            res.json(sheet_data);
+        });
+    });
+
     //import csv
     app.post('/import/csv', function(req,res){
         var form = new formidable.IncomingForm();
