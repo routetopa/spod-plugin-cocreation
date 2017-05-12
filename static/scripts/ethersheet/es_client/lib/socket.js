@@ -48,7 +48,7 @@ var Socket = module.exports = function(channel,socket_id,websocket,es){
     this.error_handler = function(){
         this.connection_is_open = false;
         //this.prevRetryTime = this.retryTime;
-        this.connectionRetry();
+        //this.connectionRetry();
     };
 
     this.message_handler = function(){};
