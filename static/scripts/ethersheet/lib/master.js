@@ -34,7 +34,7 @@ exports.createMasterServer = function(config){
             }
         }
         //console.log("KEY: " + key);
-        if ( _.isUndefined(slaveServers[key]) ) {qu
+        if ( _.isUndefined(slaveServers[key]) ) {
             slaveServers[key] = cluster.fork();
             //Kill worker when there are not users in the related room
             cluster.on('exit', function(worker, code, signal){
