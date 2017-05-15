@@ -11,11 +11,23 @@ exports.createMasterServer = function(config){
     var slaveServers = [];
     var proxy = httpProxy.createProxyServer();
 
-    function getResourceString(url){
+    function getResourceKeyFromURL(url){
         url = url.replace(/\/s\//, "");
         url = url.replace(/\/pubsub\/?.*/, "");
         url = url.replace(/\/es_client\/?.*/, "");
         return url;
+    };
+
+    function getKeyByWorkerPid(pid){
+        var key = undefined;
+        var keys = Object.keys(slaveServers);
+        for(var k in keys){
+            if(slaveServers[keys[k]].worker.process.pid === pid){
+                key = keys[k];
+                break;
+            }
+        }
+        return key;
     };
 
     function assignSlave(request, response)
@@ -25,36 +37,31 @@ exports.createMasterServer = function(config){
         var key;
         if( _.isUndefined(referer) )//main dataset page request
         {
-            key = getResourceString(request.url);
+            key = getResourceKeyFromURL(request.url);
         }else{//request generate from main dataset page
-            key = getResourceString(URL.parse(referer).pathname);
-            if(key === "" || parseInt(URL.parse(referer).port) !== config.port){//static resources
+            key = getResourceKeyFromURL(URL.parse(referer).pathname);
+            if(key === "" || parseInt(URL.parse(referer).port) !== config.port){
+                //static resources
                 var servers_keys = Object.keys(slaveServers);
                 key = servers_keys[Math.floor(Math.random() * servers_keys.length)];
             }
         }
         //console.log("KEY: " + key);
         if ( _.isUndefined(slaveServers[key]) ) {
-            slaveServers[key] = cluster.fork();
+            slaveServers[key] = {worker : cluster.fork(), request : request, response: response};
+            //Proxy first request ofter eorker is online
+            slaveServers[key].worker.on('message', function( data ){
+                var key = getKeyByWorkerPid(data.pid);
+                proxy.web(slaveServers[key].request, slaveServers[key].response, {target : "http://" + host + ":" + (config.port + data.pid)}, function(e){console.log(e)});
+            });
             //Kill worker when there are not users in the related room
             cluster.on('exit', function(worker, code, signal){
-                var keys = Object.keys(slaveServers);
-                for(var k in keys){
-                    if(slaveServers[keys[k]].process.pid === worker.process.pid){
-                        delete slaveServers[keys[k]];
-                        break;
-                    }
-                }
-            });
+                delete slaveServers[getKeyByWorkerPid(worker.process.pid)];
+             });
             //proxy the request after worker creates the server
-            setTimeout(function (){
-                proxy.web(request, response, {target : "http://" + host + ":" + (config.port + slaveServers[key].process.pid)}, function(e){console.log(e)});
-            },1000);
-
             console.log("WORKERS: " + Object.keys(cluster.workers).length);
-
         }else{
-            proxy.web(request, response, {target : "http://" + host + ":" + (config.port + slaveServers[key].process.pid)}, function(e){});
+            proxy.web(request, response, {target : "http://" + host + ":" + (config.port + slaveServers[key].worker.process.pid)}, function(e){});
         }
     };
 

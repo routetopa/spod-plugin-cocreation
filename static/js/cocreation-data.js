@@ -1,3 +1,7 @@
+$(window).load(function () {
+    $('#spreadsheet').append('<iframe id="spreadsheet_container" src="' + (location.protocol + "//" + location.host + ":" + COCREATION.spreadsheet_server_port + "/s/" + COCREATION.sheetName) + '" style="height: 100%; width: 100%;"></iframe>');
+});
+
 $(document).ready(function() {
 
    /* window.addEventListener('cocreation-paper-card-controllet_delete', function (e) {
@@ -17,6 +21,7 @@ $(document).ready(function() {
             );
         }
     });*/
+
    window.addEventListener('metadata-list-controllet_update-metadata', function(e){
         var metadata = JSON.parse(e.detail.metadata);
         $.post(ODE.ajax_coocreation_room_update_metadata,

@@ -64,6 +64,7 @@ exports.createServer = function(config){
         if(err) throw err;
         http_server.listen(config.port, config.host, function(){
             console.log('ethersheet is listening over http on port ' + config.port);
+            process.send({action: "server_online", pid: process.pid});
         });
     });
 
