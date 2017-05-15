@@ -130,6 +130,8 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         $commentCmp = new SPODTCHAT_CMP_Comments($commentsParams);
         $this->addComponent('comments', $commentCmp);
 
+        $this->assign('datalet_definition_import', ODE_CLASS_Tools::getInstance()->get_all_datalet_definitions());
+
         $js = UTIL_JsGenerator::composeJsString('
                 ODE.ajax_coocreation_room_get_datalets        = {$ajax_coocreation_room_get_datalets}
                 ODE.ajax_coocreation_room_get_array_sheetdata = {$ajax_coocreation_room_get_array_sheetdata}
