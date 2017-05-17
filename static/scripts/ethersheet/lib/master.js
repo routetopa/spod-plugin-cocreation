@@ -13,6 +13,9 @@ exports.createMasterServer = function(config){
 
     function getResourceKeyFromURL(url){
         url = url.replace(/\/s\//, "");
+        url = url.replace(/\/images\//, "");
+        url = url.replace(/\/import\//, "");
+        url = url.replace(/\/upload\//, "");
         url = url.replace(/\/pubsub\/?.*/, "");
         url = url.replace(/\/es_client\/?.*/, "");
         return url;
@@ -42,12 +45,18 @@ exports.createMasterServer = function(config){
             key = getResourceKeyFromURL(URL.parse(referer).pathname);
             if(key === "" || parseInt(URL.parse(referer).port) !== config.port){
                 //static resources
-                var servers_keys = Object.keys(slaveServers);
-                key = servers_keys[Math.floor(Math.random() * servers_keys.length)];
+                if(key === URL.parse(referer).pathname){
+                    key = getResourceKeyFromURL(request.url);
+                }else{
+                    var servers_keys = Object.keys(slaveServers);
+                    key = servers_keys[Math.floor(Math.random() * servers_keys.length)];
+                }
             }
         }
-        //console.log("KEY: " + key);
         if ( _.isUndefined(slaveServers[key]) ) {
+            /*console.log("URL: " + request.url);
+            console.log("REFERER: " + referer);
+            console.log("KEY: " + key);*/
             slaveServers[key] = {worker : cluster.fork(), request : request, response: response};
             //Proxy first request ofter eorker is online
             slaveServers[key].worker.on('message', function( data ){
@@ -66,7 +75,7 @@ exports.createMasterServer = function(config){
     };
 
     if (cluster.isMaster) {
-        var front_server = http.createServer(assignSlave).listen(config.port);
+        http.createServer(assignSlave).listen(config.port);
     }else if(cluster.isWorker){
         var cloned_config = require('../config');
         cloned_config.port = (config.port  + process.pid);
