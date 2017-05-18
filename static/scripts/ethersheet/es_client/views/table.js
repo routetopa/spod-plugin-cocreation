@@ -299,7 +299,7 @@ var Table = module.exports = View.extend({
   paginationRender : function(e){
     if(!_.isUndefined(e.action)){
       if(e.action == "sortRows")
-          location.reload();
+          location.reload(true);
           //this.table_function_menu_instance.pageSelection(1);
     }else {
       this.table_function_menu_instance.recalculateMetrix();
