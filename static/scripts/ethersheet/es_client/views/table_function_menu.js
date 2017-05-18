@@ -67,6 +67,11 @@ define( function(require,exports,module){
             self = this;
         },
 
+        recalculateMetrix: function(){
+            this.size = Math.floor(this.getSheet().allRows.length / this.chunk);
+            this.rows_in_last_page = this.getSheet().allRows.length % this.chunk;
+        },
+
         getFirstRowIndex: function(){
            return this.first_index_row;
         },

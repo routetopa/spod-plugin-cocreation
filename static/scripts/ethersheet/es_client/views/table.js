@@ -302,6 +302,7 @@ var Table = module.exports = View.extend({
           location.reload();
           //this.table_function_menu_instance.pageSelection(1);
     }else {
+      this.table_function_menu_instance.recalculateMetrix();
       this.table_function_menu_instance.getPagination();
       this.table_function_menu_instance.goToPageInGrid();
     }
