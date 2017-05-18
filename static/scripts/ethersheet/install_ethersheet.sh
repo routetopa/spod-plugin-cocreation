@@ -40,6 +40,7 @@ cloneRepository()
     npm install cookie-session
     npm install formidable
     npm install compression
+    npm install cluster
     npm install http-proxy
     npm install url
     tput setaf 2
