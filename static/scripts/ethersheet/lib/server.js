@@ -234,10 +234,11 @@ exports.createServer = function(config){
         active_clients--;
         //console.log("CLIENTS: " + active_clients);
         if(active_clients === 0) {
-            killTimeout = setTimeout(function () {
+            /*killTimeout = setTimeout(function () {
                 console.log("kill worker");
                 process.exit();
-            }, 1000 * 60 * 15);
+            }, 1000 * 60 * 15);*/
+            process.exit();
         }
 
         //console.log(active_clients);
