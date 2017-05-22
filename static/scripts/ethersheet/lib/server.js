@@ -149,7 +149,6 @@ exports.createServer = function(config){
         var form = new formidable.IncomingForm();
         form.parse(req, function(err, fields, files)
         {
-
             try {
                 var sheet_id = fields.sheet_id;
                 var image_name = files.image_file.name;
@@ -234,11 +233,11 @@ exports.createServer = function(config){
         active_clients--;
         //console.log("CLIENTS: " + active_clients);
         if(active_clients === 0) {
-            /*killTimeout = setTimeout(function () {
-                console.log("kill worker");
-                process.exit();
-            }, 1000 * 60 * 15);*/
-            process.exit();
+            killTimeout = setTimeout(function () {
+                 console.log("kill worker");
+                 process.exit();
+             }, 1000 * 60 * 15);
+            //process.exit();
         }
 
         //console.log(active_clients);
