@@ -14,7 +14,7 @@ define( function(require,exports,module){
             'mouseover .es-table-cell': 'cellsSelectionMouseover',
             'mouseup .es-table-cell'  : 'cellsSelectionMouseup',
             'dblclick .es-table-cell' : 'cellClicked',
-            'keydown': 'inputKeypress'
+            'keydown textarea': 'inputKeydown'
         },
 
         es: null,
@@ -167,10 +167,16 @@ define( function(require,exports,module){
         //KEYBOARD EVENTS STUFFS
 
         //hendler for cell editing
-        inputKeypress: function(e){
+        inputKeydown: function(e){
+
+            console.log(e);
             //return unless code is 'enter' or 'tab'
+            if(self.editingCell == true){
+                e.stopPropagation();
+            }
+
             var code = (e.keyCode ? e.keyCode : e.which);
-            if(code != 13 && code != 9 && code != 27) return;
+            if(code != 13 && code != 9 && code != 27) return true;
 
             //to fix
             /*var cells = this.table.getLocalSelection().getCells();
@@ -181,6 +187,7 @@ define( function(require,exports,module){
             switch(code){
                 case 13://ENTER
                     self.table.moveSelection(e,1,0);
+                    self.editingCell = true;
                     break;
                 case 9://TAB
                     self.table.moveSelection(e,0,1);//right
@@ -198,21 +205,12 @@ define( function(require,exports,module){
         cellsSelectionKeydown: function(e){
 
             if(self.editingCell == true){
-                try {
-                    $('textarea')._onKeyDown(e);
-                }catch(e){}
-                return false;
+                e.stopPropagation();
+                return true;
             }
 
-            var code = (e.keyCode ? e.keyCode : e.which);
-
-            //to fix
-            /*var cells = self.table.getLocalSelection();
-            _.each(cells, function(cell){
-                self.getSheet().commitCell(cell.row_id.toString(), cell.col_id.toString());
-            }, self);*/
-
             var cell = null;
+            var code = (e.keyCode ? e.keyCode : e.which);
             var sheet_table =  $('#es-grid-'+self.getId());
             sheet_table.find(".cpselected").removeClass("cpselected");
 
@@ -242,6 +240,14 @@ define( function(require,exports,module){
                 case 46://CANC
                     self.deleteCellsContent();
                     break;
+                case 9://TAB
+                    self.table.moveSelection(e,0,1);//right
+                    break;
+                case 27://ESC
+                    self.table.clearOverlays();
+                    self.editingCell = false;
+                    self.resetSelection(self.current_cell);
+                    break;
             }
 
             if (e.shiftKey) {
@@ -254,6 +260,7 @@ define( function(require,exports,module){
         },
 
         deleteCellsContent: function(){
+            var cell = null;
             for (var i = self.rowStart; i <= self.rowEnd; i++) {
                 for (var j = self.colStart; j <= self.colEnd; j++) {
                     cell = self.table.$grid.find("tr").eq(i).find("td").eq(j);

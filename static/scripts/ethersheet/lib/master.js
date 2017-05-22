@@ -35,7 +35,7 @@ exports.createMasterServer = function(config){
 
     function assignSlave(request, response)
     {
-        var host    = request.headers['host'].split(':')[0];
+        //var host    = request.headers['host'].split(':')[0];
         var referer = request.headers.referer;
         var key;
         if( _.isUndefined(referer) )//main dataset page request
@@ -61,7 +61,7 @@ exports.createMasterServer = function(config){
             //Proxy first request ofter eorker is online
             slaveServers[key].worker.on('message', function( data ){
                 var key = getKeyByWorkerPid(data.pid);
-                proxy.web(slaveServers[key].request, slaveServers[key].response, {target : "http://" + host + ":" + (config.port + data.pid)}, function(e){console.log(e)});
+                proxy.web(slaveServers[key].request, slaveServers[key].response, {target : "http://localhost:" + (config.port + data.pid)}, function(e){console.log(e)});
             });
             //Kill worker when there are not users in the related room
             cluster.on('exit', function(worker, code, signal){
@@ -70,7 +70,7 @@ exports.createMasterServer = function(config){
             //proxy the request after worker creates the server
             console.log("WORKERS: " + Object.keys(cluster.workers).length);
         }else{
-            proxy.web(request, response, {target : "http://" + host + ":" + (config.port + slaveServers[key].worker.process.pid)}, function(e){});
+            proxy.web(request, response, {target : "http://localhost:" + (config.port + slaveServers[key].worker.process.pid)}, function(e){});
         }
     };
 
