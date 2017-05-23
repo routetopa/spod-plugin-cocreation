@@ -204,7 +204,13 @@ Ethersheet.prototype.executeCommand = function(c){
 
 Ethersheet.prototype.sendCommand = function(c){
 
-    if(this.socket.connection_is_open){
+    if(c.getSerializedMessage){
+        this.socket.send(c.getSerializedMessage());
+    } else {
+        this.socket.send(Command.serialize(c));
+    }
+
+    /*if(this.socket.connection_is_open){
         if(c.getSerializedMessage){
             this.socket.send(c.getSerializedMessage());
         } else {
@@ -218,10 +224,10 @@ Ethersheet.prototype.sendCommand = function(c){
         }
         return true;
     }else{
-        /*this.unsended_message_queue.push(c);
-        console.log(this.unsended_message_queue);*/
+        /!*this.unsended_message_queue.push(c);
+        console.log(this.unsended_message_queue);*!/
         return false;
-    }
+    }*/
 };
 
 Ethersheet.prototype.undoCommand = function(){
