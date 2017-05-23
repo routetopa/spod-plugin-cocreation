@@ -69,20 +69,19 @@ _.extend(Socket.prototype, Events,{
     this.socket_id = socket_id;
     this.websocket = websocket;
 
-    this.ws = websocket || new SockJS(window.location.protocol + '//' + window.location.host +'/'+ channel +'/pubsub/',{debug:false,devel:false});
-    /*var host = window.location.host.split(':')[0] + ':' + config.port;
+    //this.ws = websocket || new SockJS(window.location.protocol + '//' + window.location.host +'/'+ channel +'/pubsub/',{debug:false,devel:false});
     this.ws = websocket || new SockJS(window.location.protocol + '//' + window.location.host +'/'+ channel +'/pubsub/', null, {
           'protocols_whitelist': [
-            'websocket',
-            'xdr-streaming',
+            /*'websocket',
+            'xdr-streaming',*/
             'xhr-streaming',
-            'iframe-eventsource',
-            'iframe-htmlfile',
-            'xdr-polling',
+            /*'iframe-eventsource',
+            'iframe-htmlfile',*/
+            /*'xdr-polling',*/
             'xhr-polling',
             'iframe-xhr-polling',
             'jsonp-polling']
-        });*/
+        });
 
     this.ws.onopen = _.bind(this.open,this);
     this.ws.onerror= _.bind(this.error,this);

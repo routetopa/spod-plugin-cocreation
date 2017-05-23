@@ -1,4 +1,5 @@
 <link rel="import" href="{$components_url}controllets/cocreation-paper-card-controllet/cocreation-paper-card-controllet.html">
+<link rel="import" href="{$components_url}controllets/search-panel-controllet/search-panel-controllet.html"/>
 
 <link rel="import" href="{$components_url}bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="{$components_url}bower_components/paper-fab/paper-fab.html">
@@ -151,6 +152,22 @@
         --paper-icon-button-ink-color: #FFFFFF;
     }
 
+    search-panel-controllet#search_room
+    {
+        --paper-fab-background:#2196F3;
+        --search-box-container-color: #2196F3;
+        position: absolute;
+        right: 10px;
+        top: 70px;
+        z-index: 100;
+    }
+
+    search-panel-controllet#search_room paper-input-container{
+        padding: 8px 0;
+        background: #cccccc;
+        border-radius: 8px;
+    }
+
 </style>
 {/literal}
 
@@ -202,6 +219,8 @@
             <h1 style="position: relative; top: 25%; left: 10%;">{text key="cocreation+concreation_not_active"}</h1>
         </div>
     {/if}
+
+    <search-panel-controllet id="search_room" paperfab></search-panel-controllet>
 
     <div class=" room_container">
         {foreach $cocreation_rooms as $room}

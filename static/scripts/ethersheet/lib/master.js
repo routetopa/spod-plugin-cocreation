@@ -35,28 +35,29 @@ exports.createMasterServer = function(config){
 
     function assignSlave(request, response)
     {
-        //var host    = request.headers['host'].split(':')[0];
         var referer = request.headers.referer;
-        var key;
-        if( _.isUndefined(referer) )//main dataset page request
-        {
-            key = getResourceKeyFromURL(request.url);
-        }else{//request generate from main dataset page
-            key = getResourceKeyFromURL(URL.parse(referer).pathname);
-            if(key === "" || parseInt(URL.parse(referer).port) !== config.port){
-                //static resources
-                if(key === URL.parse(referer).pathname){
-                    key = getResourceKeyFromURL(request.url);
-                }else{
-                    var servers_keys = Object.keys(slaveServers);
-                    key = servers_keys[Math.floor(Math.random() * servers_keys.length)];
-                }
-            }
+        var temp_key, key;
+
+        if(_.isUndefined(referer)){
+            temp_key =  request.url;
+        }else{
+            temp_key =  URL.parse(referer).pathname;
+            if( parseInt(URL.parse(referer).port) !== config.port )
+                temp_key = request.url;
         }
+
+        key = getResourceKeyFromURL( temp_key );
+
+        if(_.isEmpty(key)){
+            //static resources
+            var servers_keys = Object.keys(slaveServers);
+            key = servers_keys[Math.floor(Math.random() * servers_keys.length)];
+        }
+
         if ( _.isUndefined(slaveServers[key]) ) {
-            /*console.log("URL: " + request.url);
+            console.log("URL: " + request.url);
             console.log("REFERER: " + referer);
-            console.log("KEY: " + key);*/
+            console.log("KEY: " + key);
             slaveServers[key] = {worker : cluster.fork(), request : request, response: response};
             //Proxy first request ofter eorker is online
             slaveServers[key].worker.on('message', function( data ){
