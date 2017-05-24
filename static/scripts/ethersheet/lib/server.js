@@ -231,12 +231,13 @@ exports.createServer = function(config){
         pub_server.broadcast(socket,channel,close_command);
 
         active_clients--;
+        delete pub_server.sockets[channel][socket];
         //console.log("CLIENTS: " + active_clients);
         if(active_clients === 0) {
             killTimeout = setTimeout(function () {
-                 console.log("kill worker");
-                 process.exit();
-             }, 1000 * 60 * 15);
+                console.log("kill worker");
+                process.exit();
+            }, 1000 * 60 * 15);
             //process.exit();
         }
 
