@@ -425,14 +425,16 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             exit;
         }
 
-        if(COCREATION_BOL_Service::getInstance()->updateMetadata($clean['roomId'],
-                                                                  $clean['core_common_required_metadata'],
-                                                                  $clean['common_core_if_applicable_metadata'],
-                                                                  $clean['expanded_metadata'])) {
+        if(COCREATION_BOL_Service::getInstance()->updateMetadata(
+                $clean['roomId'],
+                str_replace("'","\'",$clean['core_common_required_metadata']),
+                str_replace("'","\'",$clean['common_core_if_applicable_metadata']),
+                str_replace("'","\'",$clean['expanded_metadata'])))
+        {
 
             echo json_encode(array("status" => "ok", "message" => "metadata sucessfully update for current room"));
 
-            SPODNOTIFICATION_CLASS_EventHandler::getInstance()->emitNotification(["plugin"                              => "cocreation",
+            SPODNOTIFICATION_CLASS_EventHandler::getInstance()->emitNotification(["plugin" => "cocreation",
                                      "operation"                           => "updateMetadata",
                                      "core_common_required_metadata"      => $clean['core_common_required_metadata'],
                                      "common_core_if_applicable_metadata" => $clean['common_core_if_applicable_metadata'],
