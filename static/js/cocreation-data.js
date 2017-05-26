@@ -211,7 +211,7 @@ room._publishDataset = function(){
 };
 
 room.confirmDatasetPublication = function(){
-    if(confirm("Il dataset creato non contiene informazioni personali e sensibili, in accordo alla vigente legge sulla protezione della privacy (Decreto legislativo 30 giugno 2003, n. 196)."))
+    if(confirm(OW.getLanguageText('cocreation', 'privacy_message_datalet_published')))
         $.get(ODE.ajax_coocreation_room_get_html_note,
             function (data, status) {
                 if(JSON.parse(data).status == "ok")
