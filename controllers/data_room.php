@@ -183,6 +183,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         OW::getLanguage()->addKeyForJs('cocreation', 'dataset_successfully_published');
         OW::getLanguage()->addKeyForJs('cocreation', 'metadata_successfully_saved');
         OW::getLanguage()->addKeyForJs('cocreation', 'error_metadata_updates');
+        OW::getLanguage()->addKeyForJs('cocreation', 'privacy_message_datalet_published');
     }
 
 }
