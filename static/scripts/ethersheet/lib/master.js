@@ -13,7 +13,7 @@ exports.createMasterServer = function(config){
 
     function getResourceKeyFromURL(url){
         url = url.replace(/\/s\//, "");
-        url = url.replace(/\/images\//, "");
+        url = url.replace(/\/images\/?.*/, "");
         url = url.replace(/\/import\//, "");
         url = url.replace(/\/upload\//, "");
         url = url.replace(/\/pubsub\/?.*/, "");
@@ -87,6 +87,7 @@ exports.createMasterServer = function(config){
     };
 
     if (cluster.isMaster) {
+        console.log("MASTER ONLINE");
         http.createServer(assignSlave).listen(config.port);
     }else if(cluster.isWorker){
         var cloned_config = require('../config');

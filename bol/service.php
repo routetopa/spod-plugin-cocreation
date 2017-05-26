@@ -28,8 +28,13 @@ class COCREATION_BOL_Service
         );
     }
 
-    //SHEET
+    private function __destruct()
+    {
+        // TODO: Implement __destruct() method.
+        $this->sheetDBconnection = null;
+    }
 
+    //SHEET
     public function getSheetData($sheetName){
         $data = array();
         try {
