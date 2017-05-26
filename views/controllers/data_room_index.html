@@ -538,7 +538,7 @@
                          <!-- Dataset -->
                         <paper-card id="spreadsheet" class="full_size_card" style="visibility:visible;" elevation="5">
                             <div class="screen_hidden_header">{text key="cocreation+room_dataset_tab_label"}</div>
-                            <!--<iframe id="spreadsheet_container" src="{$spreadsheet}" style="height: 100%; width: 100%;"></iframe>-->
+                            <iframe id="spreadsheet_container" src="{$spreadsheet}" style="height: 100%; width: 100%;"></iframe>
                         </paper-card>
                         <!-- Metadata -->
                         <paper-card id="metadata" class="full_size_card" style="visibility:hidden;" elevation="5">
@@ -552,11 +552,8 @@
                         <!-- Discussion -->
                         <paper-card id="discussion" class="full_size_card" style="visibility:hidden;" elevation="5">
                             <div class="screen_header">{text key="cocreation+room_discussion_tab_label"}</div>
-                            <div id="discussion_container" style="overflow-y: scroll;overflow-x: hidden;height: calc(100% - 45px)">
-                                {$comments}
-                                {if isset($private_room)}
-                                {$private_room}
-                                {/if}
+                            <div id="discussion_container" style="height: calc(100% - 45px)">
+                                {$discussion}
                             </div>
                         </paper-card>
                         <!-- Datalets -->
