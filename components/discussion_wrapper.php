@@ -16,19 +16,20 @@ class COCREATION_CMP_DiscussionWrapper extends OW_Component
         }
 
         //comment and rate
-        $commentsParams = new BASE_CommentsParams('cocreation', COCREATION_BOL_Service::ROOM_ENTITY_TYPE);
+        $commentsParams = new SPODTCHAT_CLASS_CommentsParams('cocreation', COCREATION_BOL_Service::ROOM_ENTITY_TYPE);
         $commentsParams->setEntityId($roomId);
         $commentsParams->setDisplayType(BASE_CommentsParams::DISPLAY_TYPE_WITH_LOAD_LIST);
-        $commentsParams->setCommentCountOnPage(0);
+        //$commentsParams->setCommentCountOnPage(5);
         $commentsParams->setOwnerId((OW::getUser()->getId()));
         $commentsParams->setAddComment(true);
         $commentsParams->setWrapInBox(false);
         $commentsParams->setShowEmptyList(false);
         $commentsParams->setCommentPreviewMaxCharCount(5000);
+        $commentsParams->setCommentEntityType(COCREATION_BOL_Service::COMMENT_ENTITY_TYPE);
+        $commentsParams->setNumberOfNestedLevel(2);
 
         $commentsParams->level  = 0;
         $commentsParams->nodeId = 0;
-        SPODTCHAT_CLASS_Consts::$NUMBER_OF_NESTED_LEVEL = 2;
 
         /* ODE */
         if (OW::getPluginManager()->isPluginActive('spodpr'))

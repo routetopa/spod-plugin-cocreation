@@ -1,6 +1,9 @@
 var http = require('http');
 var express = require('express');
+
 var sockjs = require('sockjs');
+//var engineio = require('engine.io');
+
 var fs = require('fs');
 var Command = require('es_command');
 var Transactor = require('transactor');
@@ -231,7 +234,6 @@ exports.createServer = function(config){
         pub_server.broadcast(socket,channel,close_command);
 
         active_clients--;
-        delete pub_server.sockets[channel][socket];
         //console.log("CLIENTS: " + active_clients);
         if(active_clients === 0) {
             killTimeout = setTimeout(function () {
@@ -260,11 +262,14 @@ exports.createServer = function(config){
      * Websocket Server
      ***********************************************/
     var ws_server = sockjs.createServer();
-
     ws_server.installHandlers(http_server,{prefix:'.*/pubsub', headers: {'accept': '*/*'}});
 
+    //var ws_server = engineio.attach( http_server, { transports :['polling'] } );
+
     ws_server.on('connection', function(socket){
+        //var channel =  socket.request.headers.referer.split('/')[4];
         var channel = socket.pathname.split('/')[1];
+        //console.log("new connection channel: " + channel);
         pub_server.addSocket(channel,socket);
         active_clients++;
         clearTimeout(killTimeout);

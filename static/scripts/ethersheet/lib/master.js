@@ -58,10 +58,11 @@ exports.createMasterServer = function(config){
             console.log("URL: " + request.url);
             console.log("REFERER: " + referer);
             console.log("KEY: " + key);
-            slaveServers[key] = {worker : cluster.fork(), request : request, response: response};
+            slaveServers[key] = {worker : cluster.fork(), request : request, response: response, online: false};
             //Proxy first request ofter eorker is online
             slaveServers[key].worker.on('message', function( data ){
                 var key = getKeyByWorkerPid(data.pid);
+                slaveServers[key].online = true;
                 proxy.web(slaveServers[key].request, slaveServers[key].response, {target : "http://localhost:" + (config.port + data.pid)}, function(e){console.log(e)});
             });
             //Kill worker when there are not users in the related room
@@ -71,7 +72,17 @@ exports.createMasterServer = function(config){
             //proxy the request after worker creates the server
             console.log("WORKERS: " + Object.keys(cluster.workers).length);
         }else{
-            proxy.web(request, response, {target : "http://localhost:" + (config.port + slaveServers[key].worker.process.pid)}, function(e){});
+
+            if (slaveServers[key].online)
+                proxy.web(request, response, {target : "http://localhost:" + (config.port + slaveServers[key].worker.process.pid)}, function(e){});
+            else
+                (function waitServerUp() {
+                    //console.log("server is closed now, I wait ...");
+                    if (slaveServers[key].online)
+                        proxy.web(request, response, {target: "http://localhost:" + (config.port + slaveServers[key].worker.process.pid)}, function (e) {  });
+                    else
+                        setTimeout(waitServerUp, 1000); //Gives the time to the server to open.
+                })();
         }
     };
 
