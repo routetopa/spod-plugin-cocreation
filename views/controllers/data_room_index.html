@@ -552,11 +552,8 @@
                         <!-- Discussion -->
                         <paper-card id="discussion" class="full_size_card" style="visibility:hidden;" elevation="5">
                             <div class="screen_header">{text key="cocreation+room_discussion_tab_label"}</div>
-                            <div id="discussion_container" style="overflow-y: scroll;overflow-x: hidden;height: calc(100% - 45px)">
-                                {$comments}
-                                {if isset($private_room)}
-                                {$private_room}
-                                {/if}
+                            <div id="discussion_container" style="height: calc(100% - 45px)">
+                                {$discussion}
                             </div>
                         </paper-card>
                         <!-- Datalets -->

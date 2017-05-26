@@ -129,6 +129,7 @@ room.handleSelectUIMode = function(mode){
         case 'discussion':
             room.current_selected_container = room.$.discussion;
             room.$.discussion.style.visibility  = 'visible';
+            SPODDISCUSSION.init();
             break;
         case 'datalets':
             room.current_selected_container = room.$.datalets;
