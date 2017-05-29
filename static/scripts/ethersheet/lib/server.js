@@ -179,7 +179,8 @@ exports.createServer = function(config){
                     fs.writeFile(newPath, data, function (err) {
                         // let's see it
                         console.log("Image uploaded");
-                        var image_url = req.protocol + "://" + req.hostname + ":" + config.port + "/images/" + sheet_id + "/" + image_name;
+                        //var image_url = req.protocol + "://" + req.hostname + ":" + require('../config').port + "/images/" + sheet_id + "/" + image_name;
+                        var image_url = req.protocol + "://" + req.hostname + "/ethersheet/images/" + sheet_id + "/" + image_name;
                         res.send(JSON.stringify({ status: true, massage: "Image uploaded", image_url: image_url}));
                     });
                 }
@@ -197,7 +198,7 @@ exports.createServer = function(config){
             var images = [];
             fs.readdir(__dirname +  "/uploads/" + sheet_ids[0], function(err, files){
                 for(var i in files)
-                    images.push(req.protocol + "://" + req.hostname + ":" + config.port + "/images/" + sheet_ids[0] + "/" + files[i]);
+                    images.push(req.protocol + "://" + req.hostname + ":" + require('../config').port + "/images/" + sheet_ids[0] + "/" + files[i]);
                 res.setHeader('Content-Type', 'application/json');
                 res.send(JSON.stringify({ status: true, massage: "Collection fuond", images: images}));
             });

@@ -73,7 +73,7 @@ room.sliderRefreshCurrentDatalet = function() {
 };
 
 room.initSlider = function(){
-    var socket = io("http://" + window.location.hostname +":3000");
+    var socket = io(window.location.origin , {path: "/realtime_notification"/*, transports: [ 'polling' ]*/});
 
     socket.on('realtime_message_' + COCREATION.entity_type + "_" + COCREATION.roomId, function(rawData) {
         switch(rawData.operation){

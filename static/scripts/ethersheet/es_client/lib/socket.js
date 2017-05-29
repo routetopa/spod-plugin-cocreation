@@ -7,7 +7,9 @@ var Events = require('backbone').Events;
 var SockJS = require('sockjs-client');
 var config = require('../config');
 
-var Socket = module.exports = function(channel,socket_id,websocket,es){
+//var eioclient = require('../node_modules/engine.io-client/engine.io');
+
+var PubSubSocket = module.exports = function(channel,socket_id,websocket,es){
     self = this;
     this.es                 = es;
     this.connection_is_open = false;
@@ -57,7 +59,7 @@ var Socket = module.exports = function(channel,socket_id,websocket,es){
 
 };
 
-_.extend(Socket.prototype, Events,{
+_.extend(PubSubSocket.prototype, Events,{
 
   recInterval : null,
   channel: null,
@@ -69,8 +71,9 @@ _.extend(Socket.prototype, Events,{
     this.socket_id = socket_id;
     this.websocket = websocket;
 
+    //SockJs
     //this.ws = websocket || new SockJS(window.location.protocol + '//' + window.location.host +'/'+ channel +'/pubsub/',{debug:false,devel:false});
-    this.ws = websocket || new SockJS(window.location.protocol + '//' + window.location.host +'/'+ channel +'/pubsub/', null, {
+    this.ws = websocket || new SockJS(window.location.protocol + '//' + window.location.host +'/ethersheet/'+ channel +'/pubsub/', null, {
           'protocols_whitelist': [
             /*'websocket',
             'xdr-streaming',*/
@@ -82,11 +85,32 @@ _.extend(Socket.prototype, Events,{
             'iframe-xhr-polling',
             'jsonp-polling']
         });
+     this.ws.onopen = _.bind(this.open,this);
+     this.ws.onerror= _.bind(this.error,this);
+     this.ws.onclose = _.bind(this.close,this);
+     this.ws.onmessage = _.bind(this.message,this);
 
-    this.ws.onopen = _.bind(this.open,this);
-    this.ws.onerror= _.bind(this.error,this);
-    this.ws.onclose = _.bind(this.close,this);
-    this.ws.onmessage = _.bind(this.message,this);
+    //Engine.io
+    /*this.ws = new eioclient( window.location.protocol + '//' + window.location.host  + '/pubsub/' + channel , { transports :['polling'], requestTimeout: 0 } );
+    //this.ws.binaryType = 'blob';
+
+    var self = this;
+    this.ws.on('open', function(){
+        self.open_handler();
+    });
+    this.ws.on('pollComplete', function(){
+          self.open_handler();
+    });
+    this.ws.on('close', function(){
+        self.close_handler();
+    });
+    this.ws.on('message', function (data) {
+        var e = { data : data};
+        self.message_handler(e);
+    });
+    this.ws.on('error', function (e) {
+        self.error_handler(e);
+    });*/
   },
 
   onMessage: function(handler){

@@ -12,12 +12,14 @@ exports.createMasterServer = function(config){
     var proxy = httpProxy.createProxyServer();
 
     function getResourceKeyFromURL(url){
+        url = url.replace(/\/ethersheet/, "");
         url = url.replace(/\/s\//, "");
         url = url.replace(/\/images\/?.*/, "");
         url = url.replace(/\/import\//, "");
         url = url.replace(/\/upload\//, "");
         url = url.replace(/\/pubsub\/?.*/, "");
         url = url.replace(/\/es_client\/?.*/, "");
+        if( url.indexOf("/") >= 0 ) url =  url.slice(1, url.length);
         return url;
     };
 
@@ -88,7 +90,7 @@ exports.createMasterServer = function(config){
 
     if (cluster.isMaster) {
         console.log("MASTER ONLINE");
-        http.createServer(assignSlave).listen(config.port);
+        http.createServer(assignSlave).listen(config.port, /*config.host*/'127.0.0.1');
     }else if(cluster.isWorker){
         var cloned_config = require('../config');
         cloned_config.port = (config.port  + process.pid);

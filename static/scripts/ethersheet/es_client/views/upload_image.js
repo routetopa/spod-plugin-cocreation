@@ -34,7 +34,7 @@ define( function(require,exports,module){
             $( '#upload_image_form' )
                 .submit( function( e ) {
                     $.ajax( {
-                        url: '/upload/image',
+                        url: '/ethersheet/upload/image',
                         type: 'POST',
                         data: new FormData( this ),
                         processData: false,

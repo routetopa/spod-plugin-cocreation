@@ -85,14 +85,14 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         $this->assign('currentUser' , BOL_AvatarService::getInstance()->getDataForUserAvatars(array(OW::getUser()->getId()))[OW::getUser()->getId()]);
 
         $sheetUrl = COCREATION_BOL_Service::getInstance()->getSheetByRoomId($params['roomId'])[0]->url;
-        $sheetUrl = preg_replace("/^(http:\/\/)(:)[0-9]*(\/)/", ":" . BOL_PreferenceService::getInstance()->findPreference('spreadsheet_server_port_preference')->defaultValue, $sheetUrl);
-        $sheetName = explode('/', $sheetUrl)[4];
+        //$sheetUrl = preg_replace("/^(http:\/\/)(:)[0-9]*(\/)/", ":" . BOL_PreferenceService::getInstance()->findPreference('spreadsheet_server_port_preference')->defaultValue, $sheetUrl);
+        //$sheetName = explode('/', $sheetUrl)[4];
         $noteUrl = COCREATION_BOL_Service::getInstance()->getDocumentsByRoomId($params['roomId'])[0]->url;
-        $noteUrl = preg_replace("/^(http:\/\/)(:)[0-9]*(\/)/", ":" . BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference')->defaultValue, $noteUrl);
-        $this->assign('spreadsheet', $sheetUrl);
-        $this->assign('notes', $noteUrl);
+        //$noteUrl = preg_replace("/^(http:\/\/)(:)[0-9]*(\/)/", ":" . BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference')->defaultValue, $noteUrl);
+        $this->assign('spreadsheet', OW_URL_HOME . "ethersheet/s/" . $sheetUrl);
+        $this->assign('notes', OW_URL_HOME . "etherpad/p/" . $noteUrl);
 
-        $data = COCREATION_BOL_Service::getInstance()->getSheetData($sheetName);
+        $data = COCREATION_BOL_Service::getInstance()->getSheetData($sheetUrl);
         $headers = array();
         foreach($data as $serie) array_push($headers, $serie->name);
         $this->assign('headers', $headers);
@@ -156,14 +156,14 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                 COCREATION.sheet_images_url                   = {$sheet_images_url}
             ', array(
                'ajax_coocreation_room_get_datalets'        => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getRoomDatalets'),
-               'ajax_coocreation_room_get_array_sheetdata' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getArrayOfObjectSheetData') . "?sheetName=" . $sheetName,
+               'ajax_coocreation_room_get_array_sheetdata' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getArrayOfObjectSheetData') . "?sheetName=" . $sheetUrl,
                'ajax_coocreation_room_update_metadata'     => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'updateMetadata'),
                'ajax_coocreation_room_add_datalet'         => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'addDataletToRoom')          . "?roomId="  . $params['roomId'],
                'ajax_coocreation_room_delete_datalet'      => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'deleteDataletFromRoom'),
                'ajax_coocreation_room_publish_dataset'     => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'publishDataset'),
                'ajax_coocreation_room_get_html_note'       => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getNoteHTMLByPadIDApiUrl')  . "?noteUrl="  . $noteUrl,
                'ajax_coocreation_room_delete_user'         => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'deleteMemberFromRoom'),
-               'sheetName'                                 => $sheetName,
+               'sheetName'                                 => $sheetUrl,
                'roomId'                                    => $params['roomId'],
                'entity_type'                               => COCREATION_BOL_Service::ROOM_ENTITY_TYPE,
                'room_members'                              => json_encode($membersIds),
@@ -172,7 +172,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                'userId'                                    => OW::getUser()->getId(),
                'roomInfo'                                  => json_encode($info),
                'spreasheet_server_port'                    => BOL_PreferenceService::getInstance()->findPreference('spreadsheet_server_port_preference')->defaultValue,
-               'sheet_images_url'                          => str_replace("/s/", "/images/", $sheetUrl)
+               'sheet_images_url'                          => OW_URL_HOME . "ethersheet/images/" . $sheetUrl
         ));
         OW::getDocument()->addOnloadScript($js);
         OW::getDocument()->addOnloadScript("data_room.init();");

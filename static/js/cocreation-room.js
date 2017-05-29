@@ -61,7 +61,7 @@ window.addEventListener('info-list-controllet_delete_user', function(e){
 });
 
 room.init = function(){
-    var socket = io("http://" + window.location.hostname +":3000");
+    var socket = io(window.location.origin , {path: "/realtime_notification"/*, transports: [ 'polling' ]*/});
     socket.on('realtime_message_' + COCREATION.entity_type + "_" + COCREATION.roomId, function(rawData) {
         switch(rawData.operation){
             case "addDatasetToRoom":
