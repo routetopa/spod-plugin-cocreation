@@ -198,7 +198,8 @@ exports.createServer = function(config){
             var images = [];
             fs.readdir(__dirname +  "/uploads/" + sheet_ids[0], function(err, files){
                 for(var i in files)
-                    images.push(req.protocol + "://" + req.hostname + ":" + require('../config').port + "/images/" + sheet_ids[0] + "/" + files[i]);
+                    //images.push(req.protocol + "://" + req.hostname + ":" + require('../config').port + "/images/" + sheet_ids[0] + "/" + files[i]);
+                    images.push(req.protocol + "://" + req.hostname + "/ethersheet/images/" + sheet_ids[0] + "/" + files[i]);
                 res.setHeader('Content-Type', 'application/json');
                 res.send(JSON.stringify({ status: true, massage: "Collection fuond", images: images}));
             });
