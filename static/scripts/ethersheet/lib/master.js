@@ -15,8 +15,7 @@ exports.createMasterServer = function(config){
         url = url.replace(/\/ethersheet/, "");
         url = url.replace(/\/s\//, "");
         url = url.replace(/\/images\/?.*/, "");
-        url = url.replace(/\/import\//, "");
-        url = url.replace(/\/upload\//, "");
+        url = url.replace(/\/upload\/?.*/, "");
         url = url.replace(/\/pubsub\/?.*/, "");
         url = url.replace(/\/es_client\/?.*/, "");
         if( url.indexOf("/") >= 0 ) url =  url.slice(1, url.length);
@@ -40,13 +39,17 @@ exports.createMasterServer = function(config){
         var referer = request.headers.referer;
         var temp_key, key;
 
-        if(_.isUndefined(referer)){
+        /*if(_.isUndefined(referer)){
             temp_key =  request.url;
         }else{
             temp_key =  URL.parse(referer).pathname;
             if( parseInt(URL.parse(referer).port) !== config.port )
                 temp_key = request.url;
-        }
+        }*/
+
+        temp_key = request.url;
+        if(request.url.indexOf("import") >= 0 || request.url.indexOf("export") >= 0 )
+            temp_key = URL.parse(referer).pathname;
 
         key = getResourceKeyFromURL( temp_key );
 

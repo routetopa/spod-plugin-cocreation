@@ -80,7 +80,7 @@ exports.createServer = function(config){
     });
 
     //convert sheet to csv
-    app.get('/s/:sheetid.csv', function(req,res){
+    app.get('/export/s/:sheetid.csv', function(req,res){
         var sheet_id = String(req.params.sheetid);
 
         if(!req.cookies || !req.cookies.JSESSIONID == sheet_id){
