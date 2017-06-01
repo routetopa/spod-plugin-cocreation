@@ -18,9 +18,6 @@ define(function(require,exports,module){
         selected_interaction: "Marker",
 
         initialize: function (o) {
-            //remove ghost view
-            /*this.undelegateEvents();
-            $(this.el).empty();*/
             Object.getPrototypeOf(this.constructor.prototype).initialize.call(this, o);
             self = this;
         },
@@ -147,7 +144,7 @@ define(function(require,exports,module){
         addToMap: function(e){
             var data;
             if(this.selected_interaction == "Marker") {
-                data =  (!_.isUndefined(self.coords)) ? self.coords.reverse().join(",") : "";
+                data =  (!_.isUndefined(self.coords)) ? _.clone(self.coords).reverse().join(",") : "";
             }else{
                 data = self.getGeoJSON();
             }
