@@ -428,6 +428,19 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             exit;
         }
 
+        /*str_replace('\\', '\\',
+            str_replace('"', '\"',
+                str_replace("'","\'",
+                    $clean['core_common_required_metadata']))),
+                str_replace("\\", "\\\\",
+                    str_replace("\"", "\\\"",
+                        str_replace("'","\'",
+                            $clean['common_core_if_applicable_metadata']))),
+                str_replace("\\", "\\\\",
+                    str_replace("\"", "\\\"",
+                        str_replace("'","\'",
+                            $clean['expanded_metadata'])))))*/
+
         if(COCREATION_BOL_Service::getInstance()->updateMetadata(
                 $clean['roomId'],
                 str_replace("'","\'",$clean['core_common_required_metadata']),
@@ -480,7 +493,8 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         try {
             $document_server_port_preference = BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference');
 
-            $apiurl = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . ":".$document_server_port_preference->defaultValue."/api/1/getHTML?apikey=e20a517df87a59751b0f01d708e2cb6496cf6a59717ccfde763360f68a7bfcec&padID=" . explode("/", $clean['noteUrl'])[4];
+            //$apiurl = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . ":".$document_server_port_preference->defaultValue."/api/1/getHTML?apikey=e20a517df87a59751b0f01d708e2cb6496cf6a59717ccfde763360f68a7bfcec&padID=" . explode("/", $clean['noteUrl'])[4];
+            $apiurl = OW_URL_HOME . "ethersheet/" . "/api/1/getHTML?apikey=e20a517df87a59751b0f01d708e2cb6496cf6a59717ccfde763360f68a7bfcec&padID=" . explode("/", $clean['noteUrl'])[4];
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $apiurl);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
