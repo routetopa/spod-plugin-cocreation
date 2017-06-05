@@ -1,6 +1,6 @@
 require.config({
   baseUrl: '/es_client/vendor',
-  waitSeconds: 200,
+  waitSeconds: 600,
   paths: {
     es_client: '..',
     test: '../test/unit'
