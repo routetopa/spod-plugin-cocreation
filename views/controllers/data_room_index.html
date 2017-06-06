@@ -413,14 +413,30 @@
         width: 56px;
         text-align: center;
     }
+
+    paper-card#spreadsheet, paper-card#metadata, paper-card#notes
+    {
+        z-index: 1;
+    }
 </style>
 <style>
+
     div.ow_chat_cont {
         display: block !important;
     }
 
     .myspace{
         display: none;
+    }
+
+    #scrim
+    {
+        z-index: 2;
+    }
+
+    div#drawer
+    {
+        z-index: 3 !important;
     }
 </style>
 <template id="data_room" is="dom-bind">
