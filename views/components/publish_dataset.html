@@ -7,9 +7,21 @@
     }
 
     #publish_button{
+         position: absolute;
+         bottom: 8px;
+         right: 8px;
+         background: #00AABF;
+         color: #FFFFFF;
+         font-weight: 700;
+         z-index: 1;
+         height: 40px;
+         margin: 0;
+     }
+
+    #validate_button{
         position: absolute;
         bottom: 8px;
-        right: 8px;
+        right: 100px;
         background: #00AABF;
         color: #FFFFFF;
         font-weight: 700;
@@ -54,7 +66,8 @@
 </script>
 {/literal}
 
-<paper-button id="publish_button" raised>{text key="cocreation+publish_dataset_button_label"}</paper-button>
+<paper-button id="validate_button" title='{text key="cocreation+validate_dataset_button_tooltip"}'>{text key="cocreation+validate_dataset_button_label"}</paper-button>
+<paper-button id="publish_button">{text key="cocreation+publish_dataset_button_label"}</paper-button>
 
 <data-table-controllet id="data_table_controllet" data='{$data}'>
 </data-table-controllet>

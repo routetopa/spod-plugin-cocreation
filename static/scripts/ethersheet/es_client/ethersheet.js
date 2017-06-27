@@ -210,6 +210,12 @@ Ethersheet.prototype.sendCommand = function(c){
         this.socket.send(Command.serialize(c));
     }
 
+    if( c.type == "sheet" && c.action == "commitCell"){
+        commandQueue.push(1);
+        clearTimeout(timer);
+        timer = setInterval(messageDispatcher, 10000);
+    }
+
     /*if(this.socket.connection_is_open){
         if(c.getSerializedMessage){
             this.socket.send(c.getSerializedMessage());

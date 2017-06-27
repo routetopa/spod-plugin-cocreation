@@ -35,7 +35,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
         $randomString = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 5);
 
-        $document_server_port_preference = BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference');
+        /*$document_server_port_preference = BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference');
         if(empty($document_server_port_preference)) {
 
             $document_server_port_preference = new BOL_Preference();
@@ -59,15 +59,15 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             BOL_PreferenceService::getInstance()->savePreference($spreadsheet_server_port_preference);
         }else{
             $spreadsheet_server_port_preference = $spreadsheet_server_port_preference->defaultValue;
-        }
+        }*/
 
         $host = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'];
 
         if($clean['room_type'] == "knowledge")
         {
-            //COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 0, "explore", $host . ":" . $document_server_port_preference . "/p/explore_room_" .$room->id."_".$randomString);
-            //COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "ideas",   $host . ":" . $document_server_port_preference . "/p/ideas_room_"   .$room->id."_".$randomString);
-            //COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 2, "outcome", $host . ":" . $document_server_port_preference . "/p/outcome_room_" .$room->id."_".$randomString);
+            /*COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 0, "explore", $host . ":" . $document_server_port_preference . "/p/explore_room_" .$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "ideas",   $host . ":" . $document_server_port_preference . "/p/ideas_room_"   .$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 2, "outcome", $host . ":" . $document_server_port_preference . "/p/outcome_room_" .$room->id."_".$randomString);*/
             COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 0, "explore", "explore_room_" .$room->id."_".$randomString);
             COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "ideas",   "ideas_room_"   .$room->id."_".$randomString);
             COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 2, "outcome", "outcome_room_" .$room->id."_".$randomString);
@@ -441,11 +441,23 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
                         str_replace("'","\'",
                             $clean['expanded_metadata'])))))*/
 
+        str_replace("\\",'/',$clean['core_common_required_metadata']);
+        str_replace("\\",'/',$clean['common_core_if_applicable_metadata']);
+        str_replace("\\",'/',$clean['expanded_metadata']);
+
+        str_replace("'","\'",$clean['core_common_required_metadata']);
+        str_replace("'","\'",$clean['common_core_if_applicable_metadata']);
+        str_replace("'","\'",$clean['expanded_metadata']);
+
+        str_replace('"',"\'",$clean['core_common_required_metadata']);
+        str_replace('"',"\'",$clean['common_core_if_applicable_metadata']);
+        str_replace('"',"\'",$clean['expanded_metadata']);
+
         if(COCREATION_BOL_Service::getInstance()->updateMetadata(
                 $clean['roomId'],
-                str_replace("'","\'",$clean['core_common_required_metadata']),
-                str_replace("'","\'",$clean['common_core_if_applicable_metadata']),
-                str_replace("'","\'",$clean['expanded_metadata'])))
+                $clean['core_common_required_metadata'],
+                $clean['common_core_if_applicable_metadata'],
+                $clean['expanded_metadata']))
         {
 
             echo json_encode(array("status" => "ok", "message" => "metadata sucessfully update for current room"));
@@ -513,7 +525,6 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         }
     }
 
-    /* AND */
     public function getDatasetById()
     {
         $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
@@ -620,6 +631,5 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         echo json_encode($data);
         exit;
     }
-    /* AND */
 
 }

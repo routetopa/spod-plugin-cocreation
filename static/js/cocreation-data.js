@@ -149,7 +149,7 @@ room.handleSelectUIMode = function(mode){
 };
 
 room.handleSplitScreen = function(e){
-   room.splitScreenActive  = e.checked;
+    room.splitScreenActive  = e.checked;
 
     room.$.spreadsheet.style.visibility = "visible";
     room.$.metadata.style.visibility    = 'hidden';
