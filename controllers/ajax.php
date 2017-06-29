@@ -632,4 +632,34 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         exit;
     }
 
+    /* Mobile app service */
+    public function getRoomsByUserId()
+    {
+        /*if ( !OW::getUser()->isAuthenticated() )
+        {
+            throw new AuthenticateException();
+        }*/
+
+        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        if ($clean == null){
+            echo json_encode(array("status" => "error", "massage" => 'Insane inputs detected'));
+            exit;
+        }
+
+        $user_rooms = array();
+        $rooms = COCREATION_BOL_Service::getInstance()->getAllRooms();
+        foreach ($rooms as $room) {
+            if (COCREATION_BOL_Service::getInstance()->isMemberJoinedToRoom($clean['userId'], $room->id) ||
+                OW::getUser()->getId() == intval($room->ownerId)
+            )
+                array_push($user_rooms, $room);
+        }
+
+        header("Access-Control-Allow-Origin: *");
+        echo json_encode(array("status" => "ok", "data" => $user_rooms));
+        exit;
+
+
+    }
+
 }

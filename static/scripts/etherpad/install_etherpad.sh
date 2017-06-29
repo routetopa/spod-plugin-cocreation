@@ -57,6 +57,7 @@ copySettings()
     cp APIKEY.txt /home/etherpad/etherpad-lite/
     cp pad.css /home/etherpad/etherpad-lite/src/static/css
     cp timeslider.css /home/etherpad/etherpad-lite/src/static/css
+    cp run.sh /home/etherpad/etherpad-lite/bin
     tput setaf 2
     echo "done"
 }
