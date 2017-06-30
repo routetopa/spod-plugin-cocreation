@@ -650,13 +650,14 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         $rooms = COCREATION_BOL_Service::getInstance()->getAllRooms();
         foreach ($rooms as $room) {
             if (COCREATION_BOL_Service::getInstance()->isMemberJoinedToRoom($clean['userId'], $room->id) ||
-                OW::getUser()->getId() == intval($room->ownerId)
+                $clean['userId'] == intval($room->ownerId)
             )
                 array_push($user_rooms, $room);
         }
 
         header("Access-Control-Allow-Origin: *");
-        echo json_encode(array("status" => "ok", "data" => $user_rooms));
+        //echo json_encode(array("status" => "ok", "data" => $user_rooms));
+        echo json_encode($user_rooms);
         exit;
 
 
