@@ -89,8 +89,12 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         //$sheetName = explode('/', $sheetUrl)[4];
         $noteUrl = COCREATION_BOL_Service::getInstance()->getDocumentsByRoomId($params['roomId'])[0]->url;
         //$noteUrl = preg_replace("/^(http:\/\/)(:)[0-9]*(\/)/", ":" . BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference')->defaultValue, $noteUrl);
-        $this->assign('spreadsheet', OW_URL_HOME . "ethersheet/s/" . $sheetUrl);
-        $this->assign('notes', OW_URL_HOME . "etherpad/p/" . $noteUrl);
+
+        /*$this->assign('spreadsheet', OW_URL_HOME . "ethersheet/s/" . $sheetUrl);
+        $this->assign('notes', OW_URL_HOME . "etherpad/p/" . $noteUrl);*/
+
+        $this->assign('spreadsheet', "/ethersheet/s/" . $sheetUrl);
+        $this->assign('notes', "/etherpad/p/" . $noteUrl);
 
         $data = COCREATION_BOL_Service::getInstance()->getSheetData($sheetUrl);
         $headers = array();
