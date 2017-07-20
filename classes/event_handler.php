@@ -64,7 +64,6 @@ class COCREATION_CLASS_EventHandler
             'data' => json_encode($data)
         ));
         OW::getEventManager()->trigger($event);
-
     }
 
     private function getCocreationRoomId($commentEntityId){

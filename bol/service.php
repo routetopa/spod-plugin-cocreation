@@ -109,7 +109,7 @@ class COCREATION_BOL_Service
                 //array_push($headers, $cells[$rows[0]][$col]['value']);
             }
 
-            for($i = 1; $i < $rows; $i++){
+            for($i = 1; $i < count($cells); $i++){
                 $wrong_values = 0;
                 $obj = new stdClass();
                 for($j = 0; $j < count($headers); $j++){
@@ -122,7 +122,7 @@ class COCREATION_BOL_Service
                     else
                         $obj->{$headers[$j]} = floatval($cells[$rows[$i]][$cols[$j]]['value']);
                 }
-                if($wrong_values == count($headers)) break;
+                if($wrong_values == count($headers)){ $wrong_values = 0; continue;}
                 array_push($data, $obj);
             }
         }catch (PDOException $e){

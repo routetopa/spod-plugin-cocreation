@@ -42,7 +42,7 @@ class COCREATION_CTRL_Main extends OW_ActionController
                         OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'confirmToJoinToRoom') . "?roomId=" . $room->id . "&memberId=" . OW::getUser()->getId() . "',
                     {}, function (data, status) {
                        window.location ='" .
-                        str_replace("index/", $room->id, OW::getRouter()->urlFor(($room->type == "data") ? 'COCREATION_CTRL_DataRoom'
+                        str_replace("index/", $room->id, OW::getRouter()->urlFor(($room->type == "data" || $room->type == "media") ? 'COCREATION_CTRL_DataRoom'
                                                                                                          : 'COCREATION_CTRL_KnowledgeRoom', 'index')) . "';});";
 
                     array_push($invitations, "&#x25cf;  <b>" . $u->username . "</b> " . OW::getLanguage()->text('cocreation', 'room_invitation_text_toast') . "<b> " . $room->name .

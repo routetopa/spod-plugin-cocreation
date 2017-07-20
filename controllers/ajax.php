@@ -35,39 +35,8 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
         $randomString = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 5);
 
-        /*$document_server_port_preference = BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference');
-        if(empty($document_server_port_preference)) {
-
-            $document_server_port_preference = new BOL_Preference();
-            $document_server_port_preference->defaultValue = 9001;
-            $document_server_port_preference->key = 'document_server_port_preference';
-            $document_server_port_preference->sortOrder = 1;
-            $document_server_port_preference->sectionName = 'general';
-            BOL_PreferenceService::getInstance()->savePreference($document_server_port_preference);
-        }else{
-            $document_server_port_preference = $document_server_port_preference->defaultValue;
-        }
-
-        $spreadsheet_server_port_preference = BOL_PreferenceService::getInstance()->findPreference('spreadsheet_server_port_preference');
-        if(empty($spreadsheet_server_port_preference)) {
-
-            $spreadsheet_server_port_preference = new BOL_Preference();
-            $spreadsheet_server_port_preference->defaultValue = 8001;
-            $spreadsheet_server_port_preference->key = 'spreadsheet_server_port_preference';
-            $spreadsheet_server_port_preference->sortOrder = 1;
-            $spreadsheet_server_port_preference->sectionName = 'general';
-            BOL_PreferenceService::getInstance()->savePreference($spreadsheet_server_port_preference);
-        }else{
-            $spreadsheet_server_port_preference = $spreadsheet_server_port_preference->defaultValue;
-        }*/
-
-        $host = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'];
-
         if($clean['room_type'] == "knowledge")
         {
-            /*COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 0, "explore", $host . ":" . $document_server_port_preference . "/p/explore_room_" .$room->id."_".$randomString);
-            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "ideas",   $host . ":" . $document_server_port_preference . "/p/ideas_room_"   .$room->id."_".$randomString);
-            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 2, "outcome", $host . ":" . $document_server_port_preference . "/p/outcome_room_" .$room->id."_".$randomString);*/
             COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 0, "explore", "explore_room_" .$room->id."_".$randomString);
             COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "ideas",   "ideas_room_"   .$room->id."_".$randomString);
             COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 2, "outcome", "outcome_room_" .$room->id."_".$randomString);
@@ -77,6 +46,9 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "notes", "notes_room_"  .$room->id."_".$randomString);
             COCREATION_BOL_Service::getInstance()->addSheetToRoom($room->id, "dataset", "dataset_room_".$room->id."_".$randomString);
             COCREATION_BOL_Service::getInstance()->createMetadataForRoom($room->id);
+
+            if($clean['room_type'] == "media")
+                $this->initEthersheetMediaRoom("dataset_room_".$room->id."_".$randomString);
         }
 
         //Send message to all members
@@ -105,6 +77,38 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
         OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_create_room_successful'));
         OW::getApplication()->redirect(OW::getRouter()->urlFor('COCREATION_CTRL_Main', 'index'));
+    }
+
+    function initEthersheetMediaRoom($collectionId) {
+        try {
+            //create the sheet first
+            $url = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . "/ethersheet/s/".$collectionId;
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $result = curl_exec($ch);
+
+            //generate the headers for media room
+            $apiurl = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . "/ethersheet/mediaroom/init";
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $apiurl);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: text/html; charset=utf-8; application/x-www-form-urlencoded'
+            ));
+            curl_setopt($ch, CURLOPT_POSTFIELDS,
+                "collection_id=".$collectionId);
+
+            $result = curl_exec($ch);
+            curl_close($ch);
+            $result = json_decode($result);
+            return $result;
+        }catch(Exception $e){
+            return null;
+        }finally{
+            return null;
+        }
     }
 
     public function deleteRoom(){
@@ -633,7 +637,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
     }
 
     /* Mobile app service */
-    public function getRoomsByUserId()
+    public function getMediaRoomsByUserId()
     {
         /*if ( !OW::getUser()->isAuthenticated() )
         {
@@ -649,18 +653,98 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         $user_rooms = array();
         $rooms = COCREATION_BOL_Service::getInstance()->getAllRooms();
         foreach ($rooms as $room) {
-            if (COCREATION_BOL_Service::getInstance()->isMemberJoinedToRoom($clean['userId'], $room->id) ||
-                $clean['userId'] == intval($room->ownerId)
-            )
+            if ((COCREATION_BOL_Service::getInstance()->isMemberJoinedToRoom($clean['userId'], $room->id) ||
+                $clean['userId'] == intval($room->ownerId)) && $room->type == "media")
+            {
+                $avatar = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($room->ownerId))[$room->ownerId];
+                $room->ownerImage = $avatar['src'];
+                $room->ownerName  = $avatar['title'];
+                $room->sheetId = COCREATION_BOL_Service::getInstance()->getSheetByRoomId($room->id)[0]->url;
                 array_push($user_rooms, $room);
+            }
         }
 
         header("Access-Control-Allow-Origin: *");
         //echo json_encode(array("status" => "ok", "data" => $user_rooms));
         echo json_encode($user_rooms);
         exit;
+    }
+
+    public function getSheetDataByRoomId(){
+        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        if ($clean == null){
+            echo json_encode(array("status" => "error", "massage" => 'Insane inputs detected'));
+            exit;
+        }
+
+        $sheetName = COCREATION_BOL_Service::getInstance()->getSheetByRoomId($clean['roomId'])[0]->url;
+
+        header("Access-Control-Allow-Origin: *");
+        echo json_encode(COCREATION_BOL_Service::getInstance()->getArrayOfObjectSheetData($sheetName));
+        exit;
+    }
+
+    public function getUserInfo(){
+        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        if ($clean == null){
+            echo json_encode(array("status" => "error", "massage" => 'Insane inputs detected'));
+            exit;
+        }
+
+        $user   = BOL_UserService::getInstance()->findByEmail($clean['email']);
+        $avatar = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($user->id))[$user->id];
+
+        $u = new stdClass();
+        $u->id       = $user->id;
+        $u->username = $avatar['title'];
+        $u->image    = $avatar['src'];
+
+        echo json_encode(array("status" => true, "user" => json_encode($u)));
+        exit;
+
+    }
+
+    public function createMediaRoomFromMobile(){
+        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        if ($clean == null){
+            echo json_encode(array("status" => false, "message" => 'Insane inputs detected'));
+            exit;
+        }
+        try{
+            $room = COCREATION_BOL_Service::getInstance()->addRoom(
+                $clean['ownerId'],
+                $clean['name'],
+                $clean['subject'],
+                $clean['description'],
+                $clean['data_from'],
+                $clean['data_to'],
+                $clean['goal'],
+                $clean['invitation_text'],
+                empty($clean['is_open']) ? 0 : 1,
+                implode("#######", $clean['users_value']),
+                $clean['room_type']
+            );
+
+            $randomString = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 5);
 
 
+            //create the sheet for the CoCreation Data room
+            //Document for notes related to the dataset
+            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "notes", "notes_room_"  .$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->addSheetToRoom($room->id, "dataset", "dataset_room_".$room->id."_".$randomString);
+            COCREATION_BOL_Service::getInstance()->createMetadataForRoom($room->id);
+
+            $this->initEthersheetMediaRoom("dataset_room_".$room->id."_".$randomString);
+
+            COCREATION_CLASS_EventHandler::getInstance()->sendNotificationRoomCreated($room);
+
+            echo json_encode(array("status" => true, "message" => 'room created'));
+            exit;
+
+        }catch (exception $e){
+            echo json_encode(array("status" => false, "message" => 'Something went wrong, please check the form values!'));
+            exit;
+        }
     }
 
 }

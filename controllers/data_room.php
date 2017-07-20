@@ -135,7 +135,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
             $this->addComponent('private_room', new SPODPR_CMP_PrivateRoomCard('ow_attachment_btn', array('datalet', 'link')));*/
         /* ODE */
 
-
+        $this->assign("toolbar_color", ($room->type == "data") ? "#4CAF50" : "#FF9800");
         $this->assign('datalet_definition_import', ODE_CLASS_Tools::getInstance()->get_all_datalet_definitions());
 
         $js = UTIL_JsGenerator::composeJsString('
