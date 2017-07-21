@@ -68,7 +68,7 @@ exports.createMasterServer = function(config){
             slaveServers[key].worker.on('message', function( data ){
                 var key = getKeyByWorkerPid(data.pid);
                 slaveServers[key].online = true;
-                proxy.web(slaveServers[key].request, slaveServers[key].response, {target : "http://localhost:" + (config.port + data.pid)}, function(e){console.log(e)});
+                proxy.web(slaveServers[key].request, slaveServers[key].response, {target : "http://localhost:" + (config.port + (data.pid % 1000))}, function(e){console.log(e)});
             });
             //Kill worker when there are not users in the related room
             cluster.on('exit', function(worker, code, signal){
@@ -79,12 +79,12 @@ exports.createMasterServer = function(config){
         }else{
 
             if (slaveServers[key].online)
-                proxy.web(request, response, {target : "http://localhost:" + (config.port + slaveServers[key].worker.process.pid)}, function(e){});
+                proxy.web(request, response, {target : "http://localhost:" + (config.port + (slaveServers[key].worker.process.pid % 1000))}, function(e){});
             else
                 (function waitServerUp() {
                     //console.log("server is closed now, I wait ...");
                     if (slaveServers[key].online)
-                        proxy.web(request, response, {target: "http://localhost:" + (config.port + slaveServers[key].worker.process.pid)}, function (e) {  });
+                        proxy.web(request, response, {target: "http://localhost:" + (config.port + (slaveServers[key].worker.process.pid % 1000))}, function (e) {  });
                     else
                         setTimeout(waitServerUp, 1000); //Gives the time to the server to open.
                 })();
@@ -96,7 +96,7 @@ exports.createMasterServer = function(config){
         http.createServer(assignSlave).listen(config.port, /*config.host*/'127.0.0.1');
     }else if(cluster.isWorker){
         var cloned_config = require('../config');
-        cloned_config.port = (config.port  + process.pid);
+        cloned_config.port = (config.port  + (process.pid % 1000));
         server.createServer(cloned_config);
     }
 };
