@@ -48,7 +48,7 @@ exports.createMasterServer = function(config){
         }*/
 
         temp_key = request.url;
-        if(request.url.indexOf("import") >= 0 || request.url.indexOf("export") >= 0 )
+        if(typeof referer !== 'unified' && (request.url.indexOf("import") >= 0 || request.url.indexOf("export") >= 0) )
             temp_key = URL.parse(referer).pathname;
 
         key = getResourceKeyFromURL( temp_key );
