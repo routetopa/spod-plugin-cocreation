@@ -426,36 +426,11 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
     public function updateMetadata()
     {
-        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        $clean = $_REQUEST;//ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
         if ($clean == null){
             OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'insane_user_email_value'));
             exit;
         }
-
-        /*str_replace('\\', '\\',
-            str_replace('"', '\"',
-                str_replace("'","\'",
-                    $clean['core_common_required_metadata']))),
-                str_replace("\\", "\\\\",
-                    str_replace("\"", "\\\"",
-                        str_replace("'","\'",
-                            $clean['common_core_if_applicable_metadata']))),
-                str_replace("\\", "\\\\",
-                    str_replace("\"", "\\\"",
-                        str_replace("'","\'",
-                            $clean['expanded_metadata'])))))*/
-
-        str_replace("\\",'/',$clean['core_common_required_metadata']);
-        str_replace("\\",'/',$clean['common_core_if_applicable_metadata']);
-        str_replace("\\",'/',$clean['expanded_metadata']);
-
-        str_replace("'","\'",$clean['core_common_required_metadata']);
-        str_replace("'","\'",$clean['common_core_if_applicable_metadata']);
-        str_replace("'","\'",$clean['expanded_metadata']);
-
-        str_replace('"',"\'",$clean['core_common_required_metadata']);
-        str_replace('"',"\'",$clean['common_core_if_applicable_metadata']);
-        str_replace('"',"\'",$clean['expanded_metadata']);
 
         if(COCREATION_BOL_Service::getInstance()->updateMetadata(
                 $clean['roomId'],
