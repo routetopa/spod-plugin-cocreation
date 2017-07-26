@@ -329,7 +329,7 @@ exports.createServer = function(config){
                                             status: true,
                                             message: "Row added"
                                         }));
-                                    }, 2000);
+                                    }, 1000);
                                 });
                             });
                         }
