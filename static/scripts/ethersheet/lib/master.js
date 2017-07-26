@@ -14,6 +14,8 @@ exports.createMasterServer = function(config){
     function getResourceKeyFromURL(url){
         url = url.replace(/\/ethersheet/, "");
         url = url.replace(/\/s\//, "");
+        url = url.replace(/\/mediaroom\/init/, "");
+        url = url.replace(/\/mediaroom\/addrow/, "");
         url = url.replace(/\/images\/?.*/, "");
         url = url.replace(/\/upload\/?.*/, "");
         url = url.replace(/\/pubsub\/?.*/, "");
@@ -48,7 +50,7 @@ exports.createMasterServer = function(config){
         }*/
 
         temp_key = request.url;
-        if(typeof referer !== 'unified' && (request.url.indexOf("import") >= 0 || request.url.indexOf("export") >= 0) )
+        if(request.url.indexOf("import") >= 0 || request.url.indexOf("export") >= 0 )
             temp_key = URL.parse(referer).pathname;
 
         key = getResourceKeyFromURL( temp_key );

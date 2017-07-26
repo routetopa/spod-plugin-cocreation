@@ -202,58 +202,24 @@ exports.createServer = function(config){
                     //images.push(req.protocol + "://" + req.hostname + ":" + require('../config').port + "/images/" + sheet_ids[0] + "/" + files[i]);
                     images.push(req.protocol + "://" + req.hostname + "/ethersheet/images/" + sheet_ids[0] + "/" + files[i]);
                 res.setHeader('Content-Type', 'application/json');
-                res.send(JSON.stringify({ status: true, massage: "Collection fuond", images: images}));
+                res.send(JSON.stringify({ status: true, massage: "Collection found", images: images}));
             });
         })
     });
 
     //Media room
-    //utility function
-    function updateCell( sheet_ids, sheet, col_idx, value ){
-
-        var add_cell_command = new Command('{"id":"C8JyNCNmA5dAqTnAcD",' +
-            '"type":"selection",' +
-            '"action":"addCell",' +
-            '"params":["' + sheet_ids + '","'
-            + sheet.rows[0] + '","' +
-            + sheet.cols[col_idx] + '"]}');
-
-        var commit_cell = new Command('{"id":"' + sheet_ids + '",' +
-            '"type":"sheet",' +
-            '"action":"commitCell",' +
-            '"params":["' + sheet.rows[0] + '","'
-            + sheet.cols[col_idx] + '",' +
-            '{"value":"' + value + '","type":"string"}]}');
-
-        setTimeout(function () {
-            transactionHandler(add_cell_command, function(err){
-                pub_server.broadcast(null,sheet_ids, add_cell_command);
-
-                setTimeout(function () {
-                    transactionHandler(commit_cell, function(err){
-                        pub_server.broadcast(null,sheet_ids, commit_cell);
-                    })
-                }, 300);
-            })
-        }, 300);
-
-    };
-
-    app.post('/mediaroom/init', function(req, res){
+    app.post('/mediaroom/init/:collection_id', function(req, res){
         res.setHeader('Content-Type', 'application/json');
+        var collection_id = String(req.params.collection_id);
         var form = new formidable.IncomingForm();
         form.parse(req, function(err, fields, files) {
             try{
-                var collection_id = fields.collection_id;
-                console.log(fields);
-                console.log("COLLECTION: " + collection_id);
                 es.getSheetCollectionIds(collection_id, function(err, sheet_ids) {
                     es.getSheet(sheet_ids[0], function(err, sheet) {
                         //console.log(sheet.rows);
                         var headers = ["Title", "Description", "Image", "Location", "Date"];
                         _.each(headers, function(h, idx){
-                            console.log(h + " - " + sheet.rows[0] + " - " + sheet.cols[idx]);
-                            updateCell(sheet_ids[0], sheet, idx, h)
+                            pub_server.updateCell(collection_id, sheet_ids[0], sheet, 0, idx, h)
                         });
                         //send response
                         res.send(JSON.stringify({
@@ -270,11 +236,11 @@ exports.createServer = function(config){
     });
 
     //Add new row in the related sheet
-    app.post('/mediaroom/addrow', function(req, res)
+    app.post('/mediaroom/addrow/:collection_id', function(req, res)
     {
         //console.log("ADD ROW SERVICE CALLED");
         res.setHeader('Content-Type', 'application/json');
-
+        var collection_id = String(req.params.collection_id);
         var form = new formidable.IncomingForm();
         form.parse(req, function(err, fields, files) {
             try {
@@ -312,9 +278,12 @@ exports.createServer = function(config){
                                     var row_ids = Object.keys(sheet.cells);
                                     var model = es.getModel("sheet",sheet_ids[0]);
 
+                                    //create a new row if it is necessary
                                     var new_row_id = null;
+                                    var new_row_idx = 0;
                                     if (row_ids.length === sheet.rows.length) {
-                                        new_row_id = require('../node_modules/es_client/helpers/uid')();
+                                        new_row_id  = require('../node_modules/es_client/helpers/uid')();
+                                        new_row_idx = row_ids.length + 1;
                                         var c = new Command('{"id":"' + sheet_ids[0] +
                                             '","type":"sheet",' +
                                             '"action":"insertRow",' +
@@ -322,13 +291,15 @@ exports.createServer = function(config){
                                         );
                                         c.execute(model, function(err){ });
                                     }else{
-                                        new_row_id = sheet.rows[row_ids.length];
+                                        new_row_id  = sheet.rows[row_ids.length];
+                                        new_row_idx = row_ids.length;
                                     }
 
                                     row.image_name = req.protocol + "://" + req.hostname + "/ethersheet/images/" + sheet_ids[0] + "/" + row.image_name;
 
-                                    _.each(Object.keys(sheet.cells[row_ids[0]]), function(col, idx){
-                                        console.log( new_row_id + " - " + col + " - " + row[Object.keys(row)[idx]] );
+                                    _.each(Object.keys(sheet.cells[row_ids[0]]), function(col, col_idx){
+                                        pub_server.updateCell(collection_id, sheet_ids[0], sheet, new_row_idx, col_idx, row[Object.keys(row)[col_idx]]);
+                                        /*console.log( new_row_id + " - " + col + " - " + row[Object.keys(row)[idx]] );
                                         var c = new Command('{"id":"' + sheet_ids[0] + '",' +
                                             '"type":"sheet",' +
                                             '"action":"commitCell",' +
@@ -339,18 +310,26 @@ exports.createServer = function(config){
                                         setTimeout(function () {
                                             //c.execute(model, function(err){ });
                                             transactionHandler(c, function(err){
-                                                pub_server.broadcast(null,sheet_ids[0],c);
-                                            })
-                                        }, 100);
+                                                //pub_server.broadcast(null,sheet_ids[0],c);
 
+                                                //var origin = (socket && socket.id) ? socket.id : null;
+                                                var command = Command.serialize(c);
+                                                for( var socket_id in pub_server.sockets[collection_id] ){
+                                                    //if(socket_id == origin) { continue; } // do not send back to the originating socket
+                                                    pub_server.sockets[collection_id][socket_id].write(command);
+                                                }
+                                            })
+                                        }, 100);*/
                                     });
 
-                                    //send response
-                                    res.send(JSON.stringify({
-                                        status: true,
-                                        message: "Row added"
-                                    }));
 
+                                    setTimeout(function(){
+                                        console.log("sending response");
+                                        res.send(JSON.stringify({
+                                            status: true,
+                                            message: "Row added"
+                                        }));
+                                    }, 2000);
                                 });
                             });
                         }
@@ -402,9 +381,9 @@ exports.createServer = function(config){
             }, 1000 * 60 * 15);
             //process.exit();
         }
-
         //console.log(active_clients);
     });
+
     pub_server.refreshClients = function(sheet_id){
         var refresh_msg = {
             type: 'sheet',
@@ -417,6 +396,50 @@ exports.createServer = function(config){
         pub_server.broadcast(null,sheet_id,refresh_command);
     };
 
+    pub_server.updateCells = function(cellKeys, cellValues, new_row_idx, collection_id, sheet_id, sheet, callback){
+        _.each(cellKeys), function(col, col_idx){
+            pub_server.updateCell(collection_id, sheet_id, sheet, new_row_idx, col_idx, cellValues[col_idx]);
+        }
+
+    };
+
+    //utility function
+    pub_server.updateCell = function( collection_id, sheet_id, sheet, row_idx, col_idx, value ){
+
+        /*var add_cell_command = new Command('{"id":"C8JyNCNmA5dAqTnAcD",' +
+            '"type":"selection",' +
+            '"action":"addCell",' +
+            '"params":["' + sheet_ids + '","'
+            + sheet.rows[row_idx] + '","' +
+            + sheet.cols[col_idx] + '"]}');*/
+
+        var update_cell_command = new Command('{"id":"' + sheet_id + '",' +
+            '"type":"sheet",' +
+            '"action":"updateCell",' +
+            '"params":["' + sheet.rows[row_idx] + '","'
+            + sheet.cols[col_idx] + '",' +
+            '{"value":"' + value + '","type":"string"}]}');
+
+        var commit_cell_command = new Command('{"id":"' + sheet_id + '",' +
+            '"type":"sheet",' +
+            '"action":"commitCell",' +
+            '"params":["' + sheet.rows[row_idx] + '","'
+            + sheet.cols[col_idx] + '",' +
+            '{"value":"' + value + '","type":"string"}]}');
+
+        setTimeout(function () {
+            transactionHandler(update_cell_command, function(err, command){
+                pub_server.broadcast(null, collection_id, command);
+                setTimeout(function () {
+                    transactionHandler(commit_cell_command, function(err, command){
+                        /*console.log("Err: " +  err);
+                        console.log("Command: " +  command);
+                        pub_server.broadcast(null, collection_id, Command.serialize(command));*/
+                    })
+                }, 500);
+            })
+        }, 500);
+    };
 
     /***********************************************
      * Websocket Server

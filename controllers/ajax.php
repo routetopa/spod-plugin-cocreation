@@ -79,38 +79,6 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         OW::getApplication()->redirect(OW::getRouter()->urlFor('COCREATION_CTRL_Main', 'index'));
     }
 
-    function initEthersheetMediaRoom($collectionId) {
-        try {
-            //create the sheet first
-            $url = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . "/ethersheet/s/".$collectionId;
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $result = curl_exec($ch);
-
-            //generate the headers for media room
-            $apiurl = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . "/ethersheet/mediaroom/init";
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $apiurl);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                'Content-Type: text/html; charset=utf-8; application/x-www-form-urlencoded'
-            ));
-            curl_setopt($ch, CURLOPT_POSTFIELDS,
-                "collection_id=".$collectionId);
-
-            $result = curl_exec($ch);
-            curl_close($ch);
-            $result = json_decode($result);
-            return $result;
-        }catch(Exception $e){
-            return null;
-        }finally{
-            return null;
-        }
-    }
-
     public function deleteRoom(){
         $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
         if ($clean == null){
@@ -704,6 +672,38 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
     }
 
+    function initEthersheetMediaRoom($collectionId) {
+        try {
+            //create the sheet first
+            $url = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . "/ethersheet/s/".$collectionId;
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $result = curl_exec($ch);
+
+            //generate the headers for media room
+            $apiurl = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . "/ethersheet/mediaroom/init/" . $collectionId;
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $apiurl);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: text/html; charset=utf-8; application/x-www-form-urlencoded'
+            ));
+            curl_setopt($ch, CURLOPT_POSTFIELDS,
+                "collection_id=".$collectionId);
+
+            $result = curl_exec($ch);
+            curl_close($ch);
+            $result = json_decode($result);
+            return $result;
+        }catch(Exception $e){
+            return null;
+        }finally{
+            return null;
+        }
+    }
+
     public function createMediaRoomFromMobile(){
         $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
         if ($clean == null){
@@ -734,7 +734,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             COCREATION_BOL_Service::getInstance()->addSheetToRoom($room->id, "dataset", "dataset_room_".$room->id."_".$randomString);
             COCREATION_BOL_Service::getInstance()->createMetadataForRoom($room->id);
 
-            $this->initEthersheetMediaRoom("dataset_room_".$room->id."_".$randomString);
+            $result = $this->initEthersheetMediaRoom("dataset_room_".$room->id."_".$randomString);
 
             COCREATION_CLASS_EventHandler::getInstance()->sendNotificationRoomCreated($room);
 
