@@ -203,7 +203,23 @@ class COCREATION_BOL_Service
 
     public function updateMetadata($roomId, $ccr, $ccia, $e)
     {
-        return COCREATION_BOL_RoomMetadataDao::getInstance()->updateMetadata($roomId,$ccr,$ccia, $e);
+        $example = new OW_Example();
+        $example->andFieldEqual('roomId', $roomId);
+        $room_meta_data = COCREATION_BOL_RoomMetadataDao::getInstance()->findObjectByExample($example);
+
+        $room_meta_data->common_core_required = $ccr;
+        $room_meta_data->common_core_if_applicable = $ccia;
+        $room_meta_data->expanded = $e;
+
+        try
+        {
+            COCREATION_BOL_RoomMetadataDao::getInstance()->save($room_meta_data);
+            return true;
+        }
+        catch (Exception $ex)
+        {
+            return false;
+        }
     }
 
     public function getMetadataByRoomId($roomId)
