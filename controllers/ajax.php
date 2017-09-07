@@ -627,19 +627,26 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         exit;
     }
 
-    public function getUserInfo(){
+    public function getUserInfo()
+    {
         $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
-        if ($clean == null){
+        if ($clean == null) {
             echo json_encode(array("status" => "error", "massage" => 'Insane inputs detected'));
             exit;
         }
 
-        $user   = BOL_UserService::getInstance()->findByEmail($clean['email']);
+        if (isset($clean['email'])) {
+            $user = BOL_UserService::getInstance()->findByEmail($clean['email']);
+        }else{
+            $user = BOL_UserService::getInstance()->findByUsername($clean['username']);
+        }
+
         $avatar = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($user->id))[$user->id];
 
         $u = new stdClass();
         $u->id       = $user->id;
-        $u->username = $avatar['title'];
+        $u->username = $avatar['urlInfo']['vars']['username'];
+        $u->name     = $avatar['title'];
         $u->image    = $avatar['src'];
 
         echo json_encode(array("status" => true, "user" => json_encode($u)));

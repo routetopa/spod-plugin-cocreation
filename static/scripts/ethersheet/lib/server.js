@@ -217,7 +217,7 @@ exports.createServer = function(config){
                 es.getSheetCollectionIds(collection_id, function(err, sheet_ids) {
                     es.getSheet(sheet_ids[0], function(err, sheet) {
                         //console.log(sheet.rows);
-                        var headers = ["Title", "Description", "Image", "Location", "Date"];
+                        var headers = ["Title", "Description", "Image", "Location", "Date", "User"];
                         _.each(headers, function(h, idx){
                             pub_server.updateCell(collection_id, sheet_ids[0], sheet, 0, idx, h)
                         });
@@ -250,7 +250,8 @@ exports.createServer = function(config){
                     description : fields.description,
                     image_name  : files.image_file.name,
                     location    : fields.location,
-                    date        : fields.date
+                    date        : fields.date,
+                    user        : fields.user
                 };
                 es.getSheetCollectionIds(collection_id, function(err, sheet_ids) {
                     //Save image file
