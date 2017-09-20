@@ -724,7 +724,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             exit;
 
         }catch (exception $e){
-            echo json_encode(array("status" => false, "message" => 'Something went wrong, please check the form values!'));
+            echo json_encode(array("status" => false, "message" => $e->getMessage()/*'Something went wrong, please check the form values!'*/));
             exit;
         }
     }
