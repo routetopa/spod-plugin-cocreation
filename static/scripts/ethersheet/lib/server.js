@@ -453,7 +453,7 @@ exports.createServer = function(config){
     ws_server.on('connection', function(socket){
         //var channel =  socket.request.headers.referer.split('/')[4];
         var channel = socket.pathname.split('/')[1];
-        //console.log("new connection channel: " + channel);
+        console.log("new connection channel: " + channel);
         pub_server.addSocket(channel,socket);
         active_clients++;
         clearTimeout(killTimeout);

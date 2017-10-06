@@ -77,10 +77,10 @@ _.extend(PubSubSocket.prototype, Events,{
           'protocols_whitelist': [
             /*'websocket',
             'xdr-streaming',*/
-            'xhr-streaming',
             /*'iframe-eventsource',
             'iframe-htmlfile',*/
             /*'xdr-polling',*/
+            'xhr-streaming',
             'xhr-polling',
             'iframe-xhr-polling',
             'jsonp-polling']

@@ -148,8 +148,8 @@ EtherSheetService.prototype.sheetToCSV = function(sheet_id,cb){
       var frow = sheet_data.rows[0];
       var lcol;
       for(lcol = 0; lcol < sheet_data.cols.length; lcol++ ){
-        if(sheet_data.cells[frow][sheet_data.cols[lcol]] == undefined)
-           break;
+          if(_.isUndefined(sheet_data.cells[frow]) || _.isUndefined(sheet_data.cells[frow][sheet_data.cols[lcol]]))
+              break;
         else {
           cell = sheet_data.cells[frow][sheet_data.cols[lcol]].value.toString().trim();
           cell = cell.replace(new RegExp('"', 'g'), '""');
