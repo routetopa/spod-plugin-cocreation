@@ -637,7 +637,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
                 $room->ownerName  = $avatar['title'];
                 $room->sheetId = COCREATION_BOL_Service::getInstance()->getSheetByRoomId($room->id)[0]->url;
 
-                $room->docs = COCREATION_BOL_Service::getInstance()->getAllDocuments();
+                $room->docs = COCREATION_BOL_Service::getInstance()->getDocumentsByRoomId($room->id);
 
                 array_push($user_rooms, $room);
             }
