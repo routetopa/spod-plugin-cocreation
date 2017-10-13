@@ -182,11 +182,19 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         OW::getDocument()->addOnloadScript("data_room.init();");
 
         OW::getLanguage()->addKeyForJs('cocreation', 'confirm_delete_datalet');
+        OW::getLanguage()->addKeyForJs('cocreation', 'datalet_successfully_added');
+        OW::getLanguage()->addKeyForJs('cocreation', 'datalet_successfully_deleted');
+        OW::getLanguage()->addKeyForJs('cocreation', 'datalet_delete_fail');
         OW::getLanguage()->addKeyForJs('cocreation', 'room_delete_fail');
+        OW::getLanguage()->addKeyForJs('cocreation', 'user_delete_fail');
+        OW::getLanguage()->addKeyForJs('cocreation', 'user_successfully_deleted');
         OW::getLanguage()->addKeyForJs('cocreation', 'dataset_successfully_published');
+        OW::getLanguage()->addKeyForJs('cocreation', 'dataset_successfully_added');
         OW::getLanguage()->addKeyForJs('cocreation', 'metadata_successfully_saved');
+        OW::getLanguage()->addKeyForJs('cocreation', 'metadata_successfully_updated');
         OW::getLanguage()->addKeyForJs('cocreation', 'error_metadata_updates');
         OW::getLanguage()->addKeyForJs('cocreation', 'privacy_message_datalet_published');
+        OW::getLanguage()->addKeyForJs('cocreation', 'current_room_deleted');
     }
 
 }
