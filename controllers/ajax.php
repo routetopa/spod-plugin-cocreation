@@ -613,6 +613,38 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         exit;
     }
 
+    public function getCocreationRoomsByUserId()
+    {
+        /*if ( !OW::getUser()->isAuthenticated() )
+        {
+            throw new AuthenticateException();
+        }*/
+
+        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        if ($clean == null){
+            echo json_encode(array("status" => "error", "massage" => 'Insane inputs detected'));
+            exit;
+        }
+
+        $user_rooms = array();
+        $rooms = COCREATION_BOL_Service::getInstance()->getAllRooms();
+        foreach ($rooms as $room) {
+            if ((COCREATION_BOL_Service::getInstance()->isMemberJoinedToRoom($clean['userId'], $room->id) ||
+                    $clean['userId'] == intval($room->ownerId)))
+            {
+                $avatar = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($room->ownerId))[$room->ownerId];
+                $room->ownerImage = $avatar['src'];
+                $room->ownerName  = $avatar['title'];
+                $room->sheetId = COCREATION_BOL_Service::getInstance()->getSheetByRoomId($room->id)[0]->url;
+                array_push($user_rooms, $room);
+            }
+        }
+
+        header("Access-Control-Allow-Origin: *");
+        echo json_encode($user_rooms);
+        exit;
+    }
+
     public function getSheetDataByRoomId(){
         $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
         if ($clean == null){
