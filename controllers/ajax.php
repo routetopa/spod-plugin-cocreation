@@ -807,7 +807,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             array_push($room_datalets, $datalet_string);
         }
 
-        echo json_encode(array("status" => true, "datalets" => $room_datalets));
+        echo json_encode(array("status" => true, "datalets" => $room_datalets, "datalets_definition" => ODE_CLASS_Tools::getInstance()->get_all_datalet_definitions()));
         exit;
     }
 
