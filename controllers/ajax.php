@@ -779,7 +779,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         $metadataObj->CC_RAF = json_decode($metadata[0]->common_core_if_applicable);
         $metadataObj->EF = json_decode($metadata[0]->expanded);
 
-        echo json_encode(array("status" => true, "metadata" => json_encode($metadataObj)));
+        echo json_encode(array("status" => true, "metadata" => $metadataObj));
         exit;
     }
 
@@ -799,7 +799,6 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             $datalet->data = str_replace("'", "&#39;", $datalet->data);
             $datalet->fields = str_replace("'", "&#39;", $datalet->fields);
 
-            //$datalet_string = "<" . $datalet->component . " datalet-id='". $datalet->id ."' fields='[" . rtrim(ltrim($datalet->fields, "}"), "{") . "]'";
             $datalet_string = "<" . $datalet->component . " datalet-id='" . $datalet->id . "' disable_my_space";
             foreach ($datalet->params as $key => $value)
                 $datalet_string .= " " . $key . "='" . $value . "'";
@@ -808,7 +807,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             array_push($room_datalets, $datalet_string);
         }
 
-        echo json_encode(array("status" => true, "datalets" => json_encode($room_datalets)));
+        echo json_encode(array("status" => true, "datalets" => $room_datalets));
         exit;
     }
 
