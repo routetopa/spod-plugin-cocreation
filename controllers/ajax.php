@@ -764,4 +764,52 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         }
     }
 
+    public function getMetadataByRoomId()
+    {
+        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        if ($clean == null) {
+            echo json_encode(array("status" => "error", "massage" => 'Insane inputs detected'));
+            exit;
+        }
+
+        $metadata = COCREATION_BOL_Service::getInstance()->getMetadataByRoomId($clean['roomId']);
+
+        $metadataObj = new stdClass();
+        $metadataObj->CC_RF = json_decode($metadata[0]->common_core_required);
+        $metadataObj->CC_RAF = json_decode($metadata[0]->common_core_if_applicable);
+        $metadataObj->EF = json_decode($metadata[0]->expanded);
+
+        echo json_encode(array("status" => true, "metadata" => json_encode($metadataObj)));
+        exit;
+    }
+
+    public function getDataletsByRoomId()
+    {
+        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        if ($clean == null) {
+            echo json_encode(array("status" => "error", "massage" => 'Insane inputs detected'));
+            exit;
+        }
+
+        $datalets = COCREATION_BOL_Service::getInstance()->getDataletsByRoomId($clean['roomId']);
+        $room_datalets = array();
+        foreach($datalets as $d) {
+            $datalet = ODE_BOL_Service::getInstance()->getDataletById($d->dataletId);
+            $datalet->params = json_decode($datalet->params);
+            $datalet->data = str_replace("'", "&#39;", $datalet->data);
+            $datalet->fields = str_replace("'", "&#39;", $datalet->fields);
+
+            //$datalet_string = "<" . $datalet->component . " datalet-id='". $datalet->id ."' fields='[" . rtrim(ltrim($datalet->fields, "}"), "{") . "]'";
+            $datalet_string = "<" . $datalet->component . " datalet-id='" . $datalet->id . "' disable_my_space";
+            foreach ($datalet->params as $key => $value)
+                $datalet_string .= " " . $key . "='" . $value . "'";
+            $datalet_string .= "></" . $datalet->component . ">";
+
+            array_push($room_datalets, $datalet_string);
+        }
+
+        echo json_encode(array("status" => true, "datalets" => $room_datalets));
+        exit;
+    }
+
 }
