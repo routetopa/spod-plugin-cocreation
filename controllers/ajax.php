@@ -796,12 +796,12 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         foreach($datalets as $d) {
             $datalet = ODE_BOL_Service::getInstance()->getDataletById($d->dataletId);
             $datalet->params = json_decode($datalet->params);
-            $datalet->data = str_replace("'", "&#39;", $datalet->data);
-            $datalet->fields = str_replace("'", "&#39;", $datalet->fields);
+            //$datalet->data = str_replace("'", "&#39;", $datalet->data);
+            //$datalet->fields = str_replace("'", "&#39;", $datalet->fields);
 
             $datalet_string = "<" . $datalet->component . " datalet-id='" . $datalet->id . "' disable_my_space";
             foreach ($datalet->params as $key => $value)
-                $datalet_string .= " " . $key . "='" .  str_replace("\"", "&#39;", $value ) . "'";
+                $datalet_string .= " " . $key . "='" .  $value . "'"; //str_replace("\"", "&#39;", $value )
             $datalet_string .= "></" . $datalet->component . ">";
 
             array_push($room_datalets, $datalet_string);
