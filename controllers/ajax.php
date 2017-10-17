@@ -801,7 +801,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
             $datalet_string = "<" . $datalet->component . " datalet-id='" . $datalet->id . "' disable_my_space";
             foreach ($datalet->params as $key => $value)
-                $datalet_string .= " " . $key . "='" .  str_replace("\"", "&#34;", $value ) . "'";
+                $datalet_string .= " " . $key . "='" .  str_replace("\"", "\\\"", $value ) . "'";
             $datalet_string .= "></" . $datalet->component . ">";
 
             array_push($room_datalets, $datalet_string);
