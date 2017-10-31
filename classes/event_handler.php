@@ -36,14 +36,14 @@ class COCREATION_CLASS_EventHandler
             ));
         }
         //For all users
-        $e->add(array(
+       /* $e->add(array(
             'section' => 'cocreation',
             'action'  => 'cocreation_add_comment',
             'description' => OW::getLanguage()->text('cocreation', 'email_notifications_setting_room_comment'),
             'selected' => false,
             'sectionLabel' => $sectionLabel,
             'sectionIcon' => 'ow_ic_write'
-        ));
+        ));*/
     }
 
     //Custom on event notification
@@ -52,13 +52,33 @@ class COCREATION_CLASS_EventHandler
         //EMAIL
         $message = OW::getLanguage()->text('cocreation','notification_room_created', ['ownername' => "<b><a>" . BOL_UserService::getInstance()->getDisplayName($room->ownerId) . "</a></b>"]) .
             " <b><a href=\"" . str_replace("index/", $room->id, OW::getRouter()->urlFor( 'COCREATION_CTRL_DataRoom' , 'index')) . "\">". $room->name ."</a></b>";
-        $email_data = array(
-            'message' =>
-               array("mail_html" => $message, "mail_text" => ""),
-            'subject' => OW::getLanguage()->text('cocreation','email_notifications_setting_room_created'),
-        );
 
-        $mobile_data = array(
+        $event = new OW_Event('notification_system.add_notification', array(
+            'notifications' => [
+                new SPODNOTIFICATION_CLASS_MailEventNotification(
+                    COCREATION_CLASS_Consts::PLUGIN_NAME,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_NEW_ROOM,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_NEW_ROOM,
+                    null,
+                    OW::getLanguage()->text('cocreation','email_notifications_setting_room_created'),
+                    $message,
+                    $message
+                )/*,
+                    new SPODNOTIFICATION_CLASS_MobileEventNotification(
+                        SPODAGORA_CLASS_Const::PLUGIN_NAME,
+                        SPODAGORA_CLASS_Const::PLUGIN_ACTION_ADD_COMMENT,
+                        SPODAGORA_CLASS_Const::PLUGIN_SUB_ACTION_ADD_COMMENT . $_REQUEST['entityId'],
+                        null,
+                        'Agora',
+                        $notification_on_comment_mail['mail_html'],
+                        ['comment' => $c]
+                    )*/
+            ]
+        ));
+
+        OW::getEventManager()->trigger($event);
+
+        /*$mobile_data = array(
             'message'    => $message,
             'room_id'    => $room->id,
             'title'      => 'CoCreation'
@@ -75,7 +95,7 @@ class COCREATION_CLASS_EventHandler
                                'owner_id' => $room->ownerId]
         ));
 
-        OW::getEventManager()->trigger($event);
+        OW::getEventManager()->trigger($event);*/
     }
 
     private function getCocreationRoomId($commentEntityId){
