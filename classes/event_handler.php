@@ -16,11 +16,8 @@ class COCREATION_CLASS_EventHandler
 
     public function init()
     {
-
-        //OW::getEventManager()->bind('notifications.collect_actions', array($this, 'onCollectNotificationActions'));
         OW::getEventManager()->bind('spodnotification.collect_actions', array($this, 'onCollectNotificationActions'));
-        //OW::getEventManager()->bind('notifications.send_list',       array($this, 'onCollectNotificationSendList'));
-        OW::getEventManager()->bind('spodtchat.add_comment',         array($this, 'sendNotificationOnCollectComment'));
+        OW::getEventManager()->bind('spod_discussion.add_comment',      array($this, 'sendNotificationOnCollectComment'));
     }
 
     public function onCollectNotificationActions( BASE_CLASS_EventCollector $e )
@@ -31,7 +28,7 @@ class COCREATION_CLASS_EventHandler
 
             $e->add(array(
                 'section' => 'cocreation',
-                'action' => 'room-created',
+                'action' => 'cocreation_room_created',
                 'description' => OW::getLanguage()->text('cocreation', 'email_notifications_setting_room_created'),
                 'selected' => false,
                 'sectionLabel' => $sectionLabel,
@@ -41,7 +38,7 @@ class COCREATION_CLASS_EventHandler
         //For all users
         $e->add(array(
             'section' => 'cocreation',
-            'action'  => 'add-comment',
+            'action'  => 'cocreation_add_comment',
             'description' => OW::getLanguage()->text('cocreation', 'email_notifications_setting_room_comment'),
             'selected' => false,
             'sectionLabel' => $sectionLabel,
@@ -52,17 +49,32 @@ class COCREATION_CLASS_EventHandler
     //Custom on event notification
     public function sendNotificationRoomCreated($room)
     {
-        $message = OW::getLanguage()->text('cocreation','notification_room_created', ['ownername' => BOL_UserService::getInstance()->getDisplayName($room->ownerId)]) .
+        //EMAIL
+        $message = OW::getLanguage()->text('cocreation','notification_room_created', ['ownername' => "<b><a>" . BOL_UserService::getInstance()->getDisplayName($room->ownerId) . "</a></b>"]) .
             " <b><a href=\"" . str_replace("index/", $room->id, OW::getRouter()->urlFor( 'COCREATION_CTRL_DataRoom' , 'index')) . "\">". $room->name ."</a></b>";
-        $data = array('message' => $message,
-            'subject' => OW::getLanguage()->text('cocreation','email_notifications_setting_room_created'));
+        $email_data = array(
+            'message' =>
+               array("mail_html" => $message, "mail_text" => ""),
+            'subject' => OW::getLanguage()->text('cocreation','email_notifications_setting_room_created'),
+        );
+
+        $mobile_data = array(
+            'message'    => $message,
+            'room_id'    => $room->id,
+            'title'      => 'CoCreation'
+        );
 
         $event = new OW_Event('notification_system.add_notification', array(
-            'type'      => "mail",
-            'plugin'    => "cocreation",
-            "action"    => "room-created",
-            'data' => json_encode($data)
+            'type'         => [SPODNOTIFICATION_CLASS_Consts::TYPE_MAIL, SPODNOTIFICATION_CLASS_Consts::TYPE_MOBILE],
+            'plugin'       => "cocreation",
+            "action"       => "cocreation_room_created",
+            "subAction"    => "cocreation_room_created",
+            "targetUserId" => null,
+            'data'         => [SPODNOTIFICATION_CLASS_Consts::TYPE_MAIL => json_encode($email_data),
+                               SPODNOTIFICATION_CLASS_Consts::TYPE_MOBILE => json_encode($mobile_data),
+                               'owner_id' => $room->ownerId]
         ));
+
         OW::getEventManager()->trigger($event);
     }
 
@@ -78,21 +90,23 @@ class COCREATION_CLASS_EventHandler
     public function sendNotificationOnCollectComment(OW_Event $event)
     {
         $params = $event->getParams();
-        $room = COCREATION_BOL_Service::getInstance()->getRoomById($this->getCocreationRoomId($params['comment']->getCommentEntityId()));
-        $user = $user = BOL_UserService::getInstance()->findUserById($params['comment']->userId);
+        $room = COCREATION_BOL_Service::getInstance()->getRoomById($this->getCocreationRoomId($params['comment']->entityId));
+        $user = $user = BOL_UserService::getInstance()->findUserById($params['comment']->ownerId);
 
         $message = OW::getLanguage()->text('cocreation','notification_room_comments_collect', ['roomname' => $room->name]) .
                    " <b><a href=\"" . str_replace("index/", $room->id, OW::getRouter()->urlFor( 'COCREATION_CTRL_DataRoom' , 'index')) . "\">" . $room->name . "</a></b><br><br>".
-                   "   <b><i>" . $user->username . "</i></b><br>\"<i>" . $params['comment']->message ."\"</i>"  ;
+                   "   <b><i>" . $user->username . "</i></b><br>\"<i>" . $params['comment']->comment ."\"</i>"  ;
         $data = array('message' => $message,
                       'subject' => OW::getLanguage()->text('cocreation','email_notifications_setting_room_comment'));
 
         $event = new OW_Event('notification_system.add_notification', array(
-            'type'      => "mail",
+            'type'      => SPODNOTIFICATION_CLASS_Consts::TYPE_MAIL,
             'plugin'    => "cocreation",
-            "action"    => "add-comment",
+            "action"    => "add_comment",
             'data' => json_encode($data)
         ));
         OW::getEventManager()->trigger($event);
+
+
     }
 }
