@@ -240,10 +240,11 @@
         </div>
 
         <div class="cardContent">
-            <form id="formFile" action="/ethersheet/import/csv" method="post" enctype="multipart/form-data">
+            <!--<form id="formFile" action="/ethersheet/import/csv" method="post" enctype="multipart/form-data">-->
+            <form id="formFile" action="/import/csv" method="post" enctype="multipart/form-data">
                 <!--<input class="inputButton" type="file" name="csv_file" onchange="onChangedFile(event)">-->
 
-                <input id="csv_file" type="file" name="csv_file" class="inputfile" onchange="onChangedFile(event)" />
+                <input id="csv_file" type="file" name="csv_file" class="inputfile" onclick="onClickFile(event)" onchange="onChangedFile(event)" />
                 <label for="csv_file">
                     <span id="csvFileName"></span>
                     <div class="chooseFile">
@@ -278,9 +279,12 @@
 
 
     <div class="cardContentFullExtended">
-    <p id="errorMessage" style="color: red;"></p>
-    <ul id="errorList" style="color: red;">
-    </ul>
+        <p id="errorMessage" style="color: red;"></p>
+        <ul id="errorList" style="color: red;">
+        </ul>
+        <p id="warningMessage" style="color: #ff8f00;"></p>
+        <ul id="warningList" style="color: #ff8f00;">
+        </ul>
 
     <table id="tblPreview" class="bs_table" style="display: none;">
         <thead id="tblHeader">
@@ -308,22 +312,32 @@
 
     <script src="/es_client/vendor/csvjson.js"></script>
     <script>
+
+        function onClickFile(event) {
+            event.currentTarget.value = null;
+        }//EndFunction.
+
         function onChangedFile(event) {
             var input = event.target;
 
+            console.log(" " + this.value);
+
             //Init the view.
             document.getElementById("errorMessage").innerText = "";
+            document.getElementById("warningMessage").innerText = "";
             $('#tblPreview').hide();
             $('#tblHeader').remove();
             $('#tblBody').remove();
             $('#errorList').empty();
+            $('#warningList').empty();
 
             //Read file.
             var filereader = new FileReader();
             filereader.readAsText(input.files[0]);
             filereader.onload = function(evt){
                 var csvDataset = filereader.result;
-                $errorList =  $('#errorList');
+                $errorList = $('#errorList');
+                $warnList = $('#warningList');
 
                 //Extract file name.
                 debugger;
@@ -341,6 +355,16 @@
                 var csvparser = new csvjson();
                 var jsonDataset = csvparser.read(csvDataset);
 
+                //Check whether there are warnings.
+                if (jsonDataset.warnings.length > 0) {
+                    document.getElementById("warningMessage").innerText = "Additional suggested things to optionally check are:";
+                    $warnList.show();
+                    for (var i=0; i<jsonDataset.warnings.length; i++) {
+                        var warnMsg = jsonDataset.warnings[i];
+                        $warnList.append('<li>' + warnMsg.description + '</li>');
+                    }
+                }
+
                 //Check whether there are errors in the csv.
                 if (jsonDataset.errors.length > 0) {
                     var errormessage = "The CSV file has the following errors:";
@@ -351,7 +375,7 @@
                         $errorList.append('<li>' + errMsg.description + '</li>');
                     }
                     $('#btnSubmit').hide();
-                    return;
+                    return false;
                 }
 
                 //Creates the table.
@@ -396,7 +420,8 @@
                 document.getElementById("errorMessage").innerText = errormessage;
             }
 
-        }
+            return true;
+        }//EndFunctionOnChange.
 
     </script>
 </div>
