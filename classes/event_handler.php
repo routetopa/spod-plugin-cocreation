@@ -22,16 +22,15 @@ class COCREATION_CLASS_EventHandler
 
     public function onCollectNotificationActions( BASE_CLASS_EventCollector $e )
     {
-        $sectionLabel = OW::getLanguage()->text('cocreation', 'main_menu_item');
         //Only for moderator and admin
         if(BOL_AuthorizationService::getInstance()->isModerator() || OW::getUser()->isAdmin()) {
 
             $e->add(array(
-                'section' => 'cocreation',
-                'action' => 'cocreation_room_created',
+                'section' => COCREATION_CLASS_Consts::PLUGIN_NAME,
+                'action' => COCREATION_CLASS_Consts::PLUGIN_ACTION_NEW_ROOM,
                 'description' => OW::getLanguage()->text('cocreation', 'email_notifications_setting_room_created'),
                 'selected' => false,
-                'sectionLabel' => $sectionLabel,
+                'sectionLabel' => OW::getLanguage()->text('cocreation', 'main_menu_item'),
                 'sectionIcon' => 'ow_ic_write'
             ));
         }
