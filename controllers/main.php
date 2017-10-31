@@ -69,5 +69,8 @@ class COCREATION_CTRL_Main extends OW_ActionController
         $this->assign('urlHome', OW_URL_HOME );
 
         OW::getLanguage()->addKeyForJs('cocreation', '  current_room_deleted');
+        OW::getLanguage()->addKeyForJs('cocreation', 'confirm_delete_room');
+        OW::getLanguage()->addKeyForJs('cocreation', 'room_delete_successful');
+        OW::getLanguage()->addKeyForJs('cocreation', 'room_delete_fail');
     }
 }
