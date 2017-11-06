@@ -63,39 +63,21 @@ class COCREATION_CLASS_EventHandler
                     OW::getLanguage()->text('cocreation','email_notifications_setting_room_created'),
                     $message,
                     $message
-                )/*,
-                    new SPODNOTIFICATION_CLASS_MobileEventNotification(
-                        SPODAGORA_CLASS_Const::PLUGIN_NAME,
-                        SPODAGORA_CLASS_Const::PLUGIN_ACTION_ADD_COMMENT,
-                        SPODAGORA_CLASS_Const::PLUGIN_SUB_ACTION_ADD_COMMENT . $_REQUEST['entityId'],
-                        null,
-                        'Agora',
-                        $notification_on_comment_mail['mail_html'],
-                        ['comment' => $c]
-                    )*/
+                ),
+                new SPODNOTIFICATION_CLASS_MobileEventNotification(
+                    COCREATION_CLASS_Consts::PLUGIN_NAME,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_NEW_ROOM,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_NEW_ROOM,
+                    null,
+                    'CoCreation',
+                    $message,
+                    ['roomId' => $room->id]
+                )
             ]
         ));
 
         OW::getEventManager()->trigger($event);
 
-        /*$mobile_data = array(
-            'message'    => $message,
-            'room_id'    => $room->id,
-            'title'      => 'CoCreation'
-        );
-
-        $event = new OW_Event('notification_system.add_notification', array(
-            'type'         => [SPODNOTIFICATION_CLASS_Consts::TYPE_MAIL, SPODNOTIFICATION_CLASS_Consts::TYPE_MOBILE],
-            'plugin'       => "cocreation",
-            "action"       => "cocreation_room_created",
-            "subAction"    => "cocreation_room_created",
-            "targetUserId" => null,
-            'data'         => [SPODNOTIFICATION_CLASS_Consts::TYPE_MAIL => json_encode($email_data),
-                               SPODNOTIFICATION_CLASS_Consts::TYPE_MOBILE => json_encode($mobile_data),
-                               'owner_id' => $room->ownerId]
-        ));
-
-        OW::getEventManager()->trigger($event);*/
     }
 
     private function getCocreationRoomId($commentEntityId){

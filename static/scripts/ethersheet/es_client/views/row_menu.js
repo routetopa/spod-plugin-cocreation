@@ -114,9 +114,9 @@ var RowMenuView = module.exports = View.extend({
   addRowMultiple: function(){
     var row_position = this.getSheet().indexForRow(this.row_id) + 1;
     if(row_position == -1) return;
-    for(var i = row_position; i <= 11;i++){
-      this.getSheet().insertRow(i);
-    }
+      for(var i = 0; i <= 11;i++){
+          this.getSheet().insertRow(i + row_position);
+      }
   },
 
   deleteRow:function(){

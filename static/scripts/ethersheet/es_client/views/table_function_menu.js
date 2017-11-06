@@ -63,6 +63,7 @@ define( function(require,exports,module){
             this.setSheet(o.data.sheets.get(o.data.users.getCurrentUser().getCurrentSheetId()) || null);
             this.size = Math.floor(this.getSheet().allRows.length / this.chunk);
             this.rows_in_last_page = this.getSheet().allRows.length % this.chunk;
+            if(this.rows_in_last_page > 0) this.size += 1;
 
             self = this;
         },
@@ -335,6 +336,7 @@ define( function(require,exports,module){
 
             this.size = Math.floor(this.getSheet().allRows.length / this.chunk);
             this.rows_in_last_page = this.getSheet().allRows.length % this.chunk;
+            if(this.rows_in_last_page > 0) this.size += 1;
 
             if(this.page > this.size) this.page = this.size;
 
