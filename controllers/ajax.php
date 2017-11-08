@@ -120,6 +120,9 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
                     $message = $room->invitationText . "<br><br>" . "<span class=\"ow_button\"><input type=\"button\" value=\"Confirm to join\" onclick=\"" . $js . "\"></span>";
                     if (OW::getPluginManager()->isPluginActive('mailbox'))
                         MAILBOX_BOL_ConversationService::getInstance()->createConversation(OW::getUser()->getId(), $u->id, "Join to co-creation room : " . $room->name, $message);
+
+                    COCREATION_CLASS_EventHandler::getInstance()->sendNotificationRoomInvitation($room, $u->id);
+
                 }
             }else{
                 OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_member_already_added'));
@@ -439,6 +442,29 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
                                                           $clean['common_core_required_metadata'],
                                                           $clean['common_core_if_applicable_metadata'],
                                                           $clean['expanded_metadata']);
+
+
+        $room = COCREATION_BOL_Service::getInstance()->getRoomById($clean['roomId']);
+        $common_core_required_metadata = json_decode($clean['common_core_required_metadata']);
+
+
+        $resource_name = "";
+        if($common_core_required_metadata->title != "")
+        {
+            $resource_name = $common_core_required_metadata->title;
+        }
+        else if(count($room) > 0)
+        {
+            $resource_name = $room->name;
+        }
+        else
+        {
+            $resource_name = $clean['datasetId'];
+        }
+
+        COCREATION_CLASS_EventHandler::getInstance()->sendNotificationDatasetPublished($resource_name);
+
+
         exit;
     }
 

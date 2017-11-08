@@ -23,7 +23,7 @@ class COCREATION_CLASS_EventHandler
     public function onCollectNotificationActions( BASE_CLASS_EventCollector $e )
     {
         //Only for moderator and admin
-        if(BOL_AuthorizationService::getInstance()->isModerator() || OW::getUser()->isAdmin()) {
+        /*if(BOL_AuthorizationService::getInstance()->isModerator() || OW::getUser()->isAdmin()) {
 
             $e->add(array(
                 'section' => COCREATION_CLASS_Consts::PLUGIN_NAME,
@@ -36,7 +36,7 @@ class COCREATION_CLASS_EventHandler
             ));
         }
         //For all users
-       /* $e->add(array(
+       $e->add(array(
             'section' => 'cocreation',
             'action'  => 'cocreation_add_comment',
             'description' => OW::getLanguage()->text('cocreation', 'email_notifications_setting_room_comment'),
@@ -44,6 +44,38 @@ class COCREATION_CLASS_EventHandler
             'sectionLabel' => $sectionLabel,
             'sectionIcon' => 'ow_ic_write'
         ));*/
+
+        $e->add(array(
+            'section' => COCREATION_CLASS_Consts::PLUGIN_NAME,
+            'action' => COCREATION_CLASS_Consts::PLUGIN_ACTION_NEW_ROOM,
+            'description' => OW::getLanguage()->text('cocreation', 'email_notifications_setting_room_created'),
+            'selected' => false,
+            'sectionLabel' => OW::getLanguage()->text('cocreation', 'main_menu_item'),
+            'sectionIcon' => 'ow_ic_write',
+            'sectionClass' => 'action'
+        ));
+
+        $e->add(array(
+            'section' => COCREATION_CLASS_Consts::PLUGIN_NAME,
+            'action'  => COCREATION_CLASS_Consts::PLUGIN_ACTION_ROOM_INVITATION,
+            'description' => OW::getLanguage()->text('cocreation', 'notification_room_invitation_label'),
+            'selected' => false,
+            'sectionLabel' => OW::getLanguage()->text('cocreation', 'main_menu_item'),
+            'sectionIcon' => 'ow_ic_write',
+            'sectionClass' => 'action'
+        ));
+
+        $e->add(array(
+            'section' => COCREATION_CLASS_Consts::PLUGIN_NAME,
+            'action'  => COCREATION_CLASS_Consts::PLUGIN_ACTION_DATASET_PUBLISHED,
+            'description' => OW::getLanguage()->text('cocreation', 'notification_dataset_published_label'),
+            'selected' => false,
+            'sectionLabel' => OW::getLanguage()->text('cocreation', 'main_menu_item'),
+            'sectionIcon' => 'ow_ic_write',
+            'sectionClass' => 'action'
+        ));
+
+
     }
 
     //Custom on event notification
@@ -80,7 +112,72 @@ class COCREATION_CLASS_EventHandler
 
     }
 
-    private function getCocreationRoomId($commentEntityId){
+    public function sendNotificationRoomInvitation($room, $newMemberId){
+
+        $message =
+            OW::getLanguage()->text('cocreation','notification_room_invitation',
+                ['ownername' => "<b><a>" . BOL_UserService::getInstance()->getDisplayName($room->ownerId) . "</a></b>",
+                 'roomname' => "<b>" . $room->name . "</b>"  ]
+            );
+
+        $event = new OW_Event('notification_system.add_notification', array(
+            'notifications' => [
+                new SPODNOTIFICATION_CLASS_MailEventNotification(
+                    COCREATION_CLASS_Consts::PLUGIN_NAME,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_ROOM_INVITATION,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_ROOM_INVITATION,
+                    $newMemberId,
+                    OW::getLanguage()->text('spodnotification','email_notifications_subject_delayed'),
+                    $message,
+                    $message
+                ),
+                new SPODNOTIFICATION_CLASS_MobileEventNotification(
+                    COCREATION_CLASS_Consts::PLUGIN_NAME,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_ROOM_INVITATION,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_ROOM_INVITATION,
+                    $newMemberId,
+                    'CoCreation',
+                    $message,
+                    ['roomId' => $room->id]
+                )
+            ]
+        ));
+
+        OW::getEventManager()->trigger($event);
+    }
+
+    public function sendNotificationDatasetPublished($title)
+    {
+        $message =
+            OW::getLanguage()->text('cocreation','notification_dataset_published',
+                ['datasetname' => "<b><a>" . $this . "</a></b>"  ]
+            );
+
+        $event = new OW_Event('notification_system.add_notification', array(
+            'notifications' => [
+                new SPODNOTIFICATION_CLASS_MailEventNotification(
+                    COCREATION_CLASS_Consts::PLUGIN_NAME,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_DATASET_PUBLISHED,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_DATASET_PUBLISHED,
+                    null,
+                    OW::getLanguage()->text('spodnotification','email_notifications_subject_delayed'),
+                    $message,
+                    $message
+                ),
+                new SPODNOTIFICATION_CLASS_MobileEventNotification(
+                    COCREATION_CLASS_Consts::PLUGIN_NAME,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_DATASET_PUBLISHED,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_DATASET_PUBLISHED,
+                    null,
+                    'CoCreation',
+                    $message,
+                    []
+                )
+            ]
+        ));
+    }
+
+    /*private function getCocreationRoomId($commentEntityId){
         $entity = BOL_CommentService::getInstance()->findCommentEntityById($commentEntityId);
         while($entity->entityType != COCREATION_BOL_Service::ROOM_ENTITY_TYPE && $entity != null){
             $comment = BOL_CommentService::getInstance()->findComment($entity->entityId);
@@ -108,7 +205,5 @@ class COCREATION_CLASS_EventHandler
             'data' => json_encode($data)
         ));
         OW::getEventManager()->trigger($event);
-
-
-    }
+    }*/
 }
