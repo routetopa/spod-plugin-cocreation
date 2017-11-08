@@ -175,6 +175,8 @@ class COCREATION_CLASS_EventHandler
                 )
             ]
         ));
+
+        OW::getEventManager()->trigger($event);
     }
 
     /*private function getCocreationRoomId($commentEntityId){
