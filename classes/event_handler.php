@@ -17,7 +17,7 @@ class COCREATION_CLASS_EventHandler
     public function init()
     {
         OW::getEventManager()->bind('spodnotification.collect_actions', array($this, 'onCollectNotificationActions'));
-        OW::getEventManager()->bind('spod_discussion.add_comment',      array($this, 'sendNotificationOnCollectComment'));
+        OW::getEventManager()->bind('spod_discussion.add_comment',      array($this, 'sendNotificationOnComment'));
     }
 
     public function onCollectNotificationActions( BASE_CLASS_EventCollector $e )
@@ -69,6 +69,16 @@ class COCREATION_CLASS_EventHandler
             'section' => COCREATION_CLASS_Consts::PLUGIN_NAME,
             'action'  => COCREATION_CLASS_Consts::PLUGIN_ACTION_DATASET_PUBLISHED,
             'description' => OW::getLanguage()->text('cocreation', 'notification_dataset_published_label'),
+            'selected' => false,
+            'sectionLabel' => OW::getLanguage()->text('cocreation', 'main_menu_item'),
+            'sectionIcon' => 'ow_ic_write',
+            'sectionClass' => 'action'
+        ));
+
+        $e->add(array(
+            'section' => COCREATION_CLASS_Consts::PLUGIN_NAME,
+            'action'  => COCREATION_CLASS_Consts::PLUGIN_ACTION_COMMENT,
+            'description' => OW::getLanguage()->text('cocreation', 'email_notifications_setting_room_comment'),
             'selected' => false,
             'sectionLabel' => OW::getLanguage()->text('cocreation', 'main_menu_item'),
             'sectionIcon' => 'ow_ic_write',
@@ -150,7 +160,7 @@ class COCREATION_CLASS_EventHandler
     {
         $message =
             OW::getLanguage()->text('cocreation','notification_dataset_published',
-                ['datasetname' => "<b><a>" . $this . "</a></b>"  ]
+                ['datasetname' => "<b><a>" . $title . "</a></b>"  ]
             );
 
         $event = new OW_Event('notification_system.add_notification', array(
@@ -177,6 +187,43 @@ class COCREATION_CLASS_EventHandler
         ));
 
         OW::getEventManager()->trigger($event);
+    }
+
+    public function sendNotificationOnComment(OW_Event $event){
+        $params  = $event->getParams();
+        $comment = $params['comment'];
+
+        $message =
+            OW::getLanguage()->text('cocreation','notification_room_invitation',
+                ['ownername' => "<b><a>" . BOL_UserService::getInstance()->getDisplayName($room->ownerId) . "</a></b>",
+                 'roomname' => "<b>" . $room->name . "</b>"  ]
+            );
+
+        $event = new OW_Event('notification_system.add_notification', array(
+            'notifications' => [
+                new SPODNOTIFICATION_CLASS_MailEventNotification(
+                    COCREATION_CLASS_Consts::PLUGIN_NAME,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_COMMENT . "_" . $comment->entityId,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_COMMENT,
+                    null,
+                    OW::getLanguage()->text('spodnotification','email_notifications_subject_delayed'),
+                    $message,
+                    $message
+                ),
+                new SPODNOTIFICATION_CLASS_MobileEventNotification(
+                    COCREATION_CLASS_Consts::PLUGIN_NAME,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_COMMENT . "_" . $comment->entityId,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_COMMENT,
+                    null,
+                    'CoCreation',
+                    $message,
+                    ['roomId' => $room->id]
+                )
+            ]
+        ));
+
+        OW::getEventManager()->trigger($event);
+
     }
 
     /*private function getCocreationRoomId($commentEntityId){

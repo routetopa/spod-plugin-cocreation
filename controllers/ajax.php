@@ -655,15 +655,14 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         $user_rooms = array();
         $rooms = COCREATION_BOL_Service::getInstance()->getAllRooms();
         foreach ($rooms as $room) {
-            if ((COCREATION_BOL_Service::getInstance()->isMemberJoinedToRoom($clean['userId'], $room->id) ||
-                    $clean['userId'] == intval($room->ownerId)))
+            if ($clean['userId'] == intval($room->ownerId) || COCREATION_BOL_Service::getInstance()->isMemberInvitedToRoom($clean['userId'], $room->id))
             {
                 $avatar = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($room->ownerId))[$room->ownerId];
                 $room->ownerImage = $avatar['src'];
                 $room->ownerName  = $avatar['title'];
-                $room->sheetId = COCREATION_BOL_Service::getInstance()->getSheetByRoomId($room->id)[0]->url;
-
-                $room->docs = COCREATION_BOL_Service::getInstance()->getDocumentsByRoomId($room->id);
+                $room->sheetId    = COCREATION_BOL_Service::getInstance()->getSheetByRoomId($room->id)[0]->url;
+                $room->docs       = COCREATION_BOL_Service::getInstance()->getDocumentsByRoomId($room->id);
+                $room->hasJoined  = COCREATION_BOL_Service::getInstance()->isMemberJoinedToRoom($clean['userId'], $room->id);
 
                 array_push($user_rooms, $room);
             }
@@ -834,6 +833,37 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         }
 
         echo json_encode(array("status" => true, "datalets" => $room_datalets, "datalets_definition" => ODE_CLASS_Tools::getInstance()->get_all_datalet_definitions()));
+        exit;
+    }
+
+    public function getAllFriends(){
+
+        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        if ($clean == null) {
+            echo json_encode(array("status" => "error", "massage" => 'Insane inputs detected'));
+            exit;
+        }
+
+        $friendsInfo = [];
+        $users = BOL_UserService::getInstance()->findList(0,10000);
+
+        foreach($users as $user)
+        {
+            if($user->id == (int)$clean['userId']) continue;
+            $avatar = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($user->id));
+            $user = BOL_UserService::getInstance()->findUserById($user->id);
+
+            $friendsInfo[] = array(
+                "id" => $user->id,
+                "name" => filter_var(BOL_UserService::getInstance()->getDisplayName($user->id), FILTER_SANITIZE_SPECIAL_CHARS),
+                "username" => $user->username,
+                "email" => $user->email,
+                "avatar" => $avatar[$user->id]["src"],
+                "url" => $avatar[$user->id]["url"]
+            );
+        }
+
+        echo json_encode(array("status" => true, "friends" => json_encode($friendsInfo)));
         exit;
     }
 
