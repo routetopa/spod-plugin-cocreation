@@ -362,12 +362,14 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
     {
         $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
         if ($clean == null){
-            /*echo json_encode(array("status" => "error", "massage" => 'Insane inputs detected'));*/
+            echo json_encode(array("status" => false, "message" => 'Insane inputs detected'));
             OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'insane_user_email_value'));
             exit;
         }
 
         COCREATION_BOL_Service::getInstance()->memberJoinToRoom($clean['memberId'], $clean['roomId']);
+        echo json_encode(array("status" => true, "message" => 'Join successful'));
+        exit;
     }
 
     public function getSheetData(){
@@ -846,6 +848,23 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
         $friendsInfo = [];
         $users = BOL_UserService::getInstance()->findList(0,10000);
+        $roomMembers = COCREATION_BOL_Service::getInstance()->getRoomMembers($clean['roomId']);
+
+        $roomMembersIds = [];
+        foreach ($roomMembers as $roomMember)
+        {
+            array_walk_recursive
+            ($roomMember,
+                function($item, $key) use (&$roomMembersIds, $roomMember)
+                {
+                    if($key == 'userId')
+                    {
+                        $roomMembersIds[$roomMember->userId] = $item;
+                    }
+                }
+            );
+
+        }
 
         foreach($users as $user)
         {
@@ -859,11 +878,12 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
                 "username" => $user->username,
                 "email" => $user->email,
                 "avatar" => $avatar[$user->id]["src"],
-                "url" => $avatar[$user->id]["url"]
+                "url" => $avatar[$user->id]["url"],
+                "isMember" => (isset($roomMembersIds[$user->id])) ? true : false
             );
         }
 
-        echo json_encode(array("status" => true, "friends" => json_encode($friendsInfo)));
+        echo json_encode(array("status" => true, "friends" => $friendsInfo));
         exit;
     }
 
