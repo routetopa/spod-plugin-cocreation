@@ -130,6 +130,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         }
 
         OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_members_add_successful'));
+
         $this->redirect(str_replace("index/", $room->id, $room->type == "knowledge" ? OW::getRouter()->urlFor('COCREATION_CTRL_KnowledgeRoom', 'index') : OW::getRouter()->urlFor('COCREATION_CTRL_DataRoom', 'index') ));
     }
 
@@ -855,11 +856,14 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         {
             array_walk_recursive
             ($roomMember,
-                function($item, $key) use (&$roomMembersIds, $roomMember)
+                function($item, $key) use (&$roomMembersIds, $roomMember, $clean)
                 {
                     if($key == 'userId')
                     {
-                        $roomMembersIds[$roomMember->userId] = $item;
+                        $roomMembersIds[$roomMember->userId] =
+                            (COCREATION_BOL_Service::getInstance()->isMemberJoinedToRoom($roomMember->userId, $clean['roomId']))
+                               ? COCREATION_CLASS_Consts::USER_STATUS_JOINED
+                               : COCREATION_CLASS_Consts::USER_STATUS_PENDING;
                     }
                 }
             );
@@ -873,17 +877,34 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             $user = BOL_UserService::getInstance()->findUserById($user->id);
 
             $friendsInfo[] = array(
-                "id" => $user->id,
-                "name" => filter_var(BOL_UserService::getInstance()->getDisplayName($user->id), FILTER_SANITIZE_SPECIAL_CHARS),
+                "id"       => $user->id,
+                "name"     => filter_var(BOL_UserService::getInstance()->getDisplayName($user->id), FILTER_SANITIZE_SPECIAL_CHARS),
                 "username" => $user->username,
-                "email" => $user->email,
-                "avatar" => $avatar[$user->id]["src"],
-                "url" => $avatar[$user->id]["url"],
-                "isMember" => (isset($roomMembersIds[$user->id])) ? true : false
+                "email"    => $user->email,
+                "avatar"   => $avatar[$user->id]["src"],
+                "url"      => $avatar[$user->id]["url"],
+                "status"   => (isset($roomMembersIds[$user->id])) ? $roomMembersIds[$user->id] : COCREATION_CLASS_Consts::USER_STATUS_NOT_INVITED
             );
         }
 
         echo json_encode(array("status" => true, "friends" => $friendsInfo));
+        exit;
+    }
+
+    public function addNewMembersToRoomFromMobile(){
+        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        if ($clean == null){
+            echo json_encode(array("status" => false, "message" => 'Insane inputs detected'));
+            exit;
+        }
+
+        $room = COCREATION_BOL_Service::getInstance()->getRoomById($clean['roomId']);
+        foreach($clean['users'] as $user){
+            $u   = BOL_UserService::getInstance()->findByEmail($user);
+            COCREATION_BOL_Service::getInstance()->addUserToRoom($room->id, $user, $u->id);
+        }
+
+        echo json_encode(array("status" => true, "message" => OW::getLanguage()->text('cocreation', 'feedback_members_add_successful')));
         exit;
     }
 
