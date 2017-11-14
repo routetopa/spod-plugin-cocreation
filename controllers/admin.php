@@ -280,14 +280,14 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
 
     public function export()
     {
-        $comments = array();
-        $this->getFlatComment($_REQUEST["id"], 0, $comments);
-
         require_once OW::getPluginManager()->getPlugin('spodagoraexporter')->getRootDir() . 'libs/PHPExcel-1.8/Classes/PHPExcel.php';
-
-
         $objPHPExcel = new PHPExcel();
 
+        $level = 'A';
+
+        $ex = new OW_Example();
+        $ex->andFieldEqual('entityId', $_REQUEST["id"]);
+        $comments = SPODDISCUSSION_BOL_DiscussionCommentDao::getInstance()->findListByExample($ex);
 
         $objPHPExcel->getProperties()->setCreator("ROUTETOPA Project")
             ->setLastModifiedBy("ROUTETOPA Project")
@@ -297,24 +297,11 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
             ->setKeywords("Cocreation Snapshot")
             ->setCategory("Cocreation Snapshot");
 
-        foreach ($comments as $row => $node)
+        foreach ($comments as $row => $comment)
         {
-            $level = 'A';
-
-            if($node->level != null)
-            {
-                switch ($node->level)
-                {
-                    case 1 : $level = 'B'; break;
-                    case 2 : $level = 'C'; break;
-                    case 3 : $level = 'D'; break;
-                }
-            }
-
-            $user = BOL_UserService::getInstance()->findUserById($node->userId);
+            $user = BOL_UserService::getInstance()->findUserById($comment->ownerId);
             $cell = $level . ($row+1);
-            $date = isset($node->createStamp) ? date("d-F-Y , G:i:s", $node->createStamp) : "";
-            $objPHPExcel->setActiveSheetIndex(0)->setCellValue($cell, $user->username . " : " . $node->message . " (".$date.")");
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue($cell, $user->username . " : " . $comment->comment . " (".$comment->timestamp.")");
         }
 
         // Set active sheet index to the first sheet, so Excel opens this as the first sheet
@@ -359,18 +346,6 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
             'exit_status'  => $matches[0],
             'output'       => str_replace("Exit status : " . $matches[0], '', $complete_output)
         );
-    }
-
-    private function getFlatComment($id, $level=0, &$flat_comment=array())
-    {
-        $comments = BOL_CommentService::getInstance()->findFullCommentList(($level == 0 ) ? COCREATION_BOL_Service::ROOM_ENTITY_TYPE : COCREATION_BOL_Service::COMMENT_ENTITY_TYPE, $id);
-
-        for ($i = 0; $i < count($comments); $i++)
-        {
-            $comments[$i]->level = $level;
-            $flat_comment = array_merge($flat_comment, array($comments[$i]));
-            $this->getFlatComment($comments[$i]->id, $level + 1, $flat_comment);
-        }
     }
 
 }
