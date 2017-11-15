@@ -85,6 +85,27 @@ class COCREATION_CLASS_EventHandler
             'sectionClass' => 'action'
         ));
 
+        $sub_actions = SPODNOTIFICATION_BOL_Service::getInstance()->isUserRegisteredForSubAction(OW::getUser()->getId(),
+            COCREATION_CLASS_Consts::PLUGIN_NAME,
+            COCREATION_CLASS_Consts::PLUGIN_ACTION_COMMENT,
+            SPODNOTIFICATION_CLASS_MailEventNotification::$TYPE);
+        foreach ($sub_actions as $sub_action)
+        {
+            preg_match_all('!\d+!', $sub_action->action, $room_id);
+            $room = COCREATION_BOL_Service::getInstance()->getRoomById($room_id[0][0]);
+
+            $e->add(array(
+                'section' => COCREATION_CLASS_Consts::PLUGIN_NAME,
+                'action'  => $sub_action->action,
+                'description' => OW::getLanguage()->text('spodagora', 'email_notifications_setting_new_comment_in_room', array("room" => $room->name)),
+                'selected' => false,
+                'sectionLabel' => COCREATION_CLASS_Consts::PLUGIN_NAME,
+                'sectionIcon' => 'ow_ic_write',
+                'sectionClass' => 'subAction',
+                'parentAction' => $sub_action->parentAction
+            ));
+        }
+
 
     }
 
