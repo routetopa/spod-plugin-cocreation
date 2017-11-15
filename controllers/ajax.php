@@ -12,6 +12,22 @@ error_reporting(-1);
 class COCREATION_CTRL_Ajax extends OW_ActionController
 {
     public function createRoom(){
+
+        if (!OW::getUser()->isAuthenticated())
+        {
+            try
+            {
+                $user_id = ODE_CLASS_Tools::getInstance()->getUserFromJWT($_REQUEST['jwt']);
+            }
+            catch (Exception $e)
+            {
+                echo json_encode(array("status"  => "ko", "error_message" => $e->getMessage()));
+                exit;
+            }
+        }else{
+            $user_id = OW::getUser()->getId();
+        }
+
         $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
         if ($clean == null){
             /*echo json_encode(array("status" => "error", "massage" => 'Insane inputs detected'));*/
@@ -73,7 +89,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             }
         }
 
-        COCREATION_CLASS_EventHandler::getInstance()->sendNotificationRoomCreated($room);
+        COCREATION_CLASS_EventHandler::getInstance()->sendNotificationRoomCreated($user_id, $room);
 
         OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_create_room_successful'));
         OW::getApplication()->redirect(OW::getRouter()->urlFor('COCREATION_CTRL_Main', 'index'));
@@ -98,6 +114,21 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
     }
 
     public function addNewMembersToRoom(){
+        if (!OW::getUser()->isAuthenticated())
+        {
+            try
+            {
+                $user_id = ODE_CLASS_Tools::getInstance()->getUserFromJWT($_REQUEST['jwt']);
+            }
+            catch (Exception $e)
+            {
+                echo json_encode(array("status"  => "ko", "error_message" => $e->getMessage()));
+                exit;
+            }
+        }else{
+            $user_id = OW::getUser()->getId();
+        }
+
         $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
         if ($clean == null){
             /*echo json_encode(array("status" => "error", "massage" => 'Insane inputs detected'));*/
@@ -121,7 +152,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
                     if (OW::getPluginManager()->isPluginActive('mailbox'))
                         MAILBOX_BOL_ConversationService::getInstance()->createConversation(OW::getUser()->getId(), $u->id, "Join to co-creation room : " . $room->name, $message);
 
-                    COCREATION_CLASS_EventHandler::getInstance()->sendNotificationRoomInvitation($room, $u->id);
+                    COCREATION_CLASS_EventHandler::getInstance()->sendNotificationRoomInvitation($user_id, $room, $u->id);
 
                 }
             }else{
@@ -359,8 +390,24 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         exit;
     }
 
+
     public function confirmToJoinToRoom()
     {
+        if (!OW::getUser()->isAuthenticated())
+        {
+            try
+            {
+                $user_id = ODE_CLASS_Tools::getInstance()->getUserFromJWT($_REQUEST['jwt']);
+            }
+            catch (Exception $e)
+            {
+                echo json_encode(array("status"  => "ko", "error_message" => $e->getMessage()));
+                exit;
+            }
+        }else{
+            $user_id = OW::getUser()->getId();
+        }
+
         $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
         if ($clean == null){
             echo json_encode(array("status" => false, "message" => 'Insane inputs detected'));
@@ -368,9 +415,18 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             exit;
         }
 
+        $room  = COCREATION_BOL_Service::getInstance()->getRoomById($clean['roomId']);
         COCREATION_BOL_Service::getInstance()->memberJoinToRoom($clean['memberId'], $clean['roomId']);
-        echo json_encode(array("status" => true, "message" => 'Join successful'));
-        exit;
+        COCREATION_CLASS_EventHandler::getInstance()->sendNotificationRoomJoin($user_id, $room, $clean['memberId']);
+
+        if(isset($clean['mobile'])){
+            echo json_encode(array("status" => true, "message" => 'Join successful'));
+            exit;
+        }else{
+            OW::getApplication()->redirect(
+                str_replace("index/", $room->id, OW::getRouter()->urlFor($room->type == "knowledge" ? 'COCREATION_CTRL_KnowledgeRoom' : 'COCREATION_CTRL_DataRoom', 'index'))
+            );
+        }
     }
 
     public function getSheetData(){
@@ -431,6 +487,22 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
     public function publishDataset()
     {
+        if (!OW::getUser()->isAuthenticated())
+        {
+            try
+            {
+                $user_id = ODE_CLASS_Tools::getInstance()->getUserFromJWT($_REQUEST['jwt']);
+            }
+            catch (Exception $e)
+            {
+                echo json_encode(array("status"  => "ko", "error_message" => $e->getMessage()));
+                exit;
+            }
+        }else{
+            $user_id = OW::getUser()->getId();
+        }
+
+
         $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
         if ($clean == null){
             OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'insane_user_email_value'));
@@ -465,7 +537,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             $resource_name = $clean['datasetId'];
         }
 
-        COCREATION_CLASS_EventHandler::getInstance()->sendNotificationDatasetPublished($resource_name);
+        COCREATION_CLASS_EventHandler::getInstance()->sendNotificationDatasetPublished($user_id, $resource_name);
 
 
         exit;
@@ -750,6 +822,21 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
     }
 
     public function createMediaRoomFromMobile(){
+        if (!OW::getUser()->isAuthenticated())
+        {
+            try
+            {
+                $user_id = ODE_CLASS_Tools::getInstance()->getUserFromJWT($_REQUEST['jwt']);
+            }
+            catch (Exception $e)
+            {
+                echo json_encode(array("status"  => "ko", "error_message" => $e->getMessage()));
+                exit;
+            }
+        }else{
+            $user_id = OW::getUser()->getId();
+        }
+
         $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
         if ($clean == null){
             echo json_encode(array("status" => false, "message" => 'Insane inputs detected'));
@@ -781,7 +868,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
             $result = $this->initEthersheetMediaRoom("dataset_room_".$room->id."_".$randomString);
 
-            COCREATION_CLASS_EventHandler::getInstance()->sendNotificationRoomCreated($room);
+            COCREATION_CLASS_EventHandler::getInstance()->sendNotificationRoomCreated($user_id, $room);
 
             echo json_encode(array("status" => true, "message" => 'room created'));
             exit;

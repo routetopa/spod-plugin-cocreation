@@ -1,6 +1,6 @@
 <?php
 
-class COCREATION_CLASS_EventHandler
+class COCREATION_CLASS_EventHandler extends OW_ActionController
 {
     private static $FIBONACCI_FIRST_20_NUMBERS = array(/*0,1,1,2,3,5,8,*/13,21,34,55,89,144,233,377,610,987,1597,2584,4181,6765);
     private static $classInstance;
@@ -45,7 +45,7 @@ class COCREATION_CLASS_EventHandler
             'sectionIcon' => 'ow_ic_write'
         ));*/
 
-        $e->add(array(
+        /*$e->add(array(
             'section' => COCREATION_CLASS_Consts::PLUGIN_NAME,
             'action' => COCREATION_CLASS_Consts::PLUGIN_ACTION_NEW_ROOM,
             'description' => OW::getLanguage()->text('cocreation', 'email_notifications_setting_room_created'),
@@ -53,7 +53,7 @@ class COCREATION_CLASS_EventHandler
             'sectionLabel' => OW::getLanguage()->text('cocreation', 'main_menu_item'),
             'sectionIcon' => 'ow_ic_write',
             'sectionClass' => 'action'
-        ));
+        ));*/
 
         $e->add(array(
             'section' => COCREATION_CLASS_Consts::PLUGIN_NAME,
@@ -106,11 +106,21 @@ class COCREATION_CLASS_EventHandler
             ));
         }
 
+        $e->add(array(
+            'section' => COCREATION_CLASS_Consts::PLUGIN_NAME,
+            'action'  => COCREATION_CLASS_Consts::PLUGIN_ACTION_JOIN,
+            'description' => OW::getLanguage()->text('cocreation', 'email_notifications_setting_room_join'),
+            'selected' => false,
+            'sectionLabel' => OW::getLanguage()->text('cocreation', 'main_menu_item'),
+            'sectionIcon' => 'ow_ic_write',
+            'sectionClass' => 'action'
+        ));
+
 
     }
 
     //Custom on event notification
-    public function sendNotificationRoomCreated($room)
+    public function sendNotificationRoomCreated($userId, $room)
     {
         //EMAIL
         $message = OW::getLanguage()->text('cocreation','notification_room_created', ['ownername' => "<b><a>" . BOL_UserService::getInstance()->getDisplayName($room->ownerId) . "</a></b>"]) .
@@ -122,6 +132,7 @@ class COCREATION_CLASS_EventHandler
                     COCREATION_CLASS_Consts::PLUGIN_NAME,
                     COCREATION_CLASS_Consts::PLUGIN_ACTION_NEW_ROOM,
                     COCREATION_CLASS_Consts::PLUGIN_ACTION_NEW_ROOM,
+                    $userId,
                     null,
                     OW::getLanguage()->text('cocreation','email_notifications_setting_room_created'),
                     $message,
@@ -131,6 +142,7 @@ class COCREATION_CLASS_EventHandler
                     COCREATION_CLASS_Consts::PLUGIN_NAME,
                     COCREATION_CLASS_Consts::PLUGIN_ACTION_NEW_ROOM,
                     COCREATION_CLASS_Consts::PLUGIN_ACTION_NEW_ROOM,
+                    $userId,
                     null,
                     'CoCreation',
                     $message,
@@ -143,46 +155,47 @@ class COCREATION_CLASS_EventHandler
 
     }
 
-    public function sendNotificationRoomInvitation($room, $newMemberId){
-
-        $message =
-            OW::getLanguage()->text('cocreation','notification_room_invitation',
-                ['ownername' => "<b><a>" . BOL_UserService::getInstance()->getDisplayName($room->ownerId) . "</a></b>",
-                 'roomname' => "<b>" . $room->name . "</b>"  ]
-            );
-
-        $event = new OW_Event('notification_system.add_notification', array(
-            'notifications' => [
-                new SPODNOTIFICATION_CLASS_MailEventNotification(
-                    COCREATION_CLASS_Consts::PLUGIN_NAME,
-                    COCREATION_CLASS_Consts::PLUGIN_ACTION_ROOM_INVITATION,
-                    COCREATION_CLASS_Consts::PLUGIN_ACTION_ROOM_INVITATION,
-                    $newMemberId,
-                    OW::getLanguage()->text('spodnotification','email_notifications_subject_delayed'),
-                    $message,
-                    $message
-                ),
-                new SPODNOTIFICATION_CLASS_MobileEventNotification(
-                    COCREATION_CLASS_Consts::PLUGIN_NAME,
-                    COCREATION_CLASS_Consts::PLUGIN_ACTION_ROOM_INVITATION,
-                    COCREATION_CLASS_Consts::PLUGIN_ACTION_ROOM_INVITATION,
-                    $newMemberId,
-                    'CoCreation',
-                    $message,
-                    []
-                )
-            ]
-        ));
-
-        OW::getEventManager()->trigger($event);
-    }
-
-    public function sendNotificationDatasetPublished($title)
+    public function sendNotificationRoomInvitation($userId, $room, $newMemberId)
     {
-        $message =
-            OW::getLanguage()->text('cocreation','notification_dataset_published',
-                ['datasetname' => "<b><a>" . $title . "</a></b>"  ]
-            );
+        $notification_on_invite = $this->getEmailNotificationOnInvite(
+            BOL_UserService::getInstance()->getDisplayName($room->ownerId),
+            $room->name,
+             OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'confirmToJoinToRoom') . "?roomId=" . $room->id . "&memberId=" . $newMemberId );
+
+        $event = new OW_Event('notification_system.add_notification', array(
+            'notifications' => [
+                new SPODNOTIFICATION_CLASS_MailEventNotification(
+                    COCREATION_CLASS_Consts::PLUGIN_NAME,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_ROOM_INVITATION,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_ROOM_INVITATION,
+                    $userId,
+                    $newMemberId,
+                    'You have been invited to cocreation room',
+                    $notification_on_invite['mail_html'],
+                    $notification_on_invite['mail_text']
+                ),
+                new SPODNOTIFICATION_CLASS_MobileEventNotification(
+                    COCREATION_CLASS_Consts::PLUGIN_NAME,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_ROOM_INVITATION,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_ROOM_INVITATION,
+                    $userId,
+                    $newMemberId,
+                    'CoCreation',
+                    $notification_on_invite['mail_html'],
+                    []
+                )
+            ]
+        ));
+
+        OW::getEventManager()->trigger($event);
+    }
+
+    public function sendNotificationDatasetPublished($userId ,$title)
+    {
+        $notification_on_publish = $this->getEmailNotificationOnPublish(
+            BOL_UserService::getInstance()->getDisplayName($userId),
+            $title
+        );
 
         $event = new OW_Event('notification_system.add_notification', array(
             'notifications' => [
@@ -190,18 +203,20 @@ class COCREATION_CLASS_EventHandler
                     COCREATION_CLASS_Consts::PLUGIN_NAME,
                     COCREATION_CLASS_Consts::PLUGIN_ACTION_DATASET_PUBLISHED,
                     COCREATION_CLASS_Consts::PLUGIN_ACTION_DATASET_PUBLISHED,
+                    $userId,
                     null,
                     OW::getLanguage()->text('spodnotification','email_notifications_subject_delayed'),
-                    $message,
-                    $message
+                    $notification_on_publish['mail_html'],
+                    $notification_on_publish['mail_text']
                 ),
                 new SPODNOTIFICATION_CLASS_MobileEventNotification(
                     COCREATION_CLASS_Consts::PLUGIN_NAME,
                     COCREATION_CLASS_Consts::PLUGIN_ACTION_DATASET_PUBLISHED,
                     COCREATION_CLASS_Consts::PLUGIN_ACTION_DATASET_PUBLISHED,
+                    $userId,
                     null,
                     'CoCreation',
-                    $message,
+                    $notification_on_publish['mail_html'],
                     []
                 )
             ]
@@ -216,9 +231,12 @@ class COCREATION_CLASS_EventHandler
 
         $room = COCREATION_BOL_Service::getInstance()->getRoomById($comment->entityId);
 
-        $message =
-            OW::getLanguage()->text('cocreation','email_notifications_setting_room_comment') . " " . "<b>" . $room->name . "</b>";
-        //"<b><a>" . BOL_UserService::getInstance()->getDisplayName($room->ownerId) . "</a></b>"
+        $notification_on_comment = $this->getEmailNotificationOnComment(
+            BOL_UserService::getInstance()->getDisplayName($comment->ownerId),
+            $comment->commment,
+            $room->name,
+            str_replace("index/", $room->id, OW::getRouter()->urlFor($room->type == "knowledge" ? 'COCREATION_CTRL_KnowledgeRoom' : 'COCREATION_CTRL_DataRoom', 'index'))
+           );
 
         $event = new OW_Event('notification_system.add_notification', array(
             'notifications' => [
@@ -226,18 +244,20 @@ class COCREATION_CLASS_EventHandler
                     COCREATION_CLASS_Consts::PLUGIN_NAME,
                     COCREATION_CLASS_Consts::PLUGIN_ACTION_COMMENT . "_" . $comment->entityId,
                     COCREATION_CLASS_Consts::PLUGIN_ACTION_COMMENT,
+                    $comment->ownerId,
                     null,
-                    OW::getLanguage()->text('spodnotification','email_notifications_subject_delayed'),
-                    $message,
-                    $message
+                    "Someone comments to cocreation room",
+                    $notification_on_comment['mail_html'],
+                    $notification_on_comment['mail_text']
                 ),
                 new SPODNOTIFICATION_CLASS_MobileEventNotification(
                     COCREATION_CLASS_Consts::PLUGIN_NAME,
                     COCREATION_CLASS_Consts::PLUGIN_ACTION_COMMENT . "_" . $comment->entityId,
                     COCREATION_CLASS_Consts::PLUGIN_ACTION_COMMENT,
+                    $comment->ownerId,
                     null,
                     'CoCreation',
-                    $message,
+                    $notification_on_comment['mail_html'],
                     ['room' => $room]
                 )
             ]
@@ -245,5 +265,208 @@ class COCREATION_CLASS_EventHandler
 
         OW::getEventManager()->trigger($event);
 
+    }
+
+    public function sendNotificationRoomJoin($userId, $room, $memberId)
+    {
+        $notification_on_join = $this->getEmailNotificationOnJoin(
+            BOL_UserService::getInstance()->getDisplayName($memberId),
+            $room->name,
+            str_replace("index/", $room->id, OW::getRouter()->urlFor($room->type == "knowledge" ? 'COCREATION_CTRL_KnowledgeRoom' : 'COCREATION_CTRL_DataRoom', 'index')));
+
+        $event = new OW_Event('notification_system.add_notification', array(
+            'notifications' => [
+                new SPODNOTIFICATION_CLASS_MailEventNotification(
+                    COCREATION_CLASS_Consts::PLUGIN_NAME,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_JOIN,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_JOIN,
+                    $userId,
+                    $room->ownerId,
+                    'User has joined to room',
+                    $notification_on_join['mail_html'],
+                    $notification_on_join['mail_text']
+                ),
+                new SPODNOTIFICATION_CLASS_MobileEventNotification(
+                    COCREATION_CLASS_Consts::PLUGIN_NAME,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_JOIN,
+                    COCREATION_CLASS_Consts::PLUGIN_ACTION_JOIN,
+                    $userId,
+                    $room->ownerId,
+                    'CoCreation',
+                    $notification_on_join['mail_html'],
+                    []
+                )
+            ]
+        ));
+
+        OW::getEventManager()->trigger($event);
+    }
+
+    public function getEmailNotificationOnInvite($ownerName, $roomName, $joinUrl)
+    {
+        $template_html = OW::getPluginManager()->getPlugin('cocreation')->getCmpViewDir() . 'email_notification_invite_template_html.html';
+        $template_txt  = OW::getPluginManager()->getPlugin('cocreation')->getCmpViewDir() . 'email_notification_invite_template_text.html';
+
+        $mail_html = $this->getEmailContentHtmlOnInvite($template_html ,$ownerName, $roomName, $joinUrl);
+        $mail_text = $this->getEmailContentTextOnInvite($template_txt, $ownerName, $roomName, $joinUrl);
+
+        return ["mail_html" => $mail_html, "mail_text" => $mail_text];
+    }
+
+    public function getEmailNotificationOnComment($userName, $comment, $roomName, $roomUrl)
+    {
+        $template_html = OW::getPluginManager()->getPlugin('cocreation')->getCmpViewDir() . 'email_notification_comment_template_html.html';
+        $template_txt  = OW::getPluginManager()->getPlugin('cocreation')->getCmpViewDir() . 'email_notification_comment_template_text.html';
+
+        $mail_html = $this->getEmailContentHtmlOnComment($template_html ,$userName, $comment, $roomName, $roomUrl);
+        $mail_text = $this->getEmailContentTextOnComment($template_txt , $userName, $comment, $roomName, $roomUrl);
+
+        return ["mail_html" => $mail_html, "mail_text" => $mail_text];
+    }
+
+    public function getEmailNotificationOnPublish($userName, $datasetName)
+    {
+        $template_html = OW::getPluginManager()->getPlugin('cocreation')->getCmpViewDir() . 'email_notification_publish_template_html.html';
+        $template_txt  = OW::getPluginManager()->getPlugin('cocreation')->getCmpViewDir() . 'email_notification_publish_template_text.html';
+
+        $mail_html = $this->getEmailContentHtmlOnPublish($template_html ,$userName, $datasetName);
+        $mail_text = $this->getEmailContentTextOnPublish($template_txt , $userName, $datasetName);
+
+        return ["mail_html" => $mail_html, "mail_text" => $mail_text];
+    }
+
+    public function getEmailNotificationOnJoin($ownerName, $roomName, $roomUrl)
+    {
+        $template_html = OW::getPluginManager()->getPlugin('cocreation')->getCmpViewDir() . 'email_notification_join_template_html.html';
+        $template_txt  = OW::getPluginManager()->getPlugin('cocreation')->getCmpViewDir() . 'email_notification_join_template_text.html';
+
+        $mail_html = $this->getEmailContentHtmlOnJoin($template_html ,$ownerName, $roomName, $roomUrl);
+        $mail_text = $this->getEmailContentTextOnJoin($template_txt, $ownerName, $roomName, $roomUrl);
+
+        return ["mail_html" => $mail_html, "mail_text" => $mail_text];
+    }
+
+    private function getEmailContentHtmlOnJoin($template_html, $ownerName, $roomName, $roomUrl)
+    {
+        //SET EMAIL TEMPLATE
+        $this->setTemplate($template_html);
+
+        $this->assign('ownerName', $ownerName);
+        $this->assign('roomName',  $roomName);
+        $this->assign('roomUrl',   $roomUrl);
+
+        return parent::render();
+    }
+
+    private function getEmailContentTextOnJoin($template_text, $ownerName, $roomName, $roomUrl)
+    {
+        //SET EMAIL TEMPLATE
+        $this->setTemplate($template_text);
+
+        $this->assign('ownerName', $ownerName);
+        $this->assign('roomName',  $roomName);
+        $this->assign('roomUrl',   $roomUrl);
+        $this->assign('nl', '%%%nl%%%');
+        $this->assign('tab', '%%%tab%%%');
+        $this->assign('space', '%%%space%%%');
+
+        $content = parent::render();
+        $search = array('%%%nl%%%', '%%%tab%%%', '%%%space%%%');
+        $replace = array("\n", '    ', ' ');
+
+        return str_replace($search, $replace, $content);
+    }
+
+    private function getEmailContentHtmlOnInvite($template_html, $ownerName, $roomName, $joinUrl)
+    {
+        //SET EMAIL TEMPLATE
+        $this->setTemplate($template_html);
+
+        $this->assign('ownerName', $ownerName);
+        $this->assign('roomName',  $roomName);
+        $this->assign('joinUrl',   $joinUrl);
+
+        return parent::render();
+    }
+
+    private function getEmailContentTextOnInvite($template_text, $ownerName, $roomName, $joinUrl)
+    {
+        //SET EMAIL TEMPLATE
+        $this->setTemplate($template_text);
+
+        $this->assign('ownerName', $ownerName);
+        $this->assign('roomName',  $roomName);
+        $this->assign('joinUrl',   $joinUrl);
+        $this->assign('nl', '%%%nl%%%');
+        $this->assign('tab', '%%%tab%%%');
+        $this->assign('space', '%%%space%%%');
+
+        $content = parent::render();
+        $search = array('%%%nl%%%', '%%%tab%%%', '%%%space%%%');
+        $replace = array("\n", '    ', ' ');
+
+        return str_replace($search, $replace, $content);
+    }
+
+    private function getEmailContentHtmlOnComment($template_html, $userName, $comment, $roomName, $roomUrl)
+    {
+        //SET EMAIL TEMPLATE
+        $this->setTemplate($template_html);
+
+        $this->assign('userName', $userName);
+        $this->assign('comment',  $comment);
+        $this->assign('roomName', $roomName);
+        $this->assign('roomUrl',  $roomUrl);
+
+        return parent::render();
+    }
+
+    private function getEmailContentTextOnComment($template_text, $userName, $comment, $roomName, $roomUrl)
+    {
+        //SET EMAIL TEMPLATE
+        $this->setTemplate($template_text);
+
+        $this->assign('userName', $userName);
+        $this->assign('comment',  $comment);
+        $this->assign('roomName', $roomName);
+        $this->assign('roomUrl',   $roomUrl);
+        $this->assign('nl', '%%%nl%%%');
+        $this->assign('tab', '%%%tab%%%');
+        $this->assign('space', '%%%space%%%');
+
+        $content = parent::render();
+        $search = array('%%%nl%%%', '%%%tab%%%', '%%%space%%%');
+        $replace = array("\n", '    ', ' ');
+
+        return str_replace($search, $replace, $content);
+    }
+
+    private function getEmailContentHtmlOnPublish($template_html, $userName, $datasetName)
+    {
+        //SET EMAIL TEMPLATE
+        $this->setTemplate($template_html);
+
+        $this->assign('userName',    $userName);
+        $this->assign('datasetName', $datasetName);
+
+        return parent::render();
+    }
+
+    private function getEmailContentTextOnPublish($template_text, $userName, $datasetName)
+    {
+        //SET EMAIL TEMPLATE
+        $this->setTemplate($template_text);
+
+        $this->assign('userName',    $userName);
+        $this->assign('datasetName', $datasetName);
+        $this->assign('nl', '%%%nl%%%');
+        $this->assign('tab', '%%%tab%%%');
+        $this->assign('space', '%%%space%%%');
+
+        $content = parent::render();
+        $search = array('%%%nl%%%', '%%%tab%%%', '%%%space%%%');
+        $replace = array("\n", '    ', ' ');
+
+        return str_replace($search, $replace, $content);
     }
 }
