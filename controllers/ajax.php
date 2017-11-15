@@ -979,6 +979,22 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
     }
 
     public function addNewMembersToRoomFromMobile(){
+
+        if (!OW::getUser()->isAuthenticated())
+        {
+            try
+            {
+                $user_id = ODE_CLASS_Tools::getInstance()->getUserFromJWT($_REQUEST['jwt']);
+            }
+            catch (Exception $e)
+            {
+                echo json_encode(array("status"  => "ko", "error_message" => $e->getMessage()));
+                exit;
+            }
+        }else{
+            $user_id = OW::getUser()->getId();
+        }
+
         $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
         if ($clean == null){
             echo json_encode(array("status" => false, "message" => 'Insane inputs detected'));
@@ -989,7 +1005,9 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         foreach($clean['users'] as $user){
             $u   = BOL_UserService::getInstance()->findByEmail($user);
             COCREATION_BOL_Service::getInstance()->addUserToRoom($room->id, $user, $u->id);
+            COCREATION_CLASS_EventHandler::getInstance()->sendNotificationRoomInvitation($user_id, $room, $u->id);
         }
+
 
         echo json_encode(array("status" => true, "message" => OW::getLanguage()->text('cocreation', 'feedback_members_add_successful')));
         exit;
