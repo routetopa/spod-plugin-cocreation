@@ -48,7 +48,6 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
             $datalet->data   = str_replace("'","&#39;", $datalet->data);
             $datalet->fields = str_replace("'","&#39;", $datalet->fields);
 
-            //$datalet_string = "<" . $datalet->component . " datalet-id='". $datalet->id ."' fields='[" . rtrim(ltrim($datalet->fields, "}"), "{") . "]'";
             $datalet_string = "<" . $datalet->component . " datalet-id='". $datalet->id ."' disable_my_space";
             foreach($datalet->params as $key => $value)
                 $datalet_string .= " " . $key . "='" . $value . "'";
@@ -85,13 +84,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         $this->assign('currentUser' , BOL_AvatarService::getInstance()->getDataForUserAvatars(array(OW::getUser()->getId()))[OW::getUser()->getId()]);
 
         $sheetUrl = COCREATION_BOL_Service::getInstance()->getSheetByRoomId($params['roomId'])[0]->url;
-        //$sheetUrl = preg_replace("/^(http:\/\/)(:)[0-9]*(\/)/", ":" . BOL_PreferenceService::getInstance()->findPreference('spreadsheet_server_port_preference')->defaultValue, $sheetUrl);
-        //$sheetName = explode('/', $sheetUrl)[4];
         $noteUrl = COCREATION_BOL_Service::getInstance()->getDocumentsByRoomId($params['roomId'])[0]->url;
-        //$noteUrl = preg_replace("/^(http:\/\/)(:)[0-9]*(\/)/", ":" . BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference')->defaultValue, $noteUrl);
-
-        /*$this->assign('spreadsheet', OW_URL_HOME . "ethersheet/s/" . $sheetUrl);
-        $this->assign('notes', OW_URL_HOME . "etherpad/p/" . $noteUrl);*/
 
         $this->assign('spreadsheet', "/ethersheet/s/" . $sheetUrl);
         $this->assign('notes', "/etherpad/p/" . $noteUrl);
@@ -112,28 +105,6 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         /* NEW DISCUSSION AGORA LIKE */
         $this->addComponent('discussion', new SPODDISCUSSION_CMP_Discussion($room->id));
         /* NEW DISCUSSION AGORA LIKE */
-
-        //DISCUSSION
-        /*$this->addComponent("comments", new COCREATION_CMP_DiscussionWrapper($params['roomId']));
-        $commentsParams = new SPODTCHAT_CLASS_CommentsParams('cocreation', COCREATION_BOL_Service::ROOM_ENTITY_TYPE);
-        $commentsParams->setEntityId($params['roomId']);
-        $commentsParams->setDisplayType(BASE_CommentsParams::DISPLAY_TYPE_WITH_LOAD_LIST);
-        $commentsParams->setOwnerId((OW::getUser()->getId()));
-        $commentsParams->setAddComment(true);
-        $commentsParams->setWrapInBox(false);
-        $commentsParams->setShowEmptyList(false);
-        $commentsParams->setCommentPreviewMaxCharCount(5000);
-        $commentsParams->setCommentEntityType(COCREATION_BOL_Service::COMMENT_ENTITY_TYPE);
-        $commentsParams->setNumberOfNestedLevel(2);
-        $commentsParams->level  = 0;
-        $commentsParams->nodeId = 0;
-        $commentCmp = new SPODTCHAT_CMP_Comments($commentsParams);
-        $this->addComponent('comments', $commentCmp);*/
-
-        /* ODE */
-        /*if (OW::getPluginManager()->isPluginActive('spodpr'))
-            $this->addComponent('private_room', new SPODPR_CMP_PrivateRoomCard('ow_attachment_btn', array('datalet', 'link')));*/
-        /* ODE */
 
         $this->assign("toolbar_color", ($room->type == "data") ? "#4CAF50" : "#FF9800");
         $this->assign('datalet_definition_import', ODE_CLASS_Tools::getInstance()->get_all_datalet_definitions());
