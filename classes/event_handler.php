@@ -119,40 +119,39 @@ class COCREATION_CLASS_EventHandler extends OW_ActionController
     }
 
     //Custom on event notification
-    public function sendNotificationRoomCreated($userId, $room)
-    {
+//    public function sendNotificationRoomCreated($userId, $room)
+//    {
         //EMAIL
-        $message = OW::getLanguage()->text('cocreation','notification_room_created', ['ownername' => "<b><a>" . BOL_UserService::getInstance()->getDisplayName($room->ownerId) . "</a></b>"]) .
-            " <b><a href=\"" . str_replace("index/", $room->id, OW::getRouter()->urlFor( 'COCREATION_CTRL_DataRoom' , 'index')) . "\">". $room->name ."</a></b>";
-
-        $event = new OW_Event('notification_system.add_notification', array(
-            'notifications' => [
-                new SPODNOTIFICATION_CLASS_MailEventNotification(
-                    COCREATION_CLASS_Consts::PLUGIN_NAME,
-                    COCREATION_CLASS_Consts::PLUGIN_ACTION_NEW_ROOM,
-                    COCREATION_CLASS_Consts::PLUGIN_ACTION_NEW_ROOM,
-                    $userId,
-                    null,
-                    OW::getLanguage()->text('cocreation','email_notifications_setting_room_created'),
-                    $message,
-                    $message
-                ),
-                new SPODNOTIFICATION_CLASS_MobileEventNotification(
-                    COCREATION_CLASS_Consts::PLUGIN_NAME,
-                    COCREATION_CLASS_Consts::PLUGIN_ACTION_NEW_ROOM,
-                    COCREATION_CLASS_Consts::PLUGIN_ACTION_NEW_ROOM,
-                    $userId,
-                    null,
-                    'CoCreation',
-                    $message,
-                    []
-                )
-            ]
-        ));
-
-        OW::getEventManager()->trigger($event);
-
-    }
+//        $message = OW::getLanguage()->text('cocreation','notification_room_created', ['ownername' => "<b><a>" . BOL_UserService::getInstance()->getDisplayName($room->ownerId) . "</a></b>"]) .
+//            " <b><a href=\"" . str_replace("index/", $room->id, OW::getRouter()->urlFor( 'COCREATION_CTRL_DataRoom' , 'index')) . "\">". $room->name ."</a></b>";
+//
+//        $event = new OW_Event('notification_system.add_notification', array(
+//            'notifications' => [
+//                new SPODNOTIFICATION_CLASS_MailEventNotification(
+//                    COCREATION_CLASS_Consts::PLUGIN_NAME,
+//                    COCREATION_CLASS_Consts::PLUGIN_ACTION_NEW_ROOM,
+//                    COCREATION_CLASS_Consts::PLUGIN_ACTION_NEW_ROOM,
+//                    $userId,
+//                    null,
+//                    OW::getLanguage()->text('cocreation','email_notifications_setting_room_created'),
+//                    $message,
+//                    $message
+//                ),
+//                new SPODNOTIFICATION_CLASS_MobileEventNotification(
+//                    COCREATION_CLASS_Consts::PLUGIN_NAME,
+//                    COCREATION_CLASS_Consts::PLUGIN_ACTION_NEW_ROOM,
+//                    COCREATION_CLASS_Consts::PLUGIN_ACTION_NEW_ROOM,
+//                    $userId,
+//                    null,
+//                    'CoCreation',
+//                    $message,
+//                    []
+//                )
+//            ]
+//        ));
+//
+//        OW::getEventManager()->trigger($event);
+//    }
 
     public function sendNotificationRoomInvitation($userId, $room, $newMemberId)
     {
@@ -204,7 +203,7 @@ class COCREATION_CLASS_EventHandler extends OW_ActionController
                     COCREATION_CLASS_Consts::PLUGIN_ACTION_JOIN,
                     $userId,
                     $room->ownerId,
-                    OW::getLanguage()->text('cocreation', 'email_joined', array("user_name" => BOL_UserService::getInstance()->getDisplayName($room->ownerId), "room_name" => $room->name)),
+                    OW::getLanguage()->text('cocreation', 'email_joined', array("user_name" => BOL_UserService::getInstance()->getDisplayName($userId), "room_name" => $room->name)),
                     $notification_on_join['mail_html'],
                     $notification_on_join['mail_text']
                 ),

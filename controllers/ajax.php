@@ -89,7 +89,16 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             }
         }
 
-        COCREATION_CLASS_EventHandler::getInstance()->sendNotificationRoomCreated($user_id, $room);
+//        COCREATION_CLASS_EventHandler::getInstance()->sendNotificationRoomCreated($user_id, $room);
+
+        SPODNOTIFICATION_BOL_Service::getInstance()->registerUserForNotification(
+            OW::getUser()->getId(),
+            COCREATION_CLASS_Consts::PLUGIN_NAME,
+            SPODNOTIFICATION_CLASS_MailEventNotification::$TYPE,
+            COCREATION_CLASS_Consts::PLUGIN_ACTION_COMMENT .'_'. $room->id,
+            SPODNOTIFICATION_CLASS_Consts::FREQUENCY_IMMEDIATELY,
+            COCREATION_CLASS_Consts::PLUGIN_ACTION_COMMENT
+        );
 
         OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_create_room_successful'));
         OW::getApplication()->redirect(OW::getRouter()->urlFor('COCREATION_CTRL_Main', 'index'));
@@ -418,6 +427,15 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         $room  = COCREATION_BOL_Service::getInstance()->getRoomById($clean['roomId']);
         COCREATION_BOL_Service::getInstance()->memberJoinToRoom($clean['memberId'], $clean['roomId']);
         COCREATION_CLASS_EventHandler::getInstance()->sendNotificationRoomJoin($user_id, $room, $clean['memberId']);
+
+        SPODNOTIFICATION_BOL_Service::getInstance()->registerUserForNotification(
+            $clean['memberId'],
+            COCREATION_CLASS_Consts::PLUGIN_NAME,
+            SPODNOTIFICATION_CLASS_MailEventNotification::$TYPE,
+            COCREATION_CLASS_Consts::PLUGIN_ACTION_COMMENT .'_'. $clean['roomId'],
+            SPODNOTIFICATION_CLASS_Consts::FREQUENCY_IMMEDIATELY,
+            COCREATION_CLASS_Consts::PLUGIN_ACTION_COMMENT
+        );
 
         if(isset($clean['mobile'])){
             echo json_encode(array("status" => true, "message" => 'Join successful'));
@@ -868,7 +886,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
             $result = $this->initEthersheetMediaRoom("dataset_room_".$room->id."_".$randomString);
 
-            COCREATION_CLASS_EventHandler::getInstance()->sendNotificationRoomCreated($user_id, $room);
+//            COCREATION_CLASS_EventHandler::getInstance()->sendNotificationRoomCreated($user_id, $room);
 
             echo json_encode(array("status" => true, "message" => 'room created'));
             exit;
@@ -1012,5 +1030,4 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         echo json_encode(array("status" => true, "message" => OW::getLanguage()->text('cocreation', 'feedback_members_add_successful')));
         exit;
     }
-
 }
