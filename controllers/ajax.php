@@ -543,7 +543,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         exit;
     }
 
-    function getNoteHTMLByPadIDApiUrl() {
+    public function getNoteHTMLByPadIDApiUrl() {
         $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
         if ($clean == null){
             OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'insane_user_email_value'));
