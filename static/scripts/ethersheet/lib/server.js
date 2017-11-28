@@ -125,8 +125,8 @@ exports.createServer = function(config){
         });
     });
 
-    //import csv
-    app.post('/import/csv', function(req,res){
+    //Original Ethersheet: import csv
+    /*app.post('/import/csv', function(req,res){
         var form = new formidable.IncomingForm();
         form.parse(req, function(err, fields, files){
             var csv_path = files.csv_file.path;
@@ -142,7 +142,70 @@ exports.createServer = function(config){
                 })
             });
         });
+    });*/
+
+    //import csv
+    app.post('/import/csv', function(req,res){
+        var form = new formidable.IncomingForm();
+        form.parse(req, function(err, fields, files){
+            var csv_path = files.csv_file.path;
+            var sheet_id = fields.sheet_id;
+            var sheet_name = fields.sheet_name;
+
+            //When the request does not contain the sheet_id,
+            //it checks whether there is the sheetName on the url or in the fields.
+            if (typeof sheet_id === 'undefined' && typeof sheet_name !== 'undefined') {
+                es.getSheetCollectionIds(sheet_name, function (err, sheet_data) {
+                    if (!err && typeof sheet_data !== 'undefined' && sheet_data.length == 1) {
+                        sheet_id = sheet_data[0];
+
+                        helperImportCSV(csv_path, sheet_id, function(err) {
+                            if (err) {
+                                res.send(500,err.message); return;
+                                return;
+                            }
+                            res.redirect('back');
+                            pub_server.refreshClients(sheet_id);
+                        });
+                    }
+                });
+                return;
+            }
+
+            helperImportCSV(csv_path, sheet_id, function(err) {
+                if (err) { res.send(500,err.message); return; }
+
+                res.redirect('back');
+                pub_server.refreshClients(sheet_id);
+            });
+        });
     });
+
+    /**
+     * Helper function, reads the CSV file from the request
+     * and creates a new sheet with the data.
+     * @param csv_path
+     * @param sheet_id
+     * @param cb
+     */
+    function helperImportCSV(csv_path, sheet_id, cb) {
+        fs.readFile(csv_path, function (err, data) {
+            if (err) {
+                cb(err);
+                return;
+            }
+
+            es.createSheetFromCSV(sheet_id, data, function (err) {
+                if (err) {
+                    cb(err);
+                    return;
+                }
+
+                cb(null);
+            });
+
+        });
+    };
 
     //Upload image from a cell
     //Post files
