@@ -215,6 +215,10 @@ overflow:scroll;
   line-height: 14px;
 }
 
+td.warning {
+  background-color: #FFAB40;
+}
+
 td.cpselected{
   background-color: #4CAE50;
   opacity: 0.6;

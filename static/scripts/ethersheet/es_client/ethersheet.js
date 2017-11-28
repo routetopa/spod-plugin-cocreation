@@ -25,6 +25,7 @@ var initializeExpressionHelpers = require('./lib/expression_helpers');
 //ISISLab code
 var TableFunctionMenu = require("./views/table_function_menu");
 var TableCopyAndPasteFeature = require("./views/table_copy_and_paste");
+var QualitycheckerMenuView = require("./views/qualitychecker_menu");
 //End ISISLab code
 
 // inputs
@@ -163,6 +164,16 @@ Ethersheet.prototype.initializeDisplay = function(o){
       table: es.table,
       es: es
     });
+
+    //QUALITYCHECKER
+
+    es.qualitychecker_menu = new QualitycheckerMenuView({
+        el: $('#es-qualitychecker-menu-container', es.$el),
+        data: es.data,
+        table: es.table,
+        table_function_menu: es.table_function_menu
+    }).render();
+
     //end ISISLab code
 
     $(".i18n").i18n();

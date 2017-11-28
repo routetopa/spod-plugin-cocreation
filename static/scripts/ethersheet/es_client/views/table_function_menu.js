@@ -299,7 +299,7 @@ define( function(require,exports,module){
             return Math.floor(Object.values(this.getSheet().allRows).indexOf(row) / this.chunk ) + 1;
         },
 
-        scrollTo: function(cell){
+        scrollTo: function(cell) {
             var low_limit = (10 * (this.chunk / 2));
             //vertical scroll
             var v_offset = cell.offset().top;
@@ -310,6 +310,37 @@ define( function(require,exports,module){
             }
             //horizintal scroll
             this.table.$grid.scrollLeft(cell.offset().left - low_limit);
+        },
+
+        scrollTo: function(cell) {
+            var low_limit = (10 * (this.chunk / 2));
+            //vertical scroll
+            var v_offset = cell.offset().top;
+            if(v_offset < low_limit){
+                this.table.$grid.scrollTop(this.rows_delta);
+            }else{
+                this.table.$grid.scrollTop(v_offset - low_limit);
+            }
+            //horizintal scroll
+            this.table.$grid.scrollLeft(cell.offset().left - low_limit);
+        },
+
+        scrollTo2: function(cell) {
+            var low_limit = (10 * (this.chunk / 2));
+            //vertical scroll
+            var v_offset = cell.offset().top;
+            if(v_offset < low_limit){
+                this.table.$grid.scrollTop(this.rows_delta);
+            }else{
+                this.table.$grid.scrollTop(v_offset - low_limit);
+            }
+            //horizintal scroll
+            const _cellLeftOffset = cell.offset().left;
+            if (_cellLeftOffset > this.table.$grid.width())
+                this.table.$grid.scrollLeft(cell.offset().left - low_limit);
+            
+            //if (this.table.$grid.width _cellLeftOffset )
+            //this.table.$grid.scrollLeft(cell.offset().left - low_limit);
         },
 
         scroll: function(grid_el){
