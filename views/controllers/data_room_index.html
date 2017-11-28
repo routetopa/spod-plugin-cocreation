@@ -426,7 +426,7 @@
         background: #00BCD4;
         color: white;
     }
-    
+
 </style>
 <style>
 
@@ -532,7 +532,12 @@
 
                     <div class="separator"></div>
 
-                    <paper-button raised class="menu_button" title='Import' on-tap="_importDatasetFromSPOD">Import</paper-button>
+                    <paper-button raised class="menu_button" title='Import' on-tap="_importDatasetFromSPOD">Import from SPOD</paper-button>
+
+                    <paper-button raised class="menu_button" title='{text key="cocreation+room_publish_dataset_tooltip"}' on-tap="_publishDataset">{text key="cocreation+publish_dataset_button_label"}</paper-button>
+                    {if $canPublishOnCKAN}
+                    <paper-button raised class="menu_button" title='{text key="cocreation+room_publish_on_ckan_tooltip"}' on-tap="_publishOnCkan">{text key="cocreation+publish_on_ckan_button_label"}</paper-button>
+                    {/if}
 
                 </div>
 
@@ -545,7 +550,7 @@
 
                         <div class="hader_title_container">
                             <div class="header_title" title="{$room->name}">{$room->name}</div>
-                            <paper-button raised title='{text key="cocreation+room_publish_dataset_tooltip"}' on-tap="_publishDataset">{text key="cocreation+publish_dataset_button_label"}</paper-button>
+                            <!--<paper-button raised title='{text key="cocreation+room_publish_dataset_tooltip"}' on-tap="_publishDataset">{text key="cocreation+publish_dataset_button_label"}</paper-button>-->
                             <!--<paper-button raised title='{text key="cocreation+room_publish_on_ckan_tooltip"}' on-tap="_publishOnCkan">{text key="cocreation+publish_on_ckan_button_label"}</paper-button>-->
                         </div>
 
