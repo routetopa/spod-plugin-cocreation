@@ -252,3 +252,68 @@ room.loadDiscussion = function(){
             onload.innerHTML = data.onloadScript;
         });
 };
+
+////////////////////////////////////////////////
+/// FUNCTION TO IMPORT DATASET FROM CKAN/SPOD.
+///
+
+room._importDatasetFromSPOD = function () {
+    this.previewFloatBoxImportFromSPOD = OW.ajaxFloatBox('COCREATION_CMP_ImportDatasetFromSpod', { message: 'loading ...' }, {width:'90%', height:'80vh', iconClass:'ow_ic_lens', title:'MyTitle'} );
+};//EndFunction.
+
+room._uploadDatasetOnEthersheet = function (event, cb) {
+    //Prepare CSV file.
+    const _jsonDataset = event.detail.dataset.data;
+    const _csvDataset = room._convertDatasetToCSV(_jsonDataset);
+    const fileCSVDataset = new File([_csvDataset], "dummy.csv", { type: 'application/vnd.ms-excel' });
+
+    var formData = new FormData();
+    formData.append("csv_file", fileCSVDataset);
+    formData.append("sheet_name", COCREATION.sheetName);
+    //formData.append("sheet_id", COCREATION.sheetName);
+    //formData.append("sheet_id", "55074c27-52d6-4208-b30e-c917b4c1702f");
+
+    //Create the target url.
+    var href = window.location.href;
+    var domain = href.substring(0, href.indexOf("/cocreation"));
+    var targetUrl = domain + "/ethersheet/import/csv" + "?sheetName=" + COCREATION.sheetName;
+
+    //Perform HTTP POST REQUEST.
+    var xhttp = new XMLHttpRequest();
+    xhttp.onload = function (event) {
+        document.querySelector('#spreadsheet_container').contentWindow.location.reload(true);
+        if(typeof room.previewFloatBoxImportFromSPOD != 'undefined')
+            room.previewFloatBoxImportFromSPOD.close();
+        cb({ success: true });
+    };
+    xhttp.onerror = function (event) {
+        document.querySelector('#spreadsheet_container').contentWindow.location.reload(true);
+        cb({ success: false, error: xhttp.statusText });
+    };
+    xhttp.open("POST", targetUrl, true);
+    xhttp.send(formData);
+};//EndFunction.
+
+room._convertDatasetToCSV = function (_jsonData) {
+    var _csvData = "";
+
+    //Header.
+    var keys = Object.keys(_jsonData[0]);
+    var _csvHeader = "";
+    for (var j=0, _key; j<keys.length && (_key=keys[j]); j++) { //Loop on keys.
+        _csvHeader += _key + (j<keys.length-1 ? ';' : "\r\n" );
+    }//EndFor.
+    _csvData += _csvHeader;
+
+    //Rows.
+    for (var i=0,_row; i<_jsonData.length && (_row=_jsonData[i]); i++) {//Loop on rows.
+        var _csvRow = "";
+        for (var j=0, _key; j<keys.length && (_key=keys[j]); j++) { //Loop on column.
+            var value = _row[_key];
+            _csvRow += value + (j<keys.length-1 ? ';' : "\r\n" );
+        }//EndForCols.
+        _csvData += _csvRow;
+    }//EndForRows.
+
+    return _csvData;
+};//EndFunction.
