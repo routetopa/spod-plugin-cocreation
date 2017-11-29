@@ -194,7 +194,7 @@ Ethersheet.prototype.executeCommand = function(c){
 
   /*isislab*/
   //var cmd = JSON.parse(c.sanitized_data);
-  if(c.type == "sheet" && c.action == "commitCell"){
+  if(c.type == "sheet" && (c.action == "commitCell" || c.action == "updateCell")){
     commandQueue.push(1);
     clearTimeout(timer);
     timer = setInterval(messageDispatcher, 10000);
@@ -210,7 +210,7 @@ Ethersheet.prototype.sendCommand = function(c){
         this.socket.send(Command.serialize(c));
     }
 
-    if( c.type == "sheet" && c.action == "commitCell"){
+    if( c.type == "sheet" &&(c.action == "commitCell" || c.action == "updateCell")){
         commandQueue.push(1);
         clearTimeout(timer);
         timer = setInterval(messageDispatcher, 10000);
