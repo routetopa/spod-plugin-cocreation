@@ -112,3 +112,4 @@ $groupName = 'cocreation';
 $authorization->addGroup($groupName);
 $authorization->addAction($groupName, 'view', true);
 $authorization->addAction($groupName, 'add_comment');
+$authorization->addAction($groupName, 'Publish on CKAN');

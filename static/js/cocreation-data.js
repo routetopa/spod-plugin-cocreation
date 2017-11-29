@@ -23,26 +23,13 @@ $(document).ready(function() {
     });*/
 
    window.addEventListener('metadata-list-controllet_update-metadata', function(e){
-        var metadata = JSON.parse(e.detail.metadata);
-        $.post(ODE.ajax_coocreation_room_update_metadata,
-            {
-                roomId                             : COCREATION.roomId,
-                core_common_required_metadata      : JSON.stringify(metadata.CC_RF),
-                common_core_if_applicable_metadata : JSON.stringify(metadata.CC_RAF),
-                expanded_metadata                  : JSON.stringify(metadata.EF)
-            },
-            function (data, status) {
-                COCREATION.metadata = metadata;
-                /*var response = JSON.parse(data);
-                if(response.status == "ok"){
-                    room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'metadata_successfully_saved');
-                    room.$.syncToast.show();
-                }else{
-                    room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'error_metadata_updates');
-                    room.$.syncToast.show();
-                }*/
-            }
-        );
+       //I want receive only my events, discard the others.
+       //NOTE: this is to have multiple the metadata-list-controllet in the page as in the
+       //cace of co-creation.
+       if (e.target.id != "metadata_component") return;
+
+       var metadata = JSON.parse(e.detail.metadata);
+       room.persistMetadata(metadata);
     });
 
     window.addEventListener('message', function (e) {
@@ -254,6 +241,27 @@ room.loadDiscussion = function(){
 };
 
 ////////////////////////////////////////////////
+/// METADATA MANAGEMENT
+///
+
+/**
+ * Sends metadata to server to save them.
+ */
+room.persistMetadata = function (metadata) {
+    $.post(ODE.ajax_coocreation_room_update_metadata,
+        {
+            roomId                             : COCREATION.roomId,
+            core_common_required_metadata      : JSON.stringify(metadata.CC_RF),
+            common_core_if_applicable_metadata : JSON.stringify(metadata.CC_RAF),
+            expanded_metadata                  : JSON.stringify(metadata.EF)
+        },
+        function (data, status) {
+            COCREATION.metadata = metadata;
+        }
+    );
+};
+
+////////////////////////////////////////////////
 /// FUNCTION TO IMPORT DATASET FROM CKAN/SPOD.
 ///
 
@@ -317,3 +325,109 @@ room._convertDatasetToCSV = function (_jsonData) {
 
     return _csvData;
 };//EndFunction.
+
+////////////////////////////////////////////////
+/// FUNCTIONS TO PUBLISH ON CKAN.
+///
+
+room._publishOnCkan = function () {
+    OW.ajaxFloatBox('COCREATION_CMP_PublishDatasetOnCkan', { message: 'loading ...' }, {width:'90%', height:'80vh', iconClass:'ow_ic_lens', title:''} );
+};//EndFunction.
+
+room.uploadOnCkan = function (_jsonData, _jsonCocreationMetadata, notes, callbackUpload) {
+    const _csvData = room._convertDatasetToCSV(_jsonData);
+
+    const roomName = JSON.parse(COCREATION.info).name + "_" + Math.floor((Math.random()*1000) + 1);
+
+    //Check the metadata type
+    //Note: here metadata is a JS object when the user is on the metadata form,
+    //otherwise it is a string.
+    //var _jsonCocreationMetadata = COCREATION.metadata;
+    //if (typeof COCREATION.metadata === 'string') {
+    //    _jsonCocreationMetadata = JSON.parse(COCREATION.metadata);
+    //}
+
+    const fileCSVData = new File([_csvData], roomName + ".csv", { type: 'application/CSV' });
+
+    //Cocreation notes.
+    var fileNotes = null;
+    if (notes != null)
+        fileNotes = new File([notes.content], notes.filename + "." + notes.extension, { type: notes.content_type });
+
+    //Before to start the upload it checks the metadata.
+    const $dataset_title = _jsonCocreationMetadata.CC_RF.title;
+    const $dataset_description = _jsonCocreationMetadata.CC_RF.description;
+    const $contact_name = _jsonCocreationMetadata.CC_RF.contact_name;
+    const $contact_email = _jsonCocreationMetadata.CC_RF.contact_email;
+    const $dataset_key = COCREATION.sheetName;
+
+    if ($dataset_title.trim().length == 0) {
+        callbackUpload({ success: false, errors: [ 'The title is required field in the metadata. Check dataset metadata.' ]});
+        return;
+    }
+
+    if ($dataset_description.trim().length == 0) {
+        callbackUpload({ success: false, errors: [ 'The description is required field in the metadata. Check dataset metadata.' ]});
+        return;
+    }
+
+    var metadata = { name: $dataset_key, title: $dataset_title, notes: $dataset_description, description: $dataset_description,
+        author: $contact_name, author_email: $contact_email };
+
+    //Create the package on CKAN.
+    const $platformUrl = COCREATION.ckan_platform_url_preference ;"http://ckan.routetopa.eu";
+    const $keyapi = COCREATION.ckan_api_key_preference;//"8febb463-f637-45b3-a6cb-d8957cdefbf3";
+
+    var client = new CKANClient($platformUrl, $keyapi);
+
+    client.createPackage(metadata, function (response, err) {
+        if (err != null) {
+            var _jsonError = JSON.parse(response);
+            var _errors = _jsonError.error.name;
+
+            if (typeof callbackUpload !== 'undefined')
+                callbackUpload({ success: false, errors: _errors });
+            return;
+        }
+
+        //Create the resource.
+        var _json = JSON.parse(response);
+        var package_id = _json.result.id;
+
+        //Changes metadata to adapt them for the
+        metadata.name =  $dataset_title;
+
+        //Upload CSV FILE.
+        client.createResourceCSV(package_id, fileCSVData, metadata, function (response, err) {
+            var uploadedPackageId = JSON.parse(response).result.id;
+            if (err != null) {
+                var _jsonError = JSON.parse(response);
+                var _errors = _jsonError.error.name;
+
+                callbackUpload({ success: false, errors: _errors, package: { id: uploadedPackageId } });
+            } else {
+                //Upload the NOTES.
+                if (notes != null) {
+                    var notesMetadata = JSON.parse(JSON.stringify(metadata)); //Clone metadata.
+                    notesMetadata.name = notes.filename;
+                    notesMetadata.format = notes.format;
+                    notesMetadata.description = "Co-creation notes";
+                    client.createResource(package_id, fileNotes, notesMetadata, function (response, err) {
+                        var uploadedPackageId = JSON.parse(response).result.id;
+                        if (err != null) {
+                            var _jsonError = JSON.parse(response);
+                            var _errors = _jsonError.error.name;
+                            callbackUpload({ success: false, errors: _errors, package: { id: uploadedPackageId } });
+                        } else
+                            callbackUpload({ success: true, package_id: package_id });
+                    });//EndCreateResource.
+                }
+            }//EndIf.
+        });//EndCreateResource.
+
+
+
+    });//EndCreatePackage.
+};//EndFunction.
+
+//////////////////////////////////////////////////////////////////////////////
