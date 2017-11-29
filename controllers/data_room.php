@@ -109,6 +109,25 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         $this->assign("toolbar_color", ($room->type == "data") ? "#4CAF50" : "#FF9800");
         $this->assign('datalet_definition_import', ODE_CLASS_Tools::getInstance()->get_all_datalet_definitions());
 
+        //Publish on CKAN Authorization check.
+        //It is useful to decide whether to show the Publish on CKAN or not.
+        $ckan_platform_url_preference = BOL_PreferenceService::getInstance()->findPreference(COCREATION_CTRL_Admin::PREF_POCKAN_PLATFORM_URL);
+        $ckan_api_key_preference = BOL_PreferenceService::getInstance()->findPreference(COCREATION_CTRL_Admin::PREF_POCKAN_API_KEY);
+        $canPublishOnCKAN = OW::getAuthorization()->isUserAuthorized(OW::getUser()->getId(), "cocreation", "Publish on CKAN");
+        $canPublishOnCKAN = $canPublishOnCKAN
+            && (!empty($ckan_platform_url_preference) && strlen($ckan_platform_url_preference->defaultValue) > 0)
+            && (!empty($ckan_api_key_preference) && strlen($ckan_api_key_preference->defaultValue) > 0);
+        $this->assign('canPublishOnCKAN', $canPublishOnCKAN);
+
+        $ckan_platform_url_preference_default_value = "";
+        $ckan_api_key_preference_default_value = "";
+        if ($canPublishOnCKAN) {
+            $this->assign('PublishOnCKAN_platform_url', $ckan_platform_url_preference->defaultValue);
+            $this->assign('PublishOnCKAN_api_key', $ckan_api_key_preference->defaultValue);
+            $ckan_platform_url_preference_default_value = $ckan_platform_url_preference->defaultValue;
+            $ckan_api_key_preference_default_value = $ckan_api_key_preference->defaultValue;
+        }
+
         $js = UTIL_JsGenerator::composeJsString('
                 ODE.ajax_coocreation_room_get_datalets        = {$ajax_coocreation_room_get_datalets}
                 ODE.ajax_coocreation_room_get_array_sheetdata = {$ajax_coocreation_room_get_array_sheetdata}
@@ -147,7 +166,9 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                'userId'                                    => OW::getUser()->getId(),
                'roomInfo'                                  => json_encode($info),
                'spreasheet_server_port'                    => BOL_PreferenceService::getInstance()->findPreference('spreadsheet_server_port_preference')->defaultValue,
-               'sheet_images_url'                          => OW_URL_HOME . "ethersheet/images/" . $sheetUrl
+               'sheet_images_url'                          => OW_URL_HOME . "ethersheet/images/" . $sheetUrl,
+                'ckan_platform_url_preference'             => $ckan_platform_url_preference_default_value,
+                'ckan_api_key_preference'                  => $ckan_api_key_preference_default_value
         ));
         OW::getDocument()->addOnloadScript($js);
         OW::getDocument()->addOnloadScript("data_room.init();");

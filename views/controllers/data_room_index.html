@@ -266,7 +266,7 @@
 
     .screen_hidden_header {
         height: 24px;
-        width: calc(100% - 292px);
+        width: calc(100% - 330px);
         padding: 12px 146px 12px 0;
         background-color: transparent;
         color: #FFFFFF;
@@ -419,6 +419,14 @@
     {
         z-index: 1;
     }
+
+    .menu_button {
+        width: calc(100% - 32px);
+        margin: 8px 16px;
+        background: #00BCD4;
+        color: white;
+    }
+
 </style>
 <style>
 
@@ -472,30 +480,6 @@
                         <paper-item onclick="room.handleSelectUIMode('notes')">
                             <iron-icon icon="description"></iron-icon>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                             <paper-item-body two-lines title='{text key="cocreation+room_notes_tooltip"}'>
                                 <div>{text key="cocreation+room_notes_tab_label"}</div>
                             </paper-item-body>
@@ -546,6 +530,15 @@
                         </paper-item-body>
                     </paper-item>
 
+                    <div class="separator"></div>
+
+                    <paper-button raised class="menu_button" title='Import' on-tap="_importDatasetFromSPOD">Import from SPOD</paper-button>
+
+                    <paper-button raised class="menu_button" title='{text key="cocreation+room_publish_dataset_tooltip"}' on-tap="_publishDataset">{text key="cocreation+publish_dataset_button_label"}</paper-button>
+                    {if $canPublishOnCKAN}
+                    <paper-button raised class="menu_button" title='{text key="cocreation+room_publish_on_ckan_tooltip"}' on-tap="_publishOnCkan">{text key="cocreation+publish_on_ckan_button_label"}</paper-button>
+                    {/if}
+
                 </div>
 
             </paper-header-panel>
@@ -557,7 +550,7 @@
 
                         <div class="hader_title_container">
                             <div class="header_title" title="{$room->name}">{$room->name}</div>
-                            <paper-button raised title='{text key="cocreation+room_publish_dataset_tooltip"}' on-tap="_publishDataset">{text key="cocreation+publish_dataset_button_label"}</paper-button>
+                            <!--<paper-button raised title='{text key="cocreation+room_publish_dataset_tooltip"}' on-tap="_publishDataset">{text key="cocreation+publish_dataset_button_label"}</paper-button>-->
                             <!--<paper-button raised title='{text key="cocreation+room_publish_on_ckan_tooltip"}' on-tap="_publishOnCkan">{text key="cocreation+publish_on_ckan_button_label"}</paper-button>-->
                         </div>
 

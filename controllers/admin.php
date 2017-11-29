@@ -2,6 +2,8 @@
 
 class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
 {
+    const PREF_POCKAN_PLATFORM_URL = "ckan_platform_url";
+    const PREF_POCKAN_API_KEY = "ckan_api_key";
 
     public function settings($params)
     {
@@ -114,6 +116,20 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
             $this->assign('dataset_room_status', true);
             $spreadsheet_room_field->setValue($dataset_room_status_preference->defaultValue);
         }
+
+        //PUBLISH ON CKAN - CKAN URL.
+        $txtCKANPlatformURL = new TextField($this::PREF_POCKAN_PLATFORM_URL);
+        $preference = BOL_PreferenceService::getInstance()->findPreference($this::PREF_POCKAN_PLATFORM_URL);
+        $ckan_platform_url_value = empty($preference) ? '' : $preference->defaultValue;
+        $txtCKANPlatformURL->setValue($ckan_platform_url_value);
+        $form->addElement($txtCKANPlatformURL);
+
+        //PUBLISH ON CKAN - key.
+        $txtCKANApiKey = new TextField($this::PREF_POCKAN_API_KEY);
+        $preference = BOL_PreferenceService::getInstance()->findPreference($this::PREF_POCKAN_API_KEY);
+        $ckan_api_key_value = empty($preference) ? '' : $preference->defaultValue;
+        $txtCKANApiKey->setValue($ckan_api_key_value);
+        $form->addElement($txtCKANApiKey);
 
         $submit->setValue('SAVE');
         $form->addElement($submit);
@@ -247,6 +263,25 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
 
             BOL_PreferenceService::getInstance()->savePreference($dataset_room_status_preference);
 
+            //PUBLISH ON CKAN: save the CKAN url.
+            $ckan_platform_url_preference = BOL_PreferenceService::getInstance()->findPreference($this::PREF_POCKAN_PLATFORM_URL);
+            if (empty($ckan_platform_url_preference)) $ckan_platform_url_preference = new BOL_Preference();
+
+            $ckan_platform_url_preference->key = $this::PREF_POCKAN_PLATFORM_URL;
+            $ckan_platform_url_preference->sortOrder = 5;
+            $ckan_platform_url_preference->sectionName = 'general';
+            $ckan_platform_url_preference->defaultValue = $data[$this::PREF_POCKAN_PLATFORM_URL];
+            BOL_PreferenceService::getInstance()->savePreference($ckan_platform_url_preference);
+
+            //PUBLISH ON CKAN: save the CKAN key.
+            $ckan_api_key_preference = BOL_PreferenceService::getInstance()->findPreference($this::PREF_POCKAN_API_KEY);
+            if (empty($ckan_api_key_preference)) $ckan_api_key_preference = new BOL_Preference();
+
+            $ckan_api_key_preference->key = $this::PREF_POCKAN_API_KEY;
+            $ckan_api_key_preference->sortOrder = 6;
+            $ckan_api_key_preference->sectionName = 'general';
+            $ckan_api_key_preference->defaultValue = $data[$this::PREF_POCKAN_API_KEY];
+            BOL_PreferenceService::getInstance()->savePreference($ckan_api_key_preference);
         }
     }
 
