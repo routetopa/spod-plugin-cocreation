@@ -50,7 +50,7 @@ define( function(require,exports,module){
                             $(".es-overlay").remove();
                         },
                         error : function(data){
-                            alert(data.statusText);
+                            alert(data.statusText + ": the file size must be less than 3Mb");
                             $('#es-modal-overlay').hide();
                             $(".es-overlay").remove();
                         }
