@@ -43,7 +43,20 @@ $(document).ready(function() {
                         data = JSON.parse(data);
                         COCREATION.datalets = data.datalets;
                         room.$.datalets_slider.setDatalets([]);
-                        setTimeout(function(){room.$.datalets_slider.setDatalets(COCREATION.datalets);},100);
+                        setTimeout(function()
+                            {
+                               room.$.datalets_slider.setDatalets(COCREATION.datalets);
+                                $.get(COCREATION.sheet_images_url,
+                                    function (data, status) {
+                                        if(data.status)
+                                        {
+                                            room.$.image_slider.setImages(data.images);
+                                        }
+                                    }
+                                );
+                            },
+                            100);
+
                     }
                 );
                 break;
