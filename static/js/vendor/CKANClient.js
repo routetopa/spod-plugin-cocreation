@@ -138,17 +138,102 @@ CKANClient.prototype = (function() {
                 });
         },//EndFunction.
 
+        showPackage: function(package_id, callback) {
+            var targetUrl = this.baseApiUrl + "package_show";
+
+            const key = package_id.toLowerCase();
+            var data = {
+                id: key
+            }
+
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function (_xmlHttpRequest) {
+                const _responseText = _xmlHttpRequest.currentTarget.responseText;
+                if (this.status >= 200 && this.status < 300)
+                    callback( _responseText, null );
+                else
+                    callback( _responseText, { status: xhttp.status, statusText: xhttp.statusText } );
+            };
+            xhttp.onerror = function (err) {
+                callback( null, { status: xhttp.status, statusText: xhttp.statusText } );
+            };
+            xhttp.open("POST", targetUrl, true);
+            xhttp.setRequestHeader('X-CKAN-API-Key', this.authToken);//Authentication.
+            xhttp.setRequestHeader('Content-Type', 'application/json');
+            xhttp.send(JSON.stringify(data));
+        },//EndFunction.
+
+        updatePackage: function (package_id, data, callback) {
+            const $self = this;
+            this.showPackage(package_id, function (response) {
+                var _jsonResponse = JSON.parse(response);
+                if (_jsonResponse.success == false) {
+                    const errorObj = { success: false, statusText: "Nothing to update", responseText: response };
+                    callback (errorObj);
+                    return;
+                }
+
+                var targetUrl = $self.baseApiUrl + "package_update";
+                var _ckanPackageData = _jsonResponse.result;
+
+                _ckanPackageData.title = data.title;
+                _ckanPackageData.notes = data.notes;
+                _ckanPackageData.description = data.description;
+                _ckanPackageData.author = data.author;
+                _ckanPackageData.author_email = data.author_email;
+
+                var _sCkanPackageData = JSON.stringify(_ckanPackageData);
+                $self.makeHTTPRequest(targetUrl, _sCkanPackageData, callback);
+            });
+        },//EndFunction.
+
+        updateResource: function (resource_id, datafile, metadata, callback) {
+            const targetUrl = this.baseApiUrl + "resource_update";
+            if (typeof metadata.format === "string")
+                metadata.format = metadata.format.toUpperCase();
+
+            var formData = new FormData();
+            formData.append('id', resource_id);
+            formData.append('package_id', metadata.package_id.toLowerCase());
+            formData.append('url', metadata.url);
+            formData.append('format', metadata.format);
+            formData.append('name', metadata.name);
+            formData.append('description', metadata.description);
+            formData.append('upload', datafile);
+
+            this.makeHTTPRequest(targetUrl, formData, callback, { ContentType: null });
+        },//EndFunction.
+
+        makeHTTPRequest: function(targetUrl, data, callback, options) {
+            if (data.hasOwnProperty("name"))
+                data.name =  data.name.replace(/ /g, '_').toLocaleLowerCase();
+
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function (_xmlHttpRequest) {
+                const _responseText = _xmlHttpRequest.currentTarget.responseText;
+                if (this.status >= 200 && this.status < 300)
+                    callback({ success: true, responseText: _responseText });
+                else
+                    callback({ success: false, responseText: _responseText, status: xhttp.status, statusText: xhttp.statusText } );
+            };
+            xhttp.onerror = function (err) {
+                callback( { success: false, status: xhttp.status, statusText: xhttp.statusText } );
+            };
+            xhttp.open("POST", targetUrl, true);
+            xhttp.setRequestHeader('X-CKAN-API-Key', this.authToken);//Authentication.
+            if (typeof options === 'undefined') {//Default.
+                xhttp.setRequestHeader('Content-Type', 'application/json');//Authentication.
+            } else {
+                if (options.hasOwnProperty("ContentType") && options.ContentType != null)
+                    xhttp.setRequestHeader('Content-Type', options.ContentType);
+            }
+            xhttp.send(data);
+        },//EndFunction.
+
         createPackage: function(data, callback) {
             var targetUrl = this.baseApiUrl + "package_create";
 
             data.name =  data.name.replace(/ /g, '_').toLocaleLowerCase();
-
-            /*const data = {
-                'name': package_name,
-                'title': package_title,
-                'private': true,
-                'notes': metadata != null ? "" : metadata.description
-            };*/
 
             const xhttp = new XMLHttpRequest();
             xhttp.onload = function (_xmlHttpRequest) {
@@ -169,13 +254,13 @@ CKANClient.prototype = (function() {
 
         createResource: function (package_id, datafile, metadata, callback) {
             const targetUrl = this.baseApiUrl + "resource_create";
-
             if (typeof metadata.format === "string")
                 metadata.format = metadata.format.toUpperCase();
 
+            var _url = 'http://www.fittizio_' + Math.floor((Math.random()*10000)) + '.net'
             var formData = new FormData();
             formData.append('package_id', package_id);
-            formData.append('url', 'http://www.fittizio.net');
+            formData.append('url', _url);
             formData.append('format', metadata.format);
             formData.append('name', metadata.name);
             formData.append('description', metadata.description);
@@ -202,10 +287,11 @@ CKANClient.prototype = (function() {
 
             const filename = metadata.name;
 
+            var _url = 'http://www.fittizio_' + Math.floor((Math.random()*10000)) + '.net'
             var formData = new FormData();
             formData.append('package_id', package_id);
             //formData.append('id', resourceid);
-            formData.append('url', 'http://www.fittizio.net');
+            formData.append('url', _url);
             formData.append('format', 'CSV');
             //formData.append('Format', 'CSV');
             //formData.append('mimetype', mimetype);
@@ -214,7 +300,7 @@ CKANClient.prototype = (function() {
             //formData.append('hash', hash);
             formData.append('description', metadata.description);
             formData.append('upload', datafile);
-
+            
             const xhttp = new XMLHttpRequest();
             xhttp.onload = function (_xmlHttpRequest) {
                 const _responseText = _xmlHttpRequest.currentTarget.responseText;

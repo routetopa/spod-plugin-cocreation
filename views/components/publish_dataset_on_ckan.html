@@ -297,6 +297,9 @@
         var current_step = 1;
         var current_direction = 'NEXT';
         const LAST_STEP_NUMBER = 4;
+        var notesContentHTML = "";
+
+        room.publishOnCkanNotes = { doPublish: false, notesContentHTML: null };
 
         $('#btnPrev').click(function () {
             if (current_step == 1) return;
@@ -327,7 +330,6 @@
                 var notes_url = base_url.substring(0, indexOfCocreation);
                 notes_url += "ajax/get-note-hTML-by-pad-iD-api-url/?noteUrl=" + notes_id;
 
-
                 //Make the http request.
                 var jqxhr = $.get(notes_url, function (response) {
                     var _html = "";
@@ -337,6 +339,7 @@
                         _html = _jsonResponse.message;
                     } else {
                         _html = _jsonResponse.data;
+                        notesContentHTML = _jsonResponse.data;
                     }
 
                     $('#iframeNotes').attr('src', "data:text/html;charset=utf-8," + _html);
@@ -354,6 +357,7 @@
             switch (step) {
                 case 1:
                     $('#btnPrev').addClass('button-disabled');
+
                     uiChooseCKANServer();
                     break;
                 case 2:
@@ -387,12 +391,15 @@
                     //Save back the metadata.
                     var _objMetadataCocreation = getCocreationMetadataAsObject();
                     var _objMetadata = getWizardMetadataAsObject();
+
                     _objMetadataCocreation.CC_RF.title = _objMetadata.CC_RF.title;
                     _objMetadataCocreation.CC_RF.description = _objMetadata.CC_RF.description;
                     _objMetadataCocreation.CC_RF.contact_email = _objMetadata.CC_RF.contact_email;
                     _objMetadataCocreation.CC_RF.contact_name = _objMetadata.CC_RF.contact_name;
-                    room.persistMetadata(_objMetadataCocreation);
-                    document.querySelector('#metadata_component').setMetadata(JSON.stringify(_objMetadataCocreation));
+                    //room.persistMetadata(_objMetadataCocreation);
+                    var $metadata_component = document.querySelector('#metadata_component');
+                    $metadata_component.setMetadata(JSON.stringify(_objMetadataCocreation));
+                    $metadata_component._forceUpdateMetadata();
 
                     uiShowNotes();
                     break;
@@ -442,23 +449,59 @@
 
             var dataset = room.current_dataset;
             var metadata = getWizardMetadataAsObject();
-            var notes = {
-                content: "queste sono le mie note....",
-                filename: "notes",
-                format: "txt",
-                content_type: "text/plain"
-            };
 
-            room.uploadOnCkan(dataset, metadata, notes, function(result) {
-                if (result.success == false) {
-                    uiShowError(result);
-                } else {
-                    var _packageid = result.package_id;
-                    $('#btnOpenDatasetOnCKAN').attr("package_id", _packageid);
-                    //$('#btnEditDatasetMetadata').attr("package_id", _packageid);
-                    uiPublished();
+            //Decide whether to publish notes.
+            var notes = null;
+            if (room.publishOnCkanNotes.doPublish) {
+                var notes = {
+                    content: notesContentHTML,
+                    filename: "notes",
+                    format: "txt",
+                    content_type: "text/plain"
+                };
+            }
+
+            //Check whether the dataset already exists on CKAN.
+            const $dataset_key = COCREATION.sheetName;
+            room.showPackage($dataset_key, function(response) {
+                const _jsonResponse = JSON.parse(response);
+                if (_jsonResponse.success == true) {
+                    $.confirm({
+                        title: 'Dataset already exists.',
+                        content: 'The dataset already exists on CKAN! Do you desire to update it?',
+                        buttons: {
+                            confirm: function () {
+                                room.updateOnCkan($dataset_key, dataset, metadata, notes, function(response) {
+                                    if (response.success) {
+                                        room._closeDialogPublishOnCKAN();
+                                        return;
+                                    }
+
+                                    debugger;
+                                });
+                            },
+                            cancel: function () {
+                                room._closeDialogPublishOnCKAN();
+                                return;
+                            }
+                        }
+                    });
+
+                    return;
                 }
+
+                //The dataset is new on CKAN.
+                room.uploadOnCkan(dataset, metadata, notes, function(result) {
+                    if (result.success == false) {
+                        uiShowError(result);
+                    } else {
+                        var _packageid = result.package_id;
+                        $('#btnOpenDatasetOnCKAN').attr("package_id", _packageid);
+                        uiPublished();
+                    }
+                });
             });
+
         });
 
         $('#btnOpenDatasetOnCKAN').click(function () {
@@ -487,6 +530,7 @@
             function (data, status) {
                 const _jsonData = JSON.parse(data);
                 room.current_dataset = _jsonData;
+
                 uiChooseCKANServer();
             }
         );//EndPost.
@@ -585,9 +629,11 @@
         if (isChecked) {
             $('#txtCocreationNotes').show();
             $('#iframeNotes').show();
+            room.publishOnCkanNotes = { doPublish: true };
         } else {
             $('#txtCocreationNotes').hide();
             $('#iframeNotes').hide();
+            room.publishOnCkanNotes = { doPublish: false };
         }
     };//EndFuntion.
 
