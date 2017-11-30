@@ -50,7 +50,7 @@ define( function(require,exports,module){
                             $(".es-overlay").remove();
                         },
                         error : function(data){
-                            alert("Something went wrong");
+                            alert(data.statusText);
                             $('#es-modal-overlay').hide();
                             $(".es-overlay").remove();
                         }
