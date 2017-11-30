@@ -343,28 +343,126 @@ room._convertDatasetToCSV = function (_jsonData) {
 ///
 
 room._publishOnCkan = function () {
-    OW.ajaxFloatBox('COCREATION_CMP_PublishDatasetOnCkan', { message: 'loading ...' }, {width:'90%', height:'80vh', iconClass:'ow_ic_lens', title:''} );
+    this.dialogPublishOnCKAN = OW.ajaxFloatBox('COCREATION_CMP_PublishDatasetOnCkan', { message: 'loading ...' }, {width:'90%', height:'80vh', iconClass:'ow_ic_lens', title:''} );
+};//EndFunction.
+
+room._closeDialogPublishOnCKAN = function () {
+    if(typeof room.dialogPublishOnCKAN != 'undefined')
+        room.dialogPublishOnCKAN.close();
+};//EndFunction.
+
+room.showPackage = function(package_id, cb) {
+    const $platformUrl = COCREATION.ckan_platform_url_preference ; //"http://ckan.routetopa.eu";
+    const $keyapi = COCREATION.ckan_api_key_preference;//"8febb463-f637-45b3-a6cb-d8957cdefbf3";
+
+    var client = new CKANClient($platformUrl, $keyapi);
+    client.showPackage(package_id, cb);
+};//EndFunction.
+
+room.updateOnCkan = function(package_id, _jsonDataset, _jsonCocreationMetadata, notes, cb) {
+
+    const fileCSVData = room._convertCSVToFile(_jsonDataset);
+
+    const $platformUrl = COCREATION.ckan_platform_url_preference ; //"http://ckan.routetopa.eu";
+    const $keyapi = COCREATION.ckan_api_key_preference;//"8febb463-f637-45b3-a6cb-d8957cdefbf3";
+    var client = new CKANClient($platformUrl, $keyapi);
+
+    const $dataset_title = _jsonCocreationMetadata.CC_RF.title;
+    const $dataset_description = _jsonCocreationMetadata.CC_RF.description;
+    const $contact_name = _jsonCocreationMetadata.CC_RF.contact_name;
+    const $contact_email = _jsonCocreationMetadata.CC_RF.contact_email;
+    var packageDataUpdate = { title: $dataset_title, notes: $dataset_description, description: $dataset_description,
+        author: $contact_name, author_email: $contact_email };
+
+    client.updatePackage(package_id, packageDataUpdate, function(response, err) {
+        if (response.success) {//Package updated.
+            //Update the resource.
+            const _resources = JSON.parse(response.responseText).result.resources;
+
+            var _filtered = _resources.filter(function (value) { return (value.format === "CSV"); } );
+            if (_filtered.length == 0) {
+                cb( {success: false, errors: [ 'Cannot find the CSV resource to update. ' ] });
+                return;
+            }
+            if (_filtered.length > 1) {
+                cb( {success: false, errors: [ 'There is more than one CSV resource, cannot determine which one to update. ' ] });
+                return;
+            }
+
+            const _csvResource = _filtered[0];
+            var resource_metadata = {
+                package_id: package_id,
+                format: 'CSV',
+                url: _csvResource.url,
+                name: $dataset_title,
+                description: $dataset_description
+            };
+
+            client.updateResource(_csvResource.id, fileCSVData, resource_metadata, function (response) {
+                if (response.success == true) { //CSV RESOURCE UPDATED WITH SUCCESS.
+
+                    //Notes update.
+                    if (notes != null) {
+                        var _filtered = _resources.filter(function (value) { return (value.format === "TXT"); } );
+                        if (_filtered.length > 1) {
+                            cb( {success: false, errors: [ 'There is more than one TXT resource, cannot determine which one to update with notes. ' ] });
+                            return;
+                        }
+
+                        var fileNotes = new File([notes.content], notes.filename + "." + notes.format, { type: notes.content_type });
+
+                        var notesMetadata = JSON.parse(JSON.stringify(resource_metadata)); //Clone metadata.
+                        notesMetadata.name = notes.filename;
+                        notesMetadata.format = notes.format;
+                        notesMetadata.description = "Co-creation notes";
+
+                        if (_filtered == 0) {//Create the resource with notes.
+                            client.createResource(package_id, fileNotes, notesMetadata, function (response, err) {
+                                var uploadedPackageId = JSON.parse(response).result.id;
+                                if (err != null) {
+                                    var _jsonError = JSON.parse(response);
+                                    var _errors = _jsonError.error.name;
+                                    cb({ success: false, errors: _errors, package: { id: uploadedPackageId } });
+                                } else
+                                    cb({ success: true, package_id: package_id });
+                            });//EndCreateResource.
+                        } else {//Update resource notes.
+                            var _txtResource = _filtered[0];
+                            client.updateResource(_txtResource.id, fileNotes, notesMetadata, cb);
+                        }
+                    }
+
+                    cb({success: true});
+                    return;
+                }
+
+                //Manage the error here.
+                cb({success: false });
+            });
+
+            return;
+        }
+
+        //Manage here the error.
+        debugger;
+    });
+};//EndFunction.
+
+room._convertCSVToFile = function (_jsonData) {
+    const _csvData = room._convertDatasetToCSV(_jsonData);
+    const roomName = JSON.parse(COCREATION.info).name + "_" + Math.floor((Math.random()*1000) + 1);
+    const fileCSVData = new File([_csvData], roomName + ".csv", { type: 'application/CSV' });
+    return fileCSVData;
 };//EndFunction.
 
 room.uploadOnCkan = function (_jsonData, _jsonCocreationMetadata, notes, callbackUpload) {
-    const _csvData = room._convertDatasetToCSV(_jsonData);
+    const fileCSVData = room._convertCSVToFile(_jsonData);
 
-    const roomName = JSON.parse(COCREATION.info).name + "_" + Math.floor((Math.random()*1000) + 1);
-
-    //Check the metadata type
-    //Note: here metadata is a JS object when the user is on the metadata form,
-    //otherwise it is a string.
-    //var _jsonCocreationMetadata = COCREATION.metadata;
-    //if (typeof COCREATION.metadata === 'string') {
-    //    _jsonCocreationMetadata = JSON.parse(COCREATION.metadata);
-    //}
-
-    const fileCSVData = new File([_csvData], roomName + ".csv", { type: 'application/CSV' });
-
+    debugger;
     //Cocreation notes.
     var fileNotes = null;
     if (notes != null)
-        fileNotes = new File([notes.content], notes.filename + "." + notes.extension, { type: notes.content_type });
+        fileNotes = new File([notes.content], notes.filename + "." + notes.format, { type: notes.content_type });
 
     //Before to start the upload it checks the metadata.
     const $dataset_title = _jsonCocreationMetadata.CC_RF.title;
@@ -387,7 +485,7 @@ room.uploadOnCkan = function (_jsonData, _jsonCocreationMetadata, notes, callbac
         author: $contact_name, author_email: $contact_email };
 
     //Create the package on CKAN.
-    const $platformUrl = COCREATION.ckan_platform_url_preference ;"http://ckan.routetopa.eu";
+    const $platformUrl = COCREATION.ckan_platform_url_preference ; //"http://ckan.routetopa.eu";
     const $keyapi = COCREATION.ckan_api_key_preference;//"8febb463-f637-45b3-a6cb-d8957cdefbf3";
 
     var client = new CKANClient($platformUrl, $keyapi);
@@ -418,6 +516,9 @@ room.uploadOnCkan = function (_jsonData, _jsonCocreationMetadata, notes, callbac
 
                 callbackUpload({ success: false, errors: _errors, package: { id: uploadedPackageId } });
             } else {
+                if (notes == null)
+                    callbackUpload({ success: true, package_id: package_id });
+
                 //Upload the NOTES.
                 if (notes != null) {
                     var notesMetadata = JSON.parse(JSON.stringify(metadata)); //Clone metadata.
@@ -436,8 +537,6 @@ room.uploadOnCkan = function (_jsonData, _jsonCocreationMetadata, notes, callbac
                 }
             }//EndIf.
         });//EndCreateResource.
-
-
 
     });//EndCreatePackage.
 };//EndFunction.
