@@ -141,6 +141,7 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
                 COCREATION.postits                       = {$roomPostits}
                 COCREATION.info                          = {$roomInfo}
                 COCREATION.user_id                       = {$userId}
+                COCREATION.suggested_datasets            = {$suggested_datasets}
             ', array(
                 'current_room_url'                     => str_replace("/index", "", OW::getRouter()->urlFor('COCREATION_CTRL_KnowledgeRoom', 'index')) . $params['roomId'],
                 'ajax_coocreation_room_add_dataset'    => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'addDatasetToRoom')   . "?roomId="  . $params['roomId'],
@@ -157,6 +158,7 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
                 'roomPostits'                          => $postits,
                 'roomInfo'                             => json_encode($info),
                 'userId'                               => OW::getUser()->getId(),
+                'suggested_datasets'                   => $this->getSuggestedDatasets($params['roomId'])
             ));
 
             OW::getDocument()->addOnloadScript($js);
@@ -172,5 +174,22 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
             OW::getLanguage()->addKeyForJs('cocreation', 'room_menu_tools');
             OW::getLanguage()->addKeyForJs('cocreation', 'dataset_successfully_added');
         }
+    }
+
+    private function getSuggestedDatasets($roomId)
+    {
+        $suggested_datasets = COCREATION_BOL_Service::getInstance()->getDatasetsByRoomId($roomId);
+        $suggested = [];
+
+        foreach ($suggested_datasets as $suggested_dataset)
+        {
+            $obj = new StdClass();
+            $obj->name = $suggested_dataset->name;
+            $obj->url = $suggested_dataset->url;
+            $obj->p = "suggested";
+            $suggested[] = $obj;
+        }
+
+        return $suggested;
     }
 }
