@@ -148,6 +148,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                 COCREATION.info                               = {$roomInfo}
                 COCREATION.spreadsheet_server_port            = {$spreasheet_server_port}
                 COCREATION.sheet_images_url                   = {$sheet_images_url}
+                COCREATION.sheet_remove_image_url             = {$sheet_remove_image_url}
             ', array(
                'ajax_coocreation_room_get_datalets'        => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getRoomDatalets'),
                'ajax_coocreation_room_get_array_sheetdata' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getArrayOfObjectSheetData') . "?sheetName=" . $sheetUrl,
@@ -167,8 +168,9 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                'roomInfo'                                  => json_encode($info),
                'spreasheet_server_port'                    => BOL_PreferenceService::getInstance()->findPreference('spreadsheet_server_port_preference')->defaultValue,
                'sheet_images_url'                          => OW_URL_HOME . "ethersheet/images/" . $sheetUrl,
-               'ckan_platform_url_preference'             => $ckan_platform_url_preference_default_value,
-               'ckan_api_key_preference'                  => $ckan_api_key_preference_default_value
+               'ckan_platform_url_preference'              => $ckan_platform_url_preference_default_value,
+               'ckan_api_key_preference'                   => $ckan_api_key_preference_default_value,
+               'sheet_remove_image_url'                    => OW_URL_HOME . "ethersheet/remove/image/"
         ));
         OW::getDocument()->addOnloadScript($js);
         OW::getDocument()->addOnloadScript("data_room.init();");
