@@ -170,7 +170,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                'sheet_images_url'                          => OW_URL_HOME . "ethersheet/images/" . $sheetUrl,
                'ckan_platform_url_preference'              => $ckan_platform_url_preference_default_value,
                'ckan_api_key_preference'                   => $ckan_api_key_preference_default_value,
-               'sheet_remove_image_url'                    => OW_URL_HOME . "ethersheet/remove/image/"
+               'sheet_remove_image_url'                    => OW_URL_HOME . "ethersheet/remove/image"
         ));
         OW::getDocument()->addOnloadScript($js);
         OW::getDocument()->addOnloadScript("data_room.init();");

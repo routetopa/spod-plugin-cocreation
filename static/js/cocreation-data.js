@@ -91,17 +91,16 @@ $(document).ready(function() {
             {
                 collection_id : collection_id,
                 image_name    : image_name
-            },
-            function (data, status) {
-                data = JSON.parse(data);
-                if(data.status) {
-                   room.refreshImageSlider();
-                }
-            },
-            function(err){
-              console.log(err);
             }
-        );
+        )
+        .done(function (data) {
+            if(data.status) {
+               room.refreshImageSlider();
+            }
+        })
+        .fail(function(err){
+          console.log(err);
+        });
     });
 
 });

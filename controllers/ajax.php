@@ -11,6 +11,44 @@ error_reporting(-1);
 
 class COCREATION_CTRL_Ajax extends OW_ActionController
 {
+    public function loadTemplateDoc($note){
+        // POST
+        // http://172.16.15.77/etherpad/p/notes_room_241_8rY1B/import
+        // Content-Type:multipart/form-data;
+        // BODY
+        // Content-Disposition: form-data; name="file"; filename="ChatLog ROUTE_TO_PA Technical Meeting 2015_06_30 17_14.rtf"
+        // Content-Type: application/msword
+
+        $cfile = new CURLFile(
+            OW::getPluginManager()->getPlugin('cocreation')->getStaticDir() . "template/explore-template.docx",
+            'application/msword',
+            'file');
+        /*$cfile = curl_file_create(
+            OW::getPluginManager()->getPlugin('cocreation')->getStaticDir() . "template/explore-template.docx",
+            'application/msword',
+            'file'
+        );*/
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_UPLOAD, true);
+        curl_setopt($ch, CURLOPT_URL,  $_SERVER['REQUEST_SCHEME'] . "//" . $_SERVER['HTTP_HOST'] . "/etherpad/p/" . /*$note*/'notes_room_241_8rY1B' . "/import");
+        curl_setopt($ch, CURLOPT_HTTPHEADER,
+            array(
+                'Content-Type: multipart/form-data'
+            )
+        );
+
+        $postData = array(
+            /*'name'     => 'file',
+            'filename' => '@/path/to/file.txt',//the content*/
+            'file' => $cfile
+        );
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+        $response = curl_exec($ch);
+        curl_close($ch);
+    }
+
     public function createRoom(){
 
         if (!OW::getUser()->isAuthenticated())
@@ -398,7 +436,6 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         echo json_encode(array("status" => "ok", "datalets" => $room_datalets));
         exit;
     }
-
 
     public function confirmToJoinToRoom()
     {

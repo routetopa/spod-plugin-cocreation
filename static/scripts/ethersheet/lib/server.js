@@ -251,7 +251,7 @@ exports.createServer = function(config){
         {
             let file_path = __dirname +  "/uploads/" + req.body.collection_id + "/" + req.body.image_name;
             fs.unlink(file_path, function (err) {
-                if(!_.isNull(err)){
+                if(_.isNull(err)){
                     res.send(JSON.stringify({ status: true, massage: "Image deleted"}));
                 }else{
                     res.send(JSON.stringify({ status: false, massage: "There was a problem trying to delete the image"}));
