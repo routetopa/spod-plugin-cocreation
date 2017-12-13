@@ -478,9 +478,11 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             echo json_encode(array("status" => true, "message" => 'Join successful'));
             exit;
         }else{
-            OW::getApplication()->redirect(
+            echo json_encode(array("status" => true, "message" => 'Join successful'));
+            exit;
+           /* OW::getApplication()->redirect(
                 str_replace("index/", $room->id, OW::getRouter()->urlFor($room->type == "knowledge" ? 'COCREATION_CTRL_KnowledgeRoom' : 'COCREATION_CTRL_DataRoom', 'index'))
-            );
+            );*/
         }
     }
 
