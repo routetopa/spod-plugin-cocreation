@@ -119,15 +119,23 @@ position: relative;
                 </template>
                 {/literal}
             </div>
+
+            <div class="submit_container">
+                {submit name='submit' class='ow_ic_new'}
+            </div>
         </div>
 
-        <!-- ROOM  GOAL-->
+        <!-- ROOM  GOAL -->
         <div class="step in-step-5">
             <div class="title">
                 <span>{text key="cocreation+room_goal"}</span>
             </div>
             <div class="input">
                 {input name='goal' maxlength='256'}
+            </div>
+
+            <div class="submit_container">
+                {submit name='submit' class='ow_ic_new'}
             </div>
         </div>
 
@@ -138,6 +146,10 @@ position: relative;
             </div>
             <div class="input">
                 {input name='invitation_text' maxlength='256'}
+            </div>
+
+            <div class="submit_container">
+                {submit name='submit' class='ow_ic_new'}
             </div>
         </div>
 

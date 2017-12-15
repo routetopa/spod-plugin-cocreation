@@ -11,7 +11,8 @@ COCREATION.init = function()
     COCREATION.searchField = ["name", "username", "email"];
 
     var scope = Polymer.dom(document).querySelector('#scope');
-    scope.dateFrom = scope.dateTo = new Date();
+    //scope.dateFrom = scope.dateTo = new Date();
+    $("#data_from").val(moment(new Date()).format("LL")) ;
 
     scope.dateFormat = function(date, format) {
         return moment(date).format(format);
