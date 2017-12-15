@@ -24,6 +24,25 @@ var ES_CLIENT_PATH = __dirname + '/../node_modules/es_client';
 var LAYOUT_PATH    = __dirname + '/layouts';
 
 
+function helperImportCSV(csv_path, sheet_id, cb) {
+    fs.readFile(csv_path, function (err, data) {
+        if (err) {
+            cb(err);
+            return;
+        }
+
+        es.createSheetFromCSV(sheet_id, data, function (err) {
+            if (err) {
+                cb(err);
+                return;
+            }
+
+            cb(null);
+        });
+
+    });
+};
+
 exports.createServer = function(config){
 
     /***********************************************
@@ -127,22 +146,22 @@ exports.createServer = function(config){
 
     //Original Ethersheet: import csv
     /*app.post('/import/csv', function(req,res){
-        var form = new formidable.IncomingForm();
-        form.parse(req, function(err, fields, files){
-            var csv_path = files.csv_file.path;
-            var sheet_id = fields.sheet_id;
-            fs.readFile(csv_path, function(err, data){
-                es.createSheetFromCSV(sheet_id, data, function(err){
-                    if(err){
-                        res.send(500,err.message);
-                        return;
-                    }
-                    res.redirect('back');
-                    pub_server.refreshClients(sheet_id);
-                })
-            });
-        });
-    });*/
+     var form = new formidable.IncomingForm();
+     form.parse(req, function(err, fields, files){
+     var csv_path = files.csv_file.path;
+     var sheet_id = fields.sheet_id;
+     fs.readFile(csv_path, function(err, data){
+     es.createSheetFromCSV(sheet_id, data, function(err){
+     if(err){
+     res.send(500,err.message);
+     return;
+     }
+     res.redirect('back');
+     pub_server.refreshClients(sheet_id);
+     })
+     });
+     });
+     });*/
 
     //import csv
     app.post('/import/csv', function(req,res){
@@ -180,32 +199,6 @@ exports.createServer = function(config){
             });
         });
     });
-
-    /**
-     * Helper function, reads the CSV file from the request
-     * and creates a new sheet with the data.
-     * @param csv_path
-     * @param sheet_id
-     * @param cb
-     */
-    function helperImportCSV(csv_path, sheet_id, cb) {
-        fs.readFile(csv_path, function (err, data) {
-            if (err) {
-                cb(err);
-                return;
-            }
-
-            es.createSheetFromCSV(sheet_id, data, function (err) {
-                if (err) {
-                    cb(err);
-                    return;
-                }
-
-                cb(null);
-            });
-
-        });
-    };
 
     //Upload image from a cell
     //Post files
@@ -252,16 +245,33 @@ exports.createServer = function(config){
         });
     });
 
+    app.post('/remove/image',function (req, res) {
+        res.setHeader('Content-Type', 'application/json');
+        if(!_.isUndefined(req.body.collection_id) && !_.isUndefined(req.body.image_name))
+        {
+            let file_path = __dirname +  "/uploads/" + req.body.collection_id + "/" + req.body.image_name;
+            fs.unlink(file_path, function (err) {
+                if(_.isNull(err)){
+                    res.send(JSON.stringify({ status: true, massage: "Image deleted"}));
+                }else{
+                    res.send(JSON.stringify({ status: false, massage: "There was a problem trying to delete the image"}));
+                }
+            });
+        }else{
+            res.send(JSON.stringify({ status: false, massage: "The collection_id or image_name params are mandatory"}));
+        }
+    });
+
     app.get('/images/:sheet_id/:image', function (req, res) {
         res.sendFile( __dirname +  "/uploads/" +  String(req.params.sheet_id) + "/" +  String(req.params.image));
     });
 
     app.get('/images/:collection_id', function (req, res){
-        var collection_id = String(req.params.collection_id);
+        let collection_id = String(req.params.collection_id);
         es.getSheetCollectionIds(collection_id, function(err, sheet_ids){
             var images = [];
             fs.readdir(__dirname +  "/uploads/" + sheet_ids[0], function(err, files){
-                for(var i in files)
+                for(let i in files)
                     //images.push(req.protocol + "://" + req.hostname + ":" + require('../config').port + "/images/" + sheet_ids[0] + "/" + files[i]);
                     images.push(req.protocol + "://" + req.hostname + "/ethersheet/images/" + sheet_ids[0] + "/" + files[i]);
                 res.setHeader('Content-Type', 'application/json');
@@ -364,26 +374,26 @@ exports.createServer = function(config){
                                     _.each(Object.keys(sheet.cells[row_ids[0]]), function(col, col_idx){
                                         pub_server.updateCell(collection_id, sheet_ids[0], sheet, new_row_idx, col_idx, row[Object.keys(row)[col_idx]]);
                                         /*console.log( new_row_id + " - " + col + " - " + row[Object.keys(row)[idx]] );
-                                        var c = new Command('{"id":"' + sheet_ids[0] + '",' +
-                                            '"type":"sheet",' +
-                                            '"action":"commitCell",' +
-                                            '"params":["' + new_row_id + '","'
-                                            + col + '",' +
-                                            '{"value":"' + row[Object.keys(row)[idx]] + '","type":"string"}]}');
+                                         var c = new Command('{"id":"' + sheet_ids[0] + '",' +
+                                         '"type":"sheet",' +
+                                         '"action":"commitCell",' +
+                                         '"params":["' + new_row_id + '","'
+                                         + col + '",' +
+                                         '{"value":"' + row[Object.keys(row)[idx]] + '","type":"string"}]}');
 
-                                        setTimeout(function () {
-                                            //c.execute(model, function(err){ });
-                                            transactionHandler(c, function(err){
-                                                //pub_server.broadcast(null,sheet_ids[0],c);
+                                         setTimeout(function () {
+                                         //c.execute(model, function(err){ });
+                                         transactionHandler(c, function(err){
+                                         //pub_server.broadcast(null,sheet_ids[0],c);
 
-                                                //var origin = (socket && socket.id) ? socket.id : null;
-                                                var command = Command.serialize(c);
-                                                for( var socket_id in pub_server.sockets[collection_id] ){
-                                                    //if(socket_id == origin) { continue; } // do not send back to the originating socket
-                                                    pub_server.sockets[collection_id][socket_id].write(command);
-                                                }
-                                            })
-                                        }, 100);*/
+                                         //var origin = (socket && socket.id) ? socket.id : null;
+                                         var command = Command.serialize(c);
+                                         for( var socket_id in pub_server.sockets[collection_id] ){
+                                         //if(socket_id == origin) { continue; } // do not send back to the originating socket
+                                         pub_server.sockets[collection_id][socket_id].write(command);
+                                         }
+                                         })
+                                         }, 100);*/
                                     });
 
 
@@ -471,11 +481,11 @@ exports.createServer = function(config){
     pub_server.updateCell = function( collection_id, sheet_id, sheet, row_idx, col_idx, value ){
 
         /*var add_cell_command = new Command('{"id":"C8JyNCNmA5dAqTnAcD",' +
-            '"type":"selection",' +
-            '"action":"addCell",' +
-            '"params":["' + sheet_ids + '","'
-            + sheet.rows[row_idx] + '","' +
-            + sheet.cols[col_idx] + '"]}');*/
+         '"type":"selection",' +
+         '"action":"addCell",' +
+         '"params":["' + sheet_ids + '","'
+         + sheet.rows[row_idx] + '","' +
+         + sheet.cols[col_idx] + '"]}');*/
 
         var update_cell_command = new Command('{"id":"' + sheet_id + '",' +
             '"type":"sheet",' +
@@ -497,8 +507,8 @@ exports.createServer = function(config){
                 setTimeout(function () {
                     transactionHandler(commit_cell_command, function(err, command){
                         /*console.log("Err: " +  err);
-                        console.log("Command: " +  command);
-                        pub_server.broadcast(null, collection_id, Command.serialize(command));*/
+                         console.log("Command: " +  command);
+                         pub_server.broadcast(null, collection_id, Command.serialize(command));*/
                     })
                 }, 500);
             })

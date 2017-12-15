@@ -46,14 +46,7 @@ $(document).ready(function() {
                         setTimeout(function()
                             {
                                room.$.datalets_slider.setDatalets(COCREATION.datalets);
-                                $.get(COCREATION.sheet_images_url,
-                                    function (data, status) {
-                                        if(data.status)
-                                        {
-                                            room.$.image_slider.setImages(data.images);
-                                        }
-                                    }
-                                );
+                               room.refreshImageSlider();
                             },
                             100);
                     }
@@ -85,15 +78,31 @@ $(document).ready(function() {
     });
 
     window.addEventListener('image-slider-datalet_attached', function(e){
-        $.get(COCREATION.sheet_images_url,
-            function (data, status) {
-                if(data.status)
-                {
-                    room.$.image_slider.setImages(data.images);
-                }
-            }
-        );
+        room.refreshImageSlider();
     });
+
+    window.addEventListener('image-slider-datalet_delete', function(e){
+
+        let img_cmp = e.detail.image.split('/');
+        let collection_id = img_cmp[img_cmp.length - 2];
+        let image_name    = img_cmp[img_cmp.length - 1];
+
+        $.post(COCREATION.sheet_remove_image_url,
+            {
+                collection_id : collection_id,
+                image_name    : image_name
+            }
+        )
+        .done(function (data) {
+            if(data.status) {
+               room.refreshImageSlider();
+            }
+        })
+        .fail(function(err){
+          console.log(err);
+        });
+    });
+
 });
 
 room.splitScreenActive          = false;
@@ -236,6 +245,17 @@ room.confirmDatasetPublication = function(){
                 }
             }
         );
+};
+
+room.refreshImageSlider = function()
+{
+    $.get(COCREATION.sheet_images_url,
+        function (data, status) {
+            if (data.status) {
+                room.$.image_slider.setImages(data.images);
+            }
+        }
+    );
 };
 
 room.loadDiscussion = function(){

@@ -222,7 +222,6 @@ EtherSheetService.prototype.createSheetFromCSV = function(sheet_id,data,cb){
   };
 
   //make the data
-  debugger;
   var colmap = {};
   var csv_parser = csv();
   var sniffer = new CSVSniffer([';',',','\t']);

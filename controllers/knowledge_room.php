@@ -86,10 +86,6 @@ class COCREATION_CTRL_KnowledgeRoom extends OW_ActionController
 
             //Set room shared documents
             $documents = COCREATION_BOL_Service::getInstance()->getDocumentsByRoomId($params['roomId']);
-            /*$this->assign('documents', array(
-                preg_replace("/^(http:\/\/)(:)[0-9]*(\/)/", ":" . BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference')->defaultValue, $documents[0]->url),
-                preg_replace("/^(http:\/\/)(:)[0-9]*(\/)/", ":" . BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference')->defaultValue, $documents[1]->url),
-                preg_replace("/^(http:\/\/)(:)[0-9]*(\/)/", ":" . BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference')->defaultValue, $documents[2]->url)));*/
             $this->assign('documents', array(
                 OW_URL_HOME . "etherpad/p/" . $documents[0]->url,
                 OW_URL_HOME . "etherpad/p/" . $documents[1]->url,
