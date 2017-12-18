@@ -41,10 +41,10 @@ class COCREATION_CMP_CreateRoom extends OW_Component
         $description->setRequired(true);
 
         $goal  = new TextField('goal');
-        $goal->setRequired(true);
+        $goal->setRequired(false);
 
         $invitationText  = new TextField('invitation_text');
-        $invitationText->setRequired(true);
+        $invitationText->setRequired(false);
 
         $usersValue  = new HiddenField('users_value');
         $usersValue->setValue("");
