@@ -29,7 +29,6 @@ cloneRepository()
     curl https://raw.githubusercontent.com/ethersheet-collective/EtherSheet/master/dev_install.sh | bash
     chown -R ethersheet:ethersheet ethersheet
     cd ethersheet/EtherSheet
-    mkdir lib/uploads
     #sh dev_install.sh
     #npm install module
     npm install
