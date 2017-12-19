@@ -23,26 +23,6 @@ var _ = require('underscore');
 var ES_CLIENT_PATH = __dirname + '/../node_modules/es_client';
 var LAYOUT_PATH    = __dirname + '/layouts';
 
-
-function helperImportCSV(csv_path, sheet_id, cb) {
-    fs.readFile(csv_path, function (err, data) {
-        if (err) {
-            cb(err);
-            return;
-        }
-
-        es.createSheetFromCSV(sheet_id, data, function (err) {
-            if (err) {
-                cb(err);
-                return;
-            }
-
-            cb(null);
-        });
-
-    });
-};
-
 exports.createServer = function(config){
 
     /***********************************************
@@ -162,6 +142,25 @@ exports.createServer = function(config){
      });
      });
      });*/
+
+     function helperImportCSV(csv_path, sheet_id, cb) {
+         fs.readFile(csv_path, function (err, data) {
+             if (err) {
+                 cb(err);
+                 return;
+             }
+
+             es.createSheetFromCSV(sheet_id, data, function (err) {
+                 if (err) {
+                     cb(err);
+                     return;
+                 }
+
+                 cb(null);
+             });
+
+         });
+     };
 
     //import csv
     app.post('/import/csv', function(req,res){
