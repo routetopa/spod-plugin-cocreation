@@ -262,13 +262,10 @@ define( function(require,exports,module){
         },
 
         pageSelection: function(page){
-            //if(page != undefined) this.page = page;
+            if(page != undefined) this.page = page;
             this.getPagination();
             this.goToPageInGrid();
-            if(page < this.page || _.isUndefined(page))
-                this.table.$grid.scrollTop(this.rows_delta);
-            else
-                this.table.$grid.scrollTop($(".es-row-headers").height() - (this.rows_delta * this.chunk));
+            this.table.$grid.scrollTop(this.rows_delta);
         },
 
         onPageSelection: function(e){
@@ -321,14 +318,14 @@ define( function(require,exports,module){
                 this.max_scroll = (grid_el.scrollHeight - this.table.$grid.height()) + 8;
                 if(grid_el.scrollTop == this.max_scroll && this.page < this.size) {
                     this.page++;
-                    this.pageSelection(this.page - 1);
+                    this.pageSelection();
                 }
 
             } else {
                 //up
                 if(grid_el.scrollTop == 0 && this.page > 1) {
                     this.page--;
-                    this.pageSelection(this.page + 1);
+                    this.pageSelection();
                 }
             }
             this.lastScrollTop = grid_el.scrollTop;
@@ -339,7 +336,6 @@ define( function(require,exports,module){
 
             this.size = Math.floor(this.getSheet().allRows.length / this.chunk);
             this.rows_in_last_page = this.getSheet().allRows.length % this.chunk;
-            if(this.rows_in_last_page > 0) this.size += 1;
 
             if(this.page > this.size) this.page = this.size;
 
