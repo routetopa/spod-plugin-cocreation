@@ -475,6 +475,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         );
 
         if(isset($clean['mobile'])){
+            echo json_encode(array("status" => true, "message" => $message, "data" => $data));
             echo json_encode(array("status" => true, "message" => 'Join successful'));
             exit;
         }else{

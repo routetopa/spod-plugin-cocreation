@@ -12,5 +12,4 @@ class COCREATION_CLASS_Consts
     const USER_STATUS_JOINED      = 0;
     const USER_STATUS_PENDING     = 1;
     const USER_STATUS_NOT_INVITED = 2;
-
 }
