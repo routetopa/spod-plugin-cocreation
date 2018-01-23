@@ -125,10 +125,8 @@ define( function(require,exports,module){
             var current_cell_keys = this.current_results[Object.keys(this.current_results)[this.current_selected_result - 1]];
             this.pageSelection(this.getPageForRow(current_cell_keys.row_id));
             //scroll to the cell related to the current result
-            _.debounce(function(){
-                var cell = $('td[data-row_id="' + current_cell_keys.row_id + '"][data-col_id="' + current_cell_keys.col_id + '"]');
-                this.scrollTo(cell);
-            }.bind(this), 300);
+            var cell = $('td[data-row_id="' + current_cell_keys.row_id + '"][data-col_id="' + current_cell_keys.col_id + '"]');
+            this.scrollTo(cell);
         },
 
         getNewResult: function(e){
@@ -264,7 +262,7 @@ define( function(require,exports,module){
         },
 
         pageSelection: function(page){
-            //if(page != undefined) this.page = page;
+            if(page != undefined) this.page = page;
             this.getPagination();
             this.goToPageInGrid();
             if(page < this.page || _.isUndefined(page))
