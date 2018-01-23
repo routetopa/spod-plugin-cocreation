@@ -303,9 +303,10 @@ define( function(require,exports,module){
         },
 
         scrollTo: function(cell){
-            var low_limit = (10 * (this.chunk / 2));
+            //var low_limit = (10 * (this.chunk / 2));
+            var low_limit = (10 * (this.chunk));
             //vertical scroll
-            var v_offset = cell.offset().top;
+            var v_offset = Math.abs(cell.offset().top);
             if(v_offset < low_limit){
                 this.table.$grid.scrollTop(this.rows_delta);
             }else{
