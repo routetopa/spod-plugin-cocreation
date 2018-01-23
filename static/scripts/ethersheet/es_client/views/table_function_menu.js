@@ -125,7 +125,8 @@ define( function(require,exports,module){
             var current_cell_keys = this.current_results[Object.keys(this.current_results)[this.current_selected_result - 1]];
             this.pageSelection(this.getPageForRow(current_cell_keys.row_id));
             //scroll to the cell related to the current result
-            var cell = $('td[data-row_id="' + current_cell_keys.row_id + '"][data-col_id="' + current_cell_keys.col_id + '"]');
+            //var cell = $('td[data-row_id="' + current_cell_keys.row_id + '"][data-col_id="' + current_cell_keys.col_id + '"]');
+            var cell = $('td#'+ current_cell_keys.row_id + '-' + current_cell_keys.col_id);
             this.scrollTo(cell);
         },
 
