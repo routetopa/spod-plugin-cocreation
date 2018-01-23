@@ -303,8 +303,7 @@ define( function(require,exports,module){
         },
 
         scrollTo: function(cell){
-            //var low_limit = (10 * (this.chunk / 2));
-            var low_limit = (10 * (this.chunk));
+            var low_limit = (10 * (this.chunk / 2));
             //vertical scroll
             var v_offset = Math.abs(cell.offset().top);
             if(v_offset < low_limit){
