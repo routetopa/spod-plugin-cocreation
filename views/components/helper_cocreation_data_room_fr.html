@@ -92,17 +92,44 @@
             pour montrer des avertissements pour les champs apparament remplis d'une façon non comforme. Lors de leur publication,
             le jeu de données peut être utilisé (sous l'onglet "jeux de données créés conjointement" lors de la première étape)
             par tous les utilisateurs du SPOD dans leurs discussions.
+            Il y a deux types de pièces: la salle de données et la salle des médias; la couleur reconnaît le type de pièce, par exemple
+            le vert identifie la salle de données et l'orange celui de la salle des médias. La salle multimédia est synchronisée avec
+            la même pièce de l'application mobile SPOD. En utilisant SPOD Mobile, les utilisateurs ne partageront pas seulement le contenu
+            (c'est-à-dire, les photos) mais les photos incluront également automatiquement la géolocalisation pour chaque photo.
+
         </div>
     </div>
 
     <div class="content" id="scroll_content">
+
+
+        <div class="sect">
+            <div class="horizontal layout cell">
+                <img src="{$staticResourcesUrl}images/cocreation_sync_fr.png" style="width: 60%; height: 60%;">
+
+                <div class="cell">
+                    <div class="horizontal layout cell">
+                        <div class="section-number">1</div>
+                        <div class="section-title">Un scénario de synchronisation</div>
+                    </div>
+                    <div>
+                        Les données synchronisées et la salle des médias présentent les mêmes caractéristiques,
+                        contrairement à la salle des données, la salle des médias a une feuille de calcul partagée avec des colonnes fixes (Titre, Description, Image, Emplacement, Date, Utilisateur)
+                        appareil mobile.<br>
+                        SPOD Mobile est actuellement disponible sur le Google Play Market à l'adresse <a href="https://play.google.com/store/apps/details?id=eu.spod.isislab.spodapp&hl=en"  target="_blank"> SPOD mobile app</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="sect">
             <div class="horizontal layout cell">
                 <img src="{$staticResourcesUrl}images/data_room_fr.png" style="width: 60%; height: 60%;">
 
                 <div class="cell">
                     <div class="horizontal layout cell">
-                        <div class="section-number">1</div>
+                        <div class="section-number">2</div>
                         <div class="section-title">Fonctionnalités</div>
                     </div>
                     <div>
@@ -147,6 +174,10 @@
                                 <paper-button raised="" tabindex="0" animated="" aria-disabled="false" elevation="1" class="x-scope paper-button-0">PUBLIER LE JEU DE DONNES SUR LE SPOD</paper-button>
                                 Permet la publication du jeu de données créé pour tous les utilisateurs de la plate-forme SPOD.
                             </li>
+                            <li>
+                                <paper-button raised="" class="menu_button x-scope paper-button-0" title="Import" role="button" tabindex="0" animated="" aria-disabled="false" elevation="1"> IMPORTER DE SPOD </paper-button>
+                                permet d'importer les deux ensembles de données créés par tous les utilisateurs de la plate-forme SPOD que les ensembles de données stockés dans le portail CKAN.
+                            </li>
                         </ul>
                         </p>
                     </div>
@@ -160,7 +191,7 @@
 
                 <div class="cell">
                     <div class="horizontal layout cell">
-                        <div class="section-number">2</div>
+                        <div class="section-number">3</div>
                         <div class="section-title">Un tour rapide</div>
                     </div>
                     <div>

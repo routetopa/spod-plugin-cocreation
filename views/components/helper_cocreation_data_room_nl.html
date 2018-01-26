@@ -83,23 +83,50 @@
 <div class="layout vertical">
 
     <div class="tall">
-        <div class="title">Cocreation Data Room helper</div>
+        <div class="title">Cocreation Data and Media Rooms helper</div>
         <div class="description">
-            This room allows members to collaborate on a shared spreadsheets to create dataset. The process is supported
+            This type of room allows members to collaborate on a shared spreadsheets to create dataset. The process is supported
             by writing shared notes (with a template that helps the community to write all the relevant information about the process) and shared metadata,
-            that are published with the dataset. Moreover, when published for other SPOD users, several validation euristics are used to show warnings on apparently
-            wrong fields. When published, the dataset can be used (under “Co-created datasets” tab on the first step of the controllet) by all SPOD users in their discussions.
+            that are published with the dataset. Moreover, several validation heuristics are used to show warnings on apparently
+            wrong fields. When published, the dataset can be used (under “Co-created datasets” tab on the first step of the Controllet) by all SPOD users in their discussions.
+
+            There are two types of rooms: the data and the media room; the color recognizes the type of room, i.e the green identifies the data room and the orange that of the media room
+            The media room is synchronized to the same room of the SPOD mobile application. By using SPOD Mobile, the users will not only share content (i.e., photos)
+            but photos will also include automatically geolocation for each photo.
+
         </div>
     </div>
 
     <div class="content" id="scroll_content">
+
+        <div class="sect">
+            <div class="horizontal layout cell">
+                <img src="{$staticResourcesUrl}images/cocreation_sync_en.png" style="width: 60%; height: 60%;">
+
+                <div class="cell">
+                    <div class="horizontal layout cell">
+                        <div class="section-number">1</div>
+                        <div class="section-title">A synchronization scenario</div>
+                    </div>
+                    <div>
+                        The synchronized data and media room show the same features, in contrast with data room,
+                        the media room  has a shared spreadsheet with fixed columns (named Title, Description, Image, Location, Date, User) that are automatically filled
+                        by taking a picture from mobile device.<br>
+                        SPOD Android app  is actually available on Google Play Market at the address <a href="https://play.google.com/store/apps/details?id=eu.spod.isislab.spodapp&hl=en"  target="_blank"> SPOD mobile app</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <div class="sect">
             <div class="horizontal layout cell">
                 <img src="{$staticResourcesUrl}images/data_room_en.png" style="width: 60%; height: 60%;">
 
                 <div class="cell">
                     <div class="horizontal layout cell">
-                        <div class="section-number">1</div>
+                        <div class="section-number">2</div>
                         <div class="section-title">Features</div>
                     </div>
                     <div>
@@ -144,6 +171,10 @@
                                 <paper-button raised="" tabindex="0" animated="" aria-disabled="false" elevation="1" class="x-scope paper-button-0">PUBLISH DATASET ON SPOD</paper-button>
                                 allows the publication of the dataset created for all users SPOD platform.
                             </li>
+                            <li>
+                                <paper-button raised="" class="menu_button x-scope paper-button-0" title="Import" role="button" tabindex="0" animated="" aria-disabled="false" elevation="1"> IMPORT FROM SPOD </paper-button>
+                                allows importing  both  datasets created by all users SPOD platform that datasets stored in the CKAN portal.
+                            </li>
                         </ul>
                         </p>
                     </div>
@@ -157,7 +188,7 @@
 
                 <div class="cell">
                     <div class="horizontal layout cell">
-                        <div class="section-number">2</div>
+                        <div class="section-number">3</div>
                         <div class="section-title">A quick tour</div>
                     </div>
                     <div>
@@ -190,6 +221,5 @@
             </div>
         </div>
     </div>
-
 
 </div>
