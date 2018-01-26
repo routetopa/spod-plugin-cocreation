@@ -339,9 +339,12 @@ var Table = module.exports = View.extend({
     var grid_el = this.$grid[0];
 
     this.$grid.scroll(function(e){
+      e.preventDefault();
+       e.stopPropagation();
       view.$table_col_headers.css('left',(0-grid_el.scrollLeft)+"px");
       view.$table_row_headers.css('top',(0-grid_el.scrollTop)+"px");
       if(_this.table_function_menu_instance != null) _this.table_function_menu_instance.scroll(grid_el);
+      return false;
     });
   },
 

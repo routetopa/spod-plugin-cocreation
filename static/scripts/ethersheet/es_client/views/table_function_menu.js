@@ -262,7 +262,7 @@ define( function(require,exports,module){
         },
 
         pageSelection: function(page){
-            //if(page != undefined) this.page = page;
+            if(page != undefined) this.page = page;
             this.getPagination();
             this.goToPageInGrid();
             if(page < this.page || _.isUndefined(page))
@@ -305,11 +305,12 @@ define( function(require,exports,module){
         scrollTo: function(cell){
             var low_limit = (10 * (this.chunk / 2));
             //vertical scroll
-            var v_offset = cell.offset().top;
+            var v_offset = $(cell)[0].offsetTop;
+            this.table.$grid.scrollTop(0);
             if(v_offset < low_limit){
                 this.table.$grid.scrollTop(this.rows_delta);
             }else{
-                this.table.$grid.scrollTop(v_offset - low_limit);
+                this.table.$grid.scrollTop(v_offset );
             }
             //horizintal scroll
             this.table.$grid.scrollLeft(cell.offset().left - low_limit);
