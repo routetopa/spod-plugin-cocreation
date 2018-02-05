@@ -79,17 +79,42 @@
 <div class="layout vertical">
 
     <div class="tall">
-        <div class="title">Helper per la stanza di Cocreazione dei dati</div>
+        <div class="title">Helper per la stanza di Cocreazione dei dati e  media</div>
         <div class="description">
-            Questa  stanza permette al gruppo di utenti di collaborare su di  un foglio di lavoro condiviso per creare un dataset.
+            Questo tipo di stanza permette al gruppo di utenti di collaborare su di  un foglio di lavoro condiviso per creare un dataset.
             Il processo è supportato scrivendo note condivise (con un modello che aiuta la comunità a dare tutte le informazioni rilevanti sul processo) e metadati condivisi,
             che sono pubblicati con il dataset. Inoltre, quando il dataset  viene pubblicato per gli altri utenti SPOD, diverse euristiche di convalida vengono utilizzate per
             mostrare le avvertenze sui campi apparentemente sbagliate. Quando  sarà pubblicato, il dataset  può essere utilizzato (nel tab “Dataset cocreati” nel primo step della controllet )
             da tutti gli utenti SPOD nelle loro discussioni.
+
+            Ci sono due tipi di stanze, una per i dati e un' altra stanza specifica per dati di tipo media. Il colore identifica il tipo di stanza, cioè il verde identifica
+            la stanza dei dati e l'arancione la stanza dei media.
+            Le stanze sono sincronizzate sull'applicazione mobile della piattaforma SPOD. Utilizzando l'app di SPOD, gli utenti non solo condividono il contenuto (ad esempio, le foto)
+            ma le foto includeranno anche la geolocalizzazione automatica per ogni foto.
         </div>
     </div>
 
     <div class="content" id="scroll_content">
+
+        <div class="sect">
+            <div class="horizontal layout cell">
+                <img src="{$staticResourcesUrl}images/cocreation_sync_it.png" style="width: 60%; height: 60%;">
+
+                <div class="cell">
+                    <div class="horizontal layout cell">
+                        <div class="section-number">1</div>
+                        <div class="section-title">La sincronizzazione</div>
+                    </div>
+                    <div>
+                        Le  stanze sincronizzate dei dati e quella dei media presentano le stesse funzionalità, in particolare la stanza dei media presenta un numero di colonne già organizzate
+                        (Title, Description, Image, Location, Date, User) che saranno completate con dati quando si scatta una foto da un cellulare.<br>
+                        L' app Android di SPOD è disponibile su Google Play all' indirizzo <a href="https://play.google.com/store/apps/details?id=eu.spod.isislab.spodapp&hl=it"  target="_blank"> SPOD mobile app</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="sect">
             <div class="horizontal layout cell">
                 <img src="{$staticResourcesUrl}images/data_room_it.png" style="width: 60%; height: 60%;">
@@ -141,6 +166,10 @@
                             <li>
                                 <paper-button raised="" tabindex="0" animated="" aria-disabled="false" elevation="1" class="x-scope paper-button-0">Pubblica il dataset su SPOD  </paper-button>
                                 Pubblicazione del dataset creato per tutti gli utenti di SPOD.
+                            </li>
+                            <li>
+                                <paper-button raised="" class="menu_button x-scope paper-button-0" title="Import" role="button" tabindex="0" animated="" aria-disabled="false" elevation="1"> IMPORTA DA SPOD </paper-button>
+                                importa dataset già creati  sulla piattaforma oppure quelli presenti sul portale degli Open Data.
                             </li>
                         </ul>
                         </p>
