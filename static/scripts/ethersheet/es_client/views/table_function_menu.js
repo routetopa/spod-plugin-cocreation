@@ -263,7 +263,7 @@ define( function(require,exports,module){
 
         pageSelection: function(page, direction){
             //if(page != undefined) this.page = page;
-            if(direction === undefined) this.page = page;
+            if(_.isUndefined(direction) && !_.isUndefined(page) ) this.page = page;
             this.getPagination();
             this.goToPageInGrid();
             if(_.isUndefined(direction) || direction > 0)
