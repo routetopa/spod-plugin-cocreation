@@ -4,3 +4,10 @@ OW::getPluginManager()->addPluginSettingsRouteName('cocreation', 'cocreation-set
 
 OW::getNavigation()->addMenuItem(OW_Navigation::MAIN, 'cocreation.index', 'cocreation', 'main_menu_item', OW_Navigation::VISIBLE_FOR_ALL);
 BOL_LanguageService::getInstance()->importPrefixFromZip(OW::getPluginManager()->getPlugin('cocreation')->getRootDir() . 'langs.zip', 'cocreation');
+
+$authorization = OW::getAuthorization();
+$groupName = 'cocreation';
+//$authorization->addGroup($groupName);
+//$authorization->addAction($groupName, 'view', true);
+//$authorization->addAction($groupName, 'add_comment');
+$authorization->addAction($groupName, 'Publish on CKAN');
