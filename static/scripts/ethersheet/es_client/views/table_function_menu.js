@@ -262,7 +262,8 @@ define( function(require,exports,module){
         },
 
         pageSelection: function(page, direction){
-            if(page != undefined) this.page = page;
+            //if(page != undefined) this.page = page;
+            if(direction === undefined) this.page = page;
             this.getPagination();
             this.goToPageInGrid();
             if(_.isUndefined(direction) || direction > 0)
@@ -319,12 +320,12 @@ define( function(require,exports,module){
         scroll: function(grid_el){
             if (grid_el.scrollTop > this.lastScrollTop ) {
                 //down
+                let delta = 20;
                 this.max_scroll = (grid_el.scrollHeight - this.table.$grid.height()) + 8;
-                if(grid_el.scrollTop == this.max_scroll && this.page < this.size) {
+                if((grid_el.scrollTop >= this.max_scroll - delta) && this.page < this.size) {
                     this.page++;
                     this.pageSelection(this.page - 1, 1);
                 }
-
             } else {
                 //up
                 if(grid_el.scrollTop == 0 && this.page > 1) {
