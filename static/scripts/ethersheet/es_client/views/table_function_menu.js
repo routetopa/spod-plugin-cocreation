@@ -74,7 +74,7 @@ define( function(require,exports,module){
         },
 
         getFirstRowIndex: function(){
-           return this.first_index_row;
+            return this.first_index_row;
         },
 
         getSheet: function(){
@@ -203,7 +203,7 @@ define( function(require,exports,module){
         add: function(s, f) {
             for (var i = s; i < f; i++) {
                 if(i == this.page)
-                   this.code += '<a class="active">' + i + '</a>';
+                    this.code += '<a class="active">' + i + '</a>';
                 else
                     this.code += '<a class="page">' + i + '</a>';
             }
@@ -258,14 +258,14 @@ define( function(require,exports,module){
             if (self.page > self.size) {
                 self.page = self.size;
             }
-           self.pageSelection();
+            self.pageSelection();
         },
 
-        pageSelection: function(page){
+        pageSelection: function(page, direction){
             if(page != undefined) this.page = page;
             this.getPagination();
             this.goToPageInGrid();
-            if(page < this.page || _.isUndefined(page))
+            if(_.isUndefined(direction) || direction > 0)
                 this.table.$grid.scrollTop(this.rows_delta);
             else
                 this.table.$grid.scrollTop($(".es-row-headers").height() - (this.rows_delta * this.chunk));
@@ -322,14 +322,14 @@ define( function(require,exports,module){
                 this.max_scroll = (grid_el.scrollHeight - this.table.$grid.height()) + 8;
                 if(grid_el.scrollTop == this.max_scroll && this.page < this.size) {
                     this.page++;
-                    this.pageSelection(this.page - 1);
+                    this.pageSelection(this.page - 1, 1);
                 }
 
             } else {
                 //up
                 if(grid_el.scrollTop == 0 && this.page > 1) {
                     this.page--;
-                    this.pageSelection(this.page + 1);
+                    this.pageSelection(this.page + 1, 0);
                 }
             }
             this.lastScrollTop = grid_el.scrollTop;
