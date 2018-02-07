@@ -17,6 +17,7 @@ var bodyParser    = require('body-parser');
 var cookieSession = require('cookie-session');
 var compression   = require('compression');
 var _ = require('underscore');
+var uuid = require('node-uuid').v4;
 
 /*End ISISLab code*/
 
@@ -210,7 +211,8 @@ exports.createServer = function(config){
         {
             try {
                 var sheet_id = fields.sheet_id;
-                var image_name = files.image_file.name;
+                var ext = files.image_file.name.split(".");
+                var image_name = uuid() + "." + ext[ext.length - 1];
             }catch(e){
                 console.log(e);
                 res.send(JSON.stringify({ status: false, massage: "There was an error"}));
@@ -317,10 +319,12 @@ exports.createServer = function(config){
         form.parse(req, function(err, fields, files) {
             try {
                 var collection_id = fields.sheetId;
+                var ext = files.image_file.name.split(".");
+                var image_name = uuid() + "." + ext[ext.length - 1];
                 var row  = {
                     title       : fields.title,
                     description : fields.description,
-                    image_name  : files.image_file.name,
+                    image_name  : image_file,
                     location    : fields.location,
                     date        : fields.date,
                     user        : fields.user
