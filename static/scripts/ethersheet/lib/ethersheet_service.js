@@ -143,7 +143,7 @@ EtherSheetService.prototype.getSheet = function(sheet_id,cb){
 EtherSheetService.prototype.sheetToCSV = function(sheet_id,cb){
     var es = this;
     es.getSheet(sheet_id,function(err,sheet_data){
-      var output = '';
+      var output = '\ufeff';
 
       var frow = sheet_data.rows[0];
       var lcol;
