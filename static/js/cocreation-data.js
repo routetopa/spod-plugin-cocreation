@@ -505,15 +505,21 @@ room.uploadOnCkan = function (_jsonData, _jsonCocreationMetadata, notes, callbac
         author: $contact_name, author_email: $contact_email };
 
     //Create the package on CKAN.
-    const $platformUrl = COCREATION.ckan_platform_url_preference ; //"http://ckan.routetopa.eu";
-    const $keyapi = COCREATION.ckan_api_key_preference;//"8febb463-f637-45b3-a6cb-d8957cdefbf3";
+    const $platformUrl = COCREATION.ckan_platform_url_preference;
+    const $keyapi = COCREATION.ckan_api_key_preference;
 
     var client = new CKANClient($platformUrl, $keyapi);
 
     client.createPackage(metadata, function (response, err) {
         if (err != null) {
             var _jsonError = JSON.parse(response);
-            var _errors = _jsonError.error.name;
+            var _errors = "";
+
+            if (typeof _jsonError.error.name !== 'undefined')
+                _errors += _jsonError.error.name;
+
+            if (typeof _jsonError.error.message !== 'undefined')
+                _errors += _jsonError.error.message;
 
             if (typeof callbackUpload !== 'undefined')
                 callbackUpload({ success: false, errors: _errors });
@@ -532,7 +538,13 @@ room.uploadOnCkan = function (_jsonData, _jsonCocreationMetadata, notes, callbac
             var uploadedPackageId = JSON.parse(response).result.id;
             if (err != null) {
                 var _jsonError = JSON.parse(response);
-                var _errors = _jsonError.error.name;
+                var _errors = "";
+
+                if (typeof _jsonError.error.name !== 'undefined')
+                    _errors += _jsonError.error.name;
+
+                if (typeof _jsonError.error.message != 'undefined')
+                    _errors += _jsonError.error.message;
 
                 callbackUpload({ success: false, errors: _errors, package: { id: uploadedPackageId } });
             } else {
