@@ -364,6 +364,7 @@
                     if (current_direction === 'NEXT') {
                         COCREATION.ckan_platform_url_preference = document.querySelector('#inputPlatformURL').value;
                         COCREATION.ckan_api_key_preference = document.querySelector('#inputCkanAPIKey').value;
+                        COCREATION.ckan_def_organisation_preference = document.querySelector('#inputDefOrganisation').value;
                     }
 
                     const $dataTablePreview = document.querySelector("#data_table_controllet");
@@ -711,6 +712,7 @@
         {if $canPublishOnCKAN}
         <paper-input id="inputPlatformURL" always-float-label label="CKAN Platform URL" value="{$PublishOnCKAN_platform_url}"></paper-input>
         <paper-input id="inputCkanAPIKey" type="password" always-float-label label="CKAN API Key" value="{$PublishOnCKAN_api_key}"></paper-input>
+        <paper-input id="inputDefOrganisation" always-float-label label="Organisation ID/Key" value="{$PublishOnCKAN_def_organisation}"></paper-input>
         {else}
         <p>You do not have permissions to upload a dataset on CKAN.</p>
         {/if}

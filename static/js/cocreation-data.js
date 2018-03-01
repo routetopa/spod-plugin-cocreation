@@ -478,7 +478,6 @@ room._convertCSVToFile = function (_jsonData) {
 room.uploadOnCkan = function (_jsonData, _jsonCocreationMetadata, notes, callbackUpload) {
     const fileCSVData = room._convertCSVToFile(_jsonData);
 
-    debugger;
     //Cocreation notes.
     var fileNotes = null;
     if (notes != null)
@@ -501,25 +500,25 @@ room.uploadOnCkan = function (_jsonData, _jsonCocreationMetadata, notes, callbac
         return;
     }
 
-    var metadata = { name: $dataset_key, title: $dataset_title, notes: $dataset_description, description: $dataset_description,
-        author: $contact_name, author_email: $contact_email };
-
     //Create the package on CKAN.
     const $platformUrl = COCREATION.ckan_platform_url_preference;
     const $keyapi = COCREATION.ckan_api_key_preference;
+    const $deforganisation = COCREATION.ckan_def_organisation_preference;
+
+    if (typeof $deforganisation === 'undefined' || $deforganisation.trim().length == 0) {
+        callbackUpload({ success: false, errors: [ 'The organisation is mandatary.' ]});
+        return;
+    }
+
+    var metadata = { name: $dataset_key, title: $dataset_title, notes: $dataset_description, description: $dataset_description,
+        author: $contact_name, author_email: $contact_email, owner_org: $deforganisation };
 
     var client = new CKANClient($platformUrl, $keyapi);
 
     client.createPackage(metadata, function (response, err) {
         if (err != null) {
             var _jsonError = JSON.parse(response);
-            var _errors = "";
-
-            if (typeof _jsonError.error.name !== 'undefined')
-                _errors += _jsonError.error.name;
-
-            if (typeof _jsonError.error.message !== 'undefined')
-                _errors += _jsonError.error.message;
+            var _errors = room.processCkanErrorMessage(_jsonError);
 
             if (typeof callbackUpload !== 'undefined')
                 callbackUpload({ success: false, errors: _errors });
@@ -538,15 +537,10 @@ room.uploadOnCkan = function (_jsonData, _jsonCocreationMetadata, notes, callbac
             var uploadedPackageId = JSON.parse(response).result.id;
             if (err != null) {
                 var _jsonError = JSON.parse(response);
-                var _errors = "";
-
-                if (typeof _jsonError.error.name !== 'undefined')
-                    _errors += _jsonError.error.name;
-
-                if (typeof _jsonError.error.message != 'undefined')
-                    _errors += _jsonError.error.message;
+                var _errors = room.processCkanErrorMessage(_jsonError);
 
                 callbackUpload({ success: false, errors: _errors, package: { id: uploadedPackageId } });
+                return;
             } else {
                 if (notes == null)
                     callbackUpload({ success: true, package_id: package_id });
@@ -571,6 +565,29 @@ room.uploadOnCkan = function (_jsonData, _jsonCocreationMetadata, notes, callbac
         });//EndCreateResource.
 
     });//EndCreatePackage.
+};//EndFunction.
+
+room.processCkanErrorMessage = function (_jsonResponse) {
+    var _errors = "";
+
+    if (typeof _jsonResponse.error.name !== 'undefined')
+        _errors += _jsonResponse.error.name;
+
+    if (typeof _jsonResponse.error.message !== 'undefined')
+        _errors += _jsonResponse.error.message;
+
+    //Selects the other possible error messages in the response.
+    for (var property in _jsonResponse.error) {
+        if (_jsonResponse.error.hasOwnProperty(property)) {
+            if (property === '__type') continue;
+            if (property === 'message') continue;
+            if (property === 'name') continue;
+
+            _errors += _jsonResponse.error[property];
+        }
+    }
+
+    return _errors;
 };//EndFunction.
 
 //////////////////////////////////////////////////////////////////////////////

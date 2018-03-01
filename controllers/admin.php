@@ -4,6 +4,7 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
 {
     const PREF_POCKAN_PLATFORM_URL = "ckan_platform_url";
     const PREF_POCKAN_API_KEY = "ckan_api_key";
+    const PREF_POCKAN_DEF_ORGANISATION = "ckan_def_organisation";
 
     public function settings($params)
     {
@@ -130,6 +131,13 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
         $ckan_api_key_value = empty($preference) ? '' : $preference->defaultValue;
         $txtCKANApiKey->setValue($ckan_api_key_value);
         $form->addElement($txtCKANApiKey);
+
+        //PUBLISH ON CKAN - DEFAULT ORGANISATION
+        $txtCKANDefOrganisation = new TextField($this::PREF_POCKAN_DEF_ORGANISATION);
+        $preference = BOL_PreferenceService::getInstance()->findPreference($this::PREF_POCKAN_DEF_ORGANISATION);
+        $ckan_def_organisation_value = empty($preference) ? '' : $preference->defaultValue;
+        $txtCKANDefOrganisation->setValue($ckan_def_organisation_value);
+        $form->addElement($txtCKANDefOrganisation);
 
         $submit->setValue('SAVE');
         $form->addElement($submit);
@@ -282,6 +290,16 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
             $ckan_api_key_preference->sectionName = 'general';
             $ckan_api_key_preference->defaultValue = $data[$this::PREF_POCKAN_API_KEY];
             BOL_PreferenceService::getInstance()->savePreference($ckan_api_key_preference);
+
+            //PUBLISH ON CKAN: save the default organisation.
+            $ckan_def_organisation_preference = BOL_PreferenceService::getInstance()->findPreference($this::PREF_POCKAN_DEF_ORGANISATION);
+            if (empty($ckan_def_organisation_preference)) $ckan_def_organisation_preference = new BOL_Preference();
+
+            $ckan_def_organisation_preference->key = $this::PREF_POCKAN_DEF_ORGANISATION;
+            $ckan_def_organisation_preference->sortOrder = 7;
+            $ckan_def_organisation_preference->sectionName = 'general';
+            $ckan_def_organisation_preference->defaultValue = $data[$this::PREF_POCKAN_DEF_ORGANISATION];
+            BOL_PreferenceService::getInstance()->savePreference($ckan_def_organisation_preference);
         }
     }
 

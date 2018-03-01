@@ -113,6 +113,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         //It is useful to decide whether to show the Publish on CKAN or not.
         $ckan_platform_url_preference = BOL_PreferenceService::getInstance()->findPreference(COCREATION_CTRL_Admin::PREF_POCKAN_PLATFORM_URL);
         $ckan_api_key_preference = BOL_PreferenceService::getInstance()->findPreference(COCREATION_CTRL_Admin::PREF_POCKAN_API_KEY);
+        $ckan_def_org_key_preference = BOL_PreferenceService::getInstance()->findPreference(COCREATION_CTRL_Admin::PREF_POCKAN_DEF_ORGANISATION);
         $canPublishOnCKAN = OW::getAuthorization()->isUserAuthorized(OW::getUser()->getId(), "cocreation", "Publish on CKAN");
         $canPublishOnCKAN = $canPublishOnCKAN
             && (!empty($ckan_platform_url_preference) && strlen($ckan_platform_url_preference->defaultValue) > 0)
@@ -126,6 +127,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
             $this->assign('PublishOnCKAN_api_key', $ckan_api_key_preference->defaultValue);
             $ckan_platform_url_preference_default_value = $ckan_platform_url_preference->defaultValue;
             $ckan_api_key_preference_default_value = $ckan_api_key_preference->defaultValue;
+            $ckan_def_organisation_preference_value = $ckan_def_org_key_preference->defaultValue;
         }
 
         $js = UTIL_JsGenerator::composeJsString('
@@ -170,6 +172,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                'sheet_images_url'                          => OW_URL_HOME . "ethersheet/images/" . $sheetUrl,
                'ckan_platform_url_preference'              => $ckan_platform_url_preference_default_value,
                'ckan_api_key_preference'                   => $ckan_api_key_preference_default_value,
+               'ckan_def_organisation_preference'          => $ckan_def_organisation_preference_value,
                'sheet_remove_image_url'                    => OW_URL_HOME . "ethersheet/remove/image"
         ));
         OW::getDocument()->addOnloadScript($js);
