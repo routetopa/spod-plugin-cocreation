@@ -489,6 +489,7 @@ room.uploadOnCkan = function (_jsonData, _jsonCocreationMetadata, notes, callbac
     const $contact_name = _jsonCocreationMetadata.CC_RF.contact_name;
     const $contact_email = _jsonCocreationMetadata.CC_RF.contact_email;
     const $dataset_key = COCREATION.sheetName;
+    const $dataset_license_id = _jsonCocreationMetadata.license_id;
 
     if ($dataset_title.trim().length == 0) {
         callbackUpload({ success: false, errors: [ 'The title is required field in the metadata. Check dataset metadata.' ]});
@@ -511,8 +512,10 @@ room.uploadOnCkan = function (_jsonData, _jsonCocreationMetadata, notes, callbac
     }
 
     var metadata = { name: $dataset_key, title: $dataset_title, notes: $dataset_description, description: $dataset_description,
-        author: $contact_name, author_email: $contact_email, owner_org: $deforganisation };
+        author: $contact_name, author_email: $contact_email, owner_org: $deforganisation, license_id: $dataset_license_id };
 
+    debugger;;
+    
     var client = new CKANClient($platformUrl, $keyapi);
 
     client.createPackage(metadata, function (response, err) {

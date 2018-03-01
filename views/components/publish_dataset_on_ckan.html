@@ -360,6 +360,7 @@
 
                     uiChooseCKANServer();
                     break;
+
                 case 2:
                     if (current_direction === 'NEXT') {
                         COCREATION.ckan_platform_url_preference = document.querySelector('#inputPlatformURL').value;
@@ -372,31 +373,47 @@
                     $('#btnPrev').removeClass('button-disabled');
                     uiShowTable();
                     break;
+
                 case 3:
                     var $metadataList = document.querySelector('#publishCKANMetadataList');
                     var objMetadata = getCocreationMetadataAsObject();
-                    var _metadata = { "CC_RF": {
-                        title: objMetadata.CC_RF.title,
-                        description: objMetadata.CC_RF.description,
-                        contact_email: objMetadata.CC_RF.contact_email,
-                        contact_name: objMetadata.CC_RF.contact_name
-                    }};
+                    var _metadata = {
+                        "MANDATORY": [
+                            { name: "title", type: "CC_RF"}, { name: "description", type: "CC_RF"}, { name: "license", type: "CC_RAF"}
+                        ],
+                        "CC_RF": {
+                            title: objMetadata.CC_RF.title,
+                            description: objMetadata.CC_RF.description,
+                            contact_email: objMetadata.CC_RF.contact_email,
+                            contact_name: objMetadata.CC_RF.contact_name
+                        },
+                        "CC_RAF": {
+                            license: objMetadata.CC_RAF.license
+                        }
+                    };
+                    debugger;
                     $metadataList.setMetadata(JSON.stringify(_metadata));
 
                     $('#btnNext').removeClass('button-disabled');
                     $('#publish_button').addClass('button-disabled');
                     uiShowMetadata();
                     break;
-                case 4:
 
+                case 4:
                     //Save back the metadata.
                     var _objMetadataCocreation = getCocreationMetadataAsObject();
                     var _objMetadata = getWizardMetadataAsObject();
 
+                    _objMetadataCocreation.MANDATORY = [
+                        { name: "title", type: "CC_RF"}, { name: "description", type: "CC_RF"}, { name: "license", type: "CC_RAF"}
+                    ];
                     _objMetadataCocreation.CC_RF.title = _objMetadata.CC_RF.title;
                     _objMetadataCocreation.CC_RF.description = _objMetadata.CC_RF.description;
                     _objMetadataCocreation.CC_RF.contact_email = _objMetadata.CC_RF.contact_email;
                     _objMetadataCocreation.CC_RF.contact_name = _objMetadata.CC_RF.contact_name;
+                    _objMetadataCocreation.CC_RAF.license = _objMetadata.CC_RAF.license;
+
+
                     //room.persistMetadata(_objMetadataCocreation);
                     var $metadata_component = document.querySelector('#metadata_component');
                     $metadata_component.setMetadata(JSON.stringify(_objMetadataCocreation));
@@ -450,6 +467,14 @@
 
             var dataset = room.current_dataset;
             var metadata = getWizardMetadataAsObject();
+
+            //Get the license key and saves it in the metadata.
+            const _licenseLabel = metadata.CC_RAF.license;
+            const $metadata_component = document.querySelector('#metadata_component');
+            $metadata_component.licenses.forEach(function (license_item) {
+                if (license_item.label === _licenseLabel)
+                    metadata.license_id = license_item.value;
+            });
 
             //Decide whether to publish notes.
             var notes = null;
@@ -650,7 +675,7 @@
 
         if (isMetadataEmpty(metadata.CC_RF.title)) {
             $.confirm({
-                title: 'The title is mandatary.',
+                title: 'The title is mandatory.',
                 content: 'Please provide the title in the metadata.',
                 type: 'red',
                 typeAnimated: true,
@@ -661,8 +686,19 @@
             return false;
         } else if (isMetadataEmpty(metadata.CC_RF.description)) {
             $.confirm({
-                title: 'The description is mandatary.',
+                title: 'The description is mandatory.',
                 content: 'Please provide the description in the metadata.',
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    close: function () { }
+                }
+            });
+            return false;
+        } else if (isMetadataEmpty(metadata.CC_RAF.license) || metadata.CC_RAF.license === 'License not specified') {
+            $.confirm({
+                title: 'The description is mandatory.',
+                content: 'Please provide the license in the metadata.',
                 type: 'red',
                 typeAnimated: true,
                 buttons: {
