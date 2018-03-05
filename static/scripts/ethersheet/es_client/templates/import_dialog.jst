@@ -340,7 +340,6 @@
                 $warnList = $('#warningList');
 
                 //Extract file name.
-                debugger;
                 var fullPath = document.getElementById('csv_file').value;
                 if (fullPath) {
                     var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
@@ -366,6 +365,7 @@
                 }
 
                 //Check whether there are errors in the csv.
+                debugger;
                 if (jsonDataset.errors.length > 0) {
                     var errormessage = "The CSV file has the following errors:";
                     document.getElementById("errorMessage").innerText = errormessage;
