@@ -18,7 +18,7 @@ var cookieSession = require('cookie-session');
 var compression   = require('compression');
 var _ = require('underscore');
 var uuid = require('node-uuid').v4;
-var shapeConverter = require('./shapeconverter/shapeconverter');
+var shapeConverter = require('./shapeconverter/shapeconverter710');
 
 /*End ISISLab code*/
 
