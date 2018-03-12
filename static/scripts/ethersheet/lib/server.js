@@ -18,6 +18,7 @@ var cookieSession = require('cookie-session');
 var compression   = require('compression');
 var _ = require('underscore');
 var uuid = require('node-uuid').v4;
+var shapeConverter = require('./shapeconverter/shapeconverter');
 
 /*End ISISLab code*/
 
@@ -418,6 +419,41 @@ exports.createServer = function(config){
                 res.send(JSON.stringify({status: false, message: "There was an error"}));
             }
         });
+    });
+
+    //Shape converter services
+    app.post('/import/shape_file', function(req, res) {
+        var form = new formidable.IncomingForm();
+        form.parse(req, function(err, fields, files) {
+            try {
+                var sheet_id = fields.sheet_id;
+                var ext = files.shape_file.name;
+                var image_name = uuid() + "." + ext[ext.length - 1];
+            } catch (e) {
+                console.log(e);
+                res.send(JSON.stringify({status: false, massage: "There was an error"}));
+            }
+
+            fs.readFile(files.shape_file.path, function (err, data) {
+                var zip = new require('adm-zip')(files.shape_file.path);
+                var zipEntries = zip.getEntries();
+                zip.extractAllTo("./lib/temp/" + sheet_id, true);
+                let c = new shapeConverter.ShapeConverter(__dirname + "/temp/" + sheet_id + "/" + zipEntries[0].entryName.split(".")[0]);
+                let CSV = c.convertToCSV();
+                if(files.shape_file.size < 3 * 1024 * 1024) {
+                    es.createSheetFromCSV(sheet_id, CSV, function (err) {
+                        if (err)
+                            console.log(err);
+                        res.redirect('back');
+                        pub_server.refreshClients(sheet_id);
+                    });
+                }else{
+                    res.header('content-type', 'text/csv; charset=utf-8');
+                    res.send(CSV);
+                }
+            });
+        });
+
     });
 
     /***********************************************
