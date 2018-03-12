@@ -43,6 +43,7 @@ cloneRepository()
     npm install cluster
     npm install http-proxy
     npm install url
+    npm install adm-zip
     tput setaf 2
     echo "done"
 }
