@@ -353,7 +353,28 @@
         });
         $('#btnNext').mousedown(function(e){e.preventDefault();});//Remove double click selection.
 
+        /**
+         * It tests a value, if it is null or undefined, it sets an empty string "";
+         **/
+        function TestNullAndSetEmptyString(value) {
+            if (typeof value === 'undefined' || value === null) return "";
+            else return value;
+        };
+
         function uiStep(step) {
+
+            const MANDATORY = [
+                { name: "title", type: "CC_RF"},
+                { name: "description", type: "CC_RF"},
+                { name: "license", type: "CC_RAF"},
+                { name: "language", type: "EF" },
+                { name: "version", type: "CC_RF" },
+                { name: "contact_name", type: "CC_RF" },
+                { name: "contact_email", type: "CC_RF" },
+                { name: "maintainer", type: "CC_RF" },
+                { name: "maintainer_email", type: "CC_RF" }
+            ];
+
             switch (step) {
                 case 1:
                     $('#btnPrev').addClass('button-disabled');
@@ -378,17 +399,22 @@
                     var $metadataList = document.querySelector('#publishCKANMetadataList');
                     var objMetadata = getCocreationMetadataAsObject();
                     var _metadata = {
-                        "MANDATORY": [
-                            { name: "title", type: "CC_RF"}, { name: "description", type: "CC_RF"}, { name: "license", type: "CC_RAF"}
-                        ],
+                        "MANDATORY": MANDATORY,
                         "CC_RF": {
-                            title: objMetadata.CC_RF.title,
-                            description: objMetadata.CC_RF.description,
-                            contact_email: objMetadata.CC_RF.contact_email,
-                            contact_name: objMetadata.CC_RF.contact_name
+                            title: TestNullAndSetEmptyString(objMetadata.CC_RF.title),
+                            description: TestNullAndSetEmptyString(objMetadata.CC_RF.description),
+                            contact_email: TestNullAndSetEmptyString(objMetadata.CC_RF.contact_email),
+                            contact_name: TestNullAndSetEmptyString(objMetadata.CC_RF.contact_name),
+                            maintainer: TestNullAndSetEmptyString(objMetadata.CC_RF.maintainer),
+                            maintainer_email: TestNullAndSetEmptyString(objMetadata.CC_RF.maintainer_email),
+                            version: TestNullAndSetEmptyString(objMetadata.CC_RF.version)
                         },
                         "CC_RAF": {
-                            license: objMetadata.CC_RAF.license
+                            license: TestNullAndSetEmptyString(objMetadata.CC_RAF.license),
+                        },
+                        "EF": {
+                            language: TestNullAndSetEmptyString(objMetadata.EF.language),
+                            origin: TestNullAndSetEmptyString(objMetadata.EF.origin)
                         }
                     };
                     debugger;
@@ -404,15 +430,26 @@
                     var _objMetadataCocreation = getCocreationMetadataAsObject();
                     var _objMetadata = getWizardMetadataAsObject();
 
-                    _objMetadataCocreation.MANDATORY = [
+                    //Since here it saves back the metadata. Here the mondatary metadata
+                    //shown in the co-creation, so do not change mandatary metadata here.
+                    _objMetadataCocreation.MANDATORY =  [
                         { name: "title", type: "CC_RF"}, { name: "description", type: "CC_RF"}, { name: "license", type: "CC_RAF"}
                     ];
+
                     _objMetadataCocreation.CC_RF.title = _objMetadata.CC_RF.title;
                     _objMetadataCocreation.CC_RF.description = _objMetadata.CC_RF.description;
-                    _objMetadataCocreation.CC_RF.contact_email = _objMetadata.CC_RF.contact_email;
+
                     _objMetadataCocreation.CC_RF.contact_name = _objMetadata.CC_RF.contact_name;
+                    _objMetadataCocreation.CC_RF.contact_email = _objMetadata.CC_RF.contact_email;
+
+                    _objMetadataCocreation.CC_RF.maintainer = _objMetadata.CC_RF.maintainer;
+                    _objMetadataCocreation.CC_RF.maintainer_email = _objMetadata.CC_RF.maintainer_email;
+
+                    _objMetadataCocreation.CC_RF.version = _objMetadata.CC_RF.version;
                     _objMetadataCocreation.CC_RAF.license = _objMetadata.CC_RAF.license;
 
+                    _objMetadataCocreation.EF.language = _objMetadata.EF.language;
+                    _objMetadataCocreation.EF.origin = _objMetadata.EF.origin;
 
                     //room.persistMetadata(_objMetadataCocreation);
                     var $metadata_component = document.querySelector('#metadata_component');
@@ -476,6 +513,14 @@
                     metadata.license_id = license_item.value;
             });
 
+            //Get the language key and saves it in the metadata.
+            debugger;
+            const _languageLabel = metadata.EF.language;
+            $metadata_component.languages.forEach(function (item) {
+                if (item.label === _languageLabel)
+                    metadata.language_id = item.value;
+            });
+
             //Decide whether to publish notes.
             var notes = null;
             if (room.publishOnCkanNotes.doPublish) {
@@ -491,6 +536,12 @@
             const $dataset_key = COCREATION.sheetName;
             room.showPackage($dataset_key, function(response) {
                 const _jsonResponse = JSON.parse(response);
+
+                if (_jsonResponse === null) {
+                    uiShowError({ errors: ["Cannot access to the CKAN platform. Check that it is working..."] });
+                    return;
+                }
+
                 if (_jsonResponse.success == true) {
                     $.confirm({
                         title: 'Dataset already exists.',
@@ -698,7 +749,7 @@
         } else if (isMetadataEmpty(metadata.CC_RAF.license) || metadata.CC_RAF.license === 'License not specified') {
             $.confirm({
                 title: 'The description is mandatory.',
-                content: 'Please provide the license in the metadata.',
+                content: 'Please provide the description in the metadata.',
                 type: 'red',
                 typeAnimated: true,
                 buttons: {
@@ -706,10 +757,46 @@
                 }
             });
             return false;
+        } else if (isMetadataEmpty(metadata.CC_RF.contact_name)) {
+            showErrorDialog('The Contact Name is mandatory.', 'Please provide the Contact Name in the metadata.');
+            return false;
+        } else if (isMetadataEmpty(metadata.CC_RF.contact_email)) {
+            showErrorDialog('The Contact  E-mail is mandatory.', 'Please provide the Contact E-mail in the metadata.');
+            return false;
+        } else if (isMetadataEmpty(metadata.CC_RF.maintainer)) {
+            showErrorDialog('The maintainer is mandatory.', 'Please provide the maintainer in the metadata.');
+            return false;
+        } else if (isMetadataEmpty(metadata.CC_RF.maintainer_email)) {
+            showErrorDialog('The maintainer email is mandatory.', 'Please provide the maintainer email in the metadata.');
+            return false;
+        } else if (isMetadataEmpty(metadata.CC_RF.version)) {
+            showErrorDialog('The version is mandatory.', 'Please provide the version in the metadata.');
+            return false;
+        } else if (isMetadataEmpty(metadata.CC_RAF.license)) {
+            showErrorDialog('The license is mandatory.', 'Please provide the license in the metadata.');
+            return false;
+        }  else if (isMetadataEmpty(metadata.EF.language)) {
+            showErrorDialog('The language is mandatory.', 'Please provide the language in the metadata.');
+            return false;
+        } else if (isMetadataEmpty(metadata.EF.origin)) {
+            showErrorDialog('The origin is mandatory.', 'Please provide the origin in the metadata.');
+            return false;
         }
 
         return true;
     };//EndFunction.
+
+    function showErrorDialog(title, content) {
+        $.confirm({
+            title: title,
+            content: content,
+            type: 'red',
+            typeAnimated: true,
+            buttons: {
+                close: function () { }
+            }
+        });
+    };//EndFunciton.
 
     function isMetadataEmpty(field) {
         return (typeof field === 'undefined' || field == null || field.length == 0);

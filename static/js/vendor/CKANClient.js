@@ -181,6 +181,14 @@ CKANClient.prototype = (function() {
                 _ckanPackageData.description = data.description;
                 _ckanPackageData.author = data.author;
                 _ckanPackageData.author_email = data.author_email;
+                _ckanPackageData.maintainer = data.maintainer;
+                _ckanPackageData.maintainer_email = data.maintainer_email;
+                _ckanPackageData.version = data.version;
+                _ckanPackageData.language = data.language;
+                _ckanPackageData.url = data.url;
+                _ckanPackageData.license_id = data.license_id;
+
+                debugger;
 
                 var _sCkanPackageData = JSON.stringify(_ckanPackageData);
                 $self.makeHTTPRequest(targetUrl, _sCkanPackageData, callback);
