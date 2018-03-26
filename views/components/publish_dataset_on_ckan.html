@@ -417,7 +417,6 @@
                             origin: TestNullAndSetEmptyString(objMetadata.EF.origin)
                         }
                     };
-                    debugger;
                     $metadataList.setMetadata(JSON.stringify(_metadata));
 
                     $('#btnNext').removeClass('button-disabled');
@@ -514,7 +513,6 @@
             });
 
             //Get the language key and saves it in the metadata.
-            debugger;
             const _languageLabel = metadata.EF.language;
             $metadata_component.languages.forEach(function (item) {
                 if (item.label === _languageLabel)
@@ -543,6 +541,13 @@
                 }
 
                 if (_jsonResponse.success == true) {
+
+                    if (typeof _jsonResponse.result !== 'undefined' && typeof _jsonResponse.result.state !== 'undefined'
+                        && _jsonResponse.result.state === 'deleted') {
+                        uiShowError({ errors: ["The dataset already exists in CKAN. You cannot see it because it is in the trash bin."] });
+                        return;
+                    }
+
                     $.confirm({
                         title: 'Dataset already exists.',
                         content: 'The dataset already exists on CKAN! Do you desire to update it?',
@@ -550,10 +555,15 @@
                             confirm: function () {
                                 room.updateOnCkan($dataset_key, dataset, metadata, notes, function(response) {
                                     if (response.success) {
-                                        room._closeDialogPublishOnCKAN();
+                                        var _packageid = _jsonResponse.result.id;
+                                        $('#btnOpenDatasetOnCKAN').attr("package_id", _packageid);
+                                        uiPublished();
+
+                                        //room._closeDialogPublishOnCKAN();
                                         return;
                                     }
 
+                                    uiShowError(response);
                                     debugger;
                                 });
                             },

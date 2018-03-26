@@ -471,13 +471,13 @@ room.updateOnCkan = function(package_id, _jsonDataset, _jsonCocreationMetadata, 
         }
 
         //Manage here the error.
-        //TODO: xxx.
-        /*var ckanResponse = JSON.parse(response.responseText);
-        var _errors = room.processCkanErrorMessage(ckanResponse.errors);
+        debugger;
+        var ckanResponse = JSON.parse(response.responseText);
+        var _errors = room.processCkanErrorMessage(ckanResponse);
 
         if (typeof cb !== 'undefined')
-            cb({ success: false, errors: _errors });
-        return;*/
+            cb({ success: false, errors: [ _errors ] });
+        return;
     });
 };//EndFunction.
 
@@ -644,10 +644,10 @@ room.uploadOnCkan = function (_jsonData, _jsonCocreationMetadata, notes, callbac
 room.processCkanErrorMessage = function (_jsonResponse) {
     var _errors = "";
 
-    if (typeof _jsonResponse.error.name !== 'undefined')
+    if (typeof _jsonResponse.error !== 'undefined' && typeof _jsonResponse.error.name !== 'undefined')
         _errors += _jsonResponse.error.name;
 
-    if (typeof _jsonResponse.error.message !== 'undefined')
+    if (typeof _jsonResponse.error !== 'undefined' && typeof _jsonResponse.error.message !== 'undefined')
         _errors += _jsonResponse.error.message;
 
     //Selects the other possible error messages in the response.
