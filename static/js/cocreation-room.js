@@ -104,17 +104,19 @@ room.init = function(){
                     { name: "description", type: "CC_RF"},
                     { name: "license", type: "CC_RAF"},
                     { name: "language", type: "EF" },
-                    { name: "version", type: "EF" },
-                    { name: "contact_name", type: "EF" },
-                    { name: "contact_email", type: "EF" },
-                    { name: "maintainer", type: "EF" },
-                    { name: "maintainer_email", type: "EF" },
-                    { name: "origin", type: "EF" }
+                    { name: "version", type: "CC_RF" },
+                    { name: "contact_name", type: "CC_RF" },
+                    { name: "contact_email", type: "CC_RF" },
+                    { name: "maintainer", type: "CC_RF" },
+                    { name: "maintainer_email", type: "CC_RF" },
+                    { name: "origin", type: "CC_RF" }
                 ];
-                COCREATION.metadata = JSON.stringify({"MANDATORY": MANDATORY,
+                COCREATION.metadata = JSON.stringify({
+                                                      "MANDATORY": MANDATORY,
                                                       "CC_RF":  JSON.parse(rawData.core_common_required_metadata),
                                                       "CC_RAF": JSON.parse(rawData.common_core_if_applicable_metadata),
-                                                      "EF":     JSON.parse(rawData.expanded_metadata )});
+                                                      "EF":     JSON.parse(rawData.expanded_metadata )
+                                                    });
                 room.$.metadata_component.setMetadata(COCREATION.metadata);
 
                 room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'metadata_successfully_updated');

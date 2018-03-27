@@ -179,7 +179,12 @@ class COCREATION_BOL_Service
            "contact_name"        => "",
            "contact_email"       => "",
            "unique_identifier"   => "",
-           "public_access_level" => ""
+           "public_access_level" => "",
+
+            "origin"                    => "",
+            "version"                   => "",
+            "maintainer"                => "",
+            "maintainer_email"          => ""
         );
 
         $common_core_if_applicable = array(
@@ -205,19 +210,11 @@ class COCREATION_BOL_Service
             "primary_IT_investment_UII" => "",
             "related_documents"         => "",
             "release_date"              => "",
-            "system_of_records"         => "",
-
-            "version"                   => "",
-            "contact_name"              => "",
-            "contact_email"             => "",
-            "maintainer"                => "",
-            "maintainer_email"          => "",
-            "origin"                    => ""
+            "system_of_records"         => ""
         );
 
 
         $roomMetadata->roomId                     = $roomId;
-        $roomMetadata->mandatory                  = $mandatory;
         $roomMetadata->common_core_required       = json_encode($common_core_required);
         $roomMetadata->common_core_if_applicable  = json_encode($common_core_if_applicable);
         $roomMetadata->expanded                   = json_encode($expanded);
