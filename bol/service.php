@@ -168,8 +168,6 @@ class COCREATION_BOL_Service
 //           "origin"              => ""
 //        );
 
-//        $mandatory = '[{"name":"title","type":"CC_RF"},{"name":"description","type":"CC_RF"},{"name":"license","type":"CC_RAF"},{"name":"language","type":"EF"},{"name":"version","type":"EF"},{"name":"contact_name","type":"EF"},{"name":"contact_email","type":"EF"},{"name":"maintainer","type":"EF"},{"name":"maintainer_email","type":"EF"},{"name":"origin","type":"EF"}]';
-
         $common_core_required = array(
            "title"               => "",
            "description"         => "",
