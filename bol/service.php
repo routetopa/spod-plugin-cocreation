@@ -179,10 +179,9 @@ class COCREATION_BOL_Service
            "unique_identifier"   => "",
            "public_access_level" => "",
 
-            "origin"                    => "",
-            "version"                   => "",
-            "maintainer"                => "",
-            "maintainer_email"          => ""
+            "version"            => "",
+            "maintainer"         => "",
+            "maintainer_email"   => ""
         );
 
         $common_core_if_applicable = array(
@@ -208,7 +207,9 @@ class COCREATION_BOL_Service
             "primary_IT_investment_UII" => "",
             "related_documents"         => "",
             "release_date"              => "",
-            "system_of_records"         => ""
+            "system_of_records"         => "",
+
+            "origin"                    => ""
         );
 
 

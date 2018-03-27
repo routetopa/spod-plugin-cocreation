@@ -109,7 +109,7 @@ room.init = function(){
                     { name: "contact_email", type: "CC_RF" },
                     { name: "maintainer", type: "CC_RF" },
                     { name: "maintainer_email", type: "CC_RF" },
-                    { name: "origin", type: "CC_RF" }
+                    { name: "origin", type: "EF" }
                 ];
                 COCREATION.metadata = JSON.stringify({
                                                       "MANDATORY": MANDATORY,

@@ -98,7 +98,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         $metadata = COCREATION_BOL_Service::getInstance()->getMetadataByRoomId($params['roomId']);
 
         $metadataObj = new stdClass();
-        $metadataObj->MANDATORY = json_decode('[{"name":"title","type":"CC_RF"},{"name":"description","type":"CC_RF"},{"name":"license","type":"CC_RAF"},{"name":"language","type":"EF"},{"name":"version","type":"CC_RF"},{"name":"contact_name","type":"CC_RF"},{"name":"contact_email","type":"CC_RF"},{"name":"maintainer","type":"CC_RF"},{"name":"maintainer_email","type":"CC_RF"},{"name":"origin","type":"CC_RF"}]');
+        $metadataObj->MANDATORY = json_decode('[{"name":"title","type":"CC_RF"},{"name":"description","type":"CC_RF"},{"name":"license","type":"CC_RAF"},{"name":"language","type":"EF"},{"name":"version","type":"CC_RF"},{"name":"contact_name","type":"CC_RF"},{"name":"contact_email","type":"CC_RF"},{"name":"maintainer","type":"CC_RF"},{"name":"maintainer_email","type":"CC_RF"},{"name":"origin","type":"EF"}]');
         $metadataObj->CC_RF = json_decode($metadata[0]->common_core_required);
         $metadataObj->CC_RAF = json_decode($metadata[0]->common_core_if_applicable);
         $metadataObj->EF = json_decode($metadata[0]->expanded);
