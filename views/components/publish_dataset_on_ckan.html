@@ -1,5 +1,5 @@
 <link rel="import" href="{$components_url}controllets/data-table-controllet/data-table-controllet.html"/>
-<link rel="import" href="{$components_url}controllets/metadata-list-controllet/metadata-list-controllet.html"/>
+<link rel="import" href="{$components_url}controllets/metadata-list-controllet/metadata-view-controllet.html"/>
 <link rel="import" href="{$components_url}bower_components/paper-button/paper-button.html">
 <link rel="import" href="{$components_url}bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="{$components_url}bower_components/paper-input/paper-input.html">
@@ -383,8 +383,8 @@
                     break;
 
                 case 3:
-                    var $metadataList = document.querySelector('#publishCKANMetadataList');
-                    var objMetadata = getCocreationMetadataAsObject();
+
+                    /*var objMetadata = getCocreationMetadataAsObject();
                     var _metadata = {
                         "MANDATORY": JSON.parse(COCREATION.metadata_mandatory),
                         "CC_RF": {
@@ -404,7 +404,12 @@
                             origin: TestNullAndSetEmptyString(objMetadata.EF.origin)
                         }
                     };
-                    $metadataList.setMetadata(JSON.stringify(_metadata));
+                    $metadataList.setMetadata(JSON.stringify(_metadata));*/
+
+                    var objMetadata = getCocreationMetadataAsObject();
+                    objMetadata.MANDATORY = JSON.parse(COCREATION.metadata_mandatory);
+                    var $metadataList = document.querySelector('#publishCKANMetadataList');
+                    $metadataList.setMetadata(JSON.stringify(objMetadata));
 
                     $('#btnNext').removeClass('button-disabled');
                     $('#publish_button').addClass('button-disabled');
@@ -413,12 +418,12 @@
 
                 case 4:
                     //Save back the metadata.
-                    var _objMetadataCocreation = getCocreationMetadataAsObject();
-//                    var _objMetadata = getWizardMetadataAsObject();
+                    /*var _objMetadataCocreation = getCocreationMetadataAsObject();
+                    var _objMetadata = getWizardMetadataAsObject();*/
 
                     //Since here it saves back the metadata. Here the mondatary metadata
                     //shown in the co-creation, so do not change mandatary metadata here.
-                    _objMetadataCocreation.MANDATORY =  JSON.parse(COCREATION.metadata_mandatory);
+                    //_objMetadata.MANDATORY =  JSON.parse(COCREATION.metadata_mandatory);
 
 //                    _objMetadataCocreation.CC_RF.title = _objMetadata.CC_RF.title;
 //                    _objMetadataCocreation.CC_RF.description = _objMetadata.CC_RF.description;
@@ -436,9 +441,9 @@
 //                    _objMetadataCocreation.EF.origin = _objMetadata.EF.origin;
 
                     //room.persistMetadata(_objMetadataCocreation);
-                    var $metadata_component = document.querySelector('#metadata_component');
-                    $metadata_component.setMetadata(JSON.stringify(_objMetadataCocreation));
-                    $metadata_component._forceUpdateMetadata();
+                    /*var $metadata_component = document.querySelector('#metadata_component');
+                    $metadata_component.setMetadata(JSON.stringify(_objMetadata));
+                    $metadata_component._forceUpdateMetadata();*/
 
                     uiShowNotes();
                     break;
@@ -852,7 +857,7 @@
 
         <!--<div class="card-number">1</div>
         <div class="matadata-name">Testo per i metadata</div>-->
-        <metadata-list-controllet id="publishCKANMetadataList" style="height: calc(100% - 40px)"></metadata-list-controllet>
+        <metadata-view-controllet id="publishCKANMetadataList" style="height: calc(100% - 40px)"></metadata-view-controllet>
 
     </div>
 </div>
