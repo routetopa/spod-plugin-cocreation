@@ -95,13 +95,17 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         $this->assign('headers', $headers);
         $this->assign('data', json_encode($data));
 
+        $metadataMandatoryObj = json_decode('[{"name":"title","type":"CC_RF"},{"name":"description","type":"CC_RF"},{"name":"license","type":"CC_RAF"},{"name":"language","type":"EF"},{"name":"version","type":"CC_RF"},{"name":"contact_name","type":"CC_RF"},{"name":"contact_email","type":"CC_RF"},{"name":"maintainer","type":"CC_RF"},{"name":"maintainer_email","type":"CC_RF"},{"name":"origin","type":"EF"}]');
+
         $metadata = COCREATION_BOL_Service::getInstance()->getMetadataByRoomId($params['roomId']);
 
         $metadataObj = new stdClass();
-        $metadataObj->MANDATORY = json_decode('[{"name":"title","type":"CC_RF"},{"name":"description","type":"CC_RF"},{"name":"license","type":"CC_RAF"},{"name":"language","type":"EF"},{"name":"version","type":"CC_RF"},{"name":"contact_name","type":"CC_RF"},{"name":"contact_email","type":"CC_RF"},{"name":"maintainer","type":"CC_RF"},{"name":"maintainer_email","type":"CC_RF"},{"name":"origin","type":"EF"}]');
+        $metadataObj->MANDATORY = $metadataMandatoryObj;
         $metadataObj->CC_RF = json_decode($metadata[0]->common_core_required);
         $metadataObj->CC_RAF = json_decode($metadata[0]->common_core_if_applicable);
         $metadataObj->EF = json_decode($metadata[0]->expanded);
+
+
 
         /* NEW DISCUSSION AGORA LIKE */
         $this->addComponent('discussion', new SPODDISCUSSION_CMP_Discussion($room->id));
@@ -147,6 +151,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                 COCREATION.room_members                       = {$room_members}
                 COCREATION.datalets                           = {$roomDatalets}
                 COCREATION.metadata                           = {$room_metadata}
+                COCREATION.metadata_mandatory                 = {$room_metadata_mandatory}
                 COCREATION.user_id                            = {$userId}
                 COCREATION.info                               = {$roomInfo}
                 COCREATION.spreadsheet_server_port            = {$spreasheet_server_port}
@@ -167,6 +172,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                'room_members'                              => json_encode($membersIds),
                'roomDatalets'                              => $room_datalets,
                'room_metadata'                             => json_encode($metadataObj),
+               'room_metadata_mandatory'                  => json_encode($metadataMandatoryObj),
                'userId'                                    => OW::getUser()->getId(),
                'roomInfo'                                  => json_encode($info),
                'spreasheet_server_port'                    => BOL_PreferenceService::getInstance()->findPreference('spreadsheet_server_port_preference')->defaultValue,

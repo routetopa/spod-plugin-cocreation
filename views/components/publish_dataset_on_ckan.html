@@ -362,20 +362,6 @@
         };
 
         function uiStep(step) {
-
-            const MANDATORY = [
-                { name: "title", type: "CC_RF"},
-                { name: "description", type: "CC_RF"},
-                { name: "license", type: "CC_RAF"},
-                { name: "language", type: "EF" },
-                { name: "version", type: "CC_RF" },
-                { name: "contact_name", type: "CC_RF" },
-                { name: "contact_email", type: "CC_RF" },
-                { name: "maintainer", type: "CC_RF" },
-                { name: "maintainer_email", type: "CC_RF" },
-                { name: "origin", type: "EF" }
-            ];
-
             switch (step) {
                 case 1:
                     $('#btnPrev').addClass('button-disabled');
@@ -400,7 +386,7 @@
                     var $metadataList = document.querySelector('#publishCKANMetadataList');
                     var objMetadata = getCocreationMetadataAsObject();
                     var _metadata = {
-                        "MANDATORY": MANDATORY,
+                        "MANDATORY": JSON.parse(COCREATION.metadata_mandatory),
                         "CC_RF": {
                             title: TestNullAndSetEmptyString(objMetadata.CC_RF.title),
                             description: TestNullAndSetEmptyString(objMetadata.CC_RF.description),
@@ -428,11 +414,11 @@
                 case 4:
                     //Save back the metadata.
                     var _objMetadataCocreation = getCocreationMetadataAsObject();
-                    var _objMetadata = getWizardMetadataAsObject();
+//                    var _objMetadata = getWizardMetadataAsObject();
 
                     //Since here it saves back the metadata. Here the mondatary metadata
                     //shown in the co-creation, so do not change mandatary metadata here.
-                    _objMetadataCocreation.MANDATORY =  MANDATORY;
+                    _objMetadataCocreation.MANDATORY =  JSON.parse(COCREATION.metadata_mandatory);
 
 //                    _objMetadataCocreation.CC_RF.title = _objMetadata.CC_RF.title;
 //                    _objMetadataCocreation.CC_RF.description = _objMetadata.CC_RF.description;

@@ -154,20 +154,6 @@ class COCREATION_BOL_Service
     public function createMetadataForRoom($roomId){
         $roomMetadata = new COCREATION_BOL_RoomMetadata();
 
-
-//        $mandatory = array(
-//           "title"               => "",
-//           "description"         => "",
-//           "license"             => "",
-//           "language"            => "",
-//           "version"             => "",
-//           "contact_name"        => "",
-//           "contact_email"       => "",
-//           "maintainer"          => "",
-//           "maintainer_email"    => "",
-//           "origin"              => ""
-//        );
-
         $common_core_required = array(
            "title"               => "",
            "description"         => "",
