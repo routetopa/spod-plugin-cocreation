@@ -99,7 +99,19 @@ room.init = function(){
                 room.$.syncToast.show();
                 break;
             case "updateMetadata":
-                COCREATION.metadata = JSON.stringify({"MANDATORY": [{ name: "title", type: "CC_RF"}, { name: "description", type: "CC_RF"}, { name: "license", type: "CC_RAF"}],
+                const MANDATORY = [
+                    { name: "title", type: "CC_RF"},
+                    { name: "description", type: "CC_RF"},
+                    { name: "license", type: "CC_RAF"},
+                    { name: "language", type: "EF" },
+                    { name: "version", type: "EF" },
+                    { name: "contact_name", type: "EF" },
+                    { name: "contact_email", type: "EF" },
+                    { name: "maintainer", type: "EF" },
+                    { name: "maintainer_email", type: "EF" },
+                    { name: "origin", type: "EF" }
+                ];
+                COCREATION.metadata = JSON.stringify({"MANDATORY": MANDATORY,
                                                       "CC_RF":  JSON.parse(rawData.core_common_required_metadata),
                                                       "CC_RAF": JSON.parse(rawData.common_core_if_applicable_metadata),
                                                       "EF":     JSON.parse(rawData.expanded_metadata )});

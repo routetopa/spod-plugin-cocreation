@@ -368,11 +368,12 @@
                 { name: "description", type: "CC_RF"},
                 { name: "license", type: "CC_RAF"},
                 { name: "language", type: "EF" },
-                { name: "version", type: "CC_RF" },
-                { name: "contact_name", type: "CC_RF" },
-                { name: "contact_email", type: "CC_RF" },
-                { name: "maintainer", type: "CC_RF" },
-                { name: "maintainer_email", type: "CC_RF" }
+                { name: "version", type: "EF" },
+                { name: "contact_name", type: "EF" },
+                { name: "contact_email", type: "EF" },
+                { name: "maintainer", type: "EF" },
+                { name: "maintainer_email", type: "EF" },
+                { name: "origin", type: "EF" }
             ];
 
             switch (step) {
@@ -431,24 +432,22 @@
 
                     //Since here it saves back the metadata. Here the mondatary metadata
                     //shown in the co-creation, so do not change mandatary metadata here.
-                    _objMetadataCocreation.MANDATORY =  [
-                        { name: "title", type: "CC_RF"}, { name: "description", type: "CC_RF"}, { name: "license", type: "CC_RAF"}
-                    ];
+                    _objMetadataCocreation.MANDATORY =  MANDATORY;
 
-                    _objMetadataCocreation.CC_RF.title = _objMetadata.CC_RF.title;
-                    _objMetadataCocreation.CC_RF.description = _objMetadata.CC_RF.description;
-
-                    _objMetadataCocreation.CC_RF.contact_name = _objMetadata.CC_RF.contact_name;
-                    _objMetadataCocreation.CC_RF.contact_email = _objMetadata.CC_RF.contact_email;
-
-                    _objMetadataCocreation.CC_RF.maintainer = _objMetadata.CC_RF.maintainer;
-                    _objMetadataCocreation.CC_RF.maintainer_email = _objMetadata.CC_RF.maintainer_email;
-
-                    _objMetadataCocreation.CC_RF.version = _objMetadata.CC_RF.version;
-                    _objMetadataCocreation.CC_RAF.license = _objMetadata.CC_RAF.license;
-
-                    _objMetadataCocreation.EF.language = _objMetadata.EF.language;
-                    _objMetadataCocreation.EF.origin = _objMetadata.EF.origin;
+//                    _objMetadataCocreation.CC_RF.title = _objMetadata.CC_RF.title;
+//                    _objMetadataCocreation.CC_RF.description = _objMetadata.CC_RF.description;
+//
+//                    _objMetadataCocreation.CC_RF.contact_name = _objMetadata.CC_RF.contact_name;
+//                    _objMetadataCocreation.CC_RF.contact_email = _objMetadata.CC_RF.contact_email;
+//
+//                    _objMetadataCocreation.CC_RF.maintainer = _objMetadata.CC_RF.maintainer;
+//                    _objMetadataCocreation.CC_RF.maintainer_email = _objMetadata.CC_RF.maintainer_email;
+//
+//                    _objMetadataCocreation.CC_RF.version = _objMetadata.CC_RF.version;
+//                    _objMetadataCocreation.CC_RAF.license = _objMetadata.CC_RAF.license;
+//
+//                    _objMetadataCocreation.EF.language = _objMetadata.EF.language;
+//                    _objMetadataCocreation.EF.origin = _objMetadata.EF.origin;
 
                     //room.persistMetadata(_objMetadataCocreation);
                     var $metadata_component = document.querySelector('#metadata_component');

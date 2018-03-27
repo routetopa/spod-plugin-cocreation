@@ -948,7 +948,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         $metadata = COCREATION_BOL_Service::getInstance()->getMetadataByRoomId($clean['roomId']);
 
         $metadataObj = new stdClass();
-        $metadataObj->MANDATORY = json_decode('[{"name":"title","type":"CC_RF"},{"name":"description","type":"CC_RF"},{"name":"license","type":"CC_RAF"}]');
+        $metadataObj->MANDATORY = json_decode('[{"name":"title","type":"CC_RF"},{"name":"description","type":"CC_RF"},{"name":"license","type":"CC_RAF"},{"name":"language","type":"EF"},{"name":"version","type":"EF"},{"name":"contact_name","type":"EF"},{"name":"contact_email","type":"EF"},{"name":"maintainer","type":"EF"},{"name":"maintainer_email","type":"EF"},{"name":"origin","type":"EF"}]');
         $metadataObj->CC_RF = json_decode($metadata[0]->common_core_required);
         $metadataObj->CC_RAF = json_decode($metadata[0]->common_core_if_applicable);
         $metadataObj->EF = json_decode($metadata[0]->expanded);

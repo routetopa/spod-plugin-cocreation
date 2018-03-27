@@ -154,6 +154,22 @@ class COCREATION_BOL_Service
     public function createMetadataForRoom($roomId){
         $roomMetadata = new COCREATION_BOL_RoomMetadata();
 
+
+//        $mandatory = array(
+//           "title"               => "",
+//           "description"         => "",
+//           "license"             => "",
+//           "language"            => "",
+//           "version"             => "",
+//           "contact_name"        => "",
+//           "contact_email"       => "",
+//           "maintainer"          => "",
+//           "maintainer_email"    => "",
+//           "origin"              => ""
+//        );
+
+//        $mandatory = '[{"name":"title","type":"CC_RF"},{"name":"description","type":"CC_RF"},{"name":"license","type":"CC_RAF"},{"name":"language","type":"EF"},{"name":"version","type":"EF"},{"name":"contact_name","type":"EF"},{"name":"contact_email","type":"EF"},{"name":"maintainer","type":"EF"},{"name":"maintainer_email","type":"EF"},{"name":"origin","type":"EF"}]';
+
         $common_core_required = array(
            "title"               => "",
            "description"         => "",
@@ -190,10 +206,18 @@ class COCREATION_BOL_Service
             "related_documents"         => "",
             "release_date"              => "",
             "system_of_records"         => "",
+
+            "version"                   => "",
+            "contact_name"              => "",
+            "contact_email"             => "",
+            "maintainer"                => "",
+            "maintainer_email"          => "",
+            "origin"                    => ""
         );
 
 
         $roomMetadata->roomId                     = $roomId;
+        $roomMetadata->mandatory                  = $mandatory;
         $roomMetadata->common_core_required       = json_encode($common_core_required);
         $roomMetadata->common_core_if_applicable  = json_encode($common_core_if_applicable);
         $roomMetadata->expanded                   = json_encode($expanded);
