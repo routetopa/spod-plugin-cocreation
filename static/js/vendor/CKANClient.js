@@ -272,6 +272,7 @@ CKANClient.prototype = (function() {
             formData.append('format', metadata.format);
             formData.append('name', metadata.name);
             formData.append('description', metadata.description);
+            
             formData.append('upload', datafile);
 
             const xhttp = new XMLHttpRequest();
