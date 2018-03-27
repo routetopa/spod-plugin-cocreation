@@ -303,7 +303,8 @@ CKANClient.prototype = (function() {
             formData.append('format', 'CSV');
             //formData.append('Format', 'CSV');
             //formData.append('mimetype', mimetype);
-            formData.append('name', metadata.name);
+            formData.append('name', metadata.title);
+            
             //formData.append('state', 'active');
             //formData.append('hash', hash);
             formData.append('description', metadata.description);
