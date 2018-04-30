@@ -509,6 +509,7 @@
                     metadata.language_id = item.value;
             });
 
+            debugger;
             //Decide whether to publish notes.
             var notes = null;
             if (room.publishOnCkanNotes.doPublish) {
@@ -748,7 +749,7 @@
             return false;
         } else if (isMetadataEmpty(metadata.CC_RAF.license) || metadata.CC_RAF.license === 'License not specified') {
             $.confirm({
-                title: 'The description is mandatory.',
+                title: 'The license is mandatory.',
                 content: 'Please provide the description in the metadata.',
                 type: 'red',
                 typeAnimated: true,
