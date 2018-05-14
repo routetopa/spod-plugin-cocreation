@@ -181,6 +181,14 @@ CKANClient.prototype = (function() {
                 _ckanPackageData.description = data.description;
                 _ckanPackageData.author = data.author;
                 _ckanPackageData.author_email = data.author_email;
+                _ckanPackageData.maintainer = data.maintainer;
+                _ckanPackageData.maintainer_email = data.maintainer_email;
+                _ckanPackageData.version = data.version;
+                _ckanPackageData.language = data.language;
+                _ckanPackageData.url = data.url;
+                _ckanPackageData.license_id = data.license_id;
+
+                debugger;
 
                 var _sCkanPackageData = JSON.stringify(_ckanPackageData);
                 $self.makeHTTPRequest(targetUrl, _sCkanPackageData, callback);
@@ -264,6 +272,7 @@ CKANClient.prototype = (function() {
             formData.append('format', metadata.format);
             formData.append('name', metadata.name);
             formData.append('description', metadata.description);
+            
             formData.append('upload', datafile);
 
             const xhttp = new XMLHttpRequest();
@@ -295,7 +304,8 @@ CKANClient.prototype = (function() {
             formData.append('format', 'CSV');
             //formData.append('Format', 'CSV');
             //formData.append('mimetype', mimetype);
-            formData.append('name', metadata.name);
+            formData.append('name', metadata.title);
+            
             //formData.append('state', 'active');
             //formData.append('hash', hash);
             formData.append('description', metadata.description);

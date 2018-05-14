@@ -99,9 +99,12 @@ room.init = function(){
                 room.$.syncToast.show();
                 break;
             case "updateMetadata":
-                COCREATION.metadata = JSON.stringify({"CC_RF":  JSON.parse(rawData.core_common_required_metadata),
+                COCREATION.metadata = JSON.stringify({
+                                                      "MANDATORY": JSON.parse(COCREATION.metadata_mandatory),
+                                                      "CC_RF":  JSON.parse(rawData.core_common_required_metadata),
                                                       "CC_RAF": JSON.parse(rawData.common_core_if_applicable_metadata),
-                                                      "EF":     JSON.parse(rawData.expanded_metadata )});
+                                                      "EF":     JSON.parse(rawData.expanded_metadata )
+                                                    });
                 room.$.metadata_component.setMetadata(COCREATION.metadata);
 
                 room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'metadata_successfully_updated');

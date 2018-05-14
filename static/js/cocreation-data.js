@@ -374,7 +374,6 @@ room._closeDialogPublishOnCKAN = function () {
 room.showPackage = function(package_id, cb) {
     const $platformUrl = COCREATION.ckan_platform_url_preference ; //"http://ckan.routetopa.eu";
     const $keyapi = COCREATION.ckan_api_key_preference;//"8febb463-f637-45b3-a6cb-d8957cdefbf3";
-
     var client = new CKANClient($platformUrl, $keyapi);
     client.showPackage(package_id, cb);
 };//EndFunction.
@@ -387,12 +386,20 @@ room.updateOnCkan = function(package_id, _jsonDataset, _jsonCocreationMetadata, 
     const $keyapi = COCREATION.ckan_api_key_preference;//"8febb463-f637-45b3-a6cb-d8957cdefbf3";
     var client = new CKANClient($platformUrl, $keyapi);
 
-    const $dataset_title = _jsonCocreationMetadata.CC_RF.title;
+    //Prepare metadata.
+    var result = this.prepareMetadataForCKAN(_jsonCocreationMetadata);
+    if (!result.success) {
+        cb(result);
+        return;
+    }
+    var packageDataUpdate = result.metadata;
+
+    /*const $dataset_title = _jsonCocreationMetadata.CC_RF.title;
     const $dataset_description = _jsonCocreationMetadata.CC_RF.description;
     const $contact_name = _jsonCocreationMetadata.CC_RF.contact_name;
     const $contact_email = _jsonCocreationMetadata.CC_RF.contact_email;
     var packageDataUpdate = { title: $dataset_title, notes: $dataset_description, description: $dataset_description,
-        author: $contact_name, author_email: $contact_email };
+        author: $contact_name, author_email: $contact_email };*/
 
     client.updatePackage(package_id, packageDataUpdate, function(response, err) {
         if (response.success) {//Package updated.
@@ -414,8 +421,8 @@ room.updateOnCkan = function(package_id, _jsonDataset, _jsonCocreationMetadata, 
                 package_id: package_id,
                 format: 'CSV',
                 url: _csvResource.url,
-                name: $dataset_title,
-                description: $dataset_description
+                name: packageDataUpdate.title,
+                description: packageDataUpdate.description
             };
 
             client.updateResource(_csvResource.id, fileCSVData, resource_metadata, function (response) {
@@ -465,6 +472,12 @@ room.updateOnCkan = function(package_id, _jsonDataset, _jsonCocreationMetadata, 
 
         //Manage here the error.
         debugger;
+        var ckanResponse = JSON.parse(response.responseText);
+        var _errors = room.processCkanErrorMessage(ckanResponse);
+
+        if (typeof cb !== 'undefined')
+            cb({ success: false, errors: [ _errors ] });
+        return;
     });
 };//EndFunction.
 
@@ -475,6 +488,85 @@ room._convertCSVToFile = function (_jsonData) {
     return fileCSVData;
 };//EndFunction.
 
+room.prepareMetadataForCKAN = function(_jsonCocreationMetadata) {
+    //Before to start the upload it checks the metadata.
+    const $dataset_title = _jsonCocreationMetadata.CC_RF.title;
+    const $dataset_description = _jsonCocreationMetadata.CC_RF.description;
+    //const $dataset_author = _jsonCocreationMetadata.CC_RF.author;
+    const $contact_name = _jsonCocreationMetadata.CC_RF.contact_name;
+    const $contact_email = _jsonCocreationMetadata.CC_RF.contact_email;
+
+    const $dataset_maintainer = _jsonCocreationMetadata.CC_RF.maintainer;
+    const $dataset_maintainer_email = _jsonCocreationMetadata.CC_RF.maintainer_email;
+
+    const $dataset_version = _jsonCocreationMetadata.CC_RF.version;
+    const $dataset_license_id = _jsonCocreationMetadata.license_id;
+
+    const $dataset_language_id = _jsonCocreationMetadata.language_id;
+    const $dataset_origin = _jsonCocreationMetadata.EF.origin;
+
+    const $dataset_key = COCREATION.sheetName;
+
+    debugger;
+
+    const _msgErrors = {
+        title_message: 'The title is a required field in the metadata.',
+        description_message: 'The description is a required field in the metadata.',
+        author_message: 'The Contact Name is a required field in the metadata.',
+        author_email_message: 'The Contact E-mail is a required field in the metadata.',
+        maintainer_message: 'The Maintainer is a required field in the metadata.',
+        maintainer_email_message: 'The Maintainer E-mail is a required field in the metadata.',
+        language_message: 'The language is a required field in the metadata.',
+        version_message: 'The version is a required field in the metadata.',
+        url_message: 'The origin is a required field in the metadata.',
+        license_id_message: 'The license is a required field in the metadata.'
+    };
+
+    /*if ($dataset_title.trim().length == 0) {
+        callbackUpload({ success: false, errors: [  ]});
+        return;
+    }
+
+    if ($dataset_description.trim().length == 0) {
+        callbackUpload({ success: false, errors: [ 'The description is required field in the metadata. Check dataset metadata.' ]});
+        return;
+    }*/
+
+    const $deforganisation = COCREATION.ckan_def_organisation_preference;
+
+    if (typeof $deforganisation === 'undefined' || $deforganisation.trim().length == 0) {
+        return { success: false, errors: [ 'The organisation is mandatary.' ]};
+    }
+
+    var metadata = {
+        name: $dataset_key,
+        title: $dataset_title,
+        notes: $dataset_description,
+        description: $dataset_description,
+        author: $contact_name,
+        author_email: $contact_email,
+        maintainer: $dataset_maintainer,
+        maintainer_email: $dataset_maintainer_email,
+        version: $dataset_version,
+        language: $dataset_language_id,
+        url: $dataset_origin,
+        owner_org: $deforganisation,
+        license_id: $dataset_license_id
+    };
+
+    for (var k in metadata){
+        var value = metadata[k];
+        var _msgErrorKey = k + "_message";
+
+        if (_msgErrors.hasOwnProperty(_msgErrorKey) && typeof value != 'undefined' && value.trim().length == 0) {
+            var msg = _msgErrors[_msgErrorKey];
+            return { success: false, errors: [ msg ] };
+        }
+    }
+
+    return { success: true, metadata: metadata };
+};//EndFunction.
+
 room.uploadOnCkan = function (_jsonData, _jsonCocreationMetadata, notes, callbackUpload) {
     const fileCSVData = room._convertCSVToFile(_jsonData);
 
@@ -483,39 +575,18 @@ room.uploadOnCkan = function (_jsonData, _jsonCocreationMetadata, notes, callbac
     if (notes != null)
         fileNotes = new File([notes.content], notes.filename + "." + notes.format, { type: notes.content_type });
 
-    //Before to start the upload it checks the metadata.
-    const $dataset_title = _jsonCocreationMetadata.CC_RF.title;
-    const $dataset_description = _jsonCocreationMetadata.CC_RF.description;
-    const $contact_name = _jsonCocreationMetadata.CC_RF.contact_name;
-    const $contact_email = _jsonCocreationMetadata.CC_RF.contact_email;
-    const $dataset_key = COCREATION.sheetName;
-    const $dataset_license_id = _jsonCocreationMetadata.license_id;
-
-    if ($dataset_title.trim().length == 0) {
-        callbackUpload({ success: false, errors: [ 'The title is required field in the metadata. Check dataset metadata.' ]});
+    var result = this.prepareMetadataForCKAN(_jsonCocreationMetadata);
+    if (!result.success) {
+        callbackUpload(result);
         return;
     }
 
-    if ($dataset_description.trim().length == 0) {
-        callbackUpload({ success: false, errors: [ 'The description is required field in the metadata. Check dataset metadata.' ]});
-        return;
-    }
+    var metadata = result.metadata;
 
     //Create the package on CKAN.
     const $platformUrl = COCREATION.ckan_platform_url_preference;
     const $keyapi = COCREATION.ckan_api_key_preference;
-    const $deforganisation = COCREATION.ckan_def_organisation_preference;
 
-    if (typeof $deforganisation === 'undefined' || $deforganisation.trim().length == 0) {
-        callbackUpload({ success: false, errors: [ 'The organisation is mandatary.' ]});
-        return;
-    }
-
-    var metadata = { name: $dataset_key, title: $dataset_title, notes: $dataset_description, description: $dataset_description,
-        author: $contact_name, author_email: $contact_email, owner_org: $deforganisation, license_id: $dataset_license_id };
-
-    debugger;;
-    
     var client = new CKANClient($platformUrl, $keyapi);
 
     client.createPackage(metadata, function (response, err) {
@@ -533,7 +604,7 @@ room.uploadOnCkan = function (_jsonData, _jsonCocreationMetadata, notes, callbac
         var package_id = _json.result.id;
 
         //Changes metadata to adapt them for the
-        metadata.name =  $dataset_title;
+        //metadata.name =  $dataset_title;
 
         //Upload CSV FILE.
         client.createResourceCSV(package_id, fileCSVData, metadata, function (response, err) {
@@ -573,10 +644,10 @@ room.uploadOnCkan = function (_jsonData, _jsonCocreationMetadata, notes, callbac
 room.processCkanErrorMessage = function (_jsonResponse) {
     var _errors = "";
 
-    if (typeof _jsonResponse.error.name !== 'undefined')
+    if (typeof _jsonResponse.error !== 'undefined' && typeof _jsonResponse.error.name !== 'undefined')
         _errors += _jsonResponse.error.name;
 
-    if (typeof _jsonResponse.error.message !== 'undefined')
+    if (typeof _jsonResponse.error !== 'undefined' && typeof _jsonResponse.error.message !== 'undefined')
         _errors += _jsonResponse.error.message;
 
     //Selects the other possible error messages in the response.
@@ -586,7 +657,7 @@ room.processCkanErrorMessage = function (_jsonResponse) {
             if (property === 'message') continue;
             if (property === 'name') continue;
 
-            _errors += _jsonResponse.error[property];
+            _errors +=  "(" + property + ":" + _jsonResponse.error[property] + ")\n";
         }
     }
 

@@ -163,7 +163,11 @@ class COCREATION_BOL_Service
            "contact_name"        => "",
            "contact_email"       => "",
            "unique_identifier"   => "",
-           "public_access_level" => ""
+           "public_access_level" => "",
+
+            "version"            => "",
+            "maintainer"         => "",
+            "maintainer_email"   => ""
         );
 
         $common_core_if_applicable = array(
@@ -190,6 +194,8 @@ class COCREATION_BOL_Service
             "related_documents"         => "",
             "release_date"              => "",
             "system_of_records"         => "",
+
+            "origin"                    => ""
         );
 
 
