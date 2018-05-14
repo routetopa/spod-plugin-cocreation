@@ -145,18 +145,21 @@ EtherSheetService.prototype.sheetToCSV = function(sheet_id,cb){
     es.getSheet(sheet_id,function(err,sheet_data){
       var output = '\ufeff';
 
+      var separator = ';';
       var frow = sheet_data.rows[0];
       var lcol;
-      for(lcol = 0; lcol < sheet_data.cols.length; lcol++ ){
-          if(_.isUndefined(sheet_data.cells[frow]) || _.isUndefined(sheet_data.cells[frow][sheet_data.cols[lcol]]))
-              break;
+
+      for(lcol = 0; lcol < sheet_data.cols.length; lcol++ )
+      {
+        if(_.isUndefined(sheet_data.cells[frow]) || _.isUndefined(sheet_data.cells[frow][sheet_data.cols[lcol]]))
+           break;
         else {
           cell = sheet_data.cells[frow][sheet_data.cols[lcol]].value.toString().trim();
           cell = cell.replace(new RegExp('"', 'g'), '""');
           cell = cell.replace(new RegExp('\n', 'g'), '');
           cell = cell.replace(new RegExp('\r', 'g'), '');
           cell = '"' + cell + '"';
-          output += cell + ',';
+          output += cell + separator;
         }
       }
       output = output.substr(0, output.length - 1) + "\n";
@@ -174,10 +177,10 @@ EtherSheetService.prototype.sheetToCSV = function(sheet_id,cb){
             cell = cell.replace(new RegExp('\r', 'g'), '');
             cell = '"' + cell + '"';
             //}
-            temp_output += cell + ',';
+            temp_output += cell + separator;
           } else {
             empty_cols_count++;
-            temp_output += ',';
+            temp_output += separator;
           }
         }
         if(empty_cols_count != lcol) output += temp_output.substr(0 , temp_output.length - 1) + "\n";
@@ -242,7 +245,7 @@ EtherSheetService.prototype.createSheetFromCSV = function(sheet_id,data,cb){
         }
         var row_uuid = uuid();
         sheet.rows.push(row_uuid);
-        sheet.cells[row_uuid] = {}
+        sheet.cells[row_uuid] = {};
         for(var col_idx = 0; col_idx < sheet.cols.length; col_idx++){
           var col_uuid = colmap[col_idx];
           var cell = {value:row[col_idx], type:Sheet.getCellType(row[col_idx])};
@@ -433,4 +436,17 @@ EtherSheetService.prototype.deleteMeta = function(sheet_id, cb){
 };
 EtherSheetService.prototype.deleteExpiredSheets = function(){
   console.log("DELETING EXPIRED SHEETS");
-}
+};
+
+EtherSheetService.prototype.insertRow = function(collection_id, row, cb){
+  var es = this;
+
+  es.getSheetCollectionIds(collection_id, function(err, sheet_ids) {
+    /*es.getSheet(sheet_ids[0], function (err, data) {
+        console.log(data);
+    });*/
+      var sheet = es.getModel('sheet',sheet_ids[0]);
+      console.log(sheet);
+
+  });
+};
