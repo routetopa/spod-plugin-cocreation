@@ -5,6 +5,7 @@ var sockjs = require('sockjs');
 //var engineio = require('engine.io');
 
 var fs = require('fs');
+var path = require('path');
 var Command = require('es_command');
 var Transactor = require('transactor');
 var EtherSheetService = require('./ethersheet_service');
@@ -18,7 +19,7 @@ var cookieSession = require('cookie-session');
 var compression   = require('compression');
 var _ = require('underscore');
 var uuid = require('node-uuid').v4;
-var shapeConverter = require('./shapeconverter/shapeconverter710');
+var shapeConverter = require('./shapeconverter/shapeconverter');
 
 /*End ISISLab code*/
 
@@ -101,20 +102,43 @@ exports.createServer = function(config){
         });
     });
 
+   app.get('/export_to_csv/:collection_id', function(req,res){
+        es.getSheetCollectionIds(String(req.params.collection_id), function (err, sheet_data) {
+            if (!err && typeof sheet_data !== 'undefined' && sheet_data.length == 1) {
+                es.sheetToCSV(sheet_data[0],function(err, sheet_data){
+                    res.header('content-type', 'text/csv; charset=utf-8');
+                    res.send(sheet_data);
+                });
+            }
+        });
+    });
+
+    //<% let ps = JSON.parse(plugins); for(let p in ps) { %>  <script src="/es_client/plugins/<%= ps[p] %>/<%= ps[p] %>.js"></script><% } %>
     //load up the sheet
     app.get('/s/:collection_id', function(req,res){
-        var collection_id = String(req.params.collection_id);
-
+        let collection_id = String(req.params.collection_id);
         http_server.collection_id = collection_id;
 
-        es.getSheetCollection(collection_id,function(err,sheet_data){
-            //console.log('sheet_data', sheet_data);
-            if(err) return res.send(500,String(err));
-            res.render('sheet.ejs',{
-                channel:collection_id,
-                sheet_collection:JSON.stringify(sheet_data)
+        //Get all plugins
+        let plugins = [];
+        fs.readdir("./node_modules/es_client/plugins", function(err, items){
+           for(let i in items)
+               plugins.push(items[i]);
+           console.log(plugins);
+
+            es.getSheetCollection(collection_id,function(err,sheet_data){
+
+                if(err) return res.send(500,String(err));
+                res.render('sheet.ejs',{
+                    channel          : collection_id,
+                    sheet_collection : JSON.stringify(sheet_data),
+                    plugins          : JSON.stringify(plugins)
+                });
             });
+
         });
+
+
     });
 
     //for test porpouse
@@ -203,8 +227,7 @@ exports.createServer = function(config){
 
     //Upload image from a cell
     //Post files
-    app.post('/upload/image', function(req, res)
-    {
+    app.post('/upload/image', function(req, res) {
         res.setHeader('Content-Type', 'application/json');
 
         var form = new formidable.IncomingForm();
@@ -311,8 +334,7 @@ exports.createServer = function(config){
     });
 
     //Add new row in the related sheet
-    app.post('/mediaroom/addrow/:collection_id', function(req, res)
-    {
+    app.post('/mediaroom/addrow/:collection_id', function(req, res) {
         //console.log("ADD ROW SERVICE CALLED");
         res.setHeader('Content-Type', 'application/json');
         var collection_id = String(req.params.collection_id);
