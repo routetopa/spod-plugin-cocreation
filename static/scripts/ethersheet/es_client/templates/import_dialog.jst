@@ -244,7 +244,7 @@
             <!--<form id="formFile" action="/import/csv" method="post" enctype="multipart/form-data">-->
                 <!--<input class="inputButton" type="file" name="csv_file" onchange="onChangedFile(event)">-->
 
-                <input id="csv_file" type="file" name="csv_file" class="inputfile" onclick="onClickFile(event)" onchange="onChangedFile(event)" />
+                <input id="csv_file" type="file" name="csv_file" class="inputfile" onclick="onClickFile(event)" accept=".csv" onchange="onChangedFile(event)" />
                 <label for="csv_file">
                     <span id="csvFileName"></span>
                     <div class="chooseFile">
@@ -322,6 +322,8 @@
 
             console.log(" " + this.value);
 
+            debugger;
+
             //Init the view.
             document.getElementById("errorMessage").innerText = "";
             document.getElementById("warningMessage").innerText = "";
@@ -330,6 +332,19 @@
             $('#tblBody').remove();
             $('#errorList').empty();
             $('#warningList').empty();
+
+            //Checks the file dimension.
+            const fInstance = input.files[0];
+            const sizeBytes = fInstance.size;
+            const sizeMB = sizeBytes / 1024 / 1024;
+
+            if (sizeMB > 10) {
+                //The file is too large.
+                var errormessage = "The CSV file is too large, the maximum size is 10 MB.";
+                document.getElementById("errorMessage").innerText = errormessage;
+                $('#btnSubmit').hide();
+                return false;
+            }
 
             //Read file.
             var filereader = new FileReader();
