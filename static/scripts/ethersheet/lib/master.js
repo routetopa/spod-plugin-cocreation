@@ -13,6 +13,7 @@ exports.createMasterServer = function(config){
 
     function getResourceKeyFromURL(url){
         url = url.replace(/\/ethersheet/, "");
+        url = url.replace(/\/export_to_csv/, "");
         url = url.replace(/\/s\//, "");
         url = url.replace(/\/mediaroom\/init/, "");
         url = url.replace(/\/mediaroom\/addrow/, "");
