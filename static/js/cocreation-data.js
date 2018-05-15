@@ -301,6 +301,10 @@ room._importDatasetFromSPOD = function () {
     this.previewFloatBoxImportFromSPOD = OW.ajaxFloatBox('COCREATION_CMP_ImportDatasetFromSpod', { message: 'loading ...' }, {width:'90%', height:'80vh', iconClass:'ow_ic_lens', title:'MyTitle'} );
 };//EndFunction.
 
+////////////////////////////////////////////////
+/// FUNCTION UPLOAD DATASET ON ETHERSHEET.
+///
+
 room._uploadDatasetOnEthersheet = function (event, cb) {
     //Prepare CSV file.
     const _jsonDataset = event.detail.dataset.data;
@@ -378,9 +382,46 @@ room.showPackage = function(package_id, cb) {
     client.showPackage(package_id, cb);
 };//EndFunction.
 
-room.updateOnCkan = function(package_id, _jsonDataset, _jsonCocreationMetadata, notes, cb) {
+room.getSheetCSV = function () {
+    //Test get CSV.
+    return new Promise( (res, rej) =>
+    {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function (response) {
+            const _responseText = response.currentTarget.responseText;
+            const _responseCode = response.currentTarget.status;
+            console.log("CSV: " + _responseText);
 
-    const fileCSVData = room._convertCSVToFile(_jsonDataset);
+            if (_responseCode / 100 == 2)
+                res(_responseText);
+            else
+                rej(_responseText);
+        };
+        xhttp.onerror = function (errResponse) {
+            rej(errResponse);
+        };
+        const _exportEndPoint = window.location.protocol + "//" + window.location.hostname + "/ethersheet/export_to_csv/" + COCREATION.sheetName;
+        xhttp.open("GET", _exportEndPoint, true);
+        xhttp.send();
+    });
+};//EndFunction.
+
+room.getSheetCSVFileInstance = async function () {
+    var fileCSVData = await room.getSheetCSV();
+    const filename = room._generateRandomFileName();
+    return room._convertStringToCSVFile(fileCSVData, filename);
+};//EndFunction.
+
+room.updateOnCkan = async function(package_id, _jsonDataset, _jsonCocreationMetadata, notes, cb) {
+
+    var fileCSVData;
+
+    try {
+        fileCSVData = await room.getSheetCSVFileInstance();
+    } catch (e) {
+        cb({ success: false, errors: [ "Cannot download CSV file from Ethersheet. Ethersheet Internal Error." ] });
+        return;
+    }
 
     const $platformUrl = COCREATION.ckan_platform_url_preference ; //"http://ckan.routetopa.eu";
     const $keyapi = COCREATION.ckan_api_key_preference;//"8febb463-f637-45b3-a6cb-d8957cdefbf3";
@@ -488,6 +529,16 @@ room._convertCSVToFile = function (_jsonData) {
     return fileCSVData;
 };//EndFunction.
 
+room._convertStringToCSVFile = function (sdata, filename) {
+    const fileCSVData = new File([sdata], filename + ".csv", { type: 'application/CSV' });
+    return fileCSVData;
+};//EndFunction.
+
+room._generateRandomFileName = function() {
+    const roomName = JSON.parse(COCREATION.info).name + "_" + Math.floor((Math.random()*1000) + 1);
+    return roomName;
+};//EndFunction.
+
 room.prepareMetadataForCKAN = function(_jsonCocreationMetadata) {
     //Before to start the upload it checks the metadata.
     const $dataset_title = _jsonCocreationMetadata.CC_RF.title;
@@ -567,8 +618,17 @@ room.prepareMetadataForCKAN = function(_jsonCocreationMetadata) {
     return { success: true, metadata: metadata };
 };//EndFunction.
 
-room.uploadOnCkan = function (_jsonData, _jsonCocreationMetadata, notes, callbackUpload) {
-    const fileCSVData = room._convertCSVToFile(_jsonData);
+room.uploadOnCkan = async function (_jsonData, _jsonCocreationMetadata, notes, callbackUpload) {
+
+    var fileCSVData;
+
+    try {
+        fileCSVData = await room.getSheetCSVFileInstance();
+    } catch (e) {
+        debugger;
+        callbackUpload({ success: false, errors: [ "Cannot download CSV file from Ethersheet.  Ethersheet Internal Error." ] });
+        return;
+    }
 
     //Cocreation notes.
     var fileNotes = null;
