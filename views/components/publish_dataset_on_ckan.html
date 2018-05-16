@@ -296,13 +296,26 @@
 
         var current_step = 1;
         var current_direction = 'NEXT';
-        const LAST_STEP_NUMBER = 4;
+        const LAST_STEP_NUMBER = 5;
         var notesContentHTML = "";
 
         room.publishOnCkanNotes = { doPublish: false, notesContentHTML: null };
 
         $('#btnPrev').click(function () {
             if (current_step == 1) return;
+
+            if (current_step == 3) { //Moving from step 3 to 2.
+                //Here you check the compatibility of the dataset with CKAN.
+
+                var _publishLogic = new PublishOnCkanLogic();
+                debugger;
+
+                var _isCompatible = true;
+                if (!_isCompatible) return;
+                //debugger;
+                current_step--;//Jump this step.
+            }
+
             current_step--;
             current_direction = "PREV";
             uiStep(current_step);
@@ -310,10 +323,25 @@
         $('#btnPrev').mousedown(function(e){e.preventDefault();});//Remove double click selection.
 
         $('#btnNext').click(function () {
+            var stepObject = null;
+
             if (current_step == LAST_STEP_NUMBER) return;
 
+            if (current_step == 1) {//Moving from STEP 1 to STEP 2.
+                //Here you check the compatibility of the dataset with CKAN.
+                var dataset = room.current_dataset;
+                var _keys = Object.keys(dataset[0]);
+
+                var _publishLogic = new PublishOnCkanLogic();
+                var validationReport = _publishLogic.validateCkanHeader(_keys);
+
+                var _isCompatible = validationReport.errors.length == 0 && validationReport.warnings.length == 0;
+                if (_isCompatible) current_step++;
+                else stepObject = validationReport;//Jump this step.
+            }
+
             //Here you check the metadata.
-            if (current_step == 3) {
+            else if (current_step == 4) {
                 document.activeElement.blur();
                 var success = performCheckMetadata();
                 if (!success) return;
@@ -349,7 +377,7 @@
 
             current_step++;
             current_direction = 'NEXT';
-            uiStep(current_step);
+            uiStep(current_step, stepObject);
         });
         $('#btnNext').mousedown(function(e){e.preventDefault();});//Remove double click selection.
 
@@ -361,7 +389,7 @@
             else return value;
         };
 
-        function uiStep(step) {
+        function uiStep(step, stepObject) {
             switch (step) {
                 case 1:
                     $('#btnPrev').addClass('button-disabled');
@@ -369,7 +397,13 @@
                     uiChooseCKANServer();
                     break;
 
-                case 2:
+                case 2: //CKAN COMPATIBILITY CARD.
+                    uiShowCKANCompatibility();
+                    uiShowCompatibilityMessages(stepObject);
+                    $('#btnPrev').removeClass('button-disabled');
+                    break;
+
+                case 3: //DATASET TABLE PREVIEW CARD.
                     if (current_direction === 'NEXT') {
                         COCREATION.ckan_platform_url_preference = document.querySelector('#inputPlatformURL').value;
                         COCREATION.ckan_api_key_preference = document.querySelector('#inputCkanAPIKey').value;
@@ -378,34 +412,11 @@
 
                     const $dataTablePreview = document.querySelector("#data_table_controllet");
                     $dataTablePreview.setData(room.current_dataset);
-                    $('#btnPrev').removeClass('button-disabled');
                     uiShowTable();
+                    $('#btnPrev').removeClass('button-disabled');
                     break;
 
-                case 3:
-
-                    /*var objMetadata = getCocreationMetadataAsObject();
-                    var _metadata = {
-                        "MANDATORY": JSON.parse(COCREATION.metadata_mandatory),
-                        "CC_RF": {
-                            title: TestNullAndSetEmptyString(objMetadata.CC_RF.title),
-                            description: TestNullAndSetEmptyString(objMetadata.CC_RF.description),
-                            contact_email: TestNullAndSetEmptyString(objMetadata.CC_RF.contact_email),
-                            contact_name: TestNullAndSetEmptyString(objMetadata.CC_RF.contact_name),
-                            maintainer: TestNullAndSetEmptyString(objMetadata.CC_RF.maintainer),
-                            maintainer_email: TestNullAndSetEmptyString(objMetadata.CC_RF.maintainer_email),
-                            version: TestNullAndSetEmptyString(objMetadata.CC_RF.version)
-                        },
-                        "CC_RAF": {
-                            license: TestNullAndSetEmptyString(objMetadata.CC_RAF.license),
-                        },
-                        "EF": {
-                            language: TestNullAndSetEmptyString(objMetadata.EF.language),
-                            origin: TestNullAndSetEmptyString(objMetadata.EF.origin)
-                        }
-                    };
-                    $metadataList.setMetadata(JSON.stringify(_metadata));*/
-
+                case 4: //METADATA CARD.
                     var objMetadata = getCocreationMetadataAsObject();
                     objMetadata.MANDATORY = JSON.parse(COCREATION.metadata_mandatory);
                     var $metadataList = document.querySelector('#publishCKANMetadataList');
@@ -416,35 +427,7 @@
                     uiShowMetadata();
                     break;
 
-                case 4:
-                    //Save back the metadata.
-                    /*var _objMetadataCocreation = getCocreationMetadataAsObject();
-                    var _objMetadata = getWizardMetadataAsObject();*/
-
-                    //Since here it saves back the metadata. Here the mondatary metadata
-                    //shown in the co-creation, so do not change mandatary metadata here.
-                    //_objMetadata.MANDATORY =  JSON.parse(COCREATION.metadata_mandatory);
-
-//                    _objMetadataCocreation.CC_RF.title = _objMetadata.CC_RF.title;
-//                    _objMetadataCocreation.CC_RF.description = _objMetadata.CC_RF.description;
-//
-//                    _objMetadataCocreation.CC_RF.contact_name = _objMetadata.CC_RF.contact_name;
-//                    _objMetadataCocreation.CC_RF.contact_email = _objMetadata.CC_RF.contact_email;
-//
-//                    _objMetadataCocreation.CC_RF.maintainer = _objMetadata.CC_RF.maintainer;
-//                    _objMetadataCocreation.CC_RF.maintainer_email = _objMetadata.CC_RF.maintainer_email;
-//
-//                    _objMetadataCocreation.CC_RF.version = _objMetadata.CC_RF.version;
-//                    _objMetadataCocreation.CC_RAF.license = _objMetadata.CC_RAF.license;
-//
-//                    _objMetadataCocreation.EF.language = _objMetadata.EF.language;
-//                    _objMetadataCocreation.EF.origin = _objMetadata.EF.origin;
-
-                    //room.persistMetadata(_objMetadataCocreation);
-                    /*var $metadata_component = document.querySelector('#metadata_component');
-                    $metadata_component.setMetadata(JSON.stringify(_objMetadata));
-                    $metadata_component._forceUpdateMetadata();*/
-
+                case 5:
                     uiShowNotes();
                     break;
                 /*case 5:
@@ -490,7 +473,6 @@
             if ($(e.currentTarget).hasClass('button-disabled')) return;//Button disabled, no action.
 
             uiLoading('uploading dataset on CKAN ...');
-            
 
             var dataset = room.current_dataset;
             var metadata = getWizardMetadataAsObject();
@@ -620,6 +602,7 @@
         $('#cardWaiting').hide();
         $('#cardFooter').hide();
         $('#cardChooseServer').hide();
+        $('#cardCKANCompatibility').hide();
         $('#cardPreview').hide();
         $('#cardMetadata').hide();
         $('#cardNotes').hide();
@@ -637,6 +620,12 @@
     function uiChooseCKANServer() {
         uiHideAll();
         $('#cardChooseServer').show();
+        $('#cardFooter').show();
+    };//EndFunction.
+    
+    function uiShowCKANCompatibility() {
+        uiHideAll();
+        $('#cardCKANCompatibility').show();
         $('#cardFooter').show();
     };//EndFunction.
     
@@ -695,6 +684,31 @@
                 close: function () { }
             }
         });
+    };//EndFunction.
+
+    function uiShowCompatibilityMessages(report) {
+        const $errTitle = $('#ckanCompatibilityErrsTitle');
+        const $errs = $('#ckanCompatibilityErrsList');
+        const $warnTitle = $('#ckanCompatibilityWarnsTitle');
+        const $warns = $('#ckanCompatibilityWarnsList');
+
+        //Cleans the lists.
+        $errs.empty();
+        $warns.empty();
+        $errTitle.hide();
+        $warnTitle.hide();
+
+        if (report.errors.length > 0) {
+            $errTitle.show();
+            for (let i=0, serr; i<report.errors.length && (serr = report.errors[i]); i++)
+                $errs.append('<li>' + serr + '</li>');
+        }
+
+        if (report.warnings.length > 0) {
+            $warnTitle.show();
+            for (let i=0, swarn; i<report.warnings.length && (swarn = report.warnings[i]); i++)
+                $warns.append('<li>' + swarn + '</li>')
+        }
     };//EndFunction.
 
     function uiShowSummary() {
@@ -844,17 +858,33 @@
     </div>
 </div>
 
-<!-- STEP 2 - CHECKING SECTION -->
+<!-- STEP 2 - Checking that the dataset content is compatible with CKAN. -->
+<div id="cardCKANCompatibility" style="height: calc(100% - 40px);">
+    <div class="card-title">2. Checking dataset compatibility with CKAN</div>
+    <div class="card-content" style="height: 100%;">
+        <div style="color: red;">
+            <p id="ckanCompatibilityErrsTitle">The dataset contains the following issues in the cells of the header,
+            making the dataset incompatible with CKAN. Please fix the following issues:</p>
+            <ul id="ckanCompatibilityErrsList" style="list-style-type: circle;"></ul>
+        </div>
+        <div>
+            <p id="ckanCompatibilityWarnsTitle">The following are suggestions to improve the dataset quality:</p>
+            <ul id="ckanCompatibilityWarnsList" style="list-style-type: circle;"></ul>
+        </div>
+    </div>
+</div>
+
+<!-- STEP 3 - CHECKING SECTION -->
 <div id="cardPreview" style="height: calc(100% - 40px);">
-    <div class="card-title">2. Review Dataset Content</div>
+    <div class="card-title">3. Review Dataset Content</div>
     <div class="card-content" style="height: 100%;">
         <data-table-controllet id="data_table_controllet" data='[]'></data-table-controllet>
     </div>
 </div>
 
-<!-- STEP 3 - Edit METADATA -->
+<!-- STEP 4 - Edit METADATA -->
 <div id="cardMetadata" style="height: 100%;">
-    <div class="card-title">3. Review Metadata</div>
+    <div class="card-title">4. Review Metadata</div>
     <div class="card-content" style="height: calc(100% - 40px); overflow-y: auto;">
 
         <!--<div class="card-number">1</div>
@@ -864,9 +894,9 @@
     </div>
 </div>
 
-<!-- STEP 4 - NOTES -->
+<!-- STEP 5 - NOTES -->
 <div id="cardNotes" style="height: calc(100% - 40px);">
-    <div class="card-title">4. Co-creation Methodology Notes</div>
+    <div class="card-title">5. Co-creation Methodology Notes</div>
     <div class="card-content" style="height: calc(100% - 40px); padding: 10px;">
         <p>You can publish the co-creation notes as additional resource within the dataset.</p>
 
@@ -884,7 +914,7 @@
     </div>
 </div>
 
-<!-- STEP 5 - Publishing Message. -->
+<!-- STEP 6 - Publishing Message. -->
 <div id="cardPublished" style="height: calc(100% - 40px)">
     <div class="card-title">Dataset Published on CKAN</div>
     <div class="card-content" style="height: 100%;">
