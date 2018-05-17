@@ -367,7 +367,7 @@ room._convertDatasetToCSV = function (_jsonData) {
 ///
 
 room._publishOnCkan = function () {
-    this.dialogPublishOnCKAN = OW.ajaxFloatBox('COCREATION_CMP_PublishDatasetOnCkan', { message: 'loading ...' }, {width:'90%', height:'80vh', iconClass:'ow_ic_lens', title:''} );
+    this.dialogPublishOnCKAN = OW.ajaxFloatBox('COCREATION_CMP_PublishDatasetOnCkan', { message: 'loading ...' }, {top:'56px', width:'calc(100vw - 128px)', height:'calc(100vh - 128px)', iconClass:'ow_ic_lens', title:''} );
 };//EndFunction.
 
 room._closeDialogPublishOnCKAN = function () {
