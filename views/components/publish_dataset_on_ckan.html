@@ -261,6 +261,15 @@
         text-align: center;
     }
 
+    .card-content ul {
+        padding-left: 40px;
+        list-style-type: disc;
+    }
+
+    .card-content p {
+        padding-top: 20px;
+    }
+
     .card-footer {
         border-top: 1px solid #eaeaea;
         position: absolute;
@@ -301,28 +310,33 @@
 
         room.publishOnCkanNotes = { doPublish: false, notesContentHTML: null };
 
-        $('#btnPrev').click(function () {
+        $('#btnPrev').click(function (e) {
+            if ($(e.currentTarget).hasClass('button-disabled')) return;//Button disabled, no action.
+            var stepObject = null;
+
             if (current_step == 1) return;
 
             if (current_step == 3) { //Moving from step 3 to 2.
                 //Here you check the compatibility of the dataset with CKAN.
+                var dataset = room.current_dataset;
+                var _keys = Object.keys(dataset[0]);
 
                 var _publishLogic = new PublishOnCkanLogic();
-                debugger;
+                var validationReport = _publishLogic.validateCkanHeader(_keys);
 
-                var _isCompatible = true;
-                if (!_isCompatible) return;
-                //debugger;
-                current_step--;//Jump this step.
+                var _isCompatible = validationReport.errors.length == 0 && validationReport.warnings.length == 0;
+                if (_isCompatible) current_step--;//Jump this step.
+                else stepObject = validationReport;
             }
 
             current_step--;
             current_direction = "PREV";
-            uiStep(current_step);
+            uiStep(current_step, stepObject);
         });
         $('#btnPrev').mousedown(function(e){e.preventDefault();});//Remove double click selection.
 
-        $('#btnNext').click(function () {
+        $('#btnNext').click(function (e) {
+            if ($(e.currentTarget).hasClass('button-disabled')) return;//Button disabled, no action.
             var stepObject = null;
 
             if (current_step == LAST_STEP_NUMBER) return;
@@ -335,9 +349,10 @@
                 var _publishLogic = new PublishOnCkanLogic();
                 var validationReport = _publishLogic.validateCkanHeader(_keys);
 
+                debugger;
                 var _isCompatible = validationReport.errors.length == 0 && validationReport.warnings.length == 0;
-                if (_isCompatible) current_step++;
-                else stepObject = validationReport;//Jump this step.
+                if (_isCompatible) current_step++;//Jump this step.
+                else stepObject = validationReport;
             }
 
             //Here you check the metadata.
@@ -393,7 +408,7 @@
             switch (step) {
                 case 1:
                     $('#btnPrev').addClass('button-disabled');
-
+                    $('#btnNext').removeClass('button-disabled');
                     uiChooseCKANServer();
                     break;
 
@@ -401,6 +416,10 @@
                     uiShowCKANCompatibility();
                     uiShowCompatibilityMessages(stepObject);
                     $('#btnPrev').removeClass('button-disabled');
+
+                    if (stepObject.errors.length == 0) $('#btnNext').removeClass('button-disabled');
+                    else $('#btnNext').addClass('button-disabled');
+
                     break;
 
                 case 3: //DATASET TABLE PREVIEW CARD.
@@ -862,14 +881,14 @@
 <div id="cardCKANCompatibility" style="height: calc(100% - 40px);">
     <div class="card-title">2. Checking dataset compatibility with CKAN</div>
     <div class="card-content" style="height: 100%;">
-        <div style="color: red;">
-            <p id="ckanCompatibilityErrsTitle">The dataset contains the following issues in the cells of the header,
+        <div>
+            <p id="ckanCompatibilityErrsTitle"><span style="color: #F44336; font-weight: 700;">ERRORS</span> - The dataset contains the following issues in the cells of the header,
             making the dataset incompatible with CKAN. Please fix the following issues:</p>
-            <ul id="ckanCompatibilityErrsList" style="list-style-type: circle;"></ul>
+            <ul id="ckanCompatibilityErrsList"></ul>
         </div>
         <div>
-            <p id="ckanCompatibilityWarnsTitle">The following are suggestions to improve the dataset quality:</p>
-            <ul id="ckanCompatibilityWarnsList" style="list-style-type: circle;"></ul>
+            <p id="ckanCompatibilityWarnsTitle"><span style="color: #FF9800; font-weight: 700;">WARNINGS</span> - The following are suggestions to improve the dataset quality:</p>
+            <ul id="ckanCompatibilityWarnsList"></ul>
         </div>
     </div>
 </div>
@@ -899,8 +918,6 @@
     <div class="card-title">5. Co-creation Methodology Notes</div>
     <div class="card-content" style="height: calc(100% - 40px); padding: 10px;">
         <p>You can publish the co-creation notes as additional resource within the dataset.</p>
-
-
         <div style="float: left; display: inline-flex; margin-bottom: 10px;">
             <paper-checkbox id="chkDoPublishNotes" style="margin: 20px 40px;" onchange="publishNotesChanged(event)">Publish notes</paper-checkbox>
             <paper-input id="txtCocreationNotes" always-float-label label="File name" value="Notes" style="display: none;"></paper-input>
