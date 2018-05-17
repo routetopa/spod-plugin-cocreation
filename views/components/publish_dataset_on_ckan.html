@@ -347,8 +347,7 @@
 
                 var _publishLogic = new PublishOnCkanLogic();
                 var validationReport = _publishLogic.validateCkanHeader(_keys);
-
-                debugger;
+                
                 var _isCompatible = validationReport.errors.length == 0 && validationReport.warnings.length == 0;
                 if (_isCompatible) current_step++;//Jump this step.
                 else stepObject = validationReport;
@@ -510,7 +509,6 @@
                     metadata.language_id = item.value;
             });
 
-            debugger;
             //Decide whether to publish notes.
             var notes = null;
             if (room.publishOnCkanNotes.doPublish) {
@@ -556,7 +554,6 @@
                                     }
 
                                     uiShowError(response);
-                                    debugger;
                                 });
                             },
                             cancel: function () {
@@ -895,7 +892,7 @@
 <!-- STEP 3 - CHECKING SECTION -->
 <div id="cardPreview" style="height: calc(100% - 40px);">
     <div class="card-title">3. Review Dataset Content</div>
-    <div class="card-content" style="height: 100%;">
+    <div class="card-content" style="height: calc(100% - 60px);">
         <data-table-controllet id="data_table_controllet" data='[]'></data-table-controllet>
     </div>
 </div>
