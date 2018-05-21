@@ -214,7 +214,8 @@ room._publishDataset = function(){
         function (data, status) {
             room.current_dataset = data;
             ODE.pluginPreview = "cocreation";
-            previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_PublishDataset', {data: data} , {width:'90%', height:'80vh', iconClass:'ow_ic_lens', title:''});
+            //previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_PublishDataset', {data: data} , {width:'90%', height:'80vh', iconClass:'ow_ic_lens', title:''});
+            previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_PublishDataset', {data: data} , {top:'56px', width:'calc(100vw - 128px)', height:'calc(100vh - 184px)', iconClass:'ow_ic_lens', title:''});
         }
     );
 };
@@ -298,7 +299,7 @@ room.persistMetadata = function (metadata) {
 ///
 
 room._importDatasetFromSPOD = function () {
-    this.previewFloatBoxImportFromSPOD = OW.ajaxFloatBox('COCREATION_CMP_ImportDatasetFromSpod', { message: 'loading ...' }, {width:'90%', height:'80vh', iconClass:'ow_ic_lens', title:'MyTitle'} );
+    this.previewFloatBoxImportFromSPOD = OW.ajaxFloatBox('COCREATION_CMP_ImportDatasetFromSpod', { message: 'loading ...' }, {top:'56px', width:'calc(100vw - 112px)', height:'calc(100vh - 112px)', title:'MyTitle'} );
 };//EndFunction.
 
 ////////////////////////////////////////////////
@@ -367,7 +368,7 @@ room._convertDatasetToCSV = function (_jsonData) {
 ///
 
 room._publishOnCkan = function () {
-    this.dialogPublishOnCKAN = OW.ajaxFloatBox('COCREATION_CMP_PublishDatasetOnCkan', { message: 'loading ...' }, {width:'90%', height:'80vh', iconClass:'ow_ic_lens', title:''} );
+    this.dialogPublishOnCKAN = OW.ajaxFloatBox('COCREATION_CMP_PublishDatasetOnCkan', { message: 'loading ...' }, {top:'56px', width:'calc(100vw - 128px)', height:'calc(100vh - 128px)', iconClass:'ow_ic_lens', title:''} );
 };//EndFunction.
 
 room._closeDialogPublishOnCKAN = function () {
@@ -407,7 +408,12 @@ room.getSheetCSV = function () {
 };//EndFunction.
 
 room.getSheetCSVFileInstance = async function () {
+    const BOM = '\ufeff'
     var fileCSVData = await room.getSheetCSV();
+
+    if (fileCSVData.length > 0 && fileCSVData.charCodeAt(0) != 65279)
+        fileCSVData = BOM + fileCSVData;
+
     const filename = room._generateRandomFileName();
     return room._convertStringToCSVFile(fileCSVData, filename);
 };//EndFunction.
@@ -512,7 +518,6 @@ room.updateOnCkan = async function(package_id, _jsonDataset, _jsonCocreationMeta
         }
 
         //Manage here the error.
-        debugger;
         var ckanResponse = JSON.parse(response.responseText);
         var _errors = room.processCkanErrorMessage(ckanResponse);
 
