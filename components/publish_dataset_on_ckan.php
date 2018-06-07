@@ -6,6 +6,7 @@ class COCREATION_CMP_PublishDatasetOnCkan extends OW_Component {
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl() . 'vendor/CKANClient.js');
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl() . 'vendor/jquery-confirm/jquery-confirm.js');
         OW::getDocument()->addStyleSheet(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl() . 'vendor/jquery-confirm/jquery-confirm.css');
+        OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticUrl() . 'components/js/publishOnCKAN.js');
         $this->assign('components_url', SPODPR_COMPONENTS_URL);
 
         //Publish on CKAN Authorization check.

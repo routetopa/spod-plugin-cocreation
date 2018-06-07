@@ -13,6 +13,7 @@ exports.createMasterServer = function(config){
 
     function getResourceKeyFromURL(url){
         url = url.replace(/\/ethersheet/, "");
+        url = url.replace(/\/export_to_csv/, "");
         url = url.replace(/\/s\//, "");
         url = url.replace(/\/mediaroom\/init/, "");
         url = url.replace(/\/mediaroom\/addrow/, "");
@@ -50,7 +51,7 @@ exports.createMasterServer = function(config){
         }*/
 
         temp_key = request.url;
-        if(request.url.indexOf("import") >= 0 || request.url.indexOf("export") >= 0 ) {
+        if(request.url.indexOf("import") >= 0 || (request.url.indexOf("export_to_csv") >= 0 && !_.isUndefined(referer))) {
             //When the url contains the sheetName (the sheet key) as parameter in the url,
             //it extract this key, choosing in this way the process that has the sheetName.
             if (temp_key.indexOf("/import/csv?sheetName=") >= 0) {
