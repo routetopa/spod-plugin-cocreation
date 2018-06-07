@@ -514,6 +514,21 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
     public function updateMetadata()
     {
+        if (!OW::getUser()->isAuthenticated())
+        {
+            try
+            {
+                $user_id = ODE_CLASS_Tools::getInstance()->getUserFromJWT($_REQUEST['jwt']);
+            }
+            catch (Exception $e)
+            {
+                echo json_encode(array("status"  => "ko", "error_message" => $e->getMessage()));
+                exit;
+            }
+        }else{
+            $user_id = OW::getUser()->getId();
+        }
+
         $clean = $_REQUEST;//ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
         if ($clean == null){
             OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'insane_user_email_value'));
@@ -529,13 +544,16 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
             echo json_encode(array("status" => "ok", "message" => "metadata sucessfully update for current room"));
 
-            SPODNOTIFICATION_CLASS_EventHandler::getInstance()->emitNotification(["plugin" => "cocreation",
-                                     "operation"                          => "updateMetadata",
-                                     "core_common_required_metadata"      => $clean['core_common_required_metadata'],
-                                     "common_core_if_applicable_metadata" => $clean['common_core_if_applicable_metadata'],
-                                     "expanded_metadata"                  => $clean['expanded_metadata'],
-                                     "entity_type" => COCREATION_BOL_Service::ROOM_ENTITY_TYPE,
-                                     "entity_id"   => $clean['roomId']
+            SPODNOTIFICATION_CLASS_EventHandler::getInstance()->emitNotification(
+            [
+                "user_id" => $user_id,
+                "plugin" => "cocreation",
+                 "operation"                          => "updateMetadata",
+                 "core_common_required_metadata"      => $clean['core_common_required_metadata'],
+                 "common_core_if_applicable_metadata" => $clean['common_core_if_applicable_metadata'],
+                 "expanded_metadata"                  => $clean['expanded_metadata'],
+                 "entity_type" => COCREATION_BOL_Service::ROOM_ENTITY_TYPE,
+                 "entity_id"   => $clean['roomId']
             ]);
         }else
            echo json_encode(array("status" => "error", "message" => "error in sql syntax"));
