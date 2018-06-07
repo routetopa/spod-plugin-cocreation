@@ -157,6 +157,8 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                 COCREATION.spreadsheet_server_port            = {$spreasheet_server_port}
                 COCREATION.sheet_images_url                   = {$sheet_images_url}
                 COCREATION.sheet_remove_image_url             = {$sheet_remove_image_url}
+                COCREATION.user_info                          = {$user_info}
+                COCREATION.owner                              = {$owner}
             ', array(
                'ajax_coocreation_room_get_datalets'        => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getRoomDatalets'),
                'ajax_coocreation_room_get_array_sheetdata' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getArrayOfObjectSheetData') . "?sheetName=" . $sheetUrl,
@@ -172,7 +174,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                'room_members'                              => json_encode($membersIds),
                'roomDatalets'                              => $room_datalets,
                'room_metadata'                             => json_encode($metadataObj),
-               'room_metadata_mandatory'                  => json_encode($metadataMandatoryObj),
+               'room_metadata_mandatory'                   => json_encode($metadataMandatoryObj),
                'userId'                                    => OW::getUser()->getId(),
                'roomInfo'                                  => json_encode($info),
                'spreasheet_server_port'                    => BOL_PreferenceService::getInstance()->findPreference('spreadsheet_server_port_preference')->defaultValue,
@@ -180,7 +182,9 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                'ckan_platform_url_preference'              => $ckan_platform_url_preference_default_value,
                'ckan_api_key_preference'                   => $ckan_api_key_preference_default_value,
                'ckan_def_organisation_preference'          => $ckan_def_organisation_preference_value,
-               'sheet_remove_image_url'                    => OW_URL_HOME . "ethersheet/remove/image"
+               'sheet_remove_image_url'                    => OW_URL_HOME . "ethersheet/remove/image",
+               'user_info'                                 => ['username' => BOL_UserService::getInstance()->findUserById(OW::getUser()->getId())->username, 'mail' => BOL_UserService::getInstance()->findUserById(OW::getUser()->getId())->email],
+               'owner'                                     => ['username' => BOL_UserService::getInstance()->findUserById($room->ownerId)->username, 'mail' => BOL_UserService::getInstance()->findUserById($room->ownerId)->email]
         ));
         OW::getDocument()->addOnloadScript($js);
         OW::getDocument()->addOnloadScript("data_room.init();");
