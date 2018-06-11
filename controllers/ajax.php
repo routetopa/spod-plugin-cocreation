@@ -5,9 +5,6 @@ require_once OW::getPluginManager()->getPlugin('spodnotification')->getRootDir()
 use ElephantIO\Client;
 use ElephantIO\Engine\SocketIO\Version1X;
 
-ini_set('display_errors',1);
-ini_set('display_startup_errors',1);
-error_reporting(-1);
 
 class COCREATION_CTRL_Ajax extends OW_ActionController
 {
@@ -537,23 +534,19 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
         if(COCREATION_BOL_Service::getInstance()->updateMetadata(
                 $clean['roomId'],
-                $clean['core_common_required_metadata'],
-                $clean['common_core_if_applicable_metadata'],
-                $clean['expanded_metadata']))
+                $clean['metadata']))
         {
 
             echo json_encode(array("status" => "ok", "message" => "metadata sucessfully update for current room"));
 
             SPODNOTIFICATION_CLASS_EventHandler::getInstance()->emitNotification(
             [
-                "user_id" => $user_id,
-                "plugin" => "cocreation",
-                 "operation"                          => "updateMetadata",
-                 "core_common_required_metadata"      => $clean['core_common_required_metadata'],
-                 "common_core_if_applicable_metadata" => $clean['common_core_if_applicable_metadata'],
-                 "expanded_metadata"                  => $clean['expanded_metadata'],
-                 "entity_type" => COCREATION_BOL_Service::ROOM_ENTITY_TYPE,
-                 "entity_id"   => $clean['roomId']
+                "user_id"     => $user_id,
+                "plugin"      => "cocreation",
+                "operation"   => "updateMetadata",
+                "metadata"    => $clean['metadata'],
+                "entity_type" => COCREATION_BOL_Service::ROOM_ENTITY_TYPE,
+                "entity_id"   => $clean['roomId']
             ]);
         }else
            echo json_encode(array("status" => "error", "message" => "error in sql syntax"));
@@ -590,19 +583,17 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
                                                           $clean['datasetId'],
                                                           $clean['data'],
                                                           $clean['notes'],
-                                                          $clean['common_core_required_metadata'],
-                                                          $clean['common_core_if_applicable_metadata'],
-                                                          $clean['expanded_metadata']);
+                                                          $clean['metadata']);
 
 
         $room = COCREATION_BOL_Service::getInstance()->getRoomById($clean['roomId']);
-        $common_core_required_metadata = json_decode($clean['common_core_required_metadata']);
+        $metadata = json_decode($clean['metadata']);
 
 
         $resource_name = "";
-        if($common_core_required_metadata->title != "")
+        if($metadata->title != "")
         {
-            $resource_name = $common_core_required_metadata->title;
+            $resource_name = $metadata->title;
         }
         else if(count($room) > 0)
         {
@@ -619,7 +610,8 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         exit;
     }
 
-    public function getNoteHTMLByPadIDApiUrl() {
+    public function getNoteHTMLByPadIDApiUrl()
+    {
         $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
         if ($clean == null){
             OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'insane_user_email_value'));
@@ -675,7 +667,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
         echo json_encode(array('resourceUrl' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getDatasetByRoomIdAndVersion') . "?room_id=" . $dataset->roomId . "&version=" . $dataset->version,
             "users"=>$avatars,
-            "metas"=>$dataset->common_core_required_metadata,
+            "metas"=>$dataset->metadata,
             "roomName" => $room->name ? $room->name : OW::getLanguage()->text('cocreation', 'deteted_room')));
         exit;
     }
@@ -727,11 +719,11 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             }
             */
             $room = COCREATION_BOL_Service::getInstance()->getRoomById($dataset->roomId);
-            $common_core_required_metadata = json_decode($dataset->common_core_required_metadata);
+            $metadata = json_decode($dataset->metadata);
 
-            if($common_core_required_metadata->title != "")
+            if($metadata->title != "")
             {
-                $resource_name = $common_core_required_metadata->title;
+                $resource_name = $metadata->title;
             }
             else if(count($room) > 0)
             {
@@ -965,12 +957,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
         $metadata = COCREATION_BOL_Service::getInstance()->getMetadataByRoomId($clean['roomId']);
 
-        $metadataObj = new stdClass();
-        $metadataObj->CC_RF = json_decode($metadata[0]->common_core_required);
-        $metadataObj->CC_RAF = json_decode($metadata[0]->common_core_if_applicable);
-        $metadataObj->EF = json_decode($metadata[0]->expanded);
-
-        echo json_encode(array("status" => true, "metadata" => $metadataObj));
+        echo json_encode(array("status" => true, "metadata" => json_decode($metadata[0])));
         exit;
     }
 

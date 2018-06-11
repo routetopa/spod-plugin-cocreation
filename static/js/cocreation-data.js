@@ -234,9 +234,7 @@ room.confirmDatasetPublication = function(){
                             owners                              : COCREATION.room_members,
                             data                                : room.current_dataset,
                             notes                               : data,
-                            common_core_required_metadata       : metadata.CC_RF,
-                            common_core_if_applicable_metadat   : metadata.CC_RAF,
-                            expanded_metadata                   : metadata.EF
+                            metadata                            : metadata
                         },
                         function (data, status) {
                             previewFloatBox.close();
@@ -284,9 +282,7 @@ room.persistMetadata = function (metadata) {
     $.post(ODE.ajax_coocreation_room_update_metadata,
         {
             roomId                             : COCREATION.roomId,
-            core_common_required_metadata      : JSON.stringify(metadata.CC_RF),
-            common_core_if_applicable_metadata : JSON.stringify(metadata.CC_RAF),
-            expanded_metadata                  : JSON.stringify(metadata.EF)
+            metadata                           : JSON.stringify(metadata)
         },
         function (data, status) {
             COCREATION.metadata = metadata;

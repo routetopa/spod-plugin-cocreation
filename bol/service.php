@@ -154,68 +154,19 @@ class COCREATION_BOL_Service
     public function createMetadataForRoom($roomId){
         $roomMetadata = new COCREATION_BOL_RoomMetadata();
 
-        $common_core_required = array(
-           "title"               => "",
-           "description"         => "",
-           "tags"                => "",
-           "last_update"         => "",
-           "publisher"           => "",
-           "contact_name"        => "",
-           "contact_email"       => "",
-           "unique_identifier"   => "",
-           "public_access_level" => "",
-
-            "version"            => "",
-            "maintainer"         => "",
-            "maintainer_email"   => ""
-        );
-
-        $common_core_if_applicable = array(
-            "bureau_code"          => "",
-            "program_code"         => "",
-            "access_level_comment" => "",
-            "download_url"         => "",
-            "endpoint"             => "",
-            "format"               => "",
-            "license"              => "",
-            "spatial"              => "",
-            "temporal"             => ""
-        );
-
-        $expanded = array(
-            "category"                  => "",
-            "data_dictionary"           => "",
-            "data_quality"              => "",
-            "distribution"              => "",
-            "frequency"                 => "",
-            "homepage_url"              => "",
-            "language"                  => "",
-            "primary_IT_investment_UII" => "",
-            "related_documents"         => "",
-            "release_date"              => "",
-            "system_of_records"         => "",
-
-            "origin"                    => ""
-        );
-
-
-        $roomMetadata->roomId                     = $roomId;
-        $roomMetadata->common_core_required       = json_encode($common_core_required);
-        $roomMetadata->common_core_if_applicable  = json_encode($common_core_if_applicable);
-        $roomMetadata->expanded                   = json_encode($expanded);
+        $roomMetadata->roomId   = $roomId;
+        $roomMetadata->metadata = '';
 
         COCREATION_BOL_RoomMetadataDao::getInstance()->save($roomMetadata);
     }
 
-    public function updateMetadata($roomId, $ccr, $ccia, $e)
+    public function updateMetadata($roomId, $metadata)
     {
         $example = new OW_Example();
         $example->andFieldEqual('roomId', $roomId);
         $room_meta_data = COCREATION_BOL_RoomMetadataDao::getInstance()->findObjectByExample($example);
 
-        $room_meta_data->common_core_required = $ccr;
-        $room_meta_data->common_core_if_applicable = $ccia;
-        $room_meta_data->expanded = $e;
+        $room_meta_data->metadata = $metadata;
 
         try
         {
@@ -232,7 +183,7 @@ class COCREATION_BOL_Service
     {
         $example = new OW_Example();
         $example->andFieldEqual('roomId', $roomId);
-        $result = COCREATION_BOL_RoomMetadataDao::getInstance()->findListByExample($example);
+        $result = COCREATION_BOL_RoomMetadataDao::getInstance()->findObjectByExample($example);
         return $result;
     }
 
@@ -523,9 +474,7 @@ class COCREATION_BOL_Service
                                $datasetId,
                                $data,
                                $notes,
-                               $common_core_required_metadata,
-                               $common_core_if_applicable_metadata,
-                               $expanded_metadata)
+                               $metadata)
     {
         //get last version and up it
         $version = 1;
@@ -542,16 +491,14 @@ class COCREATION_BOL_Service
         $dataset->version                            = $version;
         $dataset->data                               = $data;
         $dataset->notes                              = $notes;
-        $dataset->common_core_required_metadata      = json_encode($common_core_required_metadata);
-        $dataset->common_core_if_applicable_metadata = json_encode($common_core_if_applicable_metadata);
-        $dataset->expanded_metadata                  = json_encode($expanded_metadata);
+        $dataset->metadata                           = json_encode($metadata);
 
         COCREATION_BOL_DatasetDao::getInstance()->save($dataset);
     }
 
     public function getAllDatasets()
     {
-        $sql = "SELECT t1.id, t1.owners, t1.roomId, t1.datasetId, t2.ownerId, t1.common_core_required_metadata, t1.version, t1.timeStamp
+        $sql = "SELECT t1.id, t1.owners, t1.roomId, t1.datasetId, t2.ownerId, t1.metadata, t1.version, t1.timeStamp
                 FROM ". OW_DB_PREFIX ."cocreation_dataset as t1 LEFT JOIN ". OW_DB_PREFIX ."cocreation_room as t2 ON t2.id = t1.roomId 
                 ORDER BY roomId DESC, version DESC;";
         return OW::getDbo()->queryForObjectList($sql, 'COCREATION_BOL_Dataset');
