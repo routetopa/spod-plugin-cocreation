@@ -347,7 +347,7 @@ exports.createServer = function(config){
                 var row  = {
                     title       : fields.title,
                     description : fields.description,
-                    image_name  : image_file,
+                    image_name  : image_name,
                     location    : fields.location,
                     date        : fields.date,
                     user        : fields.user
