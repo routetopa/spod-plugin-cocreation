@@ -582,7 +582,8 @@
                         </paper-card>
                         <!-- Metadata -->
                         <paper-card id="metadata" class="full_size_card" style="visibility:hidden;" elevation="5">
-                            <metadata-list-controllet id="metadata_component"></metadata-list-controllet>
+                            <div class="screen_header">METADATA</div>
+                            <iframe src="{$metadata_url}" id="metadata_iframe" style="height: calc(100% - 45px); width: 100%;"></iframe>
                         </paper-card>
                         <!-- Notes -->
                         <paper-card id="notes" class="full_size_card" style="visibility:hidden;" elevation="5">

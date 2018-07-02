@@ -102,6 +102,11 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         $this->addComponent('discussion', new SPODDISCUSSION_CMP_Discussion($room->id));
         /* NEW DISCUSSION AGORA LIKE */
 
+        /* METADATA IFRAME SRC */
+        $this->assign('metadata_url', OW::getPluginManager()->getPlugin('cocreation')->getStaticUrl() . 'pages/metadata/dcat_ap_it/metadata_dcat_ap_it.html');
+        //$this->assign('metadata_url', OW::getPluginManager()->getPlugin('cocreation')->getStaticUrl() . 'pages/metadata/common_core/metadata_common_core.html');
+        /* METADATA IFRAME SRC */
+
         $this->assign("toolbar_color", ($room->type == "data") ? "#4CAF50" : "#FF9800");
         $this->assign('datalet_definition_import', ODE_CLASS_Tools::getInstance()->get_all_datalet_definitions());
 

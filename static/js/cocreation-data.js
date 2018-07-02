@@ -22,15 +22,10 @@ $(document).ready(function() {
         }
     });*/
 
-   window.addEventListener('metadata-list-controllet_update-metadata', function(e){
-       //I want receive only my events, discard the others.
-       //NOTE: this is to have multiple the metadata-list-controllet in the page as in the
-       //cace of co-creation.
-       if (e.target.id != "metadata_component") return;
-
-       var metadata = JSON.parse(e.detail.metadata);
-       room.persistMetadata(metadata);
-    });
+   window.addEventListener('metadata-list-controllet_update-metadata', function(e)
+   {
+       room.persistMetadata(e.detail.metadata);
+   });
 
     window.addEventListener('message', function (e) {
         switch (e.data) {

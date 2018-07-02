@@ -100,7 +100,8 @@ room.init = function(){
             case "updateMetadata":
                 if (rawData.user_id != COCREATION.user_id) {
                     COCREATION.metadata = rawData.metadata;
-                    room.$.metadata_component.setMetadata(COCREATION.metadata);
+                    //room.$.metadata_component.setMetadata(COCREATION.metadata);
+                    $("#metadata_iframe")[0].contentWindow.METADATA.realtime_metadata(COCREATION.metadata);
 
                     room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'metadata_successfully_updated');
                     room.$.syncToast.show();
