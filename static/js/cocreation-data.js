@@ -221,7 +221,9 @@ room.confirmDatasetPublication = function(){
             function (data, status) {
                 if(JSON.parse(data).status == "ok")
                 {
-                    var metadata = room.$.metadata_component.metadata;
+                    debugger
+                    // var metadata = room.$.metadata_component.metadata;
+                    let metadata = $("#metadata_iframe")[0].contentWindow.METADATA.form.submission.data;
                     $.post(ODE.ajax_coocreation_room_publish_dataset,
                         {
                             roomId                              : COCREATION.roomId,
