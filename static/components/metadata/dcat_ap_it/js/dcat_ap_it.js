@@ -301,13 +301,13 @@ METADATA.create_form = function()
                 input: true
             },
 
-            // ULTIMA MODIFICA (INIZIO - FINE)
+            // PERIOD OF TIME - (INIZIO - FINE)
             {
                 input: true,
                 tree: true,
                 components: [{
                     type: 'datetime',
-                    key: 'dct_temporal_start',
+                    key: 'dct_period_of_time-schema_start_date',
                     label: 'Data di ultima modifica',
                     placeholder: 'Data di ultima modifica',
                     datepickerMode: 'day',
@@ -322,7 +322,7 @@ METADATA.create_form = function()
                     }
                 }, {
                     type: 'datetime',
-                    key: 'dct_temporal_end',
+                    key: 'dct_period_of_time-schema_end_date',
                     label: 'Data di ultima modifica',
                     placeholder: 'Data di ultima modifica',
                     datepickerMode: 'day',
@@ -342,7 +342,7 @@ METADATA.create_form = function()
                 type: 'datagrid'
             },
 
-            // TITOLARE DEL DATASET
+            // RIGHTS HOLDER
             {
                 type: 'textfield',
                 key: 'dct_rightsHolder',
@@ -354,7 +354,7 @@ METADATA.create_form = function()
                 }
             },
 
-            // FREQUENZA DI AGGIORNAMENTO
+            // ACCRUAL PERIODICITY
             {
                 type: 'select',
                 key: 'dct_accrualPeriodicity',
@@ -372,7 +372,7 @@ METADATA.create_form = function()
                 }
             },
 
-            // VERSIONE
+            // VERSION
             {
                 type: 'textfield',
                 key: 'owl_versionInfo',
@@ -384,12 +384,12 @@ METADATA.create_form = function()
                 }
             },
 
-            // CONFORMITA' (IDENTIFICATORE - TITOLO - DESCRIZIONE)
+            // CONFORMS TO (IDENTIFICATORE - TITOLO - DESCRIZIONE - URI)
             {
                 input: true,
                 components: [{
                     type: 'textfield',
-                    key: 'dct_conformsTo_identifier',
+                    key: 'dct_standards-dct_identifier',
                     label: 'Identificatore',
                     placeholder: 'Identificatore',
                     input: true,
@@ -398,7 +398,7 @@ METADATA.create_form = function()
                     }
                 }, {
                     type: 'textfield',
-                    key: 'dct_conformsTo_title',
+                    key: 'dct_standards-dct_title',
                     label: 'Titolo',
                     placeholder: 'Titolo',
                     input: true,
@@ -408,9 +408,19 @@ METADATA.create_form = function()
                 },
                     {
                         type: 'textfield',
-                        key: 'dct_conformsTo_description',
+                        key: 'dct_standards-dct_description',
                         label: 'Description',
                         placeholder: 'Description',
+                        input: true,
+                        validate: {
+                            required: true
+                        }
+                    },
+                    {
+                        type: 'textfield',
+                        key: 'dct_standards-referenceDocumentation_URI',
+                        label: 'Documentation URI',
+                        placeholder: 'Documentation URI',
                         input: true,
                         validate: {
                             required: true
@@ -421,15 +431,15 @@ METADATA.create_form = function()
                 type: 'datagrid'
             },
 
-            // CREATORE
+            // CREATOR
             {
                 input: true,
                 components: [
                     {
                         type: 'textfield',
-                        key: 'dct_creator_name',
-                        label: 'Nome',
-                        placeholder: 'Nome',
+                        key: 'foaf_agent-dct_identifier',
+                        label: 'Identificativo',
+                        placeholder: 'Identificativo',
                         input: true,
                         validate: {
                             required: false
@@ -437,20 +447,20 @@ METADATA.create_form = function()
                     },
                     {
                         type: 'textfield',
-                        key: 'dct_creator_ipaIva',
-                        label: 'IPA/IVA',
-                        placeholder: 'IPA/IVA',
+                        key: 'foaf_agent-foaf_name',
+                        label: 'Nome',
+                        placeholder: 'Nome',
                         input: true,
                         validate: {
                             required: false
                         }
                     }],
                 label: 'Creatore',
-                key: 'creators',
+                key: 'dct_creator',
                 type: 'datagrid'
             },
 
-            // DESCRIZONE
+            // DESCRIPTION
             {
                 type: 'textarea',
                 label: 'Descrizione',
@@ -460,7 +470,7 @@ METADATA.create_form = function()
                 input: true
             },
 
-            // PAROLE CHIAVE
+            // KEYWORD
             {
                 type: 'textfield',
                 key: 'dcat_keyword',
@@ -472,7 +482,7 @@ METADATA.create_form = function()
                 }
             },
 
-            // LICENZA
+            // LICENSE
             {
                 type: 'select',
                 key: 'dct_license',
@@ -487,7 +497,7 @@ METADATA.create_form = function()
                 },
             },
 
-            // ORGANIZZAZIONE
+            // PUBLISHER
             {
                 type: 'textfield',
                 key: 'dct_publisher',
@@ -499,7 +509,7 @@ METADATA.create_form = function()
                 }
             },
 
-            // AUTORE
+            // AUTHOR
             {
                 type: 'textfield',
                 key: 'dct_creator',
@@ -511,7 +521,7 @@ METADATA.create_form = function()
                 }
             },
 
-            // TITOLO DISTRIBUZIONE
+            // DISTRIBUTION TITLE
             {
                 type: 'textfield',
                 key: 'distribution_dct_title',
@@ -523,17 +533,17 @@ METADATA.create_form = function()
                 }
             },
 
-            // DESCRIZIONE DISTRIBUZIONE
+            // DISTRIBUTION DESCRIPTION
             {
                 type: 'textarea',
-                key: 'dct_description',
+                key: 'distribution_dct_description',
                 label: 'Descrizione distribuzione',
                 placeholder: 'Descrizione distribuzione',
                 defaultValue: '',
                 input: true
             },
 
-            // FORMATO DISTRIBUZIONE
+            // DISTRIBUTION FORMAT
             {
                 type: 'select',
                 key: 'dct_format',
@@ -561,7 +571,7 @@ METADATA.create_form = function()
                 }
             },
 
-            // ULTIMA MODIFICA DELLA DISTRIBUZIONE
+            // UPDATE MODIFICATION DATE
             {
                 type: 'datetime',
                 key: 'dct_modified',
