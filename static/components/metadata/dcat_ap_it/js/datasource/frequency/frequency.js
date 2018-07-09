@@ -1,0 +1,27 @@
+FREQUENCY = {};
+
+FREQUENCY.frequency = [
+    {"value":"ANNUAL", "label":"ANNUAL"},
+    {"value":"ANNUAL_2", "label":"ANNUAL_2"},
+    {"value":"ANNUAL_3", "label":"ANNUAL_3"},
+    {"value":"BIENNIAL", "label":"BIENNIAL"},
+    {"value":"BIMONTHLY", "label":"BIMONTHLY"},
+    {"value":"BIWEEKLY", "label":"BIWEEKLY"},
+    {"value":"CONT", "label":"CONT"},
+    {"value":"DAILY", "label":"DAILY"},
+    {"value":"DAILY_2", "label":"DAILY_2"},
+    {"value":"IRREG", "label":"IRREG"},
+    {"value":"MONTHLY", "label":"MONTHLY"},
+    {"value":"MONTHLY_2", "label":"MONTHLY_2"},
+    {"value":"MONTHLY_3", "label":"MONTHLY_3"},
+    {"value":"NEVER", "label":"NEVER"},
+    {"value":"OP_DATPRO", "label":"OP_DATPRO"},
+    {"value":"OTHER", "label":"OTHER"},
+    {"value":"QUARTERLY", "label":"QUARTERLY"},
+    {"value":"TRIENNIAL", "label":"TRIENNIAL"},
+    {"value":"UNKNOWN", "label":"UNKNOWN"},
+    {"value":"UPDATE_CONT", "label":"UPDATE_CONT"},
+    {"value":"WEEKLY", "label":"WEEKLY"},
+    {"value":"WEEKLY_2", "label":"WEEKLY_2"},
+    {"value":"WEEKLY_3", "label":"WEEKLY_3"},
+];

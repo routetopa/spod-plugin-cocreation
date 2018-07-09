@@ -63,7 +63,7 @@ window.addEventListener('info-list-controllet_delete_user', function(e){
 room.init = function(){
     var socket = io(window.location.origin , {path: "/realtime_notification"/*, transports: [ 'polling' ]*/});
     socket.on('realtime_message_' + COCREATION.entity_type + "_" + COCREATION.roomId, function(rawData) {
-        switch(rawData.operation){
+        switch(rawData.operation) {
             case "addDatasetToRoom":
                 room.loadDatasetsLibrary();
                 room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'dataset_successfully_added');
@@ -71,15 +71,14 @@ room.init = function(){
                 break;
             case "deleteDataletFromRoom":
                 room.$.datalets_slider.setDatalets(rawData.datalets);
-                if(rawData.user_id == COCREATION.user_id)
-                {
-                    if(room.$.datalets_slider.selected == rawData.datalets.length && rawData.datalets.length > 0)
-                       room.$.datalets_slider.setSelected(1);
-                }else{
-                    if(room.$.datalets_slider.selected == parseInt(rawData.deleted_position)) {
-                        if(room.$.datalets_slider.selected == rawData.datalets.length && rawData.datalets.length > 0)
+                if (rawData.user_id == COCREATION.user_id) {
+                    if (room.$.datalets_slider.selected == rawData.datalets.length && rawData.datalets.length > 0)
+                        room.$.datalets_slider.setSelected(1);
+                } else {
+                    if (room.$.datalets_slider.selected == parseInt(rawData.deleted_position)) {
+                        if (room.$.datalets_slider.selected == rawData.datalets.length && rawData.datalets.length > 0)
                             room.$.datalets_slider.setSelected(1);
-                    }else if(room.$.datalets_slider.selected > parseInt(rawData.deleted_position))
+                    } else if (room.$.datalets_slider.selected > parseInt(rawData.deleted_position))
                         room.$.datalets_slider.setSelected(room.$.datalets_slider.selected);
                 }
 
@@ -88,7 +87,7 @@ room.init = function(){
                 break;
             case "addDataletToRoom":
                 room.$.datalets_slider.setDatalets(rawData.datalets);
-                if(rawData.user_id == COCREATION.user_id) room.$.datalets_slider.setSelected(rawData.datalets.length);
+                if (rawData.user_id == COCREATION.user_id) room.$.datalets_slider.setSelected(rawData.datalets.length);
                 room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'datalet_successfully_added');
                 room.$.syncToast.show();
                 break;
@@ -99,16 +98,14 @@ room.init = function(){
                 room.$.syncToast.show();
                 break;
             case "updateMetadata":
-                COCREATION.metadata = JSON.stringify({
-                                                      "MANDATORY": JSON.parse(COCREATION.metadata_mandatory),
-                                                      "CC_RF":  JSON.parse(rawData.core_common_required_metadata),
-                                                      "CC_RAF": JSON.parse(rawData.common_core_if_applicable_metadata),
-                                                      "EF":     JSON.parse(rawData.expanded_metadata )
-                                                    });
-                room.$.metadata_component.setMetadata(COCREATION.metadata);
+                if (rawData.user_id != COCREATION.user_id) {
+                    COCREATION.metadata = rawData.metadata;
+                    //room.$.metadata_component.setMetadata(COCREATION.metadata);
+                    $("#metadata_iframe")[0].contentWindow.METADATA.realtime_metadata(COCREATION.metadata);
 
-                room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'metadata_successfully_updated');
-                room.$.syncToast.show();
+                    room.$.syncMessage.innerHTML = OW.getLanguageText('cocreation', 'metadata_successfully_updated');
+                    room.$.syncToast.show();
+                }
                 break;
             case "deleteRoom":
                 var redirect =  window.location.pathname.split("/");

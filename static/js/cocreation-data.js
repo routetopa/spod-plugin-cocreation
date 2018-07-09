@@ -22,15 +22,10 @@ $(document).ready(function() {
         }
     });*/
 
-   window.addEventListener('metadata-list-controllet_update-metadata', function(e){
-       //I want receive only my events, discard the others.
-       //NOTE: this is to have multiple the metadata-list-controllet in the page as in the
-       //cace of co-creation.
-       if (e.target.id != "metadata_component") return;
-
-       var metadata = JSON.parse(e.detail.metadata);
-       room.persistMetadata(metadata);
-    });
+   window.addEventListener('metadata-list-controllet_update-metadata', function(e)
+   {
+       room.persistMetadata(e.detail.metadata);
+   });
 
     window.addEventListener('message', function (e) {
         switch (e.data) {
@@ -226,7 +221,9 @@ room.confirmDatasetPublication = function(){
             function (data, status) {
                 if(JSON.parse(data).status == "ok")
                 {
-                    var metadata = room.$.metadata_component.metadata;
+                    debugger
+                    // var metadata = room.$.metadata_component.metadata;
+                    let metadata = $("#metadata_iframe")[0].contentWindow.METADATA.form.submission.data;
                     $.post(ODE.ajax_coocreation_room_publish_dataset,
                         {
                             roomId                              : COCREATION.roomId,
@@ -234,9 +231,7 @@ room.confirmDatasetPublication = function(){
                             owners                              : COCREATION.room_members,
                             data                                : room.current_dataset,
                             notes                               : data,
-                            common_core_required_metadata       : metadata.CC_RF,
-                            common_core_if_applicable_metadat   : metadata.CC_RAF,
-                            expanded_metadata                   : metadata.EF
+                            metadata                            : metadata
                         },
                         function (data, status) {
                             previewFloatBox.close();
@@ -284,9 +279,7 @@ room.persistMetadata = function (metadata) {
     $.post(ODE.ajax_coocreation_room_update_metadata,
         {
             roomId                             : COCREATION.roomId,
-            core_common_required_metadata      : JSON.stringify(metadata.CC_RF),
-            common_core_if_applicable_metadata : JSON.stringify(metadata.CC_RAF),
-            expanded_metadata                  : JSON.stringify(metadata.EF)
+            metadata                           : JSON.stringify(metadata)
         },
         function (data, status) {
             COCREATION.metadata = metadata;

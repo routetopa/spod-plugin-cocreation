@@ -95,21 +95,17 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         $this->assign('headers', $headers);
         $this->assign('data', json_encode($data));
 
-        $metadataMandatoryObj = json_decode('[{"name":"title","type":"CC_RF"},{"name":"description","type":"CC_RF"},{"name":"license","type":"CC_RAF"},{"name":"language","type":"EF"},{"name":"version","type":"CC_RF"},{"name":"contact_name","type":"CC_RF"},{"name":"contact_email","type":"CC_RF"},{"name":"maintainer","type":"CC_RF"},{"name":"maintainer_email","type":"CC_RF"},{"name":"origin","type":"EF"}]');
-
         $metadata = COCREATION_BOL_Service::getInstance()->getMetadataByRoomId($params['roomId']);
-
-        $metadataObj = new stdClass();
-        $metadataObj->MANDATORY = $metadataMandatoryObj;
-        $metadataObj->CC_RF = json_decode($metadata[0]->common_core_required);
-        $metadataObj->CC_RAF = json_decode($metadata[0]->common_core_if_applicable);
-        $metadataObj->EF = json_decode($metadata[0]->expanded);
-
 
 
         /* NEW DISCUSSION AGORA LIKE */
         $this->addComponent('discussion', new SPODDISCUSSION_CMP_Discussion($room->id));
         /* NEW DISCUSSION AGORA LIKE */
+
+        /* METADATA IFRAME SRC */
+        $this->assign('metadata_url', OW::getPluginManager()->getPlugin('cocreation')->getStaticUrl() . 'pages/metadata/dcat_ap_it/metadata_dcat_ap_it.html');
+        //$this->assign('metadata_url', OW::getPluginManager()->getPlugin('cocreation')->getStaticUrl() . 'pages/metadata/common_core/metadata_common_core.html');
+        /* METADATA IFRAME SRC */
 
         $this->assign("toolbar_color", ($room->type == "data") ? "#4CAF50" : "#FF9800");
         $this->assign('datalet_definition_import', ODE_CLASS_Tools::getInstance()->get_all_datalet_definitions());
@@ -151,12 +147,13 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                 COCREATION.room_members                       = {$room_members}
                 COCREATION.datalets                           = {$roomDatalets}
                 COCREATION.metadata                           = {$room_metadata}
-                COCREATION.metadata_mandatory                 = {$room_metadata_mandatory}
                 COCREATION.user_id                            = {$userId}
                 COCREATION.info                               = {$roomInfo}
                 COCREATION.spreadsheet_server_port            = {$spreasheet_server_port}
                 COCREATION.sheet_images_url                   = {$sheet_images_url}
                 COCREATION.sheet_remove_image_url             = {$sheet_remove_image_url}
+                COCREATION.user_info                          = {$user_info}
+                COCREATION.owner                              = {$owner}
             ', array(
                'ajax_coocreation_room_get_datalets'        => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getRoomDatalets'),
                'ajax_coocreation_room_get_array_sheetdata' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getArrayOfObjectSheetData') . "?sheetName=" . $sheetUrl,
@@ -171,8 +168,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                'entity_type'                               => COCREATION_BOL_Service::ROOM_ENTITY_TYPE,
                'room_members'                              => json_encode($membersIds),
                'roomDatalets'                              => $room_datalets,
-               'room_metadata'                             => json_encode($metadataObj),
-               'room_metadata_mandatory'                  => json_encode($metadataMandatoryObj),
+               'room_metadata'                             => $metadata->metadata,
                'userId'                                    => OW::getUser()->getId(),
                'roomInfo'                                  => json_encode($info),
                'spreasheet_server_port'                    => BOL_PreferenceService::getInstance()->findPreference('spreadsheet_server_port_preference')->defaultValue,
@@ -180,7 +176,9 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                'ckan_platform_url_preference'              => $ckan_platform_url_preference_default_value,
                'ckan_api_key_preference'                   => $ckan_api_key_preference_default_value,
                'ckan_def_organisation_preference'          => $ckan_def_organisation_preference_value,
-               'sheet_remove_image_url'                    => OW_URL_HOME . "ethersheet/remove/image"
+               'sheet_remove_image_url'                    => OW_URL_HOME . "ethersheet/remove/image",
+               'user_info'                                 => ['username' => BOL_UserService::getInstance()->findUserById(OW::getUser()->getId())->username, 'mail' => BOL_UserService::getInstance()->findUserById(OW::getUser()->getId())->email],
+               'owner'                                     => ['username' => BOL_UserService::getInstance()->findUserById($room->ownerId)->username, 'mail' => BOL_UserService::getInstance()->findUserById($room->ownerId)->email]
         ));
         OW::getDocument()->addOnloadScript($js);
         OW::getDocument()->addOnloadScript("data_room.init();");
