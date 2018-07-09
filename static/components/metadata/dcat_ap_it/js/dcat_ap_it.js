@@ -94,7 +94,7 @@ METADATA.create_form = function()
                 components: [{
                     type: "select",
                     label: "Tema del dataset",
-                    key: "dct_subject",
+                    key: "dcat_theme",
                     placeholder: "Tema del dataset",
                     data: {
                         custom: "values = METADATA.loadTheme('main_theme')"
@@ -104,23 +104,23 @@ METADATA.create_form = function()
                     multiple: false,
                     input: true
                 },
-                    {
-                        type: "select",
-                        label: "Sottotema del dataset",
-                        key: "dct_subproperty",
-                        placeholder: "Sottotema del dataset",
-                        data: {
-                            custom: "values = METADATA.loadTheme(data.dct_subject.value)"
-                        },
-                        dataSrc: "custom",
-                        template: "<span>{{ item.label }}</span>",
-                        multiple: true,
-                        refreshOn: 'dct_subject',
-                        input: true
-                    }],
+                {
+                    type: "select",
+                    label: "Sottotema del dataset",
+                    key: "dct_subject",
+                    placeholder: "Sottotema del dataset",
+                    data: {
+                        custom: "values = METADATA.loadTheme(data.dcat_theme.value)"
+                    },
+                    dataSrc: "custom",
+                    template: "<span>{{ item.label }}</span>",
+                    multiple: true,
+                    refreshOn: 'dct_subject',
+                    input: true
+                }],
                 tableView: true,
                 label: 'Tema',
-                key: 'dcat_theme',
+                key: 'dcat_theme-dct_subject',
                 type: 'datagrid'
             },
 
@@ -225,7 +225,7 @@ METADATA.create_form = function()
                                 inputType: 'text',
                                 inputMask: '',
                                 label: 'Name of place',
-                                key: 'dataset_editor',
+                                key: 'locn_geographicalName',
                                 placeholder: 'Name of place',
                                 multiple: false,
                                 defaultValue: '',
@@ -247,7 +247,7 @@ METADATA.create_form = function()
                                 inputType: 'text',
                                 inputMask: '',
                                 label: 'Geonames ULR',
-                                key: 'dataset_ipa_iva',
+                                key: 'dcatapit_geographicalIdentifier',
                                 placeholder: 'Geonames URL',
                                 multiple: false,
                                 defaultValue: '',
