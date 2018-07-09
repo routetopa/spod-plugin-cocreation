@@ -681,7 +681,8 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         }
 
         header("Access-Control-Allow-Origin: *");
-        echo COCREATION_BOL_Service::getInstance()->getDatasetByRoomIdAndVersion($clean['room_id'], $clean['version'])->data;
+        $dataset = COCREATION_BOL_Service::getInstance()->getDatasetByRoomIdAndVersion($clean['room_id'], $clean['version']);
+        echo json_encode(array("records"=> json_decode($dataset->data), "metadata" => json_decode($dataset->metadata)));
         exit;
     }
 
