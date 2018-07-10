@@ -17,23 +17,23 @@ dcat_ap_it_ln["dct_identifier-tooltip-it"] = "Questa proprietà contiene l’ide
 /* dct_title */
 dcat_ap_it_ln["adms_identifier-it"] = "adms_identifier";
 dcat_ap_it_ln["adms_identifier-label-it"] = "Altro identificativo del dataset";
-// dcat_ap_it_ln["adms_identifier-placeholder-it"] = "Altro identificativo del dataset";
+dcat_ap_it_ln["adms_identifier-placeholder-it"] = "Altro identificativo del dataset";
 dcat_ap_it_ln["adms_identifier-tooltip-it"] = "Questa proprietà si riferisce a un eventuale identificativo secondario del Dataset (e.g., DOI, ISBN, W3ID, ecc.).";
 
 dcat_ap_it_ln["othid_identifier-it"] = "othid_identifier";
 dcat_ap_it_ln["othid_identifier-label-it"] = "Altro identificativo del dataset";
 dcat_ap_it_ln["othid_identifier-placeholder-it"] = "Altro identificativo del dataset";
-// dcat_ap_it_ln["othid_identifier-tooltip-it"] = "";
+dcat_ap_it_ln["othid_identifier-tooltip-it"] = "";
 
 dcat_ap_it_ln["othid_organization_name-it"] = "othid_organization_name";
 dcat_ap_it_ln["othid_organization_name-label-it"] = "Nome dell'organizzazione";
 dcat_ap_it_ln["othid_organization_name-placeholder-it"] = "Nome dell'organizzazione";
-// dcat_ap_it_ln["othid_organization_name-tooltip-it"] = "";
+dcat_ap_it_ln["othid_organization_name-tooltip-it"] = "";
 
 dcat_ap_it_ln["othid_organization_identifier-it"] = "othid_organization_identifier";
 dcat_ap_it_ln["othid_organization_identifier-label-it"] = "Identificativo dell'organizzazione";
 dcat_ap_it_ln["othid_organization_identifier-placeholder-it"] = "Identificativo dell'organizzazione";
-// dcat_ap_it_ln["othid_organization_identifier-tooltip-it"] = "";
+dcat_ap_it_ln["othid_organization_identifier-tooltip-it"] = "";
 
 /* dcat_theme-dct_subject */
 dcat_ap_it_ln["dcat_theme-it"] = "dcat_theme";
@@ -42,15 +42,9 @@ dcat_ap_it_ln["dcat_theme-placeholder-it"] = "Tema del dataset";
 dcat_ap_it_ln["dcat_theme-tooltip-it"] = "Questa proprietà si riferisce alla categoria in cui è classificato il Dataset. Un Dataset può essere associato a più temi. I valori da utilizzare per questa proprietà sono gli URI dei concetti del vocabolario EU Data Theme (URI vocabolario: http://publications.europa.eu/resource/authority/data-theme) descritti alla pagina http://publications.europa.eu/mdr/authority/data-theme.";
 
 dcat_ap_it_ln["dct_subject-it"] = "dct_subject";
-dcat_ap_it_ln["dct_subject-label-it"] = "sottotema del datase";
-dcat_ap_it_ln["dct_subject-placeholder-it"] = "sottotema del datase";
+dcat_ap_it_ln["dct_subject-label-it"] = "Sottotema del datase";
+dcat_ap_it_ln["dct_subject-placeholder-it"] = "Sottotema del datase";
 dcat_ap_it_ln["dct_subject-tooltip-it"] = "Questa proprietà si riferisce alla sottocategoria in cui può essere classificato il Dataset. Un Dataset può essere associato a più sottotemi. Il vocabolario di riferimento è EUROVOC (http://eurovoc.europa.eu/). A tale proposito, è reso disponibile dall’European Data Portal un mapping tra i temi EU Data Theme e le voci del vocabolario EUROVOC, riportato anche nell’allegato 2 di questo documento.";
-
-/* dct_publisher-?dataset_ipa_iva? */
-dcat_ap_it_ln["dct_publisher-it"] = "dct_publisher";
-dcat_ap_it_ln["dct_publisher-label-it"] = "xxx";
-dcat_ap_it_ln["dct_publisher-placeholder-it"] = "xxx";
-dcat_ap_it_ln["dct_publisher-tooltip-it"] = "xxx";
 
 dcat_ap_it_ln["dataset_ipa_iva-it"] = "dataset_ipa_iva";
 dcat_ap_it_ln["dataset_ipa_iva-label-it"] = "IPA/IVA";
@@ -92,7 +86,6 @@ dcat_ap_it_ln["dct_language-label-it"] = "Lingua del dataset";
 dcat_ap_it_ln["dct_language-placeholder-it"] = "Lingua del dataset";
 dcat_ap_it_ln["dct_language-tooltip-it"] = "Questa proprietà si riferisce a una lingua del Dataset. Questa proprietà può essere ripetuta se nel Dataset sono utilizzate più lingue. Deve essere utilizzato il vocabolario http://publications.europa.eu/mdr/authority/language/.";
 
-
 // PERIOD OF TIME
 dcat_ap_it_ln["dct_period_of_time-schema_start_date-it"] = "dct:PeriodOfTime schema:startDate";
 dcat_ap_it_ln["dct_period_of_time-schema_start_date-label-it"] = "Data di inizio";
@@ -118,9 +111,9 @@ dcat_ap_it_ln["dct_accrualPeriodicity-tooltip-it"] = "Questa proprietà si rifer
 
 // VERSION
 dcat_ap_it_ln["owl_versionInfo-it"] = "owl:versionInfo";
-dcat_ap_it_ln["dct_accrualPeriodicity-label-it"] = "Versione";
-dcat_ap_it_ln["dct_accrualPeriodicity-placeholder-it"] = "Versione";
-dcat_ap_it_ln["dct_accrualPeriodicity-tooltip-it"] = "Questa proprietà contiene il numero della versione o altre indicazioni della versione del dataset";
+dcat_ap_it_ln["owl_versionInfo-label-it"] = "Versione";
+dcat_ap_it_ln["owl_versionInfo-placeholder-it"] = "Versione";
+dcat_ap_it_ln["owl_versionInfo-tooltip-it"] = "Questa proprietà contiene il numero della versione o altre indicazioni della versione del dataset";
 
 // CONFORMS TO
 dcat_ap_it_ln["dct_standards-dct_identifier-it"] = "dct:standards dct:identifier";
@@ -207,3 +200,9 @@ dcat_ap_it_ln["dct_modified-it"] = "dct:modified";
 dcat_ap_it_ln["dct_modified-label-it"] = "Ultima modifica della distribuzione";
 dcat_ap_it_ln["dct_modified-placeholder-it"] = "Ultima modifica della distribuzione";
 dcat_ap_it_ln["dct_modified-tooltip-it"] = "Questa proprietà contiene la data più recente in cui la Distribuzione è stata modificata o aggiornata";
+
+// BYTE SIZE
+dcat_ap_it_ln["dcat_byteSize-it"] = "dct:byteSize";
+dcat_ap_it_ln["dcat_byteSize-label-it"] = "Lunghezza del file/dimensione in byte";
+dcat_ap_it_ln["dcat_byteSize-placeholder-it"] = "Lunghezza del file/dimensione in byte";
+dcat_ap_it_ln["dcat_byteSize-tooltip-it"] = "Questa proprietà contiene la lunghezza della Distribuzione in byte";
