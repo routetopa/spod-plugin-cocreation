@@ -2,11 +2,14 @@ dcat_ap_it_ln = [];
 
 /******** IT ********/
 
+/* mandatory_fields */
+dcat_ap_it_ln["mandatory_fields-title-it"] = "Campi obbligatori";
+
 /* dct_title */
 dcat_ap_it_ln["dct_title-it"] = "dct:title";
-dcat_ap_it_ln["dct_title-label-it"] = "Titolo catalogo";
-dcat_ap_it_ln["dct_title-placeholder-it"] = "Titolo catalogo";
-dcat_ap_it_ln["dct_title-tooltip-it"] = "Questa proprietà contiene un nome dato al Catalogo. Questa proprietà può essere ripetuta per esprimere il titolo in diverse lingue.";
+dcat_ap_it_ln["dct_title-label-it"] = "Titolo dataset";
+dcat_ap_it_ln["dct_title-placeholder-it"] = "Titolo dataset";
+dcat_ap_it_ln["dct_title-tooltip-it"] = "Questa proprietà contiene un nome assegnato al Dataset. Questa proprietà può essere ripetuta per esprimere il titolo in diverse lingue";
 
 /* dct_identifier */
 dcat_ap_it_ln["dct_identifier-it"] = "dct:identifier";

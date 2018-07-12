@@ -24,24 +24,41 @@ METADATA.create_form = function()
 {
     let components = [
 
-        // TITLE
         {
-            type: 'textfield',
-            key: 'dct_title',
-            input: true,
-            validate: {
-                required: true
-            }
+            theme:'primary',
+            type: 'panel',
+            key:'mandatory_fields',
+            components: [
+                // TITLE
+                {
+                    type: 'textfield',
+                    key: 'dct_title',
+                    input: true,
+                    multiple:true,
+                    validate: {
+                        required: true
+                    }
+                },
+
+                // DESCRIPTION
+                {
+                    type: 'textarea', /**/
+                    defaultValue: '',
+                    key: 'dct_description',
+                    input: true,
+                    multiple: true,
+                    validate: {
+                        required: true
+                    }
+                },
+            ]
         },
 
         // IDENTIFIER
         {
             type: 'textfield',
             key: 'dct_identifier',
-            input: true,
-            validate: {
-                required: true
-            }
+            input: true
         },
 
         // OTHER IDENTIFIER
@@ -51,26 +68,17 @@ METADATA.create_form = function()
                 {
                     type: 'textfield',
                     key: 'othid_identifier',
-                    input: true,
-                    validate: {
-                        required: false
-                    }
+                    input: true
                 },
                 {
                     type: 'textfield',
                     key: 'othid_organization_name',
-                    input: true,
-                    validate: {
-                        required: false
-                    }
+                    input: true
                 },
                 {
                     type: 'textfield',
                     key: 'othid_organization_identifier',
-                    input: true,
-                    validate: {
-                        required: false
-                    }
+                    input: true
                 }],
             key: 'adms_identifier',
             type: 'datagrid'
@@ -116,10 +124,7 @@ METADATA.create_form = function()
                         {
                             type: 'textfield',
                             key: 'dct_publisher',
-                            input: true,
-                            validate: {
-                                required: false
-                            }
+                            input: true
                         }
                     ]
                 },
@@ -128,11 +133,7 @@ METADATA.create_form = function()
                         {
                             type: 'textfield',
                             key: 'dataset_ipa_iva',
-                            input: true,
-                            validate: {
-                                required: false
-                            },
-
+                            input: true
                         }
                     ]
                 }
@@ -149,10 +150,7 @@ METADATA.create_form = function()
             enableDate: true,
             enableTime: false,
             format: 'dd-MM-yyyy',
-            input: true,
-            validate: {
-                required: true
-            }
+            input: true
         },
 
         // MODIFIED DATE
@@ -163,10 +161,7 @@ METADATA.create_form = function()
             enableDate: true,
             enableTime: false,
             format: 'dd-MM-yyyy',
-            input: true,
-            validate: {
-                required: false
-            }
+            input: true
         },
 
         // SPATIAL
@@ -199,9 +194,6 @@ METADATA.create_form = function()
                             protected: false,
                             unique: false,
                             persistent: true,
-                            validate: {
-                                required: false
-                            },
                             type: 'textfield'
                         }
                     ]
@@ -219,9 +211,6 @@ METADATA.create_form = function()
                             protected: false,
                             unique: false,
                             persistent: true,
-                            validate: {
-                                required: false
-                            },
                             type: 'textfield'
                         }
                     ]
@@ -275,10 +264,7 @@ METADATA.create_form = function()
                 enableDate: true,
                 enableTime: false,
                 format: 'dd-MM-yyyy',
-                input: true,
-                validate: {
-                    required: false
-                }
+                input: true
             }, {
                 type: 'datetime',
                 key: 'dct_period_of_time-schema_end_date',
@@ -286,10 +272,7 @@ METADATA.create_form = function()
                 enableDate: true,
                 enableTime: false,
                 format: 'dd-MM-yyyy',
-                input: true,
-                validate: {
-                    required: false
-                }
+                input: true
             }],
             tableView: true,
             key: 'dct_temporal',
@@ -300,10 +283,7 @@ METADATA.create_form = function()
         {
             type: 'textfield',
             key: 'dct_rights_holder',
-            input: true,
-            validate: {
-                required: true
-            }
+            input: true
         },
 
         // ACCRUAL PERIODICITY
@@ -316,9 +296,6 @@ METADATA.create_form = function()
             input: true,
             data: {
                 custom: "values = FREQUENCY.frequency"
-            },
-            validate: {
-                required: false
             }
         },
 
@@ -326,10 +303,7 @@ METADATA.create_form = function()
         {
             type: 'textfield',
             key: 'owl_versionInfo',
-            input: true,
-            validate: {
-                required: true
-            }
+            input: true
         },
 
         // CONFORMS TO (IDENTIFICATORE - TITOLO - DESCRIZIONE - URI)
@@ -338,33 +312,21 @@ METADATA.create_form = function()
             components: [{
                 type: 'textfield',
                 key: 'dct_standards-dct_identifier',
-                input: true,
-                validate: {
-                    required: true
-                }
+                input: true
             }, {
                 type: 'textfield',
                 key: 'dct_standards-dct_title',
-                input: true,
-                validate: {
-                    required: true
-                }
+                input: true
             },
                 {
                     type: 'textfield',
                     key: 'dct_standards-dct_description',
-                    input: true,
-                    validate: {
-                        required: true
-                    }
+                    input: true
                 },
                 {
                     type: 'textfield',
                     key: 'dct_standards-referenceDocumentation_URI',
-                    input: true,
-                    validate: {
-                        required: true
-                    }
+                    input: true
                 }],
             key: 'dct_conformsTo',
             type: 'datagrid'
@@ -377,39 +339,22 @@ METADATA.create_form = function()
                 {
                     type: 'textfield',
                     key: 'foaf_agent-dct_identifier',
-                    input: true,
-                    validate: {
-                        required: false
-                    }
+                    input: true
                 },
                 {
                     type: 'textfield',
                     key: 'foaf_agent-foaf_name',
-                    input: true,
-                    validate: {
-                        required: false
-                    }
+                    input: true
                 }],
             key: 'foaf_agent-dct_identifier-foaf_agent-foaf_name',
             type: 'datagrid'
-        },
-
-        // DESCRIPTION
-        {
-            type: 'textarea',
-            defaultValue: '',
-            key: 'dct_description',
-            input: true
         },
 
         // KEYWORD
         {
             type: 'textfield',
             key: 'dcat_keyword',
-            input: true,
-            validate: {
-                required: false
-            }
+            input: true
         },
 
         // LICENSE
@@ -429,30 +374,21 @@ METADATA.create_form = function()
         {
             type: 'textfield',
             key: 'dct_publisher',
-            input: true,
-            validate: {
-                required: true
-            }
+            input: true
         },
 
         // AUTHOR
         {
             type: 'textfield',
             key: 'dct_creator',
-            input: true,
-            validate: {
-                required: false
-            }
+            input: true
         },
 
         // DISTRIBUTION TITLE
         {
             type: 'textfield',
             key: 'distribution_dct_title',
-            input: true,
-            validate: {
-                required: true
-            }
+            input: true
         },
 
         // DISTRIBUTION DESCRIPTION
@@ -497,10 +433,7 @@ METADATA.create_form = function()
             enableDate: true,
             enableTime: false,
             format: 'dd-MM-yyyy',
-            input: true,
-            validate: {
-                required: false
-            }
+            input: true
         },
 
         // BYTE SIZE
@@ -563,21 +496,20 @@ METADATA.create_form = function()
 
 METADATA.add_info = function(components)
 {
-    let ln = parent.ODE.user_language;
+    let ln = parent.ODE.user_language || 'en';
 
     components.forEach((e)=>
     {
-        if(e.components || e.columns) {
-            let components = e.components || e.columns;
-            METADATA.add_info(components);
-        }
+        if(e.components || e.columns)
+            METADATA.add_info(e.components || e.columns);
 
-        if(e.key && dcat_ap_it_ln[e.key + '-label-'+ln])
+        if(e.key && dcat_ap_it_ln[e.key + '-label-' + ln])
         {
-            e.label = dcat_ap_it_ln[e.key + '-label-'+ln];
-            e.placeholder = dcat_ap_it_ln[e.key + '-placeholder-'+ln];
-            e.tooltip = dcat_ap_it_ln[e.key + '-tooltip-'+ln];
-        }
+            e.label       = dcat_ap_it_ln[e.key + '-label-' + ln];
+            e.placeholder = dcat_ap_it_ln[e.key + '-placeholder-' + ln];
+            e.tooltip     = dcat_ap_it_ln[e.key + '-tooltip-' + ln];
+        } else if(dcat_ap_it_ln[e.key + '-title-' + ln])
+            e.title = dcat_ap_it_ln[e.key + '-title-' + ln];
     })
 
 };
