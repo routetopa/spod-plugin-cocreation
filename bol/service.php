@@ -219,7 +219,7 @@ class COCREATION_BOL_Service
     //ROOMS
 
     public function addRoom($ownerId, $name, $subject,
-                            $description, $from, $to,
+                            $description, $metadata, $from, $to,
                             $goal, $invitationText, $isOpen,
                             $invitedUserArray, $roomType)
     {
@@ -230,6 +230,7 @@ class COCREATION_BOL_Service
         $room->name           = $name;
         $room->subject        = $subject;
         $room->description    = $description;
+        $room->metadata       = $metadata;
         $room->from           = $from;
         $room->to             = $to;
         $room->goal           = $goal;
