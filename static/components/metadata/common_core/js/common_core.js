@@ -137,8 +137,12 @@ METADATA.create_form = function()
                     input: true
                 },
                 {
-                    type: 'textfield',
+                    type: 'datetime',
                     key: 'last_update',
+                    datepickerMode: 'day',
+                    enableDate: true,
+                    enableTime: false,
+                    format: 'dd-MM-yyyy',
                     input: true
                 },
                 {
@@ -257,8 +261,12 @@ METADATA.create_form = function()
                     input: true
                 },
                 {
-                    type: 'textfield',
+                    type: 'datetime',
                     key: 'release_date',
+                    datepickerMode: 'day',
+                    enableDate: true,
+                    enableTime: false,
+                    format: 'dd-MM-yyyy',
                     input: true
                 },
                 {
@@ -283,12 +291,17 @@ METADATA.create_form = function()
     {
         METADATA.form = form;
 
-        METADATA.form.submission = {
-            data: JSON.parse(this.parent.COCREATION.metadata)
-        };
+        let meta = this.parent.COCREATION.metadata ? (typeof this.parent.COCREATION.metadata === 'string' ? JSON.parse(this.parent.COCREATION.metadata) : this.parent.COCREATION.metadata) : null;
+
+        if(meta)
+        {
+            METADATA.form.submission = {
+                data: meta
+            };
+        }
 
         METADATA.form.on('submit', (submission) => {
-            this.parent.window.dispatchEvent(new CustomEvent('metadata-list-controllet_update-metadata', {detail: { metadata: submission.data} }));
+            this.parent.window.dispatchEvent(new CustomEvent('update-metadata', {detail: { metadata: submission.data} }));
         });
 
         // Everytime the form changes, this will fire.

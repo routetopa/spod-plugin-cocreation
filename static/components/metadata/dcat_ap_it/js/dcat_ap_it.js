@@ -34,10 +34,8 @@ METADATA.create_form = function()
                     type: 'textfield',
                     key: 'dct_title',
                     input: true,
-                    multiple:true,
-                    validate: {
-                        required: true
-                    }
+                    //multiple:true,
+                    validate: { required: true }
                 },
 
                 // DESCRIPTION
@@ -46,11 +44,57 @@ METADATA.create_form = function()
                     defaultValue: '',
                     key: 'dct_description',
                     input: true,
-                    multiple: true,
-                    validate: {
-                        required: true
-                    }
+                    //multiple: true,
+                    validate: { required: true }
                 },
+
+                // THEME
+                {
+                    input: true,
+                    components: [{
+                        type: "select",
+                        key: "dcat_theme",
+                        data: {
+                            custom: "values = METADATA.loadTheme('main_theme')"
+                        },
+                        dataSrc: "custom",
+                        template: "<span>{{ item.label }}</span>",
+                        multiple: false,
+                        input: true,
+                        validate: { required: true }
+                    } ,
+                        {
+                            type: "select",
+                            key: "dct_subject",
+                            data: {
+                                custom: "values = METADATA.loadTheme(data.dcat_theme.value)"
+                            },
+                            dataSrc: "custom",
+                            template: "<span>{{ item.label }}</span>",
+                            multiple: true,
+                            refreshOn: 'dct_subject',
+                            input: true,
+                            validate: { required: true }
+                        }],
+                    tableView: true,
+                    key: 'dcat_theme-dct_subject',
+                    type: 'datagrid'
+                },
+
+                // ACCRUAL PERIODICITY
+                {
+                    type: 'select',
+                    key: 'dct_accrualPeriodicity',
+                    template: '{{ item.label }}',
+                    multiple: false,
+                    dataSrc: "custom",
+                    input: true,
+                    data: {
+                        custom: "values = FREQUENCY.frequency"
+                    },
+                    validate: { required: true },
+                }
+
             ]
         },
 
@@ -81,37 +125,6 @@ METADATA.create_form = function()
                     input: true
                 }],
             key: 'adms_identifier',
-            type: 'datagrid'
-        },
-
-        // THEME
-        {
-            input: true,
-            components: [{
-                type: "select",
-                key: "dcat_theme",
-                data: {
-                    custom: "values = METADATA.loadTheme('main_theme')"
-                },
-                dataSrc: "custom",
-                template: "<span>{{ item.label }}</span>",
-                multiple: false,
-                input: true
-            } ,
-                {
-                    type: "select",
-                    key: "dct_subject",
-                    data: {
-                        custom: "values = METADATA.loadTheme(data.dcat_theme.value)"
-                    },
-                    dataSrc: "custom",
-                    template: "<span>{{ item.label }}</span>",
-                    multiple: true,
-                    refreshOn: 'dct_subject',
-                    input: true
-                }],
-            tableView: true,
-            key: 'dcat_theme-dct_subject',
             type: 'datagrid'
         },
 
@@ -154,7 +167,7 @@ METADATA.create_form = function()
         },
 
         // MODIFIED DATE
-        {
+        /*{
             type: 'datetime',
             key: 'dct_modified',
             datepickerMode: 'day',
@@ -162,7 +175,7 @@ METADATA.create_form = function()
             enableTime: false,
             format: 'dd-MM-yyyy',
             input: true
-        },
+        },*/
 
         // SPATIAL
         {
@@ -286,19 +299,6 @@ METADATA.create_form = function()
             input: true
         },
 
-        // ACCRUAL PERIODICITY
-        {
-            type: 'select',
-            key: 'dct_accrualPeriodicity',
-            template: '{{ item.label }}',
-            multiple: true,
-            dataSrc: "custom",
-            input: true,
-            data: {
-                custom: "values = FREQUENCY.frequency"
-            }
-        },
-
         // VERSION
         {
             type: 'textfield',
@@ -330,6 +330,13 @@ METADATA.create_form = function()
                 }],
             key: 'dct_conformsTo',
             type: 'datagrid'
+        },
+
+        // CONTACT POINT
+        {
+            type: 'textfield',
+            key: 'dcat_contactPoint',
+            input: true
         },
 
         // CREATOR
@@ -425,17 +432,6 @@ METADATA.create_form = function()
             }
         },
 
-        // UPDATE MODIFICATION DATE
-        {
-            type: 'datetime',
-            key: 'dct_modified',
-            datepickerMode: 'day',
-            enableDate: true,
-            enableTime: false,
-            format: 'dd-MM-yyyy',
-            input: true
-        },
-
         // BYTE SIZE
         {
             type: 'textfield',
@@ -455,13 +451,15 @@ METADATA.create_form = function()
 
     METADATA.add_info(components);
 
-    Formio.createForm(document.getElementById('dcat_ap_it_form'), {
-        components: components
-    }).then(function(form)
+    let is_read_only = !!window.frameElement.getAttribute('data-read-only');
+
+    Formio.createForm(document.getElementById('dcat_ap_it_form'),
+        { components: components }, { readOnly: is_read_only }
+    ).then(function(form)
     {
         METADATA.form = form;
 
-        let meta = this.parent.COCREATION.metadata ? JSON.parse(this.parent.COCREATION.metadata) : null;
+        let meta = this.parent.COCREATION.metadata ? (typeof this.parent.COCREATION.metadata === 'string' ? JSON.parse(this.parent.COCREATION.metadata) : this.parent.COCREATION.metadata) : null;
 
         if(meta)
         {
@@ -471,7 +469,7 @@ METADATA.create_form = function()
         }
 
         METADATA.form.on('submit', (submission) => {
-            this.parent.window.dispatchEvent(new CustomEvent('metadata-list-controllet_update-metadata', {detail: { metadata: submission.data} }));
+            this.parent.window.dispatchEvent(new CustomEvent('update-metadata', {detail: { metadata: submission.data} }));
         });
 
         // Everytime the form changes, this will fire.

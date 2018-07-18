@@ -309,7 +309,12 @@
 
         room.publishOnCkanNotes = { doPublish: false, notesContentHTML: null };
 
+        $("#publish_metadata_iframe").attr('src', COCREATION.metadata_url);
+
         $('#btnPrev').click(function (e) {
+
+            debugger;
+
             if ($(e.currentTarget).hasClass('button-disabled')) return;//Button disabled, no action.
             var stepObject = null;
 
@@ -318,7 +323,14 @@
             if (current_step == 3) { //Moving from step 3 to 2.
                 //Here you check the compatibility of the dataset with CKAN.
                 var dataset = room.current_dataset;
-                var _keys = Object.keys(dataset[0]);
+
+                if(dataset[0]) {
+                    var _keys = Object.keys(dataset[0]);
+                }
+                else {
+                    showErrorDialog('Il dataset è vuoto', 'Il dataset è vuoto');
+                    return;
+                }
 
                 var _publishLogic = new PublishOnCkanLogic();
                 var validationReport = _publishLogic.validateCkanHeader(_keys);
@@ -335,6 +347,7 @@
         $('#btnPrev').mousedown(function(e){e.preventDefault();});//Remove double click selection.
 
         $('#btnNext').click(function (e) {
+
             if ($(e.currentTarget).hasClass('button-disabled')) return;//Button disabled, no action.
             var stepObject = null;
 
@@ -343,7 +356,14 @@
             if (current_step == 1) {//Moving from STEP 1 to STEP 2.
                 //Here you check the compatibility of the dataset with CKAN.
                 var dataset = room.current_dataset;
-                var _keys = Object.keys(dataset[0]);
+
+                if(dataset[0]) {
+                    var _keys = Object.keys(dataset[0]);
+                }
+                else {
+                    showErrorDialog('Il dataset è vuoto', 'Il dataset è vuoto');
+                    return;
+                }
 
                 var _publishLogic = new PublishOnCkanLogic();
                 var validationReport = _publishLogic.validateCkanHeader(_keys);
@@ -355,6 +375,7 @@
 
             //Here you check the metadata.
             else if (current_step == 4) {
+                debugger;
                 document.activeElement.blur();
                 var success = performCheckMetadata();
                 if (!success) return;
@@ -384,6 +405,7 @@
                     }
 
                     $('#iframeNotes').attr('src', "data:text/html;charset=utf-8," + _html);
+
                 });
 
             }
@@ -434,11 +456,6 @@
                     break;
 
                 case 4: //METADATA CARD.
-                    var objMetadata = getCocreationMetadataAsObject();
-                    objMetadata.MANDATORY = JSON.parse(COCREATION.metadata_mandatory);
-                    var $metadataList = document.querySelector('#publishCKANMetadataList');
-                    $metadataList.setMetadata(JSON.stringify(objMetadata));
-
                     $('#btnNext').removeClass('button-disabled');
                     $('#publish_button').addClass('button-disabled');
                     uiShowMetadata();
@@ -470,12 +487,7 @@
         };//EndFunction.
 
         function getWizardMetadataAsObject() {
-            var $metadataList = document.querySelector('#publishCKANMetadataList');
-            var metadata = $metadataList.getMetadata();
-            if (typeof metadata === "object") return metadata;
-            if (typeof metadata === "string") metadata = JSON.parse(metadata);
-            if (typeof metadata === "string") metadata = JSON.parse(metadata);
-            return metadata;
+            return (typeof COCREATION.metadata === 'string' ? JSON.parse(COCREATION.metadata) : COCREATION.metadata);
         };//EndFunction.
 
         function getWizardMetadataAsString() {
@@ -495,7 +507,7 @@
             var metadata = getWizardMetadataAsObject();
 
             //Get the license key and saves it in the metadata.
-            const _licenseLabel = metadata.CC_RAF.license;
+            /*const _licenseLabel = metadata.CC_RAF.license;
             const $metadata_component = document.querySelector('#metadata_component');
             $metadata_component.licenses.forEach(function (license_item) {
                 if (license_item.label === _licenseLabel)
@@ -507,7 +519,7 @@
             $metadata_component.languages.forEach(function (item) {
                 if (item.label === _languageLabel)
                     metadata.language_id = item.value;
-            });
+            });*/
 
             //Decide whether to publish notes.
             var notes = null;
@@ -749,73 +761,80 @@
      * It checks the presence of the title metadata and description.
      * @returns {boolean}
      */
-    function performCheckMetadata() {
-        var metadata = document.querySelector('#publishCKANMetadataList').getMetadata();
+    function performCheckMetadata()
+    {
+        if(!COCREATION.metadata || (typeof COCREATION.metadata === 'string' && COCREATION.metadata.trim().length === 0)) {
+            showErrorDialog('Metadata error', 'Metadata are empty');
+            return false;
+        }
 
-        if (typeof metadata === "string") metadata = JSON.parse(metadata);
-        if (typeof metadata === "string") metadata = JSON.parse(metadata);
+        let metadata = (typeof COCREATION.metadata === 'string' ? JSON.parse(COCREATION.metadata) : COCREATION.metadata);
 
-        if (isMetadataEmpty(metadata.CC_RF.title)) {
-            $.confirm({
-                title: 'The title is mandatory.',
-                content: 'Please provide the title in the metadata.',
-                type: 'red',
-                typeAnimated: true,
-                buttons: {
-                    close: function () { }
-                }
-            });
+        switch(COCREATION.metadata_type)
+        {
+            case "1" : return performCOMMONCORECheckMetadata(metadata); break;
+            case "2" : return performDCATCheckMetadata(metadata); break;
+        }
+
+        return false;
+
+    };//EndFunction.
+
+    function performDCATCheckMetadata(metadata)
+    {
+        if (isMetadataEmpty(metadata.dct_title)) {
+            showErrorDialog('The title is mandatory.', 'Please provide the title in the metadata.');
             return false;
-        } else if (isMetadataEmpty(metadata.CC_RF.description)) {
-            $.confirm({
-                title: 'The description is mandatory.',
-                content: 'Please provide the description in the metadata.',
-                type: 'red',
-                typeAnimated: true,
-                buttons: {
-                    close: function () { }
-                }
-            });
+        } else if (isMetadataEmpty(metadata.dct_description)) {
+            showErrorDialog('The description is mandatory.', 'Please provide description in the metadata.');
             return false;
-        } else if (isMetadataEmpty(metadata.CC_RAF.license) || metadata.CC_RAF.license === 'License not specified') {
-            $.confirm({
-                title: 'The license is mandatory.',
-                content: 'Please provide the description in the metadata.',
-                type: 'red',
-                typeAnimated: true,
-                buttons: {
-                    close: function () { }
-                }
-            });
+        } else if (metadata['dcat_theme-dct_subject'].length === 0) {
+            showErrorDialog('The theme is mandatory.', 'Please provide theme in the metadata.');
             return false;
-        } else if (isMetadataEmpty(metadata.CC_RF.contact_name)) {
-            showErrorDialog('The Contact Name is mandatory.', 'Please provide the Contact Name in the metadata.');
+        } else if (isMetadataEmpty(metadata.dct_accrualPeriodicity)) {
+            showErrorDialog('The accrual periodicity is mandatory.', 'Please provide accrual periodicity in the metadata.');
             return false;
-        } else if (isMetadataEmpty(metadata.CC_RF.contact_email)) {
-            showErrorDialog('The Contact  E-mail is mandatory.', 'Please provide the Contact E-mail in the metadata.');
+        }
+
+        return true;
+    }
+
+    function performCOMMONCORECheckMetadata(metadata)
+    {
+        if (isMetadataEmpty(metadata.title)) {
+            showErrorDialog('The title is mandatory.', 'Please provide the title in the metadata.');
             return false;
-        } else if (isMetadataEmpty(metadata.CC_RF.maintainer)) {
-            showErrorDialog('The maintainer is mandatory.', 'Please provide the maintainer in the metadata.');
+        } else if (isMetadataEmpty(metadata.description)) {
+            showErrorDialog('The description is mandatory.', 'Please provide the description in the metadata.');
             return false;
-        } else if (isMetadataEmpty(metadata.CC_RF.maintainer_email)) {
-            showErrorDialog('The maintainer email is mandatory.', 'Please provide the maintainer email in the metadata.');
-            return false;
-        } else if (isMetadataEmpty(metadata.CC_RF.version)) {
-            showErrorDialog('The version is mandatory.', 'Please provide the version in the metadata.');
-            return false;
-        } else if (isMetadataEmpty(metadata.CC_RAF.license)) {
+        } else if (isMetadataEmpty(metadata.license) || metadata.license === 'notspecified') {
             showErrorDialog('The license is mandatory.', 'Please provide the license in the metadata.');
             return false;
-        }  else if (isMetadataEmpty(metadata.EF.language)) {
+        } else if (isMetadataEmpty(metadata.contact_name)) {
+            showErrorDialog('The Contact Name is mandatory.', 'Please provide the Contact Name in the metadata.');
+            return false;
+        } else if (isMetadataEmpty(metadata.contact_email)) {
+            showErrorDialog('The Contact  E-mail is mandatory.', 'Please provide the Contact E-mail in the metadata.');
+            return false;
+        } else if (isMetadataEmpty(metadata.maintainer)) {
+            showErrorDialog('The maintainer is mandatory.', 'Please provide the maintainer in the metadata.');
+            return false;
+        } else if (isMetadataEmpty(metadata.maintainer_email)) {
+            showErrorDialog('The maintainer email is mandatory.', 'Please provide the maintainer email in the metadata.');
+            return false;
+        } else if (isMetadataEmpty(metadata.version)) {
+            showErrorDialog('The version is mandatory.', 'Please provide the version in the metadata.');
+            return false;
+        }  else if (isMetadataEmpty(metadata.language)) {
             showErrorDialog('The language is mandatory.', 'Please provide the language in the metadata.');
             return false;
-        } else if (isMetadataEmpty(metadata.EF.origin)) {
+        } else if (isMetadataEmpty(metadata.origin)) {
             showErrorDialog('The origin is mandatory.', 'Please provide the origin in the metadata.');
             return false;
         }
 
         return true;
-    };//EndFunction.
+    }
 
     function showErrorDialog(title, content) {
         $.confirm({
@@ -904,7 +923,8 @@
 
         <!--<div class="card-number">1</div>
         <div class="matadata-name">Testo per i metadata</div>-->
-        <metadata-view-controllet id="publishCKANMetadataList" style="height: calc(100% - 40px)"></metadata-view-controllet>
+        <!--<metadata-view-controllet id="publishCKANMetadataList" style="height: calc(100% - 40px)"></metadata-view-controllet>-->
+        <iframe id="publish_metadata_iframe" style="height: calc(100% - 45px); width: 100%;" data-read-only="true"></iframe>
 
     </div>
 </div>
