@@ -632,6 +632,7 @@ room.prepareDCATMetadataForCKAN = function (_jsonCocreationMetadata)
     const $dataset_description = _jsonCocreationMetadata.dct_description;
     let $dataset_theme = _jsonCocreationMetadata['dcat_theme-dct_subject'].reduce((themes, e) => { themes.push(e.dcat_theme.value); return themes; },[]);
     const $dataset_frequency = _jsonCocreationMetadata.dct_accrualPeriodicity.value;
+    const $owner_org = _jsonCocreationMetadata.dct_publisher;
     const $dataset_key = COCREATION.sheetName;
 
     const _msgErrors = {
@@ -661,7 +662,8 @@ room.prepareDCATMetadataForCKAN = function (_jsonCocreationMetadata)
         theme: $dataset_theme,
         modified: room.print_date(),
         identifier: $dataset_key,
-        description: $dataset_description
+        description: $dataset_description,
+        owner_org: $owner_org
     };
 
     debugger;

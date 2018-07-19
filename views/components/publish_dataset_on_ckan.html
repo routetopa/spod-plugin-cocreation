@@ -794,6 +794,9 @@
         } else if (isMetadataEmpty(metadata.dct_accrualPeriodicity)) {
             showErrorDialog('The accrual periodicity is mandatory.', 'Please provide accrual periodicity in the metadata.');
             return false;
+        } else if (isMetadataEmpty(metadata.dct_publisher)) {
+            showErrorDialog('The publisher is mandatory.', 'Please provide publisher in the metadata.');
+            return false;
         }
 
         return true;

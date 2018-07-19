@@ -81,6 +81,14 @@ METADATA.create_form = function()
                     type: 'datagrid'
                 },
 
+                // PUBLISHER
+                {
+                    type: 'textfield',
+                    key: 'dct_publisher',
+                    input: true,
+                    validate: { required: true },
+                },
+
                 // ACCRUAL PERIODICITY
                 {
                     type: 'select',
@@ -129,7 +137,7 @@ METADATA.create_form = function()
         },
 
         // PUBLISHER
-        {
+        /*{
             input: false,
             columns: [
                 {
@@ -153,7 +161,7 @@ METADATA.create_form = function()
             ],
             type: 'columns',
             key: 'columns'
-        },
+        },*/
 
         // ISSUED DATE
         {
@@ -377,13 +385,6 @@ METADATA.create_form = function()
             },
         },
 
-        // PUBLISHER
-        {
-            type: 'textfield',
-            key: 'dct_publisher',
-            input: true
-        },
-
         // AUTHOR
         {
             type: 'textfield',
@@ -473,9 +474,9 @@ METADATA.create_form = function()
         });
 
         // Everytime the form changes, this will fire.
-        METADATA.form.on('change', function(changed) {
+        /*METADATA.form.on('change', function(changed) {
             console.log('Form was changed', changed);
-        });
+        });*/
 
 /*        METADATA.form.components.forEach((e,i)=>{
             let el = e.element.querySelector('input');
