@@ -81,14 +81,6 @@ METADATA.create_form = function()
                     type: 'datagrid'
                 },
 
-                // PUBLISHER
-                {
-                    type: 'textfield',
-                    key: 'dct_publisher',
-                    input: true,
-                    validate: { required: true },
-                },
-
                 // ACCRUAL PERIODICITY
                 {
                     type: 'select',
@@ -104,6 +96,13 @@ METADATA.create_form = function()
                 }
 
             ]
+        },
+
+        // PUBLISHER
+        {
+            type: 'textfield',
+            key: 'dct_publisher',
+            input: true
         },
 
         // IDENTIFIER

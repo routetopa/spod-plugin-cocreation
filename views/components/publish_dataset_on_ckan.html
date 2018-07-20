@@ -309,7 +309,11 @@
 
         room.publishOnCkanNotes = { doPublish: false, notesContentHTML: null };
 
+        $("#inputPlatformURL").focusout('',get_organization);
+
         $("#publish_metadata_iframe").attr('src', COCREATION.metadata_url);
+
+        get_organization();
 
         $('#btnPrev').click(function (e) {
 
@@ -855,6 +859,19 @@
         return (typeof field === 'undefined' || field == null || field.length == 0);
     };//EndFunction.
 
+    function get_organization()
+    {
+        let ckan_url = $("#inputPlatformURL").val() + '/api/3/action/organization_list';
+        $("#inputDefOrganisation").empty();
+
+        $.get(ckan_url, (data)=>{
+            data.result.forEach((e)=>{
+               $("#inputDefOrganisation").append(`<option value='${e}'>${e}</option>`);
+            });
+        });
+
+    }//EndFunction.
+
 </script>
 {/literal}
 
@@ -888,7 +905,8 @@
         {if $canPublishOnCKAN}
         <paper-input id="inputPlatformURL" always-float-label label="CKAN Platform URL" value="{$PublishOnCKAN_platform_url}"></paper-input>
         <paper-input id="inputCkanAPIKey" type="password" always-float-label label="CKAN API Key" value="{$PublishOnCKAN_api_key}"></paper-input>
-        <paper-input id="inputDefOrganisation" always-float-label label="Organisation ID/Key" value="{$PublishOnCKAN_def_organisation}"></paper-input>
+        <div style="font-family: 'Roboto', 'Noto', sans-serif; color: #737373; font-size: 12px; margin-bottom: 8px;">Organisation ID/Key</div>
+        <select id="inputDefOrganisation"></select>
         {else}
         <p>You do not have permissions to upload a dataset on CKAN.</p>
         {/if}
