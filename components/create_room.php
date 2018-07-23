@@ -40,6 +40,11 @@ class COCREATION_CMP_CreateRoom extends OW_Component
         $description  = new TextField('description');
         $description->setRequired(true);
 
+        $metadata = new Selectbox('metadata');
+        $metadata->addOptions(array("1"=>"Common core", "2"=>"DCAT-AP_IT"));
+        $metadata->setValue(2);
+        $metadata->setRequired(true);
+
         $goal  = new TextField('goal');
         $goal->setRequired(false);
 
@@ -66,6 +71,7 @@ class COCREATION_CMP_CreateRoom extends OW_Component
         $form->addElement($name);
         $form->addElement($subject);
         $form->addElement($description);
+        $form->addElement($metadata);
         $form->addElement($goal);
         $form->addElement($invitationText);
         $form->addElement($usersValue);

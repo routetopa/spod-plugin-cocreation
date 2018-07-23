@@ -21,11 +21,11 @@ class COCREATION_CMP_PublishDatasetOnCkan extends OW_Component {
         if ($canPublishOnCKAN) {
             $this->assign('PublishOnCKAN_platform_url', $ckan_platform_url_preference->defaultValue);
             $this->assign('PublishOnCKAN_api_key', $ckan_api_key_preference->defaultValue);
-            $this->assign('PublishOnCKAN_def_organisation', $ckan_def_organisation_preference->defaultValue);
+            //$this->assign('PublishOnCKAN_def_organisation', $ckan_def_organisation_preference->defaultValue);
         } else {
             $this->assign('PublishOnCKAN_platform_url', '');
             $this->assign('PublishOnCKAN_api_key', '');
-            $this->assign('PublishOnCKAN_def_organisation', '');
+            //$this->assign('PublishOnCKAN_def_organisation', '');
         }
     }//EndConstructor.
 

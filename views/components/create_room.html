@@ -55,10 +55,11 @@ position: relative;
             <li class="step-1 cocoreation_create_room_left_menu_selected">{text key="cocreation+room_name_label"}</li>
             <li class="step-2">{text key="cocreation+room_subject_label"}</li>
             <li class="step-3">{text key="cocreation+room_description_label"}</li>
-            <li class="step-4">{text key="cocreation+room_period_label"}</li>
-            <li class="step-5">{text key="cocreation+room_goal_label"}</li>
-            <li class="step-6">{text key="cocreation+room_ivitation_label"}</li>
-            <li class="step-7">{text key="cocreation+room_members_label"}</li>
+            <li class="step-4">{text key="cocreation+room_metadata_label"}</li>
+            <li class="step-5">{text key="cocreation+room_period_label"}</li>
+            <li class="step-6">{text key="cocreation+room_goal_label"}</li>
+            <li class="step-7">{text key="cocreation+room_ivitation_label"}</li>
+            <li class="step-8">{text key="cocreation+room_members_label"}</li>
         </ul>
     </div>
 
@@ -95,8 +96,18 @@ position: relative;
             </div>
         </div>
 
-        <!-- ROOM PERIOD-->
+        <!-- ROOM  METADATA-->
         <div class="step in-step-4">
+            <div class="title">
+                <span>{text key="cocreation+room_metadata"}</span>
+            </div>
+            <div class="input">
+                {input name='metadata'}
+            </div>
+        </div>
+
+        <!-- ROOM PERIOD-->
+        <div class="step in-step-5">
             <div class="title">
                 <span>{text key="cocreation+room_period"}</span>
             </div>
@@ -126,7 +137,7 @@ position: relative;
         </div>
 
         <!-- ROOM  GOAL -->
-        <div class="step in-step-5">
+        <div class="step in-step-6">
             <div class="title">
                 <span>{text key="cocreation+room_goal"}</span>
             </div>
@@ -140,7 +151,7 @@ position: relative;
         </div>
 
         <!-- ROOM  INVITATION TEXT-->
-        <div class="step in-step-6">
+        <div class="step in-step-7">
             <div class="title">
                 <span>{text key="cocreation+room_invitationText"}</span>
             </div>
@@ -154,7 +165,7 @@ position: relative;
         </div>
 
         <!-- ROOM  MEMBERS/SUBMIT-->
-        <div class="step in-step-7">
+        <div class="step in-step-8">
 
             <div class="title">
                 <span>{text key="cocreation+creation_form_members"}</span>

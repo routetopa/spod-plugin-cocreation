@@ -10,6 +10,7 @@ $sql = 'CREATE TABLE IF NOT EXISTS `' . OW_DB_PREFIX . 'cocreation_room` (
   `name` varchar(255),
   `subject` varchar(255),
   `description` varchar(255),
+  `metadata` TINYINT(1),
   `from` date,
   `to` date,
   `goal` varchar(255),

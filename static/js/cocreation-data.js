@@ -22,7 +22,7 @@ $(document).ready(function() {
         }
     });*/
 
-   window.addEventListener('metadata-list-controllet_update-metadata', function(e)
+    window.addEventListener('update-metadata', function(e)
    {
        room.persistMetadata(e.detail.metadata);
    });
@@ -537,22 +537,32 @@ room._generateRandomFileName = function() {
     return roomName;
 };//EndFunction.
 
-room.prepareMetadataForCKAN = function(_jsonCocreationMetadata) {
+room.prepareMetadataForCKAN = function(_jsonCocreationMetadata)
+{
+    switch(COCREATION.metadata_type)
+    {
+        case "1" : return room.prepareCOMMONCOREMetadataForCKAN(_jsonCocreationMetadata); break;
+        case "2" : return room.prepareDCATMetadataForCKAN(_jsonCocreationMetadata); break;
+    }
+};//EndFunction.
+
+room.prepareCOMMONCOREMetadataForCKAN = function (_jsonCocreationMetadata)
+{
     //Before to start the upload it checks the metadata.
-    const $dataset_title = _jsonCocreationMetadata.CC_RF.title;
-    const $dataset_description = _jsonCocreationMetadata.CC_RF.description;
+    const $dataset_title = _jsonCocreationMetadata.title;
+    const $dataset_description = _jsonCocreationMetadata.description;
     //const $dataset_author = _jsonCocreationMetadata.CC_RF.author;
-    const $contact_name = _jsonCocreationMetadata.CC_RF.contact_name;
-    const $contact_email = _jsonCocreationMetadata.CC_RF.contact_email;
+    const $contact_name = _jsonCocreationMetadata.contact_name;
+    const $contact_email = _jsonCocreationMetadata.contact_email;
 
-    const $dataset_maintainer = _jsonCocreationMetadata.CC_RF.maintainer;
-    const $dataset_maintainer_email = _jsonCocreationMetadata.CC_RF.maintainer_email;
+    const $dataset_maintainer = _jsonCocreationMetadata.maintainer;
+    const $dataset_maintainer_email = _jsonCocreationMetadata.maintainer_email;
 
-    const $dataset_version = _jsonCocreationMetadata.CC_RF.version;
-    const $dataset_license_id = _jsonCocreationMetadata.license_id;
+    const $dataset_version = _jsonCocreationMetadata.version;
+    const $dataset_license_id = _jsonCocreationMetadata.license;
 
-    const $dataset_language_id = _jsonCocreationMetadata.language_id;
-    const $dataset_origin = _jsonCocreationMetadata.EF.origin;
+    const $dataset_language_id = _jsonCocreationMetadata.language;
+    const $dataset_origin = _jsonCocreationMetadata.origin;
 
     const $dataset_key = COCREATION.sheetName;
 
@@ -575,7 +585,6 @@ room.prepareMetadataForCKAN = function(_jsonCocreationMetadata) {
         callbackUpload({ success: false, errors: [  ]});
         return;
     }
-
     if ($dataset_description.trim().length == 0) {
         callbackUpload({ success: false, errors: [ 'The description is required field in the metadata. Check dataset metadata.' ]});
         return;
@@ -583,11 +592,11 @@ room.prepareMetadataForCKAN = function(_jsonCocreationMetadata) {
 
     const $deforganisation = COCREATION.ckan_def_organisation_preference;
 
-    if (typeof $deforganisation === 'undefined' || $deforganisation.trim().length == 0) {
+    if (typeof $deforganisation === 'undefined' || $deforganisation.trim().length === 0) {
         return { success: false, errors: [ 'The organisation is mandatary.' ]};
     }
 
-    var metadata = {
+    let metadata = {
         name: $dataset_key,
         title: $dataset_title,
         notes: $dataset_description,
@@ -603,21 +612,94 @@ room.prepareMetadataForCKAN = function(_jsonCocreationMetadata) {
         license_id: $dataset_license_id
     };
 
-    for (var k in metadata){
-        var value = metadata[k];
-        var _msgErrorKey = k + "_message";
+    for (let k in metadata){
+        let value = metadata[k];
+        let _msgErrorKey = k + "_message";
 
-        if (_msgErrors.hasOwnProperty(_msgErrorKey) && typeof value != 'undefined' && value.trim().length == 0) {
-            var msg = _msgErrors[_msgErrorKey];
+        if (_msgErrors.hasOwnProperty(_msgErrorKey) && typeof value !== 'undefined' && value.trim().length === 0) {
+            let msg = _msgErrors[_msgErrorKey];
             return { success: false, errors: [ msg ] };
         }
     }
 
     return { success: true, metadata: metadata };
-};//EndFunction.
+};
 
-room.uploadOnCkan = async function (_jsonData, _jsonCocreationMetadata, notes, callbackUpload) {
+room.prepareDCATMetadataForCKAN = function (_jsonCocreationMetadata)
+{
+    //Before to start the upload it checks the metadata.
+    const $dataset_title = _jsonCocreationMetadata.dct_title;
+    const $dataset_description = _jsonCocreationMetadata.dct_description;
+    let $dataset_theme = _jsonCocreationMetadata['dcat_theme-dct_subject'].reduce((themes, e) => { themes.push(e.dcat_theme.value); return themes; },[]);
+    const $dataset_frequency = _jsonCocreationMetadata.dct_accrualPeriodicity.value;
+    const $dataset_key = COCREATION.sheetName;
 
+    const _msgErrors = {
+        title_message: 'The title is a required field in the metadata.',
+        description_message: 'The description is a required field in the metadata.',
+        author_message: 'The Contact Name is a required field in the metadata.',
+        author_email_message: 'The Contact E-mail is a required field in the metadata.',
+        maintainer_message: 'The Maintainer is a required field in the metadata.',
+        maintainer_email_message: 'The Maintainer E-mail is a required field in the metadata.',
+        language_message: 'The language is a required field in the metadata.',
+        version_message: 'The version is a required field in the metadata.',
+        url_message: 'The origin is a required field in the metadata.',
+        license_id_message: 'The license is a required field in the metadata.'
+    };
+
+    const $deforganisation = COCREATION.ckan_def_organisation_preference;
+
+    if (typeof $deforganisation === 'undefined' || $deforganisation.trim().length === 0)
+        return { success: false, errors: [ 'The organisation is mandatary.' ]};
+
+    // DCAT-AP_IT
+    let metadata = {
+        name: $dataset_key,
+        title: $dataset_title,
+        notes: $dataset_description,
+        frequency: $dataset_frequency,
+        theme: $dataset_theme,
+        modified: room.print_date(),
+        identifier: $dataset_key,
+        description: $dataset_description,
+        owner_org: $deforganisation
+    };
+
+    debugger;
+
+    for (let k in metadata)
+    {
+        let value = metadata[k];
+        let _msgErrorKey = k + "_message";
+
+        if (_msgErrors.hasOwnProperty(_msgErrorKey) && typeof value !== 'undefined' && value.trim().length === 0)
+        {
+            let msg = _msgErrors[_msgErrorKey];
+            return { success: false, errors: [ msg ] };
+        }
+    }
+
+    return { success: true, metadata: metadata };
+};
+
+room.print_date = function()
+{
+    let D = new Date();
+
+    let y = D.getFullYear();
+    let m = (D.getMonth()+1) < 10 ? '0' +  (D.getMonth()+1) : (D.getMonth()+1);
+    let d = D.getDate() < 10 ? '0' +  D.getDate() : D.getDate();
+
+    let h = D.getHours() < 10 ? '0' +  D.getHours() : D.getHours();
+    let mi = D.getMinutes() < 10 ? '0' +  D.getMinutes() : D.getMinutes();
+    let s = D.getSeconds() < 10 ? '0' +  D.getSeconds() : D.getSeconds();
+    let ms = D.getMilliseconds() < 10 ? '0' +  D.getMilliseconds() : D.getMilliseconds();
+
+    return y+'-'+m+'-'+d+'T'+h+':'+mi+':'+s+'.'+ms+'000';
+};
+
+room.uploadOnCkan = async function (_jsonData, _jsonCocreationMetadata, notes, callbackUpload)
+{
     var fileCSVData;
 
     try {

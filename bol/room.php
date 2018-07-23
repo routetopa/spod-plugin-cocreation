@@ -7,6 +7,7 @@ class COCREATION_BOL_Room extends OW_Entity
     public $name;
     public $subject;
     public $description;
+    public $metadata;
     public $from;
     public $to;
     public $goal;

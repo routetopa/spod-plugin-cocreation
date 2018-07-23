@@ -103,8 +103,13 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         /* NEW DISCUSSION AGORA LIKE */
 
         /* METADATA IFRAME SRC */
-        $this->assign('metadata_url', OW::getPluginManager()->getPlugin('cocreation')->getStaticUrl() . 'pages/metadata/dcat_ap_it/metadata_dcat_ap_it.html');
-        //$this->assign('metadata_url', OW::getPluginManager()->getPlugin('cocreation')->getStaticUrl() . 'pages/metadata/common_core/metadata_common_core.html');
+        $metadata_url = "";
+        switch($room->metadata)
+        {
+            case 1 : $metadata_url = OW::getPluginManager()->getPlugin('cocreation')->getStaticUrl() . 'pages/metadata/common_core/metadata_common_core.html'; break;
+            case 2 : $metadata_url = OW::getPluginManager()->getPlugin('cocreation')->getStaticUrl() . 'pages/metadata/dcat_ap_it/metadata_dcat_ap_it.html'  ;   break;
+        }
+        $this->assign('metadata_url', $metadata_url);
         /* METADATA IFRAME SRC */
 
         $this->assign("toolbar_color", ($room->type == "data") ? "#4CAF50" : "#FF9800");
@@ -154,6 +159,8 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                 COCREATION.sheet_remove_image_url             = {$sheet_remove_image_url}
                 COCREATION.user_info                          = {$user_info}
                 COCREATION.owner                              = {$owner}
+                COCREATION.metadata_url                       = {$metadata_url}
+                COCREATION.metadata_type                      = {$metadata_type}
             ', array(
                'ajax_coocreation_room_get_datalets'        => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getRoomDatalets'),
                'ajax_coocreation_room_get_array_sheetdata' => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getArrayOfObjectSheetData') . "?sheetName=" . $sheetUrl,
@@ -178,7 +185,9 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                'ckan_def_organisation_preference'          => $ckan_def_organisation_preference_value,
                'sheet_remove_image_url'                    => OW_URL_HOME . "ethersheet/remove/image",
                'user_info'                                 => ['username' => BOL_UserService::getInstance()->findUserById(OW::getUser()->getId())->username, 'mail' => BOL_UserService::getInstance()->findUserById(OW::getUser()->getId())->email],
-               'owner'                                     => ['username' => BOL_UserService::getInstance()->findUserById($room->ownerId)->username, 'mail' => BOL_UserService::getInstance()->findUserById($room->ownerId)->email]
+               'owner'                                     => ['username' => BOL_UserService::getInstance()->findUserById($room->ownerId)->username, 'mail' => BOL_UserService::getInstance()->findUserById($room->ownerId)->email],
+               'metadata_url'                              => $metadata_url,
+               'metadata_type'                             => $room->metadata
         ));
         OW::getDocument()->addOnloadScript($js);
         OW::getDocument()->addOnloadScript("data_room.init();");
