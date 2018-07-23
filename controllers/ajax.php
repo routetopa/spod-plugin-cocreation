@@ -46,6 +46,24 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         curl_close($ch);
     }
 
+    static function getPadReadonlyId($padName) {
+        try {
+            $document_server_port_preference = BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference');
+
+            $apiurl = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . "/etherpad/api/1/getReadOnlyID?apikey=e20a517df87a59751b0f01d708e2cb6496cf6a59717ccfde763360f68a7bfcec&padID=" . $padName;
+            $ch = curl_init();
+            // you should put here url of your getinfo.php script
+            curl_setopt($ch, CURLOPT_URL, $apiurl);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $result = curl_exec($ch);
+            curl_close($ch);
+            $result = json_decode($result);
+            return $result->data->readOnlyID;
+        }catch(Exception $e){
+            return null;
+        }
+    }
+
     public function createRoom(){
 
         if (!OW::getUser()->isAuthenticated())
@@ -86,20 +104,26 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
         $randomString = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 5);
 
-        if($clean['room_type'] == "knowledge")
-        {
-            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 0, "explore", "explore_room_" .$room->id."_".$randomString);
-            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "ideas",   "ideas_room_"   .$room->id."_".$randomString);
-            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 2, "outcome", "outcome_room_" .$room->id."_".$randomString);
-        }else{
-            //create the sheet for the CoCreation Data room
-            //Document for notes related to the dataset
-            COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "notes", "notes_room_"  .$room->id."_".$randomString);
-            COCREATION_BOL_Service::getInstance()->addSheetToRoom($room->id, "dataset", "dataset_room_".$room->id."_".$randomString);
-            COCREATION_BOL_Service::getInstance()->createMetadataForRoom($room->id);
+        switch($clean['room_type']){
+            case "knowledge":
+                COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 0, "explore", "explore_room_" .$room->id."_".$randomString);
+                COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "ideas",   "ideas_room_"   .$room->id."_".$randomString);
+                COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 2, "outcome", "outcome_room_" .$room->id."_".$randomString);
+                break;
+            case "commentarium":
+                COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 0, "opera", "commentarium_room_" .$room->id."_".$randomString);
+                COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 0, "opera", $this->getPadReadonlyId("commentarium_room_" .$room->id."_".$randomString));
+                break;
+            default:
+                //create the sheet for the CoCreation Data room
+                //Document for notes related to the dataset
+                COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "notes", "notes_room_"  .$room->id."_".$randomString);
+                COCREATION_BOL_Service::getInstance()->addSheetToRoom($room->id, "dataset", "dataset_room_".$room->id."_".$randomString);
+                COCREATION_BOL_Service::getInstance()->createMetadataForRoom($room->id);
 
-            if($clean['room_type'] == "media")
-                $this->initEthersheetMediaRoom("dataset_room_".$room->id."_".$randomString);
+                if($clean['room_type'] == "media")
+                    $this->initEthersheetMediaRoom("dataset_room_".$room->id."_".$randomString);
+                break;
         }
 
         //Send message to all members

@@ -26,6 +26,20 @@ class COCREATION_CTRL_Main extends OW_ActionController
             ) {
                 $owner = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($room->ownerId));
                 $room->owner = $owner[$room->ownerId]['title'];
+
+                switch($room->type)
+                {
+                    case "knowledge":
+                        $room->url = OW_URL_HOME.'cocreation/knowledge-room/'.$room->id;
+                        break;
+                    case "commentarium":
+                        $room->url = OW_URL_HOME.'cocreation/commentarium-room/'.$room->id;
+                        break;
+                    default:
+                        $room->url = OW_URL_HOME.'cocreation/data-room/'.$room->id;
+                        break;
+                }
+
                 array_push($visible_rooms, $room);
             } else {
                 $members = COCREATION_BOL_Service::getInstance()->getRoomMembers($room->id);
