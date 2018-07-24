@@ -88,6 +88,11 @@
         /*--paper-fab-background:#2196F3;*/
     }
 
+    paper-fab#chrome_reader_fab
+    {
+        --paper-fab-background:#FF0206;
+    }
+
     paper-fab#view_datasets {
         padding: 8px;
         margin: 8px;
@@ -184,7 +189,7 @@
 
     function addCocreationRoom(room_type)
     {
-        previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_CreateRoom', {room_type : room_type} , {top: '60px', width:'60%', height:'550px', iconClass: 'ow_ic_add', title: ''});
+        previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_CreateRoom', {room_type : room_type} , {top: '60px', width:'60%', height:'480px', iconClass: 'ow_ic_add', title: ''});
 
     }
 
@@ -255,7 +260,7 @@
                 {if $userId == $room->ownerId}
                 is-owner
                 {/if}
-                room-url="{$partialRoomUrl}{if $room->type == "data" || $room->type == "media" }data{else}knowledge{/if}-room/{$room->id}">
+                room-url="{$room->url}">
          </cocreation-paper-card-controllet>
         {/foreach}
 
@@ -265,6 +270,7 @@
             <paper-fab-speed-dial id="add_dataset" direction="top" class="bottom-right add-paper-fab">
                 <paper-fab id="add_fab" icon="add" title='' class="dropdown-trigger"></paper-fab>
                 <div class="dropdown-content">
+                    <paper-fab id="chrome_reader_fab" title='{text key="cocreation+room_add_commentarium_room"}' mini icon="chrome-reader-mode" onclick="addCocreationRoom('commentarium')"></paper-fab>
                     <paper-fab id="assessment_fab" title='{text key="cocreation+room_add_data_room"}' mini icon="assessment" onclick="addCocreationRoom('data')"></paper-fab>
                     <paper-fab id="description_fab" title='{text key="cocreation+room_add_knowledge_room"}' mini icon="description" onclick="addCocreationRoom('knowledge')"></paper-fab>
                     <paper-fab id="media_fab" title='{text key="cocreation+room_add_media_room"}' mini icon="image:collections" onclick="addCocreationRoom('media')"></paper-fab>
