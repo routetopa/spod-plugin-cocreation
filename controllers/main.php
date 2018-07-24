@@ -51,13 +51,28 @@ class COCREATION_CTRL_Main extends OW_ActionController
                     }
                 }
                 if($isInvited){
+
+                    $roomUrl = null;
+                    switch($room->type){
+                        case "data":
+                            $roomUrl = str_replace("index/", $room->id, OW::getRouter()->urlFor('COCREATION_CTRL_DataRoom', 'index') );
+                            break;
+                        case "media":
+                            $roomUrl = str_replace("index/", $room->id, OW::getRouter()->urlFor('COCREATION_CTRL_DataRoom', 'index') );
+                            break;
+                        case "knowledge":
+                            $roomUrl = str_replace("index/", $room->id, OW::getRouter()->urlFor('COCREATION_CTRL_KnowledgeRoom', 'index'));
+                            break;
+                        case "commentarium":
+                            $roomUrl = str_replace("index/", $room->id, OW::getRouter()->urlFor('COCREATION_CTRL_CommentariumRoom', 'index'));
+                            break;
+                    }
+
                     $u = BOL_UserService::getInstance()->findUserById(intval($room->ownerId));
                     $js = "$.post('" .
                         OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'confirmToJoinToRoom') . "?roomId=" . $room->id . "&memberId=" . OW::getUser()->getId() . "',
                     {}, function (data, status) {
-                       window.location ='" .
-                        str_replace("index/", $room->id, OW::getRouter()->urlFor(($room->type == "data" || $room->type == "media") ? 'COCREATION_CTRL_DataRoom'
-                                                                                                         : 'COCREATION_CTRL_KnowledgeRoom', 'index')) . "';});";
+                       window.location ='" . $roomUrl. "';});";
 
                     array_push($invitations, "&#x25cf;  <b>" . $u->username . "</b> " . OW::getLanguage()->text('cocreation', 'room_invitation_text_toast') . "<b> " . $room->name .
                         "</b> <input class=\"confirm_button\" type=\"button\" value=\"" . OW::getLanguage()->text('cocreation', 'room_confirm_to_join') .

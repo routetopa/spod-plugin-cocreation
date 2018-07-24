@@ -231,7 +231,20 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
         OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_members_add_successful'));
 
-        $this->redirect(str_replace("index/", $room->id, $room->type == "knowledge" ? OW::getRouter()->urlFor('COCREATION_CTRL_KnowledgeRoom', 'index') : OW::getRouter()->urlFor('COCREATION_CTRL_DataRoom', 'index') ));
+        switch($room->type){
+            case "data":
+                $this->redirect(str_replace("index/", $room->id, OW::getRouter()->urlFor('COCREATION_CTRL_DataRoom', 'index') ));
+                break;
+            case "media":
+                $this->redirect(str_replace("index/", $room->id, OW::getRouter()->urlFor('COCREATION_CTRL_DataRoom', 'index') ));
+                break;
+            case "knowledge":
+                $this->redirect(str_replace("index/", $room->id, OW::getRouter()->urlFor('COCREATION_CTRL_KnowledgeRoom', 'index')));
+                break;
+            case "commentarium":
+                $this->redirect(str_replace("index/", $room->id, OW::getRouter()->urlFor('COCREATION_CTRL_CommentariumRoom', 'index')));
+                break;
+        }
     }
 
     public function deleteMemberFromRoom()
