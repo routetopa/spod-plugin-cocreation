@@ -798,10 +798,10 @@
         } else if (isMetadataEmpty(metadata.dct_accrualPeriodicity)) {
             showErrorDialog('The accrual periodicity is mandatory.', 'Please provide accrual periodicity in the metadata.');
             return false;
-        } else if (isMetadataEmpty(metadata.dct_publisher)) {
+        } /*else if (isMetadataEmpty(metadata.dct_publisher)) {
             showErrorDialog('The publisher is mandatory.', 'Please provide publisher in the metadata.');
             return false;
-        }
+        }*/
 
         return true;
     }
@@ -862,14 +862,13 @@
     function get_organization()
     {
         let ckan_url = $("#inputPlatformURL").val() + '/api/3/action/organization_list';
-        $("#inputDefOrganisation").empty();
 
         $.get(ckan_url, (data)=>{
+            $("#inputDefOrganisation").empty();
             data.result.forEach((e)=>{
                $("#inputDefOrganisation").append(`<option value='${e}'>${e}</option>`);
             });
         });
-
     }//EndFunction.
 
 </script>
