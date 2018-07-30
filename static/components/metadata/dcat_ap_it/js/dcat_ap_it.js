@@ -252,16 +252,20 @@ METADATA.create_form = function()
                     },
                     {
                         value: "en",
-                        label: "Inglese"
+                        label: "English"
                     },
                     {
                         value: "fr",
-                        label: "Francese"
+                        label: "Français"
                     },
                     {
                         value: "de",
-                        label: "Tedesco"
-                    }
+                        label: "Deutsch"
+                    },
+                    {
+                        value: "en",
+                        label: "Nederlands"
+                    },
                 ]
             },
             validate: {
