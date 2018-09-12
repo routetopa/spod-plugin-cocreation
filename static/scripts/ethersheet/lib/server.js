@@ -141,8 +141,8 @@ exports.createServer = function(config){
             if(err) return res.send(500,String(err));
             res.render('sheet.ejs',{
                 channel          : collection_id,
-                sheet_collection : JSON.stringify(sheet_data),
-                plugins          : JSON.stringify(plugins)
+                sheet_collection : JSON.stringify(sheet_data)
+                //plugins          : JSON.stringify(plugins)
             });
         });
 
