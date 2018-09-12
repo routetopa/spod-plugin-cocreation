@@ -55,6 +55,22 @@ EtherSheetService.colors = [
 ];
 
 // EtherSheet API
+EtherSheetService.prototype.refreshDbConnection = function()
+{
+    var es = this;
+    this.connectionHandler = function(){};
+    es.db = new ueberDB.database(
+        es.config.db_type, {
+            socketPath : '/var/run/mysqld/mysqld.sock',
+            user: es.config.db_user,
+            host: es.config.db_host,
+            password: es.config.db_password,
+            database: es.config.db_name
+        });
+    es.db.init(function(err){
+        es.connectionHandler(err);
+    });
+};
 
 EtherSheetService.prototype.onConnect = function(cb){
   this.connectionHandler = cb;

@@ -18,7 +18,7 @@ module.exports['map_view'] = _.template("<div id=\"map\"></div>");
 /*START Import CSV dialog*/
 //module.exports['import_dialog'] = _.template("<div id='es-modal-close'>[close]</div><h2>Import CSV</h2>\n<form action=\"/ethersheet/import/csv\" method=\"post\" enctype=\"multipart/form-data\">\n  <input type=\"file\" name=\"csv_file\"><input type='submit' value='Upload'>\n  <input type=\"hidden\" name=\"sheet_id\" value=\"<%=sheet_id%>\">\n</form>\n\n\n");
 $.get('/es_client/templates/import_dialog.jst', function (data) { module.exports['import_dialog'] = _.template(data); });
-    $.get('/es_client/templates/import_shape_file_dialog.jst', function (data) { module.exports['import_shape_file_dialog'] = _.template(data); });
+$.get('/es_client/templates/import_shape_file_dialog.jst', function (data) { module.exports['import_shape_file_dialog'] = _.template(data); });
 /*END Import CSV dialog */
 
 //CHANGED FOR DATA QUALITY
