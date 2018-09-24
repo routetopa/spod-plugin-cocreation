@@ -136,7 +136,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
                     COCREATION_BOL_Service::getInstance()->addUserToRoom($room->id, $user, $u->id);
                     $js = "$.post('" .
                         OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'confirmToJoinToRoom') . "?roomId=" . $room->id . "&memberId=" . $u->id . "',
-                            {}, function (data, status) {
+                            { mobile : true }, function (data, status) {
                                window.location ='" .
                         str_replace("index/", $room->id, OW::getRouter()->urlFor($room->type == "knowledge" ? 'COCREATION_CTRL_KnowledgeRoom' : 'COCREATION_CTRL_DataRoom', 'index')) . "';});";
 
@@ -231,7 +231,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
                     COCREATION_BOL_Service::getInstance()->addUserToRoom($room->id, $user, $u->id);
                     $js = "$.post('" .
                         OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'confirmToJoinToRoom') . "?roomId=" . $room->id . "&memberId=" . $u->id . "',
-                        {mobile : true}, function (data, status) {
+                        { mobile : true }, function (data, status) {
                            window.location ='" . $url. "';});";
 
                     $message = $room->invitationText . "<br><br>" . "<span class=\"ow_button\"><input type=\"button\" value=\"Confirm to join\" onclick=\"" . $js . "\"></span>";
@@ -239,7 +239,6 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
                         MAILBOX_BOL_ConversationService::getInstance()->createConversation(OW::getUser()->getId(), $u->id, "Join to co-creation room : " . $room->name, $message);
 
                     COCREATION_CLASS_EventHandler::getInstance()->sendNotificationRoomInvitation($user_id, $room, $u->id);
-
                 }
             }else{
                 OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_member_already_added'));

@@ -71,7 +71,7 @@ class COCREATION_CTRL_Main extends OW_ActionController
                     $u = BOL_UserService::getInstance()->findUserById(intval($room->ownerId));
                     $js = "$.post('" .
                         OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'confirmToJoinToRoom') . "?roomId=" . $room->id . "&memberId=" . OW::getUser()->getId() . "',
-                    {}, function (data, status) {
+                    { mobile : true }, function (data, status) {
                        window.location ='" . $roomUrl. "';});";
 
                     array_push($invitations, "&#x25cf;  <b>" . $u->username . "</b> " . OW::getLanguage()->text('cocreation', 'room_invitation_text_toast') . "<b> " . $room->name .
