@@ -206,16 +206,33 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         }
 
         $room = COCREATION_BOL_Service::getInstance()->getRoomById($clean['roomId']);
+
+        $url = "";
+        switch($room->type){
+            case "data":
+                $url = str_replace("index/", $room->id, OW::getRouter()->urlFor('COCREATION_CTRL_DataRoom', 'index') );
+                break;
+            case "media":
+                $url = str_replace("index/", $room->id, OW::getRouter()->urlFor('COCREATION_CTRL_DataRoom', 'index') );
+                break;
+            case "knowledge":
+                $url = str_replace("index/", $room->id, OW::getRouter()->urlFor('COCREATION_CTRL_KnowledgeRoom', 'index'));
+                break;
+            case "commentarium":
+                $url = str_replace("index/", $room->id, OW::getRouter()->urlFor('COCREATION_CTRL_CommentariumRoom', 'index'));
+                break;
+        }
+
         foreach($clean['users_value'] as $user){
             $u   = BOL_UserService::getInstance()->findByEmail($user);
             if(!COCREATION_BOL_Service::getInstance()->isMemberInvitedToRoom($u->id, $room->id)) {
                 if (!COCREATION_BOL_Service::getInstance()->isMemberJoinedToRoom($u->id, $room->id)) {
+
                     COCREATION_BOL_Service::getInstance()->addUserToRoom($room->id, $user, $u->id);
                     $js = "$.post('" .
                         OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'confirmToJoinToRoom') . "?roomId=" . $room->id . "&memberId=" . $u->id . "',
-                        {}, function (data, status) {
-                           window.location ='" .
-                        str_replace("index/", $room->id, OW::getRouter()->urlFor($room->type == "knowledge" ? 'COCREATION_CTRL_KnowledgeRoom' : 'COCREATION_CTRL_DataRoom', 'index')) . "';});";
+                        {mobile : true}, function (data, status) {
+                           window.location ='" . $url. "';});";
 
                     $message = $room->invitationText . "<br><br>" . "<span class=\"ow_button\"><input type=\"button\" value=\"Confirm to join\" onclick=\"" . $js . "\"></span>";
                     if (OW::getPluginManager()->isPluginActive('mailbox'))
@@ -231,20 +248,8 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
 
         OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_members_add_successful'));
 
-        switch($room->type){
-            case "data":
-                $this->redirect(str_replace("index/", $room->id, OW::getRouter()->urlFor('COCREATION_CTRL_DataRoom', 'index') ));
-                break;
-            case "media":
-                $this->redirect(str_replace("index/", $room->id, OW::getRouter()->urlFor('COCREATION_CTRL_DataRoom', 'index') ));
-                break;
-            case "knowledge":
-                $this->redirect(str_replace("index/", $room->id, OW::getRouter()->urlFor('COCREATION_CTRL_KnowledgeRoom', 'index')));
-                break;
-            case "commentarium":
-                $this->redirect(str_replace("index/", $room->id, OW::getRouter()->urlFor('COCREATION_CTRL_CommentariumRoom', 'index')));
-                break;
-        }
+        $this->redirect($url);
+
     }
 
     public function deleteMemberFromRoom()
@@ -514,10 +519,25 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             echo json_encode(array("status" => true, "message" => 'Join successful'));
             exit;
         }else{
+
+            $url = "";
+            switch($room->type){
+                case "data":
+                    $url = str_replace("index/", $room->id, OW::getRouter()->urlFor('COCREATION_CTRL_DataRoom', 'index') );
+                    break;
+                case "media":
+                    $url = str_replace("index/", $room->id, OW::getRouter()->urlFor('COCREATION_CTRL_DataRoom', 'index') );
+                    break;
+                case "knowledge":
+                    $url = str_replace("index/", $room->id, OW::getRouter()->urlFor('COCREATION_CTRL_KnowledgeRoom', 'index'));
+                    break;
+                case "commentarium":
+                    $url = str_replace("index/", $room->id, OW::getRouter()->urlFor('COCREATION_CTRL_CommentariumRoom', 'index'));
+                    break;
+            }
+
             //echo json_encode(array("status" => true, "message" => 'Join successful'));
-            OW::getApplication()->redirect(
-                str_replace("index/", $room->id, OW::getRouter()->urlFor($room->type == "knowledge" ? 'COCREATION_CTRL_KnowledgeRoom' : 'COCREATION_CTRL_DataRoom', 'index'))
-            );
+            OW::getApplication()->redirect($url);
             exit;
         }
     }
