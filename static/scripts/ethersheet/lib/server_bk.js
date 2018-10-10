@@ -1,3 +1,4 @@
+
 var http = require('http');
 var express = require('express');
 
@@ -96,9 +97,9 @@ exports.createServer = function(config){
         console.log("URL: " + req.url);
         console.log("****************");
 
-       es.refreshDbConnection();
+        es.refreshDbConnection();
 
-       es.sheetToCSV(sheet_id,function(err, sheet_data){
+        es.sheetToCSV(sheet_id,function(err, sheet_data){
             //res.header('content-type', 'text/csv');
             //res.render('csv.ejs',{ csv:sheet_data});
             //ISISLab fantasy
@@ -119,7 +120,7 @@ exports.createServer = function(config){
         });
     });
 
-   app.get('/export_to_csv/:collection_id', function(req,res){
+    app.get('/export_to_csv/:collection_id', function(req,res){
         es.getSheetCollectionIds(String(req.params.collection_id), function (err, sheet_data) {
             if (!err && typeof sheet_data !== 'undefined' && sheet_data.length == 1) {
                 es.sheetToCSV(sheet_data[0],function(err, sheet_data){
@@ -141,8 +142,8 @@ exports.createServer = function(config){
             if(err) return res.send(500,String(err));
             res.render('sheet.ejs',{
                 channel          : collection_id,
-                sheet_collection : JSON.stringify(sheet_data),
-                plugins          : JSON.stringify(plugins)
+                sheet_collection : JSON.stringify(sheet_data)
+                //plugins          : JSON.stringify(plugins)
             });
         });
 
