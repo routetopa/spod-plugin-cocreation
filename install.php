@@ -100,7 +100,28 @@ CREATE TABLE IF NOT EXISTS `' . OW_DB_PREFIX . 'cocreation_template` (
   `url` varchar(255),
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
+
+CREATE TABLE IF NOT EXISTS `' . OW_DB_PREFIX . 'cocreation_room_form` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `roomId` int(11) NOT NULL,
+  `formTemplate` mediumtext,
+  `form` mediumtext,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
+
+CREATE TABLE IF NOT EXISTS `' . OW_DB_PREFIX . 'cocreation_room_form_submission` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `roomId` int(11) NOT NULL,
+  `userId` int(11),
+  `submission` mediumtext,
+  `ip` varchar(16),
+  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
+
 ';
+
+
 
 OW::getDbo()->query($sql);
 

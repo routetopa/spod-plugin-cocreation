@@ -112,6 +112,7 @@ room.handleSelectUIMode = function(mode){
     room.$.discussion.style.visibility  = 'hidden';
     room.$.datalets.style.display       = 'none';
     room.$.info.style.visibility        = 'hidden';
+    room.$.form.style.visibility        = 'hidden';
 
     switch(mode){
         case 'dataset':
@@ -142,6 +143,10 @@ room.handleSelectUIMode = function(mode){
         case 'info':
             room.current_selected_container  = room.$.info;
             room.$.info.style.visibility        = 'visible';
+            break;
+        case 'form':
+            room.current_selected_container = room.$.form;
+            room.$.form.style.visibility    = 'visible';
             break;
         case 'split':
             room.$.split_checkbox.checked = !room.$.split_checkbox.checked;

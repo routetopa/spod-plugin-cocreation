@@ -79,6 +79,7 @@ class COCREATION_BOL_Service
         return $data;
     }
 
+
     public function getArrayOfObjectSheetData($sheetName){
         $data = array();
         try {
@@ -187,6 +188,14 @@ class COCREATION_BOL_Service
         return $result;
     }
 
+    public function getFormByRoomId($roomId)
+    {
+        $example = new OW_Example();
+        $example->andFieldEqual('roomId', $roomId);
+        $result = COCREATION_BOL_RoomFormDao::getInstance()->findObjectByExample($example);
+        return $result;
+    }
+
     public function deleteMetadataFromRoom($roomId){
         $example = new OW_Example();
         $example->andFieldEqual('roomId', $roomId);
@@ -271,6 +280,38 @@ class COCREATION_BOL_Service
         $this->deleteDatasetsFromRoom($roomId);
         $this->deleteMetadataFromRoom($roomId);
         $this->deleteMembersFromRoom($roomId);
+    }
+
+    // FORM
+
+    public function addFormToRoom($roomId, $formTemplate, $form)
+
+    {
+        $ex = new OW_Example();
+        $ex->andFieldEqual('roomId', $roomId);
+
+        $roomForm = COCREATION_BOL_RoomFormDao::getInstance()->findObjectByExample($ex);
+
+        if(empty($roomForm))
+            $roomForm = new COCREATION_BOL_RoomForm();
+
+        $roomForm->roomId       = $roomId;
+        $roomForm->formTemplate = $formTemplate;
+        $roomForm->form         = $form;
+
+        COCREATION_BOL_RoomFormDao::getInstance()->save($roomForm);
+    }
+
+    public function addFormSubmissionToRoom($roomId, $userId, $submission, $ip)
+    {
+       $roomForm = new COCREATION_BOL_RoomFormSubmission();
+
+        $roomForm->roomId     = $roomId;
+        $roomForm->userId     = $userId;
+        $roomForm->submission = $submission;
+        $roomForm->ip         = $ip;
+
+        COCREATION_BOL_RoomFormSubmissionDao::getInstance()->save($roomForm);
     }
 
     //USER AND MEMBER
