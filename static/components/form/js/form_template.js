@@ -17,11 +17,10 @@ FORM.handle_options = function()
         el.addEventListener('click', (evt)=>{
             evt.target.closest(".card-body.panel-body").querySelectorAll(".accordion").forEach( (e)=>{
                 is_opened ? e.style.display = 'none' : e.style.display = 'block';
-                is_opened = !is_opened;
-            })
+            });
+            is_opened = !is_opened;
         });
     });
-
 };
 
 FORM.create_form = function()
@@ -48,13 +47,7 @@ FORM.create_form = function()
 
                 t.components[t.components.length-1].key = index + '_' + t.components[t.components.length-1].key;
 
-                if(submission[index + '_element-type'] === 'number')
-                {
-                    let n_o = parent.$.extend(true, {}, FORM.template.number_options);
-                    n_o[0].components[0].key = index + '_' + n_o[0].components[0].key;
-                    n_o[1].components[0].key = index + '_' + n_o[1].components[0].key;
-                    t.components[t.components.length-1].columns = n_o;
-                }
+                FORM.enrich_element(t.components[t.components.length-1], submission[index + '_element-type'], index);
 
                 components.push(t);
                 index++;
@@ -64,46 +57,74 @@ FORM.create_form = function()
         // ADD BUTTON
         components.push({type: 'button', action: 'submit', label: 'Submit', theme: 'primary'});
 
-        Formio.createForm(document.getElementById('form'), {components: components}).then(function(form)
-        {
-            FORM.formio = form;
-
-            let f = parent.COCREATION.form ? JSON.parse(parent.COCREATION.form) : null;
-
-            if(f) FORM.formio.submission = { data: f };
-
-            FORM.handle_options();
-
-            FORM.formio.on('submit', (submission) => {
-                let items = FORM.parse_submission(submission.data);
-                parent.$.post(parent.ODE.ajax_coocreation_room_save_form, { roomId: parent.COCREATION.roomId, form_template: JSON.stringify(submission.data), form: JSON.stringify(items) });
-                return true;
-            });
-
-            FORM.formio.on('change', function(e) {
-                if(e.changed && e.changed.component.type === 'select')
-                {
-                    let index = e.changed.component.key.split('_');
-                    let el = FormioUtils.getComponent(FORM.formio.component.components, index[0] + '_type_options',true);
-
-                    if(e.data[e.changed.component.key] === 'number')
-                    {
-                        let n_o = parent.$.extend(true, {}, FORM.template.number_options);
-                        n_o[0].components[0].key = index[0] + '_' + n_o[0].components[0].key;
-                        n_o[1].components[0].key = index[0] + '_' + n_o[1].components[0].key;
-                        el.columns = n_o;
-                    }
-
-
-                    if(e.data[e.changed.component.key] === 'select')
-                        el.columns = FORM.template.select_options;
-
-                    FORM.formio.render();
-                }
-            });
-
-        });
+        FORM.render_form(components);
     })
+};
+
+FORM.render_form = function (components)
+{
+    Formio.createForm(document.getElementById('form'), {components: components}).then(function(form)
+    {
+        FORM.formio = form;
+
+        let f = parent.COCREATION.form ? JSON.parse(parent.COCREATION.form) : null;
+
+        if(f) FORM.formio.submission = { data: f };
+
+        FORM.handle_options();
+
+        FORM.on_formio_submit();
+
+        FORM.on_formio_change();
+    });
+};
+
+FORM.on_formio_change = function ()
+{
+    FORM.formio.on('change', function(e)
+    {
+        if(e.changed && e.changed.component.type === 'select')
+        {
+            let index = e.changed.component.key.split('_');
+            let el = FormioUtils.getComponent(FORM.formio.component.components, index[0] + '_type_options',true);
+
+            FORM.enrich_element(el, e.data[e.changed.component.key], index[0]);
+
+            FORM.formio.render();
+        }
+    });
+
+};
+
+FORM.enrich_element = function (el, key, index)
+{
+    if(key === 'number')
+    {
+        let n_o = parent.$.extend(true, {}, FORM.template.number_options);
+        n_o[0].components[0].key = index + '_' + n_o[0].components[0].key;
+        n_o[1].components[0].key = index + '_' + n_o[1].components[0].key;
+        el.columns = n_o;
+    }
+
+    if(key === 'select')
+    {
+        let s_o = parent.$.extend(true, {}, FORM.template.select_options);
+        s_o[0].components[0].key = index + '_' + s_o[0].components[0].key;
+        el.columns = s_o;
+    }
+
+    if(key === 'string')
+        el.columns = [];
+
+};
+
+FORM.on_formio_submit = function ()
+{
+    FORM.formio.on('submit', (submission) => {
+        let items = FORM.parse_submission(submission.data);
+        parent.$.post(parent.ODE.ajax_coocreation_room_save_form, { roomId: parent.COCREATION.roomId, form_template: JSON.stringify(submission.data), form: JSON.stringify(items) });
+        return true;
+    });
 };
 
 FORM.parse_submission = function(submission)
@@ -130,6 +151,11 @@ FORM.parse_submission = function(submission)
        if(items[elem].required) items[elem].validate = {required:true};
        if(items[elem].min) items[elem].validate.min = items[elem].min;
        if(items[elem].max) items[elem].validate.max = items[elem].max;
+
+       if(items[elem].type === 'select' && items[elem].selectValue)
+           if(Array.isArray(items[elem].selectValue))
+               items[elem].selectValue.forEach((e)=>{items[elem].data.values.push({label:e, value:e})});
+
        if(items[elem].visible) form.push(items[elem]);
        return form;
    },[]);
@@ -201,7 +227,6 @@ FORM.template.blue_print = {
                                         ]
                                     },
                                     defaultValue : "string",
-                                    onChange : FORM.on_type_select_change
                                 }
                             ]
                         },
@@ -310,7 +335,7 @@ FORM.template.blue_print = {
             {
                 type: 'columns',
                 input: false,
-                /*customClass: "accordion",*/
+                customClass: "accordion",
                 columns: [],
                 key: 'type_options'
             }
@@ -360,7 +385,9 @@ FORM.template.number = {
 
 FORM.template.select = {
     "type": "select",
+    "template": '{{ item.label }}',
     "input": true,
+    "dataSrc": 'values',
     "data": {
         "values": []
     },
@@ -400,7 +427,7 @@ FORM.template.select_options = [
         components : [
             // Value
             {
-                key: 'value',
+                key: 'selectValue',
                 label: 'Valori',
                 type: 'textfield',
                 input: true,
