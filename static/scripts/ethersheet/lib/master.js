@@ -15,6 +15,7 @@ exports.createMasterServer = function(config){
         url = url.replace(/\/ethersheet/, "");
         url = url.replace(/\/export_to_csv/, "");
         url = url.replace(/\/s\//, "");
+        url = url.replace(/\/addrow/, "");
         url = url.replace(/\/mediaroom\/init/, "");
         url = url.replace(/\/mediaroom\/addrow/, "");
         url = url.replace(/\/images\/?.*/, "");
@@ -43,12 +44,12 @@ exports.createMasterServer = function(config){
         var temp_key, key;
 
         /*if(_.isUndefined(referer)){
-            temp_key =  request.url;
-        }else{
-            temp_key =  URL.parse(referer).pathname;
-            if( parseInt(URL.parse(referer).port) !== config.port )
-                temp_key = request.url;
-        }*/
+         temp_key =  request.url;
+         }else{
+         temp_key =  URL.parse(referer).pathname;
+         if( parseInt(URL.parse(referer).port) !== config.port )
+         temp_key = request.url;
+         }*/
 
         temp_key = request.url;
         if(request.url.indexOf("import") >= 0 || (request.url.indexOf("export_to_csv") >= 0 && !_.isUndefined(referer))) {
@@ -83,7 +84,7 @@ exports.createMasterServer = function(config){
             //Kill worker when there are not users in the related room
             cluster.on('exit', function(worker, code, signal){
                 delete slaveServers[getKeyByWorkerPid(worker.process.pid)];
-             });
+            });
             //proxy the request after worker creates the server
             console.log("WORKERS: " + Object.keys(cluster.workers).length);
         }else{

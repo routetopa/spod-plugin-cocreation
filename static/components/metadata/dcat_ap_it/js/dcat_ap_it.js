@@ -55,7 +55,7 @@ METADATA.create_form = function()
                         type: "select",
                         key: "dcat_theme",
                         data: {
-                            custom: "values = METADATA.loadTheme('main_theme')"
+                            custom: "values = METADATA.loadTheme('main_theme_' + parent.ODE.user_language)"
                         },
                         dataSrc: "custom",
                         template: "<span>{{ item.label }}</span>",
@@ -90,7 +90,7 @@ METADATA.create_form = function()
                     dataSrc: "custom",
                     input: true,
                     data: {
-                        custom: "values = FREQUENCY.frequency"
+                        custom: "values = FREQUENCY.frequency_" + parent.ODE.user_language
                     },
                     validate: { required: true },
                 }
@@ -189,7 +189,7 @@ METADATA.create_form = function()
             type: "select",
             key: "dct_spatial",
             data: {
-                custom : "values = COVERAGE.coverage"
+                custom : "values = COVERAGE.coverage_" + parent.ODE.user_language
             },
             dataSrc: "custom",
             template: "<span>{{ item.label }}</span>",
@@ -384,7 +384,7 @@ METADATA.create_form = function()
             dataSrc: "custom",
             input: true,
             data: {
-                custom: "values =  LICENSE.license"
+                custom: "values =  LICENSE.license_" + parent.ODE.user_language
             },
         },
 
