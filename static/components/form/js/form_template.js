@@ -8,6 +8,66 @@ FORM.init = function()
     FORM.create_form();
 };
 
+FORM.create_form = function()
+{
+    parent.$.getJSON(parent.ODE.ajax_coocreation_room_get_array_sheetdata).then((data)=>
+    {
+        let submission;
+
+        try {
+            submission = JSON.parse(parent.COCREATION.form);
+        }catch (ex){
+            submission = null;
+        }
+
+        let components = [];
+        let index = 0;
+        let e_e;
+
+        for(let key in data[0])
+        {
+            if(data[0].hasOwnProperty(key))
+            {
+                let t = parent.$.extend(true, {}, FORM.template.blue_print);
+
+                t.title = key;
+
+                for(let j=0; j<t.components.length; j++) {
+                    for (let i = 0; i < t.components[j].columns.length; i++)
+                        t.components[j].columns[i].components[0].key = index + '_' + t.components[j].columns[i].components[0].key;
+                }
+
+                if(submission && submission[index + '_element-type'] && (e_e = FORM.enrich_element(submission[index + '_element-type'], index)))
+                        t.components.push(e_e);
+
+                components.push(t);
+                index++;
+            }
+        }
+
+        // ADD BUTTON
+        components.push({type: 'button', action: 'submit', label: 'Submit', theme: 'primary'});
+
+        FORM.render_form(components, submission);
+    })
+};
+
+FORM.render_form = function (components, submission)
+{
+    Formio.createForm(document.getElementById('form'), {components: components}).then(function(form)
+    {
+        FORM.formio = form;
+
+        if(submission) FORM.formio.submission = { data: submission };
+
+        FORM.handle_options();
+
+        FORM.on_formio_submit();
+
+        FORM.on_formio_change();
+    });
+};
+
 FORM.handle_options = function()
 {
     document.querySelectorAll(".accordion").forEach((e)=>{e.style.display = 'none'});
@@ -23,62 +83,6 @@ FORM.handle_options = function()
     });
 };
 
-FORM.create_form = function()
-{
-    parent.$.getJSON(parent.ODE.ajax_coocreation_room_get_array_sheetdata).then((data)=>
-    {
-        let submission = JSON.parse(parent.COCREATION.form);
-
-        let components = [];
-        let index = 0;
-
-        for(let key in data[0])
-        {
-            if(data[0].hasOwnProperty(key))
-            {
-                let t = parent.$.extend(true, {}, FORM.template.blue_print);
-
-                t.title = key;
-                
-                for(let j=0; j<t.components.length; j++) {
-                    for (let i = 0; i < t.components[j].columns.length; i++)
-                        t.components[j].columns[i].components[0].key = index + '_' + t.components[j].columns[i].components[0].key;
-                }
-
-                t.components[t.components.length-1].key = index + '_' + t.components[t.components.length-1].key;
-
-                FORM.enrich_element(t.components[t.components.length-1], submission[index + '_element-type'], index);
-
-                components.push(t);
-                index++;
-            }
-        }
-
-        // ADD BUTTON
-        components.push({type: 'button', action: 'submit', label: 'Submit', theme: 'primary'});
-
-        FORM.render_form(components);
-    })
-};
-
-FORM.render_form = function (components)
-{
-    Formio.createForm(document.getElementById('form'), {components: components}).then(function(form)
-    {
-        FORM.formio = form;
-
-        let f = parent.COCREATION.form ? JSON.parse(parent.COCREATION.form) : null;
-
-        if(f) FORM.formio.submission = { data: f };
-
-        FORM.handle_options();
-
-        FORM.on_formio_submit();
-
-        FORM.on_formio_change();
-    });
-};
-
 FORM.on_formio_change = function ()
 {
     FORM.formio.on('change', function(e)
@@ -86,36 +90,64 @@ FORM.on_formio_change = function ()
         if(e.changed && e.changed.component.type === 'select')
         {
             let index = e.changed.component.key.split('_');
+
             let el = FormioUtils.getComponent(FORM.formio.component.components, index[0] + '_type_options',true);
 
-            FORM.enrich_element(el, e.data[e.changed.component.key], index[0]);
+            if(el)
+            {
+                for(let i=0; i<el.columns.length; i++)
+                    for(let j=0; j<el.columns[i].components.length; j++)
+                        FORM.formio.removeComponentByKey(el.columns[i].components[j].key);
 
-            FORM.formio.render();
+                for(let i=0; i<FORM.formio.component.components.length; i++)
+                    if(FORM.formio.component.components[i].key === index[0] + '_type_options') {
+                        FORM.formio.component.components.splice(i, 1);
+                        break;
+                    }
+            }
+
+            let op = FORM.enrich_element(e.data[e.changed.component.key], index[0]);
+
+            if(op)
+            {
+                FORM.formio.addComponent(op, document.querySelectorAll(".card-body.panel-body")[index[0]], FORM.formio.data);
+                FORM.formio.component.components.push(op);
+            }
         }
     });
 
 };
 
-FORM.enrich_element = function (el, key, index)
+FORM.enrich_element = function (key, index)
 {
+    if(key === 'string' || key === 'date_picker' || key === 'province')
+        return null;
+
+    let op;
+
     if(key === 'number')
     {
-        let n_o = parent.$.extend(true, {}, FORM.template.number_options);
-        n_o[0].components[0].key = index + '_' + n_o[0].components[0].key;
-        n_o[1].components[0].key = index + '_' + n_o[1].components[0].key;
-        el.columns = n_o;
+        op = parent.$.extend(true, {}, FORM.template.number_options);
+        op.columns[0].components[0].key = index + '_' + op.columns[0].components[0].key;
+        op.columns[1].components[0].key = index + '_' + op.columns[1].components[0].key;
     }
 
     if(key === 'select')
     {
-        let s_o = parent.$.extend(true, {}, FORM.template.select_options);
-        s_o[0].components[0].key = index + '_' + s_o[0].components[0].key;
-        el.columns = s_o;
+        op = parent.$.extend(true, {}, FORM.template.select_options);
+        op.columns[0].components[0].key = index + '_' + op.columns[0].components[0].key;
     }
 
-    if(key === 'string')
-        el.columns = [];
 
+    if(key === 'geo')
+    {
+        op = parent.$.extend(true, {}, FORM.template.geo_options);
+        op.columns[0].components[0].key = index + '_' + op.columns[0].components[0].key;
+    }
+
+    op.key = index + '_' + op.key;
+
+    return op;
 };
 
 FORM.on_formio_submit = function ()
@@ -147,24 +179,26 @@ FORM.parse_submission = function(submission)
        }
    }
 
-   return Object.keys(items).reduce((form, elem)=>{
+   return Object.keys(items).reduce((form, elem)=>
+   {
        if(items[elem].required) items[elem].validate = {required:true};
-       if(items[elem].min) items[elem].validate.min = items[elem].min;
-       if(items[elem].max) items[elem].validate.max = items[elem].max;
+
+       if(items[elem].type === 'number')
+       {
+           if (items[elem].min) items[elem].validate.min = items[elem].min;
+           if (items[elem].max) items[elem].validate.max = items[elem].max;
+       }
 
        if(items[elem].type === 'select' && items[elem].selectValue)
            if(Array.isArray(items[elem].selectValue))
                items[elem].selectValue.forEach((e)=>{items[elem].data.values.push({label:e, value:e})});
 
        if(items[elem].visible) form.push(items[elem]);
+
        return form;
+
    },[]);
 
-};
-
-FORM.on_type_select_change = function()
-{
-    console.log('CHANGED');
 };
 
 FORM.init();
@@ -223,6 +257,14 @@ FORM.template.blue_print = {
                                             {
                                                 label: 'Select',
                                                 value: 'select'
+                                            },
+                                            {
+                                                label: 'GEO',
+                                                value: 'geo'
+                                            },
+                                            {
+                                                label: 'Province',
+                                                value: 'province'
                                             }
                                         ]
                                     },
@@ -330,14 +372,6 @@ FORM.template.blue_print = {
                             ]
                         }
                     ]
-            },
-            // TYPE OPTION
-            {
-                type: 'columns',
-                input: false,
-                customClass: "accordion",
-                columns: [],
-                key: 'type_options'
             }
         ]
 };
@@ -394,45 +428,105 @@ FORM.template.select = {
     "valueProperty": "value"
 };
 
-FORM.template.number_options = [
-    {
-        width: 3,
-        components : [
-            // Min
+FORM.template.province = {
+    type: 'select',
+    template: '{{ item.label }}',
+    multiple: false,
+    dataSrc: 'values',
+    input: true,
+    data: {
+        values: [
             {
-                key: 'min',
-                label: 'Minimo',
-                type: 'number',
-                input: true,
+                label: 'Benevento',
+                value: 'Benevento',
             },
-        ]
-    },
-    {
-        width: 3,
-        components : [
-            // Max
             {
-                key: 'max',
-                label: 'Massimo',
-                type: 'number',
-                input: true,
+                label: 'Caserta',
+                value: 'Caserta'
             },
+            {
+                label: 'Napoli',
+                value: 'Napoli'
+            },
+            {
+                label: 'Salerno',
+                value: 'Salerno'
+            }
         ]
     }
-];
+};
 
-FORM.template.select_options = [
-    {
-        width: 3,
-        components : [
-            // Value
-            {
-                key: 'selectValue',
-                label: 'Valori',
-                type: 'textfield',
-                input: true,
-                multiple: true,
-            },
-        ]
-    }
-];
+// TYPE OPTIONS
+
+FORM.template.geo_options = {
+    type: 'columns',
+    input: false,
+    columns: [
+        {
+            width: 3,
+            components : [
+                // GEO
+                {
+                    key: 'geo',
+                    label: 'geo',
+                    type: 'number',
+                    input: true,
+                }
+            ]
+        }
+    ],
+    key: 'type_options'
+};
+
+FORM.template.number_options = {
+    type: 'columns',
+    input: false,
+    columns: [
+        {
+            width: 3,
+            components : [
+                    // Min
+                    {
+                        key: 'min',
+                        label: 'Minimo',
+                        type: 'number',
+                        input: true,
+                    }
+                ]
+        },
+        {
+            width: 3,
+            components : [
+                // Max
+                {
+                    key: 'max',
+                    label: 'Massimo',
+                    type: 'number',
+                    input: true,
+                }
+            ]
+        }
+    ],
+    key: 'type_options'
+};
+
+FORM.template.select_options = {
+    type: 'columns',
+    input: false,
+    columns: [
+        {
+            width: 3,
+            components : [
+                // Value
+                {
+                    key: 'selectValue',
+                    label: 'Valori',
+                    type: 'textfield',
+                    input: true,
+                    multiple: true,
+                }
+            ]
+        }
+    ],
+    key: 'type_options'
+};
