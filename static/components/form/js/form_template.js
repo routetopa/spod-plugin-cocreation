@@ -155,6 +155,7 @@ FORM.on_formio_submit = function ()
     FORM.formio.on('submit', (submission) => {
         let items = FORM.parse_submission(submission.data);
         parent.$.post(parent.ODE.ajax_coocreation_room_save_form, { roomId: parent.COCREATION.roomId, form_template: JSON.stringify(submission.data), form: JSON.stringify(items) });
+        FORM.formio.setLoading(document.querySelector('button[type="submit"].btn.btn-primary'), false);
         return true;
     });
 };

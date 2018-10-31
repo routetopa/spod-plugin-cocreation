@@ -859,17 +859,18 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             COCREATION_BOL_Service::getInstance()->addFormSubmissionToRoom($_REQUEST['roomId'], $user_id, $_REQUEST['submission'], $_SERVER['REMOTE_ADDR']);
 
             $url = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . "/ethersheet/addrow/" . $_REQUEST['sheet_name'];
+
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
             curl_setopt($ch, CURLOPT_POSTFIELDS, $_REQUEST['submission']);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/plain'));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Content-Length: ' . strlen($_REQUEST['submission'])));
 
             $result = curl_exec($ch);
             curl_close($ch);
 
-            echo json_encode(array("status" => "ok", "resutl"=>$result, "url"=>$url));
+            echo json_encode(array("status" => "ok", "resutl" => $result, "url" => $url));
         }
         catch (Exception $e)
         {
