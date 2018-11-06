@@ -378,7 +378,7 @@
         width: calc(100% - 64px);
         display:block;
     }
-    
+
     .split_size_card_left{
         margin:32px 16px 32px 32px;
         height: calc(100% - 64px);
@@ -387,7 +387,7 @@
         right: inherit;
         left: 0px;
     }
-    
+
     .split_size_card_right{
         left: inherit;
         right: 0px;
@@ -515,6 +515,23 @@
                             </paper-item-body>
                         </paper-item>
 
+                        <!-- FORM -->
+                        <paper-item id="info_menu_item" onclick="room.handleSelectUIMode('form')">
+                            <iron-icon icon="info"></iron-icon>
+                            <paper-item-body two-lines>
+                                <div>Form</div>
+                            </paper-item-body>
+                        </paper-item>
+
+                        <!-- SUBMISSION -->
+<!--                        <paper-item id="info_menu_item" onclick="room.handleSelectUIMode('submission')">
+                            <iron-icon icon="info"></iron-icon>
+                            <paper-item-body two-lines>
+                                <div>Submission</div>
+                            </paper-item-body>
+                        </paper-item>
+-->
+
                         <div class="separator"></div>
 
                     </paper-menu>
@@ -608,6 +625,11 @@
                         <!-- Info -->
                         <paper-card id="info" class="full_size_card" style="visibility:hidden;" elevation="5">
                             <info-list-controllet id="info_list_controllet"></info-list-controllet>
+                        </paper-card>
+                        <!-- Form -->
+                        <paper-card id="form" class="full_size_card" style="visibility:hidden;" elevation="5">
+                            <div class="screen_header">FORM</div>
+                            <iframe src="{$form_url}" id="form_iframe" style="height: calc(100% - 45px); width: 100%;"></iframe>
                         </paper-card>
                     </div>
                 </div>

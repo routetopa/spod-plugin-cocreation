@@ -81,31 +81,30 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             $user_id = OW::getUser()->getId();
         }
 
-        $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
+        /*$clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
         if ($clean == null){
-            /*echo json_encode(array("status" => "error", "massage" => 'Insane inputs detected'));*/
             OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'insane_user_email_value'));
             exit;
-        }
+        }*/
 
         $room = COCREATION_BOL_Service::getInstance()->addRoom(
             OW::getUser()->getId(),
-            $clean['name'],
-            $clean['subject'],
-            $clean['description'],
-            $clean['metadata'],
-            $clean['data_from'],
-            $clean['data_to'],
-            $clean['goal'],
-            $clean['invitation_text'],
-            empty($clean['is_open']) ? 0 : 1,
-            implode("#######", $clean['users_value']),
-            $clean['room_type']
+            $_REQUEST['name'],
+            $_REQUEST['subject'],
+            $_REQUEST['description'],
+            $_REQUEST['metadata'],
+            $_REQUEST['data_from'],
+            $_REQUEST['data_to'],
+            $_REQUEST['goal'],
+            $_REQUEST['invitation_text'],
+            empty($_REQUEST['is_open']) ? 0 : 1,
+            implode("#######", $_REQUEST['users_value']),
+            $_REQUEST['room_type']
         );
 
         $randomString = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 5);
 
-        switch($clean['room_type']){
+        switch($_REQUEST['room_type']){
             case "knowledge":
                 COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 0, "explore", "explore_room_" .$room->id."_".$randomString);
                 COCREATION_BOL_Service::getInstance()->addDocToRoom($room->id, 1, "ideas",   "ideas_room_"   .$room->id."_".$randomString);
@@ -122,13 +121,13 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
                 COCREATION_BOL_Service::getInstance()->addSheetToRoom($room->id, "dataset", "dataset_room_".$room->id."_".$randomString);
                 COCREATION_BOL_Service::getInstance()->createMetadataForRoom($room->id);
 
-                if($clean['room_type'] == "media")
+                if($_REQUEST['room_type'] == "media")
                     $this->initEthersheetMediaRoom("dataset_room_".$room->id."_".$randomString);
                 break;
         }
 
         //Send message to all members
-        foreach($clean['users_value'] as $user)
+        foreach($_REQUEST['users_value'] as $user)
         {
             $u = BOL_UserService::getInstance()->findByEmail($user);
             if($u->id != NULL) {
@@ -140,9 +139,9 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
                                window.location ='" .
                         str_replace("index/", $room->id, OW::getRouter()->urlFor($room->type == "knowledge" ? 'COCREATION_CTRL_KnowledgeRoom' : 'COCREATION_CTRL_DataRoom', 'index')) . "';});";
 
-                    $message = $clean['invitation_text'] . "<br><br>" . "<span class=\"ow_button\"><input type=\"button\" value=\"Conform to join\" onclick=\"" . $js . "\"></span>";
+                    $message = $_REQUEST['invitation_text'] . "<br><br>" . "<span class=\"ow_button\"><input type=\"button\" value=\"Conform to join\" onclick=\"" . $js . "\"></span>";
                     if (OW::getPluginManager()->isPluginActive('mailbox'))
-                        MAILBOX_BOL_ConversationService::getInstance()->createConversation(OW::getUser()->getId(), $u->id, "Join to co-creation room : " . $clean['name'], $message);
+                        MAILBOX_BOL_ConversationService::getInstance()->createConversation(OW::getUser()->getId(), $u->id, "Join to co-creation room : " . $_REQUEST['name'], $message);
                 }else{
                     OW::getFeedback()->info(OW::getLanguage()->text('cocreation', 'feedback_member_already_added'));
                 }
@@ -552,8 +551,8 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         exit;
     }
 
-    public function getArrayOfObjectSheetData(){
-
+    public function getArrayOfObjectSheetData()
+    {
         //ser cors header
         $clean = ODE_CLASS_InputFilter::getInstance()->sanitizeInputs($_REQUEST);
         if ($clean == null){
@@ -804,6 +803,83 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
         header("Access-Control-Allow-Origin: *");
         echo json_encode($data);
         exit;
+    }
+
+    public function saveRoomForm()
+    {
+        if (!OW::getUser()->isAuthenticated())
+        {
+            try
+            {
+                $user_id = ODE_CLASS_Tools::getInstance()->getUserFromJWT($_REQUEST['jwt']);
+            }
+            catch (Exception $e)
+            {
+                echo json_encode(array("status"  => "ko", "error_message" => $e->getMessage()));
+                exit;
+            }
+        }else{
+            $user_id = OW::getUser()->getId();
+        }
+
+        try
+        {
+            COCREATION_BOL_Service::getInstance()->addFormToRoom($_REQUEST['roomId'], $_REQUEST['form_template'], $_REQUEST['form']);
+            echo json_encode(array("status" => "ok"));
+        }
+        catch (Exception $e)
+        {
+            echo json_encode(array("status" => "ko"));
+        }
+        finally
+        {
+            exit;
+        }
+    }
+
+    public function saveRoomFormSubmission()
+    {
+        if (!OW::getUser()->isAuthenticated())
+        {
+            try
+            {
+                $user_id = ODE_CLASS_Tools::getInstance()->getUserFromJWT($_REQUEST['jwt']);
+            }
+            catch (Exception $e)
+            {
+                echo json_encode(array("status"  => "ko", "error_message" => $e->getMessage()));
+                exit;
+            }
+        }else{
+            $user_id = OW::getUser()->getId();
+        }
+
+        try
+        {
+            COCREATION_BOL_Service::getInstance()->addFormSubmissionToRoom($_REQUEST['roomId'], $user_id, $_REQUEST['submission'], $_SERVER['REMOTE_ADDR']);
+
+            $url = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . "/ethersheet/addrow/" . $_REQUEST['sheet_name'];
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $_REQUEST['submission']);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Content-Length: ' . strlen($_REQUEST['submission'])));
+
+            $result = curl_exec($ch);
+            curl_close($ch);
+
+            echo json_encode(array("status" => "ok", "resutl" => $result, "url" => $url));
+        }
+        catch (Exception $e)
+        {
+            echo json_encode(array("status" => "ko"));
+        }
+        finally
+        {
+            exit;
+        }
     }
 
     /* Mobile app service */

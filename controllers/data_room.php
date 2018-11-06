@@ -9,6 +9,8 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
             throw new AuthenticateException();
         }
 
+        $is_owner = false;
+
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('spodtchat')->getStaticJsUrl() . 'vendor/livequery-1.1.1/jquery.livequery.js');
 
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('cocreation')->getStaticJsUrl() . 'perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js');
@@ -35,6 +37,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         if(intval($room->ownerId) == OW::getUser()->getId()) {
             $this->assign('ownerUserActive', true);
             $this->assign('isMember', true);
+            $is_owner = true;
         }else
             $this->assign('ownerUserActive', false);
 
@@ -97,6 +100,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
 
         $metadata = COCREATION_BOL_Service::getInstance()->getMetadataByRoomId($params['roomId']);
 
+        $form = COCREATION_BOL_Service::getInstance()->getFormByRoomId($params['roomId']);
 
         /* NEW DISCUSSION AGORA LIKE */
         $this->addComponent('discussion', new SPODDISCUSSION_CMP_Discussion($room->id));
@@ -111,6 +115,11 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         }
         $this->assign('metadata_url', $metadata_url);
         /* METADATA IFRAME SRC */
+
+        /* FORM IFRAME SRC */
+        $form_url = $is_owner ? OW::getPluginManager()->getPlugin('cocreation')->getStaticUrl() . 'pages/form/form_template.html' : OW::getPluginManager()->getPlugin('cocreation')->getStaticUrl() . 'pages/form/form.html';
+        $this->assign('form_url', $form_url);
+        /* FORM IFRAME SRC */
 
         $this->assign("toolbar_color", ($room->type == "data") ? "#4CAF50" : "#FF9800");
         $this->assign('datalet_definition_import', ODE_CLASS_Tools::getInstance()->get_all_datalet_definitions());
@@ -145,6 +154,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                 ODE.ajax_coocreation_room_publish_dataset     = {$ajax_coocreation_room_publish_dataset}
                 ODE.ajax_coocreation_room_get_html_note       = {$ajax_coocreation_room_get_html_note}
                 ODE.ajax_coocreation_room_delete_user         = {$ajax_coocreation_room_delete_user}
+                ODE.ajax_coocreation_room_save_form           = {$ajax_coocreation_room_save_form}
                 COCREATION.sheetName                          = {$sheetName}
                 COCREATION.roomId                             = {$roomId}
                 COCREATION.room_type                          = "data"
@@ -152,6 +162,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                 COCREATION.room_members                       = {$room_members}
                 COCREATION.datalets                           = {$roomDatalets}
                 COCREATION.metadata                           = {$room_metadata}
+                COCREATION.form                               = {$form}
                 COCREATION.user_id                            = {$userId}
                 COCREATION.info                               = {$roomInfo}
                 COCREATION.spreadsheet_server_port            = {$spreasheet_server_port}
@@ -170,12 +181,14 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
                'ajax_coocreation_room_publish_dataset'     => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'publishDataset'),
                'ajax_coocreation_room_get_html_note'       => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'getNoteHTMLByPadIDApiUrl')  . "?noteUrl="  . $noteUrl,
                'ajax_coocreation_room_delete_user'         => OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'deleteMemberFromRoom'),
+               'ajax_coocreation_room_save_form'           => $is_owner ? OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'saveRoomForm') : OW::getRouter()->urlFor('COCREATION_CTRL_Ajax', 'saveRoomFormSubmission'),
                'sheetName'                                 => $sheetUrl,
                'roomId'                                    => $params['roomId'],
                'entity_type'                               => COCREATION_BOL_Service::ROOM_ENTITY_TYPE,
                'room_members'                              => json_encode($membersIds),
                'roomDatalets'                              => $room_datalets,
                'room_metadata'                             => $metadata->metadata,
+               'form'                                      => empty($form) ? '' : ($is_owner ? $form->formTemplate : $form->form),
                'userId'                                    => OW::getUser()->getId(),
                'roomInfo'                                  => json_encode($info),
                'spreasheet_server_port'                    => BOL_PreferenceService::getInstance()->findPreference('spreadsheet_server_port_preference')->defaultValue,
