@@ -259,10 +259,10 @@ FORM.template.blue_print = {
                                                 label: 'Select',
                                                 value: 'select'
                                             },
-                                            {
+                                            /*{
                                                 label: 'GEO',
                                                 value: 'geo'
-                                            },
+                                            },*/
                                             {
                                                 label: 'Province',
                                                 value: 'province'
