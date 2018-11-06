@@ -75,95 +75,95 @@ exports.createServer = function(config){
     });
 
     /**********************************************
-     * UTILITY FUNCTIONS
-     *********************************************/
+         * UTILITY FUNCTIONS
+         *********************************************/
 
-    function getRow(sheet, cb)
-    {
-        let i, cols_keys, row_id;
-        for(let ri in sheet.rows) {
-            console.log(sheet.rows[ri]);
-            console.log(sheet.cells[sheet.rows[ri]]);
-            if (_.isUndefined(sheet.cells[sheet.rows[ri]])) {
-                row_id = sheet.rows[ri];
-                break;
-            }
-            cols_keys = Object.keys(sheet.cells[sheet.rows[ri]]);
-            for(i=0; i < cols_keys.length; i++){
-                if(!_.isEmpty(sheet.cells[sheet.rows[ri]][cols_keys[i]])) break;
-            }
-            if(i === cols_keys.length - 1) {
-                row_id = sheet.rows[ri];
-                break;
-            }
-        }
-        if(_.isUndefined(row_id)) {
-            row_id = uuid();
-            sheet.rows.push(row_id);
-            es.setRowIndex(sheet.id, sheet.rows, function (err, data) {
-                if(err)
-                    cb(err, null);
-                else
-                    cb(null, row_id);
-            });
-        }else{
-            cb(null, row_id);
-        }
-    }
-
-    function setColumn(sheet, new_row, cb){
-        let new_row_keys =  Object.keys(new_row);
-        if (sheet.cols.length < new_row_keys.length) {
-            for (let i = 0; i < (new_row_keys.length - sheet.cols.length); i++)
-                sheet.cols.push(uuid());
-            es.setColIndex(sheet.id, sheet.cols,
-                function(err, data)
-                {
-                    if(err)
-                        cb(err);
-                    else
-                        cb(null);
+        function getRow(sheet, cb)
+        {
+            let i, cols_keys, row_id;
+            for(let ri in sheet.rows) {
+                //console.log(sheet.rows[ri]);
+                //console.log(sheet.cells[sheet.rows[ri]]);
+                if (_.isUndefined(sheet.cells[sheet.rows[ri]])) {
+                    row_id = sheet.rows[ri];
+                    break;
                 }
-            );
-        }else{
-           cb(null);
-        }
-    }
-
-    function addRowToSheet(sheet, row_id, new_row, cb)
-    {
-        let new_cells = {};
-        let new_row_keys = Object.keys(new_row);
-        for(let k = 0; k < new_row_keys.length; k++)
-            new_cells[sheet.cols[k]] = { value : new_row[new_row_keys[k]] , type : "string"}
-        sheet.cells[row_id] = new_cells;
-
-        es.setCells(sheet.id, sheet.cells, function(err, data){
-            if(err)
-               cb(err);
-            else
-               cb(null);
-        });
-    }
-
-    function helperImportCSV(csv_path, sheet_id, cb) {
-        fs.readFile(csv_path, function (err, data) {
-            if (err) {
-                cb(err);
-                return;
+                cols_keys = Object.keys(sheet.cells[sheet.rows[ri]]);
+                for(i=0; i < cols_keys.length; i++){
+                    if(!_.isEmpty(sheet.cells[sheet.rows[ri]][cols_keys[i]])) break;
+                }
+                if(i === cols_keys.length - 1) {
+                    row_id = sheet.rows[ri];
+                    break;
+                }
             }
+            if(_.isUndefined(row_id)) {
+                row_id = uuid();
+                sheet.rows.push(row_id);
+                es.setRowIndex(sheet.id, sheet.rows, function (err, data) {
+                    if(err)
+                        cb(err, null);
+                    else
+                        cb(null, row_id);
+                });
+            }else{
+                cb(null, row_id);
+            }
+        }
 
-            es.createSheetFromCSV(sheet_id, data, function (err) {
+        function setColumn(sheet, new_row, cb){
+            let new_row_keys =  Object.keys(new_row);
+            if (sheet.cols.length < new_row_keys.length) {
+                for (let i = 0; i < (new_row_keys.length - sheet.cols.length); i++)
+                    sheet.cols.push(uuid());
+                es.setColIndex(sheet.id, sheet.cols,
+                    function(err, data)
+                    {
+                        if(err)
+                            cb(err);
+                        else
+                            cb(null);
+                    }
+                );
+            }else{
+               cb(null);
+            }
+        }
+
+        function addRowToSheet(sheet, row_id, new_row, cb)
+        {
+            let new_cells = {};
+            let new_row_keys = Object.keys(new_row);
+            for(let k = 0; k < new_row_keys.length; k++)
+                new_cells[sheet.cols[k]] = { value : new_row[new_row_keys[k]] , type : "string"};
+            sheet.cells[row_id] = new_cells;
+
+            es.setCells(sheet.id, sheet.cells, function(err, data){
+                if(err)
+                   cb(err);
+                else
+                   cb(null);
+            });
+        }
+
+        function helperImportCSV(csv_path, sheet_id, cb) {
+            fs.readFile(csv_path, function (err, data) {
                 if (err) {
                     cb(err);
                     return;
                 }
 
-                cb(null);
-            });
+                es.createSheetFromCSV(sheet_id, data, function (err) {
+                    if (err) {
+                        cb(err);
+                        return;
+                    }
 
-        });
-    }
+                    cb(null);
+                });
+
+            });
+        }
 
     /**********************************************
      * HTTP Routes
@@ -205,124 +205,79 @@ exports.createServer = function(config){
 
     app.post('/addrow/:collection_id', function(req, res){
         res.setHeader('Content-Type', 'application/json');
-        let collection_id = String(req.params.collection_id);
-        let new_row       = req.body;
-        es.getSheetCollectionIds(collection_id, function(err, sheet_ids) {
-            if(err) throw err;
-            es.getSheet(sheet_ids[0], function(err, sheet) {
-                if(err){
-                    res.send(JSON.stringify({
-                        status: false,
-                        message: "There was an error getting sheet "
-                    }));
-                    throw err;
-                }
-              /*  console.log("**************************************************");
-                console.log("*******************CELLS**************************");
-                console.log("**************************************************");
-                console.log(sheet.cells);
-                console.log("**************************************************");
-                console.log("*******************ROWS***************************");
-                console.log("**************************************************");
-                console.log(sheet.rows);
-                console.log("**************************************************");
-                console.log("*******************COLS***************************");
-                console.log("**************************************************");
-                console.log(sheet.cols);
-                console.log("**************************************************");
-                console.log("*******************XXXX***************************");
-                console.log("**************************************************");*/
-                getRow(sheet,
-                    function(err, row_id){
-                       if(err){
-                           res.send(JSON.stringify({
-                               status: false,
-                               message: "There was an error getting new row"
-                           }));
-                           throw err;
-                       }else{
-                           setColumn(sheet, new_row,
-                           function(err){
-                               if(err) {
+                let collection_id = String(req.params.collection_id);
+                let new_row       = req.body;
+                es.getSheetCollectionIds(collection_id, function(err, sheet_ids) {
+                    if(err) throw err;
+                    //console.log(sheet_ids);
+                    es.getSheet(sheet_ids[0], function(err, sheet) {
+                        if(err){
+                            res.send(JSON.stringify({
+                                status: false,
+                                message: "There was an error getting sheet"
+                            }));
+                            throw err;
+                        }
+                        /*  console.log("**************************************************");
+                        console.log("*******************CELLS**************************");
+                        console.log("**************************************************");
+                        console.log(sheet.cells);
+                        console.log("**************************************************");
+                        console.log("*******************ROWS***************************");
+                        console.log("**************************************************");
+                        console.log(sheet.rows);
+                        console.log("**************************************************");
+                        console.log("*******************COLS***************************");
+                        console.log("**************************************************");
+                        console.log(sheet.cols);
+                        console.log("**************************************************");
+                        console.log("*******************XXXX***************************");
+                        console.log("**************************************************");*/
+                        getRow(sheet,
+                            function(err, row_id){
+                               if(err){
                                    res.send(JSON.stringify({
                                        status: false,
-                                       message: "There was an error getting columns"
+                                       message: "There was an error getting new row"
                                    }));
                                    throw err;
                                }else{
-                                   addRowToSheet(sheet, row_id, new_row,
+                                   setColumn(sheet, new_row,
                                    function(err){
-                                       if(err){
+                                       if(err) {
                                            res.send(JSON.stringify({
                                                status: false,
-                                               message: "There was an error creating new cells"
+                                               message: "There was an error getting columns"
                                            }));
                                            throw err;
                                        }else{
-                                           res.send(JSON.stringify({
-                                               status: true,
-                                               message: "Row successful added"
-                                           }));
-                                           es.refreshDbConnection();
-                                           pub_server.refreshCells(collection_id, sheet.id);
-                                           //pub_server.refreshClients(collection_id, sheet.id);
+                                           addRowToSheet(sheet, row_id, new_row,
+                                               function(err){
+                                                   if(err){
+                                                       res.send(JSON.stringify({
+                                                           status: false,
+                                                           message: "There was an error creating new cells"
+                                                       }));
+                                                       throw err;
+                                                   }else{
+                                                       setTimeout(function(){
+                                                           pub_server.refreshCollectionIdClients(sheet.id, collection_id);
+                                                       }, 1000);
+
+                                                       res.send(JSON.stringify({
+                                                           status: true,
+                                                           message: "Row successful added"
+                                                       }));
+                                                   }
+                                               }
+                                           );
                                        }
                                    });
                                }
-                           })
-                       }
-                    }
-                );
-
-                /*let new_row = req.body;
-                let new_row_keys =  Object.keys(new_row);
-                sheet.rows.push(uuid());
-                es.setRowIndex(sheet.id, sheet.rows, function (err, data) {
-                    if(err){
-                        res.send(JSON.stringify({
-                            status: true,
-                            message: "There was an error creating new row"
-                        }));
-                        throw err;
-                    }
-                    if (sheet.cols.length < new_row_keys.length) {
-                        for (let i = 0; i < (new_row_keys.length - sheet.cols.length); i++)
-                            sheet.cols.push(uuid());
-                        es.setColIndex(sheet.id, sheet.cols,
-                            function(err, data)
-                            {
-                                if(err){
-                                    res.send(JSON.stringify({
-                                        status: true,
-                                        message: "There was an error creating new column"
-                                    }));
-                                    throw err;
-                                }
-                                addRowToSheet(sheet, new_row, function () {
-                                    res.send(JSON.stringify({
-                                        status: true,
-                                        message: "Row successful added"
-                                    }));
-                                    es.refreshDbConnection();
-                                    pub_server.refreshCells(collection_id, sheet.id);
-                                    //pub_server.refreshClients(collection_id, sheet.id);
-                                });
                             }
                         );
-                    }else{
-                        addRowToSheet(sheet, new_row, function () {
-                            res.send(JSON.stringify({
-                                status: true,
-                                message: "Row successful added"
-                            }));
-                            es.refreshDbConnection();
-                            pub_server.refreshCells(collection_id, sheet.id);
-                            //pub_server.refreshClients(collection_id, sheet.id);
-                        });
-                    }
-                });*/
-            });
-        });
+                    });
+                });
     });
 
     /* end Form stuff*/
@@ -767,6 +722,18 @@ exports.createServer = function(config){
         console.log('sending refresh command');
 
     };
+
+    pub_server.refreshCollectionIdClients = function(sheet_id, collection_id){
+            let refresh_msg = {
+                type: 'sheet',
+                id: sheet_id,
+                action: 'refreshSheet',
+                params:[]
+            };
+            let refresh_command = Command.serialize(refresh_msg);
+            pub_server.broadcast(null,collection_id,refresh_command);
+            console.log('sending refresh command');
+        };
 
     /***********************************************
      * Websocket Server
