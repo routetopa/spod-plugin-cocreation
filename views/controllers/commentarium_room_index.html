@@ -484,14 +484,14 @@
                     </div>
                 </paper-toolbar>
 
-                <!-- FULL SIZE ETHERSHEET -->
+                <!-- FULL SIZE ETHERPAD -->
                 <div class="content_container">
                     <div id="full_size_container" class="full_size_content">
 
                         <!-- Opera -->
                         <paper-card id="opera" class="full_size_card" style="visibility: visible;" elevation="5">
                             <div class="section_header">{text key="cocreation+room_opera"}</div>
-                            <iframe src="{$document}?userName={$currentUser['title']}&showControls=true&showLineNumbers=false&pageview=true" style="height: 100%; width: 100%;"></iframe>
+                            <iframe src="{$document}?role={$role}&user={$currentUserId}&userName={$currentUser['title']}&showControls=true&showLineNumbers=false&pageview=true" style="height: 100%; width: 100%;"></iframe>
                         </paper-card>
 
                         <paper-card id="discussion" class="full_size_card" style="visibility:hidden;" elevation="5">

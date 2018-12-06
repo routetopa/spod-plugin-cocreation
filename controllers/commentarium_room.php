@@ -31,15 +31,18 @@ class COCREATION_CTRL_CommentariumRoom extends OW_ActionController
             //Set info for current co-creation room
             $room = COCREATION_BOL_Service::getInstance()->getRoomById($params['roomId']);
             $this->assign('owner', BOL_AvatarService::getInstance()->getDataForUserAvatars(array($room->ownerId))[$room->ownerId]);
+            $this->assign('currentUserId', OW::getUser()->getId());
 
             $documents = COCREATION_BOL_Service::getInstance()->getDocumentsByRoomId($params['roomId']);
             $document = $documents[0]->url;
             if(intval($room->ownerId) == OW::getUser()->getId()) {
                 $this->assign('ownerUserActive', true);
                 $this->assign('isMember', true);
+                $this->assign('role', '0');
                 $document = OW_URL_HOME . "etherpad/p/" . $document;
             }else {
                 $this->assign('ownerUserActive', false);
+                $this->assign('role', '1');
                 $document = OW_URL_HOME . "etherpad/p/" . COCREATION_CTRL_Ajax::getPadReadonlyId($documents[0]->url);
             }
 
