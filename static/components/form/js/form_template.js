@@ -38,7 +38,7 @@ FORM.create_form = function()
                 }
 
                 if(submission && submission[index + '_element-type'] && (e_e = FORM.enrich_element(submission[index + '_element-type'], index)))
-                        t.components.push(e_e);
+                    t.components.push(e_e);
 
                 components.push(t);
                 index++;
@@ -87,11 +87,11 @@ FORM.on_formio_change = function ()
 {
     FORM.formio.on('change', function(e)
     {
-        if(e.changed && e.changed.component.type === 'select')
+        if(e.changed && e.changed.component.constant_key === 'element-type')
         {
-            let index = e.changed.component.key.split('_');
+            let index = e.changed.component.key.split('_')[0];
 
-            let el = FormioUtils.getComponent(FORM.formio.component.components, index[0] + '_type_options',true);
+            let el = FormioUtils.getComponent(FORM.formio.component.components, index + '_type_options',true);
 
             if(el)
             {
@@ -100,17 +100,17 @@ FORM.on_formio_change = function ()
                         FORM.formio.removeComponentByKey(el.columns[i].components[j].key);
 
                 for(let i=0; i<FORM.formio.component.components.length; i++)
-                    if(FORM.formio.component.components[i].key === index[0] + '_type_options') {
+                    if(FORM.formio.component.components[i].key === index + '_type_options') {
                         FORM.formio.component.components.splice(i, 1);
                         break;
                     }
             }
 
-            let op = FORM.enrich_element(e.data[e.changed.component.key], index[0]);
+            let op = FORM.enrich_element(e.data[e.changed.component.key], index);
 
             if(op)
             {
-                FORM.formio.addComponent(op, document.querySelectorAll(".card-body.panel-body")[index[0]], FORM.formio.data);
+                FORM.formio.addComponent(op, document.querySelectorAll(".card-body.panel-body")[index], FORM.formio.data);
                 FORM.formio.component.components.push(op);
             }
         }
@@ -123,27 +123,10 @@ FORM.enrich_element = function (key, index)
     if(key === 'string' || key === 'date_picker' || key === 'province')
         return null;
 
-    let op;
+    let op = parent.$.extend(true, {}, FORM.template[`${key}_options`]);
 
-    if(key === 'number')
-    {
-        op = parent.$.extend(true, {}, FORM.template.number_options);
-        op.columns[0].components[0].key = index + '_' + op.columns[0].components[0].key;
-        op.columns[1].components[0].key = index + '_' + op.columns[1].components[0].key;
-    }
-
-    if(key === 'select')
-    {
-        op = parent.$.extend(true, {}, FORM.template.select_options);
-        op.columns[0].components[0].key = index + '_' + op.columns[0].components[0].key;
-    }
-
-
-    if(key === 'geo')
-    {
-        op = parent.$.extend(true, {}, FORM.template.geo_options);
-        op.columns[0].components[0].key = index + '_' + op.columns[0].components[0].key;
-    }
+    for(let i=0; i<op.columns.length; i++)
+        op.columns[i].components[0].key = index + '_' + op.columns[i].components[0].key;
 
     op.key = index + '_' + op.key;
 
@@ -162,43 +145,44 @@ FORM.on_formio_submit = function ()
 
 FORM.parse_submission = function(submission)
 {
-   let items = {};
+    let items = {};
 
-   for(let key in submission)
-   {
-       if(submission.hasOwnProperty(key))
-       {
-           let k = key.split('_');
+    for(let key in submission)
+    {
+        if(submission.hasOwnProperty(key))
+        {
+            let k = key.split('_');
 
-           if (!items[k[0]])
-           {
-               items[k[0]] = {key: k[0]};
-               parent.$.extend(true, items[k[0]], FORM.template[submission[k[0] + '_element-type']]);
-           }
+            if (!items[k[0]])
+            {
+                items[k[0]] = {key: k[0]};
+                parent.$.extend(true, items[k[0]], FORM.template[submission[`${k[0]}_element-type`]]);
+            }
 
-           items[k[0]][k[1]] = submission[key];
-       }
-   }
+            items[k[0]][k[1]] = submission[key];
+        }
+    }
 
-   return Object.keys(items).reduce((form, elem)=>
-   {
-       if(items[elem].required) items[elem].validate = {required:true};
+    return Object.keys(items).reduce((form, elem)=>
+    {
+        if(items[elem].required) items[elem].validate = {required:true};
 
-       if(items[elem].type === 'number')
-       {
-           if (items[elem].min) items[elem].validate.min = items[elem].min;
-           if (items[elem].max) items[elem].validate.max = items[elem].max;
-       }
+        if(items[elem].type === 'number')
+        {
+            if (items[elem].min) items[elem].validate.min = items[elem].min;
+            if (items[elem].max) items[elem].validate.max = items[elem].max;
+        }
 
-       if(items[elem].type === 'select' && items[elem].selectValue)
-           if(Array.isArray(items[elem].selectValue))
-               items[elem].selectValue.forEach((e)=>{items[elem].data.values.push({label:e, value:e})});
+        if(items[elem].type === 'select' && items[elem].selectValue)
+            if(Array.isArray(items[elem].selectValue))
+                items[elem].selectValue.forEach((e)=>{items[elem].data.values.push({label:e, value:e})});
 
-       if(items[elem].visible) form.push(items[elem]);
 
-       return form;
+        if(items[elem].visible) form.push(items[elem]);
 
-   },[]);
+        return form;
+
+    },[]);
 
 };
 
@@ -235,6 +219,7 @@ FORM.template.blue_print = {
                                 // TYPE
                                 {
                                     key: 'element-type',
+                                    constant_key:'element-type',
                                     type: 'select',
                                     label: 'Type',
                                     template: '{{ item.label }}',
@@ -259,13 +244,17 @@ FORM.template.blue_print = {
                                                 label: 'Select',
                                                 value: 'select'
                                             },
-                                            /*{
+                                            {
                                                 label: 'GEO',
                                                 value: 'geo'
-                                            },*/
+                                            },
                                             {
                                                 label: 'Province',
                                                 value: 'province'
+                                            },
+                                            {
+                                                label: 'File',
+                                                value: 'file'
                                             }
                                         ]
                                     },
@@ -457,6 +446,15 @@ FORM.template.province = {
     }
 };
 
+FORM.template.file = {
+    type: "file",
+    input: true,
+    filePattern: '',
+    fileMinSize: '',
+    fileMaxSize: '10MB',
+    storage: 'Base64'
+};
+
 // TYPE OPTIONS
 
 FORM.template.geo_options = {
@@ -486,14 +484,14 @@ FORM.template.number_options = {
         {
             width: 3,
             components : [
-                    // Min
-                    {
-                        key: 'min',
-                        label: 'Minimo',
-                        type: 'number',
-                        input: true,
-                    }
-                ]
+                // Min
+                {
+                    key: 'min',
+                    label: 'Minimo',
+                    type: 'number',
+                    input: true,
+                }
+            ]
         },
         {
             width: 3,
@@ -525,6 +523,40 @@ FORM.template.select_options = {
                     type: 'textfield',
                     input: true,
                     multiple: true,
+                }
+            ]
+        }
+    ],
+    key: 'type_options'
+};
+
+FORM.template.file_options =
+{
+    type: 'columns',
+    input: false,
+    columns: [
+        {
+            width: 3,
+            components: [
+                {
+                    key: 'filePattern',
+                    type: 'select',
+                    template: '{{ item.label }}',
+                    multiple: false,
+                    dataSrc: 'values',
+                    input: true,
+                    data: {
+                        values: [
+                            {
+                                label: 'Immagini',
+                                value: '.jpg,.png,.giff',
+                            },
+                            {
+                                label: 'Documenti',
+                                value: '.pdf,.doc,.word'
+                            }
+                        ]
+                    }
                 }
             ]
         }

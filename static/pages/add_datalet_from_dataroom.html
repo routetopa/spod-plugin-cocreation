@@ -38,14 +38,15 @@
         {
             if(addedJs == (dynamicAddedJs.length-1))
             {
-                ComponentService.deep_url = parent.ODE.deep_url;
+                ComponentService.components_url = parent.ODE.deep_components;
 
                 var params =
                 {
                     'deep-url'          : parent.ODE.deep_url,
                     'data-url'          : parent.ODE.ajax_coocreation_room_get_array_sheetdata,
                     'datalets-list-url' : parent.ODE.deep_datalet_list,
-                    'localization'      : parent.ODE.user_language
+                    'localization'      : parent.ODE.user_language,
+                    'components-url'    : parent.ODE.deep_components
                 };
 
                 //var iframe = parent.document.getElementById("co-datalets-creator-controllet_float");

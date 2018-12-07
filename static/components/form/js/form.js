@@ -14,6 +14,7 @@ FORM.create_form = function()
 
     Formio.createForm(document.getElementById('form'), {components: components}).then(function(form)
     {
+        form.fileService = '......';
         FORM.formio = form;
 
         FORM.formio.on('submit', (submission) =>
