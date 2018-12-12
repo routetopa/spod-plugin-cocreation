@@ -349,7 +349,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
                 $datalet->data   = str_replace("'","&#39;", $datalet->data);
                 $datalet->fields = str_replace("'","&#39;", $datalet->fields);
 
-                $datalet_string = "<" . $datalet->component . " datalet-id='". $datalet->id ."' fields='[" . rtrim(ltrim($datalet->fields, "}"), "{") . "]'";
+                $datalet_string = "<" . $datalet->component . " datalet-id='". $datalet->id ."' disable_my_space disable_html_export disable_link fields='[" . rtrim(ltrim($datalet->fields, "}"), "{") . "]'";
                 foreach($datalet->params as $key => $value)
                     $datalet_string .= " " . $key . "='" . $value . "'";
                 $datalet_string .= "></" . $datalet->component . ">";
@@ -390,7 +390,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             $datalet->data   = str_replace("'","&#39;", $datalet->data);
             $datalet->fields = str_replace("'","&#39;", $datalet->fields);
 
-            $datalet_string = "<" . $datalet->component . " datalet-id='". $datalet->id ."' fields='[" . rtrim(ltrim($datalet->fields, "}"), "{") . "]'";
+            $datalet_string = "<" . $datalet->component . " datalet-id='". $datalet->id ."' disable_my_space disable_html_export disable_link fields='[" . rtrim(ltrim($datalet->fields, "}"), "{") . "]'";
             foreach($datalet->params as $key => $value)
                 $datalet_string .= " " . $key . "='" . $value . "'";
             $datalet_string .= "></" . $datalet->component . ">";
@@ -1112,7 +1112,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             $datalet->data = str_replace("'", "&#39;", $datalet->data);
             $datalet->fields = str_replace("'", "&#39;", $datalet->fields);
 
-            $datalet_string = "<" . $datalet->component . " datalet-id='" . $datalet->id . "' disable_my_space";
+            $datalet_string = "<" . $datalet->component . " datalet-id='" . $datalet->id . "' disable_my_space disable_html_export disable_link";
             foreach ($datalet->params as $key => $value)
                 $datalet_string .= " " . $key . "='" .  str_replace("\"", "\\\"", $value ) . "'";
             $datalet_string .= "></" . $datalet->component . ">";
