@@ -487,10 +487,18 @@
 
                         <div class="separator"></div>
 
-                        <paper-item onclick="room.handleSelectUIMode('discussion')">
-                            <iron-icon id="discussion_icon" icon="communication:forum"></iron-icon>
-                            <paper-item-body two-lines title='{text key="cocreation+room_discussion_tab_label"}'>
-                                <div>{text key="cocreation+room_discussion_tab_label"}</div>
+                        <paper-item id="info_menu_item" onclick="room.handleSelectUIMode('info')">
+                            <iron-icon icon="info"></iron-icon>
+                            <paper-item-body two-lines>
+                                <div>Info</div>
+                            </paper-item-body>
+                        </paper-item>
+
+                        <paper-item onclick="room.handleSelectUIMode('members')">
+                            <iron-icon icon="social:person"></iron-icon>
+                            <paper-item-body two-lines>
+                                <!--<div>{text key="cocreation+room_members_tab_label"}</div>-->
+                                <div>Members</div>
                             </paper-item-body>
                         </paper-item>
 
@@ -508,29 +516,20 @@
                             </paper-item-body>
                         </paper-item>
 
-                        <paper-item id="info_menu_item" onclick="room.handleSelectUIMode('info')">
-                            <iron-icon icon="info"></iron-icon>
-                            <paper-item-body two-lines>
-                                <div>Info</div>
+                        <paper-item onclick="room.handleSelectUIMode('discussion')">
+                            <iron-icon id="discussion_icon" icon="communication:forum"></iron-icon>
+                            <paper-item-body two-lines title='{text key="cocreation+room_discussion_tab_label"}'>
+                                <div>{text key="cocreation+room_discussion_tab_label"}</div>
                             </paper-item-body>
                         </paper-item>
 
                         <!-- FORM -->
-                        <paper-item id="info_menu_item" onclick="room.handleSelectUIMode('form')">
+                        <paper-item onclick="room.handleSelectUIMode('form')">
                             <iron-icon icon="assignment"></iron-icon>
                             <paper-item-body two-lines>
                                 <div>Form</div>
                             </paper-item-body>
                         </paper-item>
-
-                        <!-- SUBMISSION -->
-<!--                        <paper-item id="info_menu_item" onclick="room.handleSelectUIMode('submission')">
-                            <iron-icon icon="info"></iron-icon>
-                            <paper-item-body two-lines>
-                                <div>Submission</div>
-                            </paper-item-body>
-                        </paper-item>
--->
 
                         <div class="separator"></div>
 
@@ -573,16 +572,16 @@
 
                         <div style="float: right">
                             {if $ownerUserActive}
-                               <paper-fab icon="add" onclick="room.inviteNewUsers();" title='{text key="cocreation+room_invite_new_members_button"}'></paper-fab>
+                            <paper-fab icon="add" onclick="room.inviteNewUsers();" title='{text key="cocreation+room_invite_new_members_button"}'></paper-fab>
                             {/if}
                         </div>
 
                         <div id="right_floater" class="right_floater">
                             <div class="ow_avatar style-scope" title="{$owner['title']}"><div class="owner_badge">OWNER</div><a class="style-scope" href="{$owner['url']}"><img alt="" style="max-width: 100%;" class="style-scope dataset-table-controllet" src="{$owner['src']}"></a></div>
                             {foreach $members as $member}
-                                {if $member['isJoined']}
-                                    <div class="ow_avatar style-scope" title="{$member['title']}"><a class="style-scope" href="{$member['url']}"><img alt="" style="max-width: 100%;" class="style-scope dataset-table-controllet" src="{$member['src']}"></a></div>
-                                {/if}
+                            {if $member['isJoined']}
+                            <div class="ow_avatar style-scope" title="{$member['title']}"><a class="style-scope" href="{$member['url']}"><img alt="" style="max-width: 100%;" class="style-scope dataset-table-controllet" src="{$member['src']}"></a></div>
+                            {/if}
                             {/foreach}
                         </div>
 
@@ -592,7 +591,7 @@
                 <!-- FULL SIZE ETHERSHEET -->
                 <div class="content_container">
                     <div id="full_size_container" class="full_size_content">
-                         <!-- Dataset -->
+                        <!-- Dataset -->
                         <paper-card id="spreadsheet" class="full_size_card" style="visibility:visible;" elevation="5">
                             <div class="screen_hidden_header">{text key="cocreation+room_dataset_tab_label"}</div>
                             <iframe id="spreadsheet_container" src="{$spreadsheet}" style="height: 100%; width: 100%;"></iframe>
@@ -607,12 +606,13 @@
                             <div class="screen_header">{text key="cocreation+room_notes_tab_label"}</div>
                             <iframe src="{{$notes}}?userName={{$currentUser['title']}}&showControls=true&showLineNumbers=false&pageview=true" style="height: 100%; width: 100%;"></iframe>
                         </paper-card>
-                        <!-- Discussion -->
-                        <paper-card id="discussion" class="full_size_card" style="visibility:hidden;" elevation="5">
-                            <div class="screen_header">{text key="cocreation+room_discussion_tab_label"}</div>
-                            <div id="discussion_container" style="height: calc(100% - 45px)">
-                                {$discussion}
-                            </div>
+                        <!-- Info -->
+                        <paper-card id="info" class="full_size_card" style="visibility:hidden;" elevation="5">
+                            {$info_cmp}
+                        </paper-card>
+                        <!-- Members -->
+                        <paper-card id="members_card" class="full_size_card" style="visibility:hidden;" elevation="5">
+                            {$members_cmp}
                         </paper-card>
                         <!-- Datalets -->
                         <paper-card id="datalets" class="full_size_card" style="display:none;" elevation="5">
@@ -622,9 +622,12 @@
                         <paper-card id="images" class="full_size_card" style="visibility:hidden;" elevation="5">
                             <image-slider-datalet id="image_slider"></image-slider-datalet>
                         </paper-card>
-                        <!-- Info -->
-                        <paper-card id="info" class="full_size_card" style="visibility:hidden;" elevation="5">
-                            <info-list-controllet id="info_list_controllet"></info-list-controllet>
+                        <!-- Discussion -->
+                        <paper-card id="discussion" class="full_size_card" style="visibility:hidden;" elevation="5">
+                            <div class="screen_header">{text key="cocreation+room_discussion_tab_label"}</div>
+                            <div id="discussion_container" style="height: calc(100% - 45px)">
+                                {$discussion}
+                            </div>
                         </paper-card>
                         <!-- Form -->
                         <paper-card id="form" class="full_size_card" style="visibility:hidden;" elevation="5">

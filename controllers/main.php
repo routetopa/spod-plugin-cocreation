@@ -2,10 +2,8 @@
 
 class COCREATION_CTRL_Main extends OW_ActionController
 {
-
     public function index()
     {
-        //COCOCO
         if ( !OW::getUser()->isAuthenticated() )
         {
             throw new AuthenticateException();
@@ -26,6 +24,8 @@ class COCREATION_CTRL_Main extends OW_ActionController
             ) {
                 $owner = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($room->ownerId));
                 $room->owner = $owner[$room->ownerId]['title'];
+                $room->ownerSrc = $owner[$room->ownerId]['src'];
+                $room->ownerUrl = $owner[$room->ownerId]['url'];
 
                 switch($room->type)
                 {

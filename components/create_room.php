@@ -35,10 +35,10 @@ class COCREATION_CMP_CreateRoom extends OW_Component
         $name->setRequired(true);
 
         $subject  = new TextField('subject');
-        $subject->setRequired(true);
+//        $subject->setRequired(true);
 
         $description  = new TextField('description');
-        $description->setRequired(true);
+//        $description->setRequired(true);
 
         $metadata = new Selectbox('metadata');
         $metadata->addOptions(array("1"=>"Common core", "2"=>"DCAT-AP_IT"));
@@ -46,15 +46,15 @@ class COCREATION_CMP_CreateRoom extends OW_Component
         $metadata->setRequired(true);
 
         $goal  = new TextField('goal');
-        $goal->setRequired(false);
+//        $goal->setRequired(false);
 
         $invitationText  = new TextField('invitation_text');
-        $invitationText->setRequired(false);
+//        $invitationText->setRequired(false);
 
         $usersValue  = new HiddenField('users_value');
         $usersValue->setValue("");
         $usersValue->setId('users_value');
-        $usersValue->setRequired(false);
+//        $usersValue->setRequired(false);
 
         $managerOp  = new HiddenField('manager_op');
         $managerOp->setValue("requestToAddRoom");

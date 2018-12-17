@@ -316,13 +316,14 @@ class COCREATION_BOL_Service
 
     //USER AND MEMBER
 
-    public function addUserToRoom($roomId, $email, $userId, $isJoined = 0)
+    public function addUserToRoom($roomId, $email, $userId, $isJoined = 0, $role = 1)
     {
         $roomMember = new COCREATION_BOL_RoomMember();
 
         $roomMember->roomId   = $roomId;
         $roomMember->email    = $email;
         $roomMember->isJoined = $isJoined;
+        $roomMember->role     = $role;
         $roomMember->userId   = $userId;
 
         COCREATION_BOL_RoomMemberDao::getInstance()->save($roomMember);

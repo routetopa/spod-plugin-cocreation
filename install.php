@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS `' . OW_DB_PREFIX . 'cocreation_room_member` (
   `userId` int(11) NOT NULL,
   `email` varchar(255),
   `isJoined` tinyint(1),
+  `role` int(11),
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
 

@@ -49,7 +49,7 @@
     .room_container {
         position: relative;
         /*min-height: calc(100vh - 56px);*/
-        margin-bottom: 32px;
+        margin-bottom: 24px;
     }
 
     .buttons_container {
@@ -189,8 +189,7 @@
 
     function addCocreationRoom(room_type)
     {
-        previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_CreateRoom', {room_type : room_type} , {top: '60px', width:'60%', height:'518px', iconClass: 'ow_ic_add', title: ''});
-
+        previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_CreateRoom', {room_type : room_type} , {top: '56px', width:'600px', height:'', iconClass: 'ow_ic_add', title: ''});
     }
 
     setTimeout(function(){
@@ -252,7 +251,10 @@
         <cocreation-paper-card-controllet
                 room-id="{$room->id}"
                 name="{$room->name}"
+                description="{$room->description}"
                 owner="{$room->owner}"
+                owner-src="{$room->ownerSrc}"
+                owner-url="{$room->ownerUrl}"
                 from="{$room->from}"
                 to="{$room->to}"
                 goal="{$room->goal}"

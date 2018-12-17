@@ -10,28 +10,28 @@ COCREATION.init = function()
     COCREATION.friend_info = JSON.parse($('#friends_info').val());
     COCREATION.searchField = ["name", "username", "email"];
 
-    var scope = Polymer.dom(document).querySelector('#scope');
-    //scope.dateFrom = scope.dateTo = new Date();
-    $("#data_from").val(moment(new Date()).format("LL")) ;
+    // var scope = Polymer.dom(document).querySelector('#scope');
+    // scope.dateFrom = scope.dateTo = new Date();
+    // $("#data_from").val(moment(new Date()).format("LL")) ;
 
-    scope.dateFormat = function(date, format) {
-        return moment(date).format(format);
-    };
+    // scope.dateFormat = function(date, format) {
+    //     return moment(date).format(format);
+    // };
 
-    scope.dismissDialog = function(event) {
-        if (event.detail.confirmed){
-            if(COCREATION.openDataPanel == "from")
-                scope.dateFrom = scope.$.picker.date;
-            else
-                scope.dateTo = scope.$.picker.date;
-        }
-    };
-
-    scope.showDialog = function(e) {
-        var args = e.target.getAttribute('data-args');
-        COCREATION.openDataPanel = args;
-        this.$.dialog.toggle();
-    };
+    // scope.dismissDialog = function(event) {
+    //     if (event.detail.confirmed){
+    //         if(COCREATION.openDataPanel == "from")
+    //             scope.dateFrom = scope.$.picker.date;
+    //         else
+    //             scope.dateTo = scope.$.picker.date;
+    //     }
+    // };
+    //
+    // scope.showDialog = function(e) {
+    //     var args = e.target.getAttribute('data-args');
+    //     COCREATION.openDataPanel = args;
+    //     this.$.dialog.toggle();
+    // };
 };
 
 

@@ -32,7 +32,8 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
 
         //Set info for current co-creation room
         $room = COCREATION_BOL_Service::getInstance()->getRoomById($params['roomId']);
-        $this->assign('owner', BOL_AvatarService::getInstance()->getDataForUserAvatars(array($room->ownerId))[$room->ownerId]);
+        $owner = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($room->ownerId))[$room->ownerId];
+        $this->assign('owner', $owner);
 
         if(intval($room->ownerId) == OW::getUser()->getId()) {
             $this->assign('ownerUserActive', true);
@@ -68,6 +69,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
             $user   = BOL_UserService::getInstance()->findByEmail($member->email);
             $avatar = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($user->id))[$user->id];
             $avatar['isJoined'] = $member->isJoined;
+            $avatar['role'] = $member->role;
             array_push($members, $avatar);
             array_push($membersIds, $user->id);
         }
@@ -105,6 +107,11 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         /* NEW DISCUSSION AGORA LIKE */
         $this->addComponent('discussion', new SPODDISCUSSION_CMP_Discussion($room->id));
         /* NEW DISCUSSION AGORA LIKE */
+
+        /* INFO */
+        $this->addComponent('info_cmp', new COCREATION_CMP_Info($room));
+        /* MEMBERS */
+        $this->addComponent('members_cmp', new COCREATION_CMP_Members($owner, $members));
 
         /* METADATA IFRAME SRC */
         $metadata_url = "";

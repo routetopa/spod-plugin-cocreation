@@ -112,6 +112,7 @@ room.handleSelectUIMode = function(mode){
     room.$.discussion.style.visibility  = 'hidden';
     room.$.datalets.style.display       = 'none';
     room.$.info.style.visibility        = 'hidden';
+    room.$.members_card.style.visibility        = 'hidden';
     room.$.form.style.visibility        = 'hidden';
 
     switch(mode){
@@ -144,6 +145,10 @@ room.handleSelectUIMode = function(mode){
             room.current_selected_container  = room.$.info;
             room.$.info.style.visibility        = 'visible';
             break;
+        case 'members':
+            room.current_selected_container  = room.$.members_card;
+            room.$.members_card.style.visibility        = 'visible';
+            break;
         case 'form':
             room.current_selected_container = room.$.form;
             room.$.form.style.visibility    = 'visible';
@@ -166,6 +171,8 @@ room.handleSplitScreen = function(e){
     room.$.discussion.style.visibility  = 'hidden';
     room.$.datalets.style.display       = 'none';
     room.$.info.style.visibility        = 'hidden';
+    room.$.members_card.style.visibility     = 'hidden';
+    room.$.form.style.visibility        = 'hidden';
 
    if(room.splitScreenActive){//active split screen
        room.$.dataset_menu_item.disabled = true;
@@ -188,7 +195,9 @@ room.handleSplitScreen = function(e){
        $(room.$.images).addClass("split_size_card_right");
        $(room.$.discussion).addClass("split_size_card_right");
        $(room.$.datalets).addClass("split_size_card_right");
+       $(room.$.form).addClass("split_size_card_right");
        $(room.$.info).addClass("split_size_card_right");
+       $(room.$.members_card).addClass("split_size_card_right");
    }else{
        room.$.dataset_menu_item.disabled = false;
        room.$.section_menu.selected      = 0;
@@ -200,7 +209,9 @@ room.handleSplitScreen = function(e){
        $(room.$.images).removeClass("split_size_card_right");
        $(room.$.discussion).removeClass("split_size_card_right");
        $(room.$.datalets).removeClass("split_size_card_right");
+       $(room.$.form).removeClass("split_size_card_right");
        $(room.$.info).removeClass("split_size_card_right");
+       $(room.$.members_card).removeClass("split_size_card_right");
    }
 };
 
@@ -226,7 +237,6 @@ room.confirmDatasetPublication = function(){
             function (data, status) {
                 if(JSON.parse(data).status == "ok")
                 {
-                    debugger
                     // var metadata = room.$.metadata_component.metadata;
                     let metadata = $("#metadata_iframe")[0].contentWindow.METADATA.form.submission.data;
                     $.post(ODE.ajax_coocreation_room_publish_dataset,
@@ -571,8 +581,6 @@ room.prepareCOMMONCOREMetadataForCKAN = function (_jsonCocreationMetadata)
 
     const $dataset_key = COCREATION.sheetName;
 
-    debugger;
-
     const _msgErrors = {
         title_message: 'The title is a required field in the metadata.',
         description_message: 'The description is a required field in the metadata.',
@@ -670,8 +678,6 @@ room.prepareDCATMetadataForCKAN = function (_jsonCocreationMetadata)
         owner_org: $deforganisation
     };
 
-    debugger;
-
     for (let k in metadata)
     {
         let value = metadata[k];
@@ -710,7 +716,6 @@ room.uploadOnCkan = async function (_jsonData, _jsonCocreationMetadata, notes, c
     try {
         fileCSVData = await room.getSheetCSVFileInstance();
     } catch (e) {
-        debugger;
         callbackUpload({ success: false, errors: [ "Cannot download CSV file from Ethersheet.  Ethersheet Internal Error." ] });
         return;
     }
