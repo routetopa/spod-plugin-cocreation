@@ -393,12 +393,13 @@ exports.createServer = function(config){
         res.setHeader('Content-Type', 'application/json');
 
         let form = new formidable.IncomingForm();
+        let image_name,sheet_id;
         form.parse(req, function(err, fields, files)
         {
             try {
-                let sheet_id = fields.sheet_id;
+                sheet_id = fields.sheet_id;
                 let ext = files.image_file.name.split(".");
-                let image_name = uuid() + "." + ext[ext.length - 1];
+                image_name = uuid() + "." + ext[ext.length - 1];
             }catch(e){
                 console.log(e);
                 res.send(JSON.stringify({ status: false, massage: "There was an error"}));
