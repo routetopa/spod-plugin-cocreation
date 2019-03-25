@@ -144,6 +144,7 @@ THEMES.ECON_en = [
     {"value":"2406_en", "label":"2406 monetary relations"},
     {"value":"2411_en", "label":"2411 monetary economics"},
     {"value":"2416_en", "label":"2416 financial institutions and credit"},
+    {"value":"2421_en", "label":"2421 free movement of capital"},
     {"value":"2426_en", "label":"2426 financing and investment"},
     {"value":"2431_en", "label":"2431 insurance"},
     {"value":"2436_en", "label":"2436 public finance and budget policy"},
@@ -186,6 +187,7 @@ THEMES.ECON_it = [
     {"value":"2406_it", "label":"2406 relazioni monetarie"},
     {"value":"2411_it", "label":"2411 economia monetaria"},
     {"value":"2416_it", "label":"2416 istituti finanziari e di credito"},
+    {"value":"2421_it", "label":"2421 libera circolazione dei capitali"},
     {"value":"2426_it", "label":"2426 investimenti e finanziamenti"},
     {"value":"2431_it", "label":"2431 assicurazioni"},
     {"value":"2436_it", "label":"2436 finanze pubbliche e politica di bilancio"},
@@ -240,6 +242,28 @@ THEMES.INTR_it = [
     {"value":"0811_it", "label":"0811 politica di cooperazione"},
     {"value":"0816_it", "label":"0816 equilibrio internazionale"},
     {"value":"0821_it", "label":"0821 difesa"}
+];
+
+THEMES.JUST_en = [
+    {"value":"1206_en", "label":"1206 sources and branches of the law"},
+    {"value":"1211_en", "label":"1211 civil law"},
+    {"value":"1216_en", "label":"1216 criminal law"},
+    {"value":"1221_en", "label":"1221 justice access to the courts"},
+    {"value":"1226_en", "label":"1226 organisation of the legal system"},
+    {"value":"1231_en", "label":"1231 diritto internazionale"},
+    {"value":"1236_en", "label":"1236 drights and freedoms"}
+];
+
+/*** IT ***/
+
+THEMES.JUST_it = [
+    {"value":"1206_it", "label":"1206 fonti e branche del diritto"},
+    {"value":"1211_it", "label":"1211 diritto civile"},
+    {"value":"1216_it", "label":"1216 diritto penale"},
+    {"value":"1221_it", "label":"1221 giustizia"},
+    {"value":"1226_it", "label":"1226 organizzazione della giustizia"},
+    {"value":"1231_it", "label":"1231 diritto internazionale"},
+    {"value":"1236_it", "label":"1236 diritti e libertà"}
 ];
 
 THEMES.GOVE_en = [
