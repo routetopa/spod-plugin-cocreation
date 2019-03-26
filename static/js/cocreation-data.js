@@ -2,30 +2,34 @@
     $('#spreadsheet').append('<iframe id="spreadsheet_container" src="' + (location.protocol + "//" + location.host + ":" + COCREATION.spreadsheet_server_port + "/s/" + COCREATION.sheetName) + '" style="height: 100%; width: 100%;"></iframe>');
 });*/
 
+room.splitScreenActive          = false;
+room.current_selected_container = null;
+room.current_dataset            = "";
+
 $(document).ready(function() {
 
-   /* window.addEventListener('cocreation-paper-card-controllet_delete', function (e) {
-        var c = confirm(OW.getLanguageText('cocreation', 'confirm_delete_datalet'));
-        if (c == true) {
-            $.post(ODE.ajax_coocreation_room_delete_datalet,
-                {
-                    roomId          : e.detail.roomId
-                },
-                function (data, status) {
-                    data = JSON.parse(data);
-                    if (data.status == "ok") {
-                    } else {
-                        OW.info(OW.getLanguageText('cocreation', 'room_delete_fail'));
-                    }
-                }
-            );
-        }
-    });*/
+    /* window.addEventListener('cocreation-paper-card-controllet_delete', function (e) {
+     var c = confirm(OW.getLanguageText('cocreation', 'confirm_delete_datalet'));
+     if (c == true) {
+     $.post(ODE.ajax_coocreation_room_delete_datalet,
+     {
+     roomId          : e.detail.roomId
+     },
+     function (data, status) {
+     data = JSON.parse(data);
+     if (data.status == "ok") {
+     } else {
+     OW.info(OW.getLanguageText('cocreation', 'room_delete_fail'));
+     }
+     }
+     );
+     }
+     });*/
 
     window.addEventListener('update-metadata', function(e)
-   {
-       room.persistMetadata(e.detail.metadata);
-   });
+    {
+        room.persistMetadata(e.detail.metadata);
+    });
 
     window.addEventListener('message', function (e) {
         switch (e.data) {
@@ -40,8 +44,8 @@ $(document).ready(function() {
                         room.$.datalets_slider.setDatalets([]);
                         setTimeout(function()
                             {
-                               room.$.datalets_slider.setDatalets(COCREATION.datalets);
-                               room.refreshImageSlider();
+                                room.$.datalets_slider.setDatalets(COCREATION.datalets);
+                                room.refreshImageSlider();
                             },
                             100);
                     }
@@ -88,22 +92,19 @@ $(document).ready(function() {
                 image_name    : image_name
             }
         )
-        .done(function (data) {
-            if(data.status) {
-               room.refreshImageSlider();
-            }
-        })
-        .fail(function(err){
-          console.log(err);
-        });
+            .done(function (data) {
+                if(data.status) {
+                    room.refreshImageSlider();
+                }
+            })
+            .fail(function(err){
+                console.log(err);
+            });
     });
 
 });
 
-room.splitScreenActive          = false;
-room.current_selected_container = null;
-
-room.handleSelectUIMode = function(mode){
+room.handleSelectUIMode = function(mode) {
     //Standard init
     room.$.spreadsheet.style.visibility = (!room.splitScreenActive) ?  "hidden" : "visible";
     room.$.metadata.style.visibility    = 'hidden';
@@ -161,7 +162,7 @@ room.handleSelectUIMode = function(mode){
 
 };
 
-room.handleSplitScreen = function(e){
+room.handleSplitScreen = function(e) {
     room.splitScreenActive  = e.checked;
 
     room.$.spreadsheet.style.visibility = "visible";
@@ -215,9 +216,7 @@ room.handleSplitScreen = function(e){
    }
 };
 
-room.current_dataset = "";
-
-room._publishDataset = function(){
+room._publishDataset = function() {
     $.post(ODE.ajax_coocreation_room_get_array_sheetdata,
         {
             sheetName: COCREATION.sheetName
@@ -231,7 +230,7 @@ room._publishDataset = function(){
     );
 };
 
-room.confirmDatasetPublication = function(){
+room.confirmDatasetPublication = function() {
     if(confirm(OW.getLanguageText('cocreation', 'privacy_message_datalet_published')))
         $.get(ODE.ajax_coocreation_room_get_html_note,
             function (data, status) {
@@ -258,8 +257,7 @@ room.confirmDatasetPublication = function(){
         );
 };
 
-room.refreshImageSlider = function()
-{
+room.refreshImageSlider = function() {
     $.get(COCREATION.sheet_images_url,
         function (data, status) {
             if (data.status) {
@@ -269,7 +267,7 @@ room.refreshImageSlider = function()
     );
 };
 
-room.loadDiscussion = function(){
+room.loadDiscussion = function() {
     $.post(OW.ajaxComponentLoaderRsp + "?cmpClass=COCREATION_CMP_DiscussionWrapper",
         {params: "[\"" + COCREATION.roomId + "\"]"},
         function (data, status) {
@@ -283,13 +281,8 @@ room.loadDiscussion = function(){
         });
 };
 
-////////////////////////////////////////////////
-/// METADATA MANAGEMENT
-///
+// METADATA MANAGEMENT
 
-/**
- * Sends metadata to server to save them.
- */
 room.persistMetadata = function (metadata) {
     $.post(ODE.ajax_coocreation_room_update_metadata,
         {
@@ -302,17 +295,13 @@ room.persistMetadata = function (metadata) {
     );
 };
 
-////////////////////////////////////////////////
-/// FUNCTION TO IMPORT DATASET FROM CKAN/SPOD.
-///
+// FUNCTION TO IMPORT DATASET FROM CKAN/SPOD.
 
 room._importDatasetFromSPOD = function () {
     this.previewFloatBoxImportFromSPOD = OW.ajaxFloatBox('COCREATION_CMP_ImportDatasetFromSpod', { message: 'loading ...' }, {top:'56px', width:'calc(100vw - 112px)', height:'calc(100vh - 112px)', title:'MyTitle'} );
-};//EndFunction.
+};
 
-////////////////////////////////////////////////
-/// FUNCTION UPLOAD DATASET ON ETHERSHEET.
-///
+// FUNCTION UPLOAD DATASET ON ETHERSHEET.
 
 room._uploadDatasetOnEthersheet = function (event, cb) {
     //Prepare CSV file.
@@ -345,7 +334,7 @@ room._uploadDatasetOnEthersheet = function (event, cb) {
     };
     xhttp.open("POST", targetUrl, true);
     xhttp.send(formData);
-};//EndFunction.
+};
 
 room._convertDatasetToCSV = function (_jsonData) {
     var _csvData = "";
@@ -369,8 +358,9 @@ room._convertDatasetToCSV = function (_jsonData) {
     }//EndForRows.
 
     return _csvData;
-};//EndFunction.
+};
 
+<<<<<<< HEAD
 ////////////////////////////////////////////////
 /// PRIVACY CHECK.
 ///
@@ -560,57 +550,46 @@ room._checkPrivacy_2 = function() {
 ////////////////////////////////////////////////
 /// FUNCTIONS TO PUBLISH ON CKAN.
 ///
+=======
+// FUNCTIONS TO PUBLISH ON CKAN.
+>>>>>>> 70b5d14d636b9c7ef8fe9e17471b3f4e479c48c1
 
 room._publishOnCkan = function () {
     this.dialogPublishOnCKAN = OW.ajaxFloatBox('COCREATION_CMP_PublishDatasetOnCkan', { message: 'loading ...' }, {top:'56px', width:'calc(100vw - 128px)', height:'calc(100vh - 128px)', iconClass:'ow_ic_lens', title:''} );
-};//EndFunction.
+};
 
 room._closeDialogPublishOnCKAN = function () {
     if(typeof room.dialogPublishOnCKAN != 'undefined')
         room.dialogPublishOnCKAN.close();
-};//EndFunction.
+};
 
 room.showPackage = function(package_id, cb) {
     const $platformUrl = COCREATION.ckan_platform_url_preference ; //"http://ckan.routetopa.eu";
     const $keyapi = COCREATION.ckan_api_key_preference;//"8febb463-f637-45b3-a6cb-d8957cdefbf3";
     var client = new CKANClient($platformUrl, $keyapi);
     client.showPackage(package_id, cb);
-};//EndFunction.
+};
 
 room.getSheetCSV = function () {
-    //Test get CSV.
-    return new Promise( (res, rej) =>
-    {
-        const xhttp = new XMLHttpRequest();
-        xhttp.onload = function (response) {
-            const _responseText = response.currentTarget.responseText;
-            const _responseCode = response.currentTarget.status;
-            console.log("CSV: " + _responseText);
+    return new Promise( (res, rej) => {
 
-            if (_responseCode / 100 == 2)
-                res(_responseText);
-            else
-                rej(_responseText);
-        };
-        xhttp.onerror = function (errResponse) {
-            rej(errResponse);
-        };
-        const _exportEndPoint = window.location.protocol + "//" + window.location.hostname + "/ethersheet/export_to_csv/" + COCREATION.sheetName;
-        xhttp.open("GET", _exportEndPoint, true);
-        xhttp.send();
+        $.ajax(ODE.ajax_coocreation_room_get_array_sheetdata, {
+            success: function(result) {
+                res(result);
+            },
+            error: function(result) {
+                rej(result);
+            }
+        });
+
     });
-};//EndFunction.
+};
 
 room.getSheetCSVFileInstance = async function () {
-    const BOM = '\ufeff'
-    var fileCSVData = await room.getSheetCSV();
-
-    if (fileCSVData.length > 0 && fileCSVData.charCodeAt(0) != 65279)
-        fileCSVData = BOM + fileCSVData;
-
-    const filename = room._generateRandomFileName();
+    let fileCSVData = await room.getSheetCSV();
+    let filename = room._generateRandomFileName();
     return room._convertStringToCSVFile(fileCSVData, filename);
-};//EndFunction.
+};
 
 room.updateOnCkan = async function(package_id, _jsonDataset, _jsonCocreationMetadata, notes, cb) {
 
@@ -719,36 +698,38 @@ room.updateOnCkan = async function(package_id, _jsonDataset, _jsonCocreationMeta
             cb({ success: false, errors: [ _errors ] });
         return;
     });
-};//EndFunction.
+};
 
 room._convertCSVToFile = function (_jsonData) {
     const _csvData = room._convertDatasetToCSV(_jsonData);
     const roomName = JSON.parse(COCREATION.info).name + "_" + Math.floor((Math.random()*1000) + 1);
     const fileCSVData = new File([_csvData], roomName + ".csv", { type: 'application/CSV' });
     return fileCSVData;
-};//EndFunction.
+};
 
 room._convertStringToCSVFile = function (sdata, filename) {
+    // todo --> To bom, or not to bom, that is the question (const BOM = '\ufeff')
+    // if (fileCSVData.length > 0 && fileCSVData.charCodeAt(0) != 65279)
+    //     fileCSVData = BOM + fileCSVData;
+    sdata = room._convertDatasetToCSV(JSON.parse(sdata));
     const fileCSVData = new File([sdata], filename + ".csv", { type: 'application/CSV' });
     return fileCSVData;
-};//EndFunction.
+};
 
 room._generateRandomFileName = function() {
     const roomName = JSON.parse(COCREATION.info).name + "_" + Math.floor((Math.random()*1000) + 1);
     return roomName;
-};//EndFunction.
+};
 
-room.prepareMetadataForCKAN = function(_jsonCocreationMetadata)
-{
+room.prepareMetadataForCKAN = function(_jsonCocreationMetadata) {
     switch(COCREATION.metadata_type)
     {
         case "1" : return room.prepareCOMMONCOREMetadataForCKAN(_jsonCocreationMetadata); break;
         case "2" : return room.prepareDCATMetadataForCKAN(_jsonCocreationMetadata); break;
     }
-};//EndFunction.
+};
 
-room.prepareCOMMONCOREMetadataForCKAN = function (_jsonCocreationMetadata)
-{
+room.prepareCOMMONCOREMetadataForCKAN = function (_jsonCocreationMetadata) {
     //Before to start the upload it checks the metadata.
     const $dataset_title = _jsonCocreationMetadata.title;
     const $dataset_description = _jsonCocreationMetadata.description;
@@ -824,8 +805,50 @@ room.prepareCOMMONCOREMetadataForCKAN = function (_jsonCocreationMetadata)
     return { success: true, metadata: metadata };
 };
 
-room.prepareDCATMetadataForCKAN = function (_jsonCocreationMetadata)
-{
+room.prepareDCATMetadataForCKAN = function (_jsonCocreationMetadata) {
+    // DCAT-AP_IT
+    let metadata = {
+        // self-generated
+        name:           COCREATION.sheetName,
+        identifier:     COCREATION.sheetName,
+        modified:       room.print_date(),
+
+        // metadata
+        title:          _jsonCocreationMetadata.dct_title,
+        description:    _jsonCocreationMetadata.dct_description,
+        theme:          _jsonCocreationMetadata['dcat_theme-dct_subject'].reduce((themes, e) => { themes.push(e.dcat_theme.value.split('_')[0]); return themes; },[]),
+        frequency:      _jsonCocreationMetadata.dct_accrualPeriodicity.value.split('_')[0],
+
+        // notes
+        notes:          _jsonCocreationMetadata.dct_description,
+
+        // on publication
+        owner_org:      COCREATION.ckan_def_organisation_preference,
+    };
+
+    let $defgroups = [];
+    // for(let k in COCREATION.ckan_def_groups_preference)
+    //     $defgroups.push({"name": COCREATION.ckan_def_groups_preference[k]});
+    COCREATION.ckan_def_groups_preference.each(function () {
+        $defgroups.push({"name": $(this).val()});
+    });
+
+    if($defgroups.length > 0)
+        metadata.groups = $defgroups;
+
+
+    for (let k in metadata)
+    {
+        let value = metadata[k];
+
+        if (value == null || typeof value == 'undefined' || (typeof value == 'string' && value.trim().length === 0))
+            return { success: false, errors: ['The "' + k + '" is a required field in the metadata.'] };
+    }
+
+    return { success: true, metadata: metadata };
+};
+
+room.prepareDCATMetadataForCKAN2 = function (_jsonCocreationMetadata) {
     //Before to start the upload it checks the metadata.
     const $dataset_title = _jsonCocreationMetadata.dct_title;
     const $dataset_description = _jsonCocreationMetadata.dct_description;
@@ -879,8 +902,7 @@ room.prepareDCATMetadataForCKAN = function (_jsonCocreationMetadata)
     return { success: true, metadata: metadata };
 };
 
-room.print_date = function()
-{
+room.print_date = function() {
     let D = new Date();
 
     let y = D.getFullYear();
@@ -892,11 +914,11 @@ room.print_date = function()
     let s = D.getSeconds() < 10 ? '0' +  D.getSeconds() : D.getSeconds();
     let ms = D.getMilliseconds() < 10 ? '0' +  D.getMilliseconds() : D.getMilliseconds();
 
-    return y+'-'+m+'-'+d+'T'+h+':'+mi+':'+s+'.'+ms+'000';
+    // return y+'-'+m+'-'+d+'T'+h+':'+mi+':'+s+'.'+ms+'000';
+    return y+'-'+m+'-'+d;
 };
 
-room.uploadOnCkan = async function (_jsonData, _jsonCocreationMetadata, notes, callbackUpload)
-{
+room.uploadOnCkan = async function (_jsonData, _jsonCocreationMetadata, notes, callbackUpload) {
     var fileCSVData;
 
     try {
@@ -975,7 +997,7 @@ room.uploadOnCkan = async function (_jsonData, _jsonCocreationMetadata, notes, c
         });//EndCreateResource.
 
     });//EndCreatePackage.
-};//EndFunction.
+};
 
 room.processCkanErrorMessage = function (_jsonResponse) {
     var _errors = "";
@@ -998,6 +1020,4 @@ room.processCkanErrorMessage = function (_jsonResponse) {
     }
 
     return _errors;
-};//EndFunction.
-
-//////////////////////////////////////////////////////////////////////////////
+};

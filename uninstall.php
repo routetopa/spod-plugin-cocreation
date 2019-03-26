@@ -1,3 +1,3 @@
 <?php
 
-OW::getRouter()->removeRoute('cocreationep.index');
+OW::getRouter()->removeRoute('cocreation.index');

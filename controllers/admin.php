@@ -5,6 +5,7 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
     const PREF_POCKAN_PLATFORM_URL = "ckan_platform_url";
     const PREF_POCKAN_API_KEY = "ckan_api_key";
     const PREF_POCKAN_DEF_ORGANISATION = "ckan_def_organisation";
+    const PREF_POCKAN_DEF_GROUPS = "ckan_def_groups";
 
     public function settings($params)
     {
@@ -138,6 +139,13 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
         $ckan_def_organisation_value = empty($preference) ? '' : $preference->defaultValue;
         $txtCKANDefOrganisation->setValue($ckan_def_organisation_value);
         $form->addElement($txtCKANDefOrganisation);
+
+        //PUBLISH ON CKAN - DEFAULT GROUPS
+        $txtCKANDefGroups = new TextField($this::PREF_POCKAN_DEF_GROUPS);
+        $preference = BOL_PreferenceService::getInstance()->findPreference($this::PREF_POCKAN_DEF_GROUPS);
+        $ckan_def_groups_value = empty($preference) ? '' : $preference->defaultValue;
+        $txtCKANDefGroups->setValue($ckan_def_groups_value);
+        $form->addElement($txtCKANDefGroups);
 
         $submit->setValue('SAVE');
         $form->addElement($submit);
@@ -300,6 +308,16 @@ class COCREATION_CTRL_Admin extends ADMIN_CTRL_Abstract
             $ckan_def_organisation_preference->sectionName = 'general';
             $ckan_def_organisation_preference->defaultValue = $data[$this::PREF_POCKAN_DEF_ORGANISATION];
             BOL_PreferenceService::getInstance()->savePreference($ckan_def_organisation_preference);
+
+            //PUBLISH ON CKAN: save the default groups.
+            $ckan_def_groups_preference = BOL_PreferenceService::getInstance()->findPreference($this::PREF_POCKAN_DEF_GROUPS);
+            if (empty($ckan_def_groups_preference)) $ckan_def_groups_preference = new BOL_Preference();
+
+            $ckan_def_groups_preference->key = $this::PREF_POCKAN_DEF_ORGANISATION;
+            $ckan_def_groups_preference->sortOrder = 7;
+            $ckan_def_groups_preference->sectionName = 'general';
+            $ckan_def_groups_preference->defaultValue = $data[$this::PREF_POCKAN_DEF_GROUPS];
+            BOL_PreferenceService::getInstance()->savePreference($ckan_def_groups_preference);
         }
     }
 
