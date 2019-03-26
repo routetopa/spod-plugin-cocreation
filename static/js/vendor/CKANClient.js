@@ -139,6 +139,7 @@ CKANClient.prototype = (function() {
         },//EndFunction.
 
         showPackage: function(package_id, callback) {
+            debugger
             var targetUrl = this.baseApiUrl + "package_show";
 
             const key = package_id.toLowerCase();
@@ -159,7 +160,7 @@ CKANClient.prototype = (function() {
             };
             xhttp.open("POST", targetUrl, true);
             xhttp.setRequestHeader('X-CKAN-API-Key', this.authToken);//Authentication.
-            xhttp.setRequestHeader('Content-Type', 'application/json');
+            // xhttp.setRequestHeader('Content-Type', 'application/json'); //aaaa
             xhttp.send(JSON.stringify(data));
         },//EndFunction.
 
