@@ -360,12 +360,9 @@ room._convertDatasetToCSV = function (_jsonData) {
     return _csvData;
 };
 
-<<<<<<< HEAD
-////////////////////////////////////////////////
-/// PRIVACY CHECK.
-///
+// FUNCTIONS TO PUBLISH ON CKAN.
 
-room._checkPrivacy = function(){
+room._checkPrivacy = function() {
     $.post(ODE.ajax_coocreation_room_get_array_sheetdata, { sheetName: COCREATION.sheetName },
         function (data, status) {
             room.current_dataset = data;
@@ -437,38 +434,38 @@ room._checkPrivacy_2 = function() {
             const _fieldkeys = Object.keys(_records[0]).map( (val) => { return { name: val } });
 
             /*
-            DONATO : Configure privacy checker.
-            const privacyCfg = new PrivacyConfigFactory();
-            const privacyChecker = new DataChecker(privacyCfg);
+             DONATO : Configure privacy checker.
+             const privacyCfg = new PrivacyConfigFactory();
+             const privacyChecker = new DataChecker(privacyCfg);
 
-            //Run privacy checker.
-            let evaLogs = privacyChecker.evaluate(_records, _fieldkeys);
-            //let evaLogs = privacyChecker.testTyposErrors(_records, _fieldkeys);
+             //Run privacy checker.
+             let evaLogs = privacyChecker.evaluate(_records, _fieldkeys);
+             //let evaLogs = privacyChecker.testTyposErrors(_records, _fieldkeys);
 
-            //Prepare data to be visualised.
-            let viewBuilder = new PrivacyReportViewBuilder();
-            let reportView = viewBuilder.build(evaLogs);
+             //Prepare data to be visualised.
+             let viewBuilder = new PrivacyReportViewBuilder();
+             let reportView = viewBuilder.build(evaLogs);
 
-            //Insert the styling in the dataset.
-            //"border: 1px solid #F44336; padding: 3px 12px;";
-            reportView.DATASET.forEach((colArrs, idx) => {
-                colArrs.forEach((value) => {
-                    console.log(value);
-                    value.style = "border: 1px solid #F44336; padding: 3px 12px;";
-                    value.tooltiptext = value.descr;
-                });
-            });
+             //Insert the styling in the dataset.
+             //"border: 1px solid #F44336; padding: 3px 12px;";
+             reportView.DATASET.forEach((colArrs, idx) => {
+             colArrs.forEach((value) => {
+             console.log(value);
+             value.style = "border: 1px solid #F44336; padding: 3px 12px;";
+             value.tooltiptext = value.descr;
+             });
+             });
 
-            const sdata = JSON.stringify(_records);//Mandatory because data-table-controllet takes stringyfied JSON.
-            const sstyling = JSON.stringify(reportView.DATASET);
+             const sdata = JSON.stringify(_records);//Mandatory because data-table-controllet takes stringyfied JSON.
+             const sstyling = JSON.stringify(reportView.DATASET);
 
-            debugger;
+             debugger;
 
-            //ODE.pluginPreview = "cocreation";
-            //previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_PublishDataset', {data: data} , {width:'90%', height:'80vh', iconClass:'ow_ic_lens', title:''});
-            //previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_PublishDataset', {data: data} , {top:'56px', width:'calc(100vw - 128px)', height:'calc(100vh - 184px)', iconClass:'ow_ic_lens', title:''});
-            previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_PrivacyChecker', { data: sdata, styling: sstyling } , {top:'56px', width:'calc(100vw - 128px)', height:'calc(100vh - 184px)', iconClass:'ow_ic_lens', title:''});
-            */
+             //ODE.pluginPreview = "cocreation";
+             //previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_PublishDataset', {data: data} , {width:'90%', height:'80vh', iconClass:'ow_ic_lens', title:''});
+             //previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_PublishDataset', {data: data} , {top:'56px', width:'calc(100vw - 128px)', height:'calc(100vh - 184px)', iconClass:'ow_ic_lens', title:''});
+             previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_PrivacyChecker', { data: sdata, styling: sstyling } , {top:'56px', width:'calc(100vw - 128px)', height:'calc(100vh - 184px)', iconClass:'ow_ic_lens', title:''});
+             */
 
             const typeAndMetatypeFactory = new TypeAndMetatypeConfigFactory();
             const datachecker = new DataChecker(typeAndMetatypeFactory);
@@ -510,9 +507,9 @@ room._checkPrivacy_2 = function() {
                         }
                     }
                     /*else{ //recognized metadatypes have a different style
-                        value.style = "border: 1px solid #6CC4EE; padding: 3px 12px;";
-                        value.tooltiptext = value.descr;
-                    }*/
+                     value.style = "border: 1px solid #6CC4EE; padding: 3px 12px;";
+                     value.tooltiptext = value.descr;
+                     }*/
                 });
             });
 
@@ -545,14 +542,6 @@ room._checkPrivacy_2 = function() {
         }
     );
 };
-
-
-////////////////////////////////////////////////
-/// FUNCTIONS TO PUBLISH ON CKAN.
-///
-=======
-// FUNCTIONS TO PUBLISH ON CKAN.
->>>>>>> 70b5d14d636b9c7ef8fe9e17471b3f4e479c48c1
 
 room._publishOnCkan = function () {
     this.dialogPublishOnCKAN = OW.ajaxFloatBox('COCREATION_CMP_PublishDatasetOnCkan', { message: 'loading ...' }, {top:'56px', width:'calc(100vw - 128px)', height:'calc(100vh - 128px)', iconClass:'ow_ic_lens', title:''} );

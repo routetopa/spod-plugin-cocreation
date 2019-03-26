@@ -598,8 +598,14 @@
         });
 
         $('#btnOpenDatasetOnCKAN').click(function () {
+            debugger
             var _url = COCREATION.ckan_platform_url_preference;
-            _url += "/dataset/" + $('#btnOpenDatasetOnCKAN').attr("package_id");
+            //todo
+            if (_url.indexOf('.regione.campania') > -1)
+                _url = 'http://test.dati.regione.campania.it/catalogo/datasetdetail/' + $('#btnOpenDatasetOnCKAN').attr("package_id");
+            else
+                _url += "/dataset/" + $('#btnOpenDatasetOnCKAN').attr("package_id");
+
             //const targetUrl = $txt_platform.value + '/dataset/edit/' + createdPackageName;
             window.open(_url, "_blank");
         });
@@ -874,6 +880,7 @@
 
     function get_groups()
     {
+        $("#inputDefGroups").empty();
         ["fondi", "lavoro", "spod", "turismo"].forEach((e)=>{
 //            $("#inputDefGroups").append(`<option value='${e}'>${e}</option>`);
             $("#inputDefGroups").append(`<li><input type="checkbox" name="${e}" value="${e}">${e}</li>`);

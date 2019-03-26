@@ -38,7 +38,7 @@ define(function(require, exports, module) {
 
 function CKANClient(platformUrl, token) {
     this.baseurl = platformUrl;
-    this.baseApiUrl = platformUrl + "/api/action/";
+    this.baseApiUrl = platformUrl + "/api/3/action/";
     this.authToken = token;
 }//EndFunction.
 
