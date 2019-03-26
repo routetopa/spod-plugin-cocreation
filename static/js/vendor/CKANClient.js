@@ -188,8 +188,6 @@ CKANClient.prototype = (function() {
                 _ckanPackageData.url = data.url;
                 _ckanPackageData.license_id = data.license_id;
 
-                debugger;
-
                 var _sCkanPackageData = JSON.stringify(_ckanPackageData);
                 $self.makeHTTPRequest(targetUrl, _sCkanPackageData, callback);
             });

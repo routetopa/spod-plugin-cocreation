@@ -309,15 +309,15 @@
 
         room.publishOnCkanNotes = { doPublish: false, notesContentHTML: null };
 
-        $("#inputPlatformURL").focusout('',get_organization);
+        $("#inputPlatformURL").focusout('', get_organization);
+        $("#inputPlatformURL").focusout('', get_groups);
 
         $("#publish_metadata_iframe").attr('src', COCREATION.metadata_url);
 
         get_organization();
+        get_groups();
 
         $('#btnPrev').click(function (e) {
-
-            debugger;
 
             if ($(e.currentTarget).hasClass('button-disabled')) return;//Button disabled, no action.
             var stepObject = null;
@@ -371,7 +371,7 @@
 
                 var _publishLogic = new PublishOnCkanLogic();
                 var validationReport = _publishLogic.validateCkanHeader(_keys);
-                
+
                 var _isCompatible = validationReport.errors.length == 0 && validationReport.warnings.length == 0;
                 if (_isCompatible) current_step++;//Jump this step.
                 else stepObject = validationReport;
@@ -379,7 +379,6 @@
 
             //Here you check the metadata.
             else if (current_step == 4) {
-                debugger;
                 document.activeElement.blur();
                 var success = performCheckMetadata();
                 if (!success) return;
@@ -451,6 +450,8 @@
                         COCREATION.ckan_platform_url_preference = document.querySelector('#inputPlatformURL').value;
                         COCREATION.ckan_api_key_preference = document.querySelector('#inputCkanAPIKey').value;
                         COCREATION.ckan_def_organisation_preference = document.querySelector('#inputDefOrganisation').value;
+//                        COCREATION.ckan_def_groups_preference = $('#inputDefGroups').val();
+                        COCREATION.ckan_def_groups_preference = $('#inputDefGroups input:checkbox:checked');
                     }
 
                     const $dataTablePreview = document.querySelector("#data_table_controllet");
@@ -653,19 +654,19 @@
         $('#cardChooseServer').show();
         $('#cardFooter').show();
     };//EndFunction.
-    
+
     function uiShowCKANCompatibility() {
         uiHideAll();
         $('#cardCKANCompatibility').show();
         $('#cardFooter').show();
     };//EndFunction.
-    
+
     function uiShowTable() {
         uiHideAll();
         $('#cardPreview').show();
         $('#cardFooter').show();
     };//EndFunction.
-    
+
     function uiShowMetadata() {
         uiHideAll();
         $('#cardMetadata').show();
@@ -871,6 +872,28 @@
         });
     }//EndFunction.
 
+    function get_groups()
+    {
+        ["fondi", "lavoro", "spod", "turismo"].forEach((e)=>{
+//            $("#inputDefGroups").append(`<option value='${e}'>${e}</option>`);
+            $("#inputDefGroups").append(`<li><input type="checkbox" name="${e}" value="${e}">${e}</li>`);
+        });
+
+        return
+
+        let ckan_url = $("#inputPlatformURL").val() + '/api/3/action/group_list';
+
+        $.get(ckan_url, (data)=>{
+            $("#inputDefGroups").empty();
+            data.result.forEach((e)=>{
+//                // list
+                $("#inputDefGroups").append(`<option value='${e}'>${e}</option>`);
+//                // checkbox
+//                $("#inputDefGroups").append(`<li><input type="checkbox" name="${e}" value="${e}">${e}</li>`);
+            });
+        });
+    }//EndFunction.
+
 </script>
 {/literal}
 
@@ -896,16 +919,18 @@
     <div id="btnNext" class="button-next">next<iron-icon icon="icons:chevron-right"></iron-icon></div>
 </div>
 
-
 <!-- STEP 1 - CHOOSE THE SERVER -->
 <div id="cardChooseServer">
     <div class="card-title">1. Choose on which CKAN to upload</div>
-    <div class="card-content">
+    <div class="card-content" style="margin-left: 8px;">
         {if $canPublishOnCKAN}
-        <paper-input id="inputPlatformURL" always-float-label label="CKAN Platform URL" value="{$PublishOnCKAN_platform_url}"></paper-input>
-        <paper-input id="inputCkanAPIKey" type="password" always-float-label label="CKAN API Key" value="{$PublishOnCKAN_api_key}"></paper-input>
-        <div style="font-family: 'Roboto', 'Noto', sans-serif; color: #737373; font-size: 12px; margin-bottom: 8px;">Organisation ID/Key</div>
+        <paper-input id="inputPlatformURL" always-float-label label="CKAN Platform URL" value="{$PublishOnCKAN_platform_url}" style="width: 230px;"></paper-input>
+        <paper-input id="inputCkanAPIKey" type="password" always-float-label label="CKAN API Key" value="{$PublishOnCKAN_api_key}" style="width: 230px;"></paper-input>
+        <div style="font-family: 'Roboto', 'Noto', sans-serif; color: #737373; font-size: 12px; margin-bottom: 8px;">Organisation</div> <!--ID/Key spa-->
         <select id="inputDefOrganisation"></select>
+        <div style="font-family: 'Roboto', 'Noto', sans-serif; color: #737373; font-size: 12px; margin: 8px 0;">Additional Groups</div>
+        <!--<select id="inputDefGroups" multiple style="width: 230px;"></select>-->
+        <ul id="inputDefGroups"></ul>
         {else}
         <p>You do not have permissions to upload a dataset on CKAN.</p>
         {/if}
