@@ -34,7 +34,9 @@ class COCREATION_CMP_AddMembers extends OW_Component
 
 
         $submit = new Submit('submit');
-        $submit->setValue('submit');
+        //$submit->setValue('submit');
+        $submit->setId('add_members_button');
+        $submit->setValue(OW::getLanguage()->text('cocreation', 'add_members'));
 
 
         $form->addElement($usersValue);

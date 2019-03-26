@@ -498,7 +498,8 @@
                             <iron-icon icon="social:person"></iron-icon>
                             <paper-item-body two-lines>
                                 <!--<div>{text key="cocreation+room_members_tab_label"}</div>-->
-                                <div>Members</div>
+                                <div>{text key="cocreation+room_members_tab_label"}</div>
+
                             </paper-item-body>
                         </paper-item>
 
@@ -548,11 +549,11 @@
 
                     <div class="separator"></div>
 
-                    <paper-button raised class="menu_button" title='Import' on-tap="_importDatasetFromSPOD">Import from SPOD</paper-button>
+                    <paper-button raised class="menu_button" title='{text key="cocreation+open_dataset_button_tooltip"}' on-tap="_importDatasetFromSPOD">{text key="cocreation+open_dataset_button_label"}</paper-button>
 
-                    <paper-button raised class="menu_button" title='{text key="cocreation+room_publish_dataset_tooltip"}' on-tap="_publishDataset">{text key="cocreation+publish_dataset_button_label"}</paper-button>
+                    <paper-button raised class="menu_button" title='{text key="cocreation+publish_dataset_internally_tooltip"}' on-tap="_publishDataset">{text key="cocreation+publish_dataset_button_label"}</paper-button>
                     {if $canPublishOnCKAN}
-                    <paper-button raised class="menu_button" title='{text key="cocreation+room_publish_on_ckan_tooltip"}' on-tap="_publishOnCkan">{text key="cocreation+publish_on_ckan_button_label"}</paper-button>
+                    <paper-button raised class="menu_button" title='{text key="cocreation+publish_on_ckan_button_tooltip"}' on-tap="_publishOnCkan">{text key="cocreation+publish_on_ckan_button_label"}</paper-button>
                     {/if}
 
                 </div>
