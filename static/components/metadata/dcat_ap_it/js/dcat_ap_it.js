@@ -2,456 +2,23 @@ METADATA = {
     form:null
 };
 
-METADATA.init = function()
-{
+METADATA.init = function() {
     METADATA.create_form();
 };
 
-METADATA.realtime_metadata = function (data)
-{
+METADATA.realtime_metadata = function (data) {
     METADATA.form.submission = {
         data: JSON.parse(data)
     };
 };
 
-METADATA.loadTheme = function(theme)
-{
+METADATA.loadTheme = function(theme) {
     if(!theme) return;
     return THEMES[theme];
 };
 
-METADATA.create_form = function()
-{
-    let components = [
-
-        {
-            theme:'primary',
-            type: 'panel',
-            key:'mandatory_fields',
-            components: [
-                // TITLE
-                {
-                    type: 'textfield',
-                    key: 'dct_title',
-                    input: true,
-                    //multiple:true,
-                    validate: { required: true }
-                },
-
-                // DESCRIPTION
-                {
-                    type: 'textarea', /**/
-                    defaultValue: '',
-                    key: 'dct_description',
-                    input: true,
-                    //multiple: true,
-                    validate: { required: true }
-                },
-
-                // THEME
-                {
-                    input: true,
-                    components: [{
-                        type: "select",
-                        key: "dcat_theme",
-                        data: {
-                            custom: "values = METADATA.loadTheme('main_theme_' + parent.ODE.user_language)"
-                        },
-                        dataSrc: "custom",
-                        template: "<span>{{ item.label }}</span>",
-                        multiple: false,
-                        input: true,
-                        validate: { required: true }
-                    } ,
-                        {
-                            type: "select",
-                            key: "dct_subject",
-                            data: {
-                                custom: "values = METADATA.loadTheme(data.dcat_theme.value)"
-                            },
-                            dataSrc: "custom",
-                            template: "<span>{{ item.label }}</span>",
-                            multiple: true,
-                            refreshOn: 'dct_subject',
-                            input: true,
-                            validate: { required: true }
-                        }],
-                    tableView: true,
-                    key: 'dcat_theme-dct_subject',
-                    type: 'datagrid'
-                },
-
-                // ACCRUAL PERIODICITY
-                {
-                    type: 'select',
-                    key: 'dct_accrualPeriodicity',
-                    template: '{{ item.label }}',
-                    multiple: false,
-                    dataSrc: "custom",
-                    input: true,
-                    data: {
-                        custom: "values = FREQUENCY.frequency_" + parent.ODE.user_language
-                    },
-                    validate: { required: true },
-                }
-
-            ]
-        },
-
-        // PUBLISHER
-        {
-            type: 'textfield',
-            key: 'dct_publisher',
-            input: true
-        },
-
-        // IDENTIFIER
-        {
-            type: 'textfield',
-            key: 'dct_identifier',
-            input: true
-        },
-
-        // OTHER IDENTIFIER
-        {
-            input: true,
-            components: [
-                {
-                    type: 'textfield',
-                    key: 'othid_identifier',
-                    input: true
-                },
-                {
-                    type: 'textfield',
-                    key: 'othid_organization_name',
-                    input: true
-                },
-                {
-                    type: 'textfield',
-                    key: 'othid_organization_identifier',
-                    input: true
-                }],
-            key: 'adms_identifier',
-            type: 'datagrid'
-        },
-
-        // PUBLISHER
-        /*{
-            input: false,
-            columns: [
-                {
-                    components: [
-                        {
-                            type: 'textfield',
-                            key: 'dct_publisher',
-                            input: true
-                        }
-                    ]
-                },
-                {
-                    components: [
-                        {
-                            type: 'textfield',
-                            key: 'dataset_ipa_iva',
-                            input: true
-                        }
-                    ]
-                }
-            ],
-            type: 'columns',
-            key: 'columns'
-        },*/
-
-        // ISSUED DATE
-        {
-            type: 'datetime',
-            key: 'dct_issued',
-            datepickerMode: 'day',
-            enableDate: true,
-            enableTime: false,
-            format: 'dd-MM-yyyy',
-            input: true
-        },
-
-        // MODIFIED DATE
-        /*{
-            type: 'datetime',
-            key: 'dct_modified',
-            datepickerMode: 'day',
-            enableDate: true,
-            enableTime: false,
-            format: 'dd-MM-yyyy',
-            input: true
-        },*/
-
-        // SPATIAL
-        {
-            type: "select",
-            key: "dct_spatial",
-            data: {
-                custom : "values = COVERAGE.coverage_" + parent.ODE.user_language
-            },
-            dataSrc: "custom",
-            template: "<span>{{ item.label }}</span>",
-            multiple: true,
-            input: true
-        },
-
-        // Geographical Name
-        {
-            input: false,
-            columns: [
-                {
-                    components: [
-                        {
-                            input: true,
-                            tableView: true,
-                            inputType: 'text',
-                            inputMask: '',
-                            key: 'locn_geographicalName',
-                            multiple: false,
-                            defaultValue: '',
-                            protected: false,
-                            unique: false,
-                            persistent: true,
-                            type: 'textfield'
-                        }
-                    ]
-                },
-                {
-                    components: [
-                        {
-                            input: true,
-                            tableView: true,
-                            inputType: 'text',
-                            inputMask: '',
-                            key: 'dcatapit_geographicalIdentifier',
-                            multiple: false,
-                            defaultValue: '',
-                            protected: false,
-                            unique: false,
-                            persistent: true,
-                            type: 'textfield'
-                        }
-                    ]
-                }
-            ],
-            type: 'columns',
-            key: 'columns'
-        },
-
-        // LANGUAGE
-        {
-            type: "select",
-            key: "dct_language",
-            data: {
-                values: [
-                    {
-                        value: "it",
-                        label: "Italiano"
-                    },
-                    {
-                        value: "en",
-                        label: "English"
-                    },
-                    {
-                        value: "fr",
-                        label: "Français"
-                    },
-                    {
-                        value: "de",
-                        label: "Deutsch"
-                    },
-                    {
-                        value: "en",
-                        label: "Nederlands"
-                    },
-                ]
-            },
-            validate: {
-                required: false
-            },
-            dataSrc: "values",
-            template: "<span>{{ item.label }}</span>",
-            multiple: true,
-            input: true
-        },
-
-        // PERIOD OF TIME - (INIZIO - FINE)
-        {
-            input: true,
-            tree: true,
-            components: [{
-                type: 'datetime',
-                key: 'dct_period_of_time-schema_start_date',
-                datepickerMode: 'day',
-                enableDate: true,
-                enableTime: false,
-                format: 'dd-MM-yyyy',
-                input: true
-            }, {
-                type: 'datetime',
-                key: 'dct_period_of_time-schema_end_date',
-                datepickerMode: 'day',
-                enableDate: true,
-                enableTime: false,
-                format: 'dd-MM-yyyy',
-                input: true
-            }],
-            tableView: true,
-            key: 'dct_temporal',
-            type: 'datagrid'
-        },
-
-        // RIGHTS HOLDER
-        {
-            type: 'textfield',
-            key: 'dct_rights_holder',
-            input: true
-        },
-
-        // VERSION
-        {
-            type: 'textfield',
-            key: 'owl_versionInfo',
-            input: true
-        },
-
-        // CONFORMS TO (IDENTIFICATORE - TITOLO - DESCRIZIONE - URI)
-        {
-            input: true,
-            components: [{
-                type: 'textfield',
-                key: 'dct_standards-dct_identifier',
-                input: true
-            }, {
-                type: 'textfield',
-                key: 'dct_standards-dct_title',
-                input: true
-            },
-                {
-                    type: 'textfield',
-                    key: 'dct_standards-dct_description',
-                    input: true
-                },
-                {
-                    type: 'textfield',
-                    key: 'dct_standards-referenceDocumentation_URI',
-                    input: true
-                }],
-            key: 'dct_conformsTo',
-            type: 'datagrid'
-        },
-
-        // CONTACT POINT
-        {
-            type: 'textfield',
-            key: 'dcat_contactPoint',
-            input: true
-        },
-
-        // CREATOR
-        {
-            input: true,
-            components: [
-                {
-                    type: 'textfield',
-                    key: 'foaf_agent-dct_identifier',
-                    input: true
-                },
-                {
-                    type: 'textfield',
-                    key: 'foaf_agent-foaf_name',
-                    input: true
-                }],
-            key: 'foaf_agent-dct_identifier-foaf_agent-foaf_name',
-            type: 'datagrid'
-        },
-
-        // KEYWORD
-        {
-            type: 'textfield',
-            key: 'dcat_keyword',
-            input: true
-        },
-
-        // LICENSE
-        {
-            type: 'select',
-            key: 'dct_license',
-            template: '{{ item.label }}',
-            multiple: false,
-            dataSrc: "custom",
-            input: true,
-            data: {
-                custom: "values =  LICENSE.license_" + parent.ODE.user_language
-            },
-        },
-
-        // AUTHOR
-        {
-            type: 'textfield',
-            key: 'dct_creator',
-            input: true
-        },
-
-        // DISTRIBUTION TITLE
-        {
-            type: 'textfield',
-            key: 'distribution_dct_title',
-            input: true
-        },
-
-        // DISTRIBUTION DESCRIPTION
-        {
-            type: 'textarea',
-            key: 'distribution_dct_description',
-            defaultValue: '',
-            input: true
-        },
-
-        // DISTRIBUTION FORMAT
-        {
-            type: 'select',
-            key: 'dct_format',
-            template: '{{ item.label }}',
-            multiple: false,
-            dataSrc: 'values',
-            input: true,
-            data: {
-                custom: '',
-                resource: '',
-                url: '',
-                json: '',
-                values: [
-                    {
-                        label: 'CSV',
-                        value: 'csv'
-                    },
-                    {
-                        label: 'XML',
-                        value: 'xml'
-                    }
-                ]
-            }
-        },
-
-        // BYTE SIZE
-        {
-            type: 'textfield',
-            key: 'dcat_byteSize',
-            defaultValue: '',
-            input: true
-        },
-
-        // SUBMIT
-        {
-            type: 'button',
-            action: 'submit',
-            label: 'Submit',
-            theme: 'primary'
-        }
-    ];
+METADATA.create_form = function() {
+    let components = METADATA.getComponents();
 
     METADATA.add_info(components);
 
@@ -496,8 +63,7 @@ METADATA.create_form = function()
     });
 };
 
-METADATA.add_info = function(components)
-{
+METADATA.add_info = function(components) {
     let ln = parent.ODE.user_language || 'en';
 
     components.forEach((e)=>
@@ -514,6 +80,402 @@ METADATA.add_info = function(components)
             e.title = dcat_ap_it_ln[e.key + '-title-' + ln];
     })
 
+};
+
+METADATA.getComponents = function() {
+    return [
+        // TABS
+        {
+            type: "tabs",
+            components: [
+                {
+                    key: "dct_tab1",
+                    label: "Informazioni",
+                    components: METADATA.getTab1Components()
+                },
+                {
+                    key: "dct_tab2",
+                    label: "Classificazione",
+                    components: METADATA.getTab2Components()
+                },
+                {
+                    key: "dct_tab3",
+                    label: "Organizzazioni",
+                    components: METADATA.getTab3Components()
+                },
+                {
+                    key: "dct_tab4",
+                    label: "Riferimenti Temporali",
+                    components: METADATA.getTab4Components()
+                },
+                {
+                    key: "dct_tab5",
+                    label: "Riferimenti Spaziali",
+                    components: METADATA.getTab5Components()
+                },
+                {
+                    key: "dct_tab6",
+                    label: "Standards",
+                    components: METADATA.getTab6Components()
+                },
+                {
+                    key: "dct_tab7",
+                    label: "Datasets Collegati",
+                    components: METADATA.getTab7Components()
+                },
+                {
+                    key: "dct_tab8",
+                    label: "Informazioni supplementari",
+                    components: METADATA.getTab8Components()
+                }
+            ]
+        },
+
+        // SUBMIT
+        {
+            type: 'button',
+            label: 'Salva',
+            action: 'submit',
+            theme: 'primary'
+        }
+    ]
+};
+
+METADATA.getTab1Components = function() {
+    return [
+        // TITLE
+        {
+            key: 'dct_title',
+            type: 'textfield',
+            validate: { required: true }
+        },
+
+        // DESCRIPTION
+        {
+            key: 'dct_description',
+            type: 'textarea',
+            validate: { required: true }
+        },
+
+        // IDENTIFIER
+        {
+            key: 'dct_identifier',
+            type: 'textfield'
+        },
+
+        // LANGUAGE
+        {
+            key: "dct_language",
+            type: "select",
+            data: {
+                values: [
+                    {
+                        value: "it",
+                        label: "Italiano"
+                    },
+                    {
+                        value: "en",
+                        label: "English"
+                    },
+                    {
+                        value: "fr",
+                        label: "Français"
+                    },
+                    {
+                        value: "de",
+                        label: "Deutsch"
+                    },
+                    {
+                        value: "ne",
+                        label: "Nederlands"
+                    }
+                ]
+            },
+            dataSrc: "values",
+            multiple: true
+        },
+
+        // LICENSE
+        {
+            key: 'dct_license',
+            type: 'select',
+            data: {
+                custom: "values =  LICENSE.license_" + parent.ODE.user_language
+            },
+            dataSrc: "custom",
+            multiple: false
+        },
+
+        //todo VISIBILITA
+
+        // VERSION
+        {
+            key: 'owl_versionInfo',
+            type: 'textfield'
+        }
+    ]
+};
+
+METADATA.getTab2Components = function() {
+    return [
+        // THEME
+        {
+            key: 'dcat_theme-dct_subject',
+            type: 'datagrid',
+            components: [
+                {
+                    key: "dcat_theme",
+                    type: "select",
+                    data: {
+                        custom: "values = METADATA.loadTheme('main_theme_' + parent.ODE.user_language)"
+                    },
+                    dataSrc: "custom",
+                    validate: { required: true }
+                },
+                {
+                    key: "dct_subject",
+                    type: "select",
+                    data: {
+                        custom: "values = METADATA.loadTheme(row.dcat_theme.value)"
+                    },
+                    dataSrc: "custom",
+                    refreshOn: 'dcat_theme',
+                    multiple: true
+                }
+            ]
+        },
+
+        // KEYWORD
+        {
+            key: 'dcat_keyword',
+            type: 'textfield'
+        }
+    ]
+};
+
+METADATA.getTab3Components = function() {
+    return [
+        // CREATOR
+        {
+            key: 'foaf_agent-dct_identifier-foaf_agent-foaf_name',
+            type: 'datagrid',
+            components: [
+                {
+                    key: 'foaf_agent-foaf_name',
+                    type: 'textfield'
+                },
+                {
+                    key: 'foaf_agent-dct_identifier',
+                    type: 'textfield'
+                }
+            ]
+        }
+    ]
+};
+
+METADATA.getTab4Components = function() {
+    return [
+        // ISSUED DATE
+        {
+            key: 'dct_issued',
+            type: 'datetime',
+            format: 'dd-MM-yyyy',
+            enableTime: false
+        },
+
+        // MODIFIED DATE
+        // {
+        //     key: 'dct_modified',
+        //     type: 'datetime',
+        //     format: 'dd-MM-yyyy',
+        //     enableTime: false,
+        //     validate: { required: true }
+        // },
+
+        // ACCRUAL PERIODICITY
+        {
+            key: 'dct_accrualPeriodicity',
+            type: 'select',
+            data: {
+                custom: "values = FREQUENCY.frequency_" + parent.ODE.user_language
+            },
+            dataSrc: "custom",
+            multiple: false,
+            validate: { required: true }
+        },
+
+        // PERIOD OF TIME - (INIZIO - FINE)
+        {
+            key: 'dct_temporal',
+            type: 'datagrid',
+            components: [
+                {
+                    key: 'dct_period_of_time-schema_start_date',
+                    type: 'datetime',
+                    format: 'dd-MM-yyyy',
+                    enableTime: false
+                },
+                {
+                    key: 'dct_period_of_time-schema_end_date',
+                    type: 'datetime',
+                    format: 'dd-MM-yyyy',
+                    enableTime: false
+                }
+            ]
+        }
+    ]
+};
+
+METADATA.getTab5Components = function() {
+    return [
+        // SPATIAL
+        {
+            key: "dct_spatial",
+            type: "select",
+            data: {
+                custom : "values = COVERAGE.coverage_" + parent.ODE.user_language
+            },
+            dataSrc: "custom",
+            multiple: true
+        },
+
+        // Geographical Name
+        {
+            key: 'columns',
+            type: 'columns',
+            columns: [
+                {
+                    components: [
+                        {
+                            key: 'locn_geographicalName',
+                            type: 'textfield'
+                        }
+                    ]
+                },
+                {
+                    components: [
+                        {
+                            key: 'dcatapit_geographicalIdentifier',
+                            type: 'textfield'
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+};
+
+METADATA.getTab6Components = function() {
+    return [
+        // CONFORMS TO (IDENTIFICATORE - TITOLO - DESCRIZIONE - URI)
+        {
+            key: 'dct_conformsTo',
+            type: 'datagrid',
+            components: [
+            {
+                key: 'dct_standards-dct_identifier',
+                type: 'textfield'
+            }, {
+                key: 'dct_standards-dct_title',
+                type: 'textfield'
+            }, {
+                key: 'dct_standards-dct_description',
+                type: 'textfield'
+            },
+            {
+                key: 'dct_standards-referenceDocumentation_URI',
+                type: 'textfield'
+            }]
+        }
+    ]
+};
+
+METADATA.getTab7Components = function() {
+    return [
+        // OTHER IDENTIFIER
+        {
+            key: 'adms_identifier',
+            type: 'datagrid',
+            components: [
+            {
+                key: 'othid_identifier',
+                type: 'textfield'
+            },
+            {
+                key: 'othid_organization_name',
+                type: 'textfield'
+            },
+            {
+                key: 'othid_organization_identifier',
+                type: 'textfield'
+            }]
+        }
+    ]
+};
+
+METADATA.getTab8Components = function() {
+    return [
+        // AUTHOR
+        {
+            key: 'dct_creator',
+            type: 'textfield'
+        },
+
+        // PUBLISHER
+        {
+            key: 'dct_publisher',
+            type: 'textfield'
+        },
+
+        // RIGHTS HOLDER
+        {
+            key: 'dct_rights_holder',
+            type: 'textfield'
+        },
+
+        // CONTACT POINT
+        {
+            key: 'dcat_contactPoint',
+            type: 'textfield'
+        },
+
+        // DISTRIBUTION TITLE
+        {
+            key: 'distribution_dct_title',
+            type: 'textfield'
+        },
+
+        // DISTRIBUTION DESCRIPTION
+        {
+            key: 'distribution_dct_description',
+            type: 'textarea'
+        },
+
+        // DISTRIBUTION FORMAT
+        {
+            key: 'dct_format',
+            type: 'select',
+            data: {
+                values: [
+                    {
+                        label: 'CSV',
+                        value: 'csv'
+                    },
+                    {
+                        label: 'XML',
+                        value: 'xml'
+                    }
+                ]
+            },
+            dataSrc: 'values'
+        },
+
+        // BYTE SIZE
+        {
+            key: 'dcat_byteSize',
+            type: 'textfield'
+        }
+    ]
 };
 
 METADATA.init();

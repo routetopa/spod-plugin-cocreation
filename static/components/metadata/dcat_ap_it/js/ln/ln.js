@@ -2,6 +2,16 @@ dcat_ap_it_ln = [];
 
 /******** IT ********/
 
+/* todo tabs */
+dcat_ap_it_ln["dct_tab1-label-it"] = "Informazioni";
+dcat_ap_it_ln["dct_tab2-label-it"] = "Classificazione";
+dcat_ap_it_ln["dct_tab3-label-it"] = "Organizzazioni";
+dcat_ap_it_ln["dct_tab4-label-it"] = "Riferimenti Temporali";
+dcat_ap_it_ln["dct_tab5-label-it"] = "Riferimenti Spaziali";
+dcat_ap_it_ln["dct_tab6-label-it"] = "Standards";
+dcat_ap_it_ln["dct_tab7-label-it"] = "Datasets Collegati";
+dcat_ap_it_ln["dct_tab8-label-it"] = "Informazioni supplementari";
+
 /* mandatory_fields */
 dcat_ap_it_ln["mandatory_fields-title-it"] = "Campi obbligatori";
 
