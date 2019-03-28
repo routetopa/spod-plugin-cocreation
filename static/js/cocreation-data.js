@@ -381,7 +381,7 @@ room._checkPrivacy = function() {
             const privacyChecker = new DataChecker(privacyCfg);
 
             //Run privacy checker.
-            let evaLogs = privacyChecker.evaluate(_records, _fieldkeys);
+            let evaLogs = privacyChecker.evaluate(_records, _fieldkeys, { language: ODE.user_language });
             console.log(evaLogs);
             //let evaLogs = privacyChecker.testTyposErrors(_records, _fieldkeys);
 
@@ -389,18 +389,17 @@ room._checkPrivacy = function() {
             let viewBuilder = new PrivacyReportViewBuilder();
             let reportView = viewBuilder.buildDatatypeAndMetatype(evaLogs, false);
             console.log(reportView)
-            let reportColumnStats= viewBuilder.buildColumnStats(evaLogs);
+            let reportColumnStats= viewBuilder.buildColumnStats(evaLogs, false, { language: ODE.user_language });
 
             //Insert the styling in the dataset.
             //"border: 1px solid #F44336; padding: 3px 12px;";
             reportView.DATASET.forEach((colArrs, idx) => {
                 colArrs.forEach((value) => {
-                    console.log(value);
                     if(value.datatype.name == 'NULL'){
                         value.style = "border: 1px solid #F44336; padding: 3px 12px;";
+                        value.tooltiptext = value.descr;
                     }
 
-                    // value.tooltiptext = value.descr;
                 });
             });
 
@@ -420,9 +419,7 @@ room._checkPrivacy_2 = function() {
     $.post(ODE.ajax_coocreation_room_get_array_sheetdata, { sheetName: COCREATION.sheetName },
         function (data, status) {
             room.current_dataset = data;
-            console.log(data);
             const _records = JSON.parse(data);
-            console.log(_records);
             //const _records = eval("json=" + data);
 
             //Check whether the array is empty.
@@ -471,7 +468,7 @@ room._checkPrivacy_2 = function() {
             const datachecker = new DataChecker(typeAndMetatypeFactory);
 
             //Datatype and metadatatype inference
-            let evaLogs = datachecker.askForEvaluation(_records, _fieldkeys);
+            let evaLogs = datachecker.askForEvaluation(_records, _fieldkeys, { language: ODE.user_language });
 
             //Prepare data to be visualised.
             let viewBuilder = new PrivacyReportViewBuilder();
@@ -513,7 +510,7 @@ room._checkPrivacy_2 = function() {
                 });
             });
 
-            let reportColumnStats= viewBuilder.buildColumnStats(evaLogs);
+            let reportColumnStats= viewBuilder.buildColumnStats(evaLogs, true, { language: ODE.user_language });
 
             debugger
             let schema = {};
@@ -529,7 +526,7 @@ room._checkPrivacy_2 = function() {
                     schema[reportColumnStats.types[column_name].type].push(column_name);
                 }
             }
-            let structuralPrivacyBreaches = datachecker.testStructuralPrivacyBreaches(schema);
+            let structuralPrivacyBreaches = datachecker.testStructuralPrivacyBreaches(schema, { language: ODE.user_language });
             console.log(structuralPrivacyBreaches);
 
             let info = [_records, reportColumnStats];
