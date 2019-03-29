@@ -1,16 +1,364 @@
-const messages = {
-    "contentPrivacyBreach_CF" : "Dato personale secondo il GDPR 2016/679 Art. 4",
-    "contentPrivacyBreach_EMAIL" : "Dato personale secondo il GDPR 2016/679 Art. 4",
-    "contentPrivacyBreach_IBAN" : "Dato personale secondo il GDPR 2016/679 Art. 4",
-    "contentPrivacyBreach_PHONE" : "Dato personale secondo il GDPR 2016/679 Art. 4",
-    "contentPrivacyBreach_MOBILEPHONE" : "Dato personale secondo il GDPR 2016/679 Art. 4",
-    "contentPrivacyBreach_ZIPCODE_DATE_GENDER" : "Quasi-identifier (se la Data è la data di nascita)",
-    "contentPrivacyBreach_NAME_SURNAME_LAT_LONG" : "Dato personale secondo il GDPR 2016/679 Art. 4",
-    "contentPrivacyBreach_NAME_SURNAME_ADDRESS" : "Dato personale secondo il GDPR 2016/679 Art. 4",
-    "contentPrivacyBreach_NAME_SURNAME_RELIGION" : "Categoria particolare di dato personale secondo il GDPR 2016/679 Art. 9",
-    "contentPrivacyBreach_CF_LAT_LONG" : "Dato personale secondo il GDPR 2016/679 Art. 4",
-    "contentPrivacyBreach_CF_ADDRESS" : "Dato personale secondo il GDPR 2016/679 Art. 4",
-    "contentPrivacyBreach_CF_RELIGION" : "Categoria particolare di dato personale secondo il GDPR 2016/679 Art. 9",
+const QUALICY_LNG = {
+
+    "contentPrivacyBreach_CF" : {
+        "IT": "Dato personale secondo il GDPR 2016/679 Art. 4",
+        "EN": "Personal data according to GDPR 2016/679 Art. 4",
+        "FR": "Personal data according to GDPR 2016/679 Art. 4",
+        "NL": "Personal data according to GDPR 2016/679 Art. 4",
+    },
+    "contentPrivacyBreach_EMAIL" : {
+        "IT": "Dato personale secondo il GDPR 2016/679 Art. 4",
+        "EN": "Personal data according to GDPR 2016/679 Art. 4",
+        "FR": "Personal data according to GDPR 2016/679 Art. 4",
+        "NL": "Personal data according to GDPR 2016/679 Art. 4",
+    },
+    "contentPrivacyBreach_IBAN" : {
+        "IT": "Dato personale secondo il GDPR 2016/679 Art. 4",
+        "EN": "Personal data according to GDPR 2016/679 Art. 4",
+        "FR": "Personal data according to GDPR 2016/679 Art. 4",
+        "NL": "Personal data according to GDPR 2016/679 Art. 4",
+    },
+    "contentPrivacyBreach_PHONE" : {
+        "IT": "Dato personale secondo il GDPR 2016/679 Art. 4",
+        "EN": "Personal data according to GDPR 2016/679 Art. 4",
+        "FR": "Personal data according to GDPR 2016/679 Art. 4",
+        "NL": "Personal data according to GDPR 2016/679 Art. 4",
+    },
+    "contentPrivacyBreach_MOBILEPHONE" : {
+        "IT": "Dato personale secondo il GDPR 2016/679 Art. 4",
+        "EN": "Personal data according to GDPR 2016/679 Art. 4",
+        "FR": "Personal data according to GDPR 2016/679 Art. 4",
+        "NL": "Personal data according to GDPR 2016/679 Art. 4",
+    },
+    "contentPrivacyBreach_ZIPCODE_DATE_GENDER" : {
+        "IT": "Quasi-identifier (se la Data è la data di nascita)",
+        "EN": "Quasi-identifier (if the Date is Date of Birth",
+        "FR": "Quasi-identifier (if the Date is Date of Birth",
+        "NL": "Quasi-identifier (if the Date is Date of Birth",
+    },
+    "contentPrivacyBreach_NAME_SURNAME_LAT_LONG" : {
+        "IT": "Dato personale secondo il GDPR 2016/679 Art. 4",
+        "EN": "Personal data according to GDPR 2016/679 Art. 4",
+        "FR": "Personal data according to GDPR 2016/679 Art. 4",
+        "NL": "Personal data according to GDPR 2016/679 Art. 4",
+    },
+    "contentPrivacyBreach_NAME_SURNAME_ADDRESS" : {
+        "IT": "Dato personale secondo il GDPR 2016/679 Art. 4",
+        "EN": "Personal data according to GDPR 2016/679 Art. 4",
+        "FR": "Personal data according to GDPR 2016/679 Art. 4",
+        "NL": "Personal data according to GDPR 2016/679 Art. 4",
+    },
+    "contentPrivacyBreach_NAME_SURNAME_RELIGION" : {
+        "IT": "Categoria particolare di dato personale secondo il GDPR 2016/679 Art. 9",
+        "EN": "Particular category of personal data according to GDPR 2016/679 Art. 4",
+        "FR": "Particular category of personal data according to GDPR 2016/679 Art. 4",
+        "NL": "Particular category of personal data according to GDPR 2016/679 Art. 4",
+    },
+    "contentPrivacyBreach_CF_LAT_LONG" : {
+        "IT": "Dato personale secondo il GDPR 2016/679 Art. 4",
+        "EN": "Personal data according to GDPR 2016/679 Art. 4",
+        "FR": "Personal data according to GDPR 2016/679 Art. 4",
+        "NL": "Personal data according to GDPR 2016/679 Art. 4",
+    },
+    "contentPrivacyBreach_CF_ADDRESS" : {
+        "IT": "Dato personale secondo il GDPR 2016/679 Art. 4",
+        "EN": "Personal data according to GDPR 2016/679 Art. 4",
+        "FR": "Personal data according to GDPR 2016/679 Art. 4",
+        "NL": "Personal data according to GDPR 2016/679 Art. 4",
+    },
+    "contentPrivacyBreach_CF_RELIGION" :  {
+        "IT": "Categoria particolare di dato personale secondo il GDPR 2016/679 Art. 9",
+        "EN": "Particular category of personal data according to GDPR 2016/679 Art. 4",
+        "FR": "Particular category of personal data according to GDPR 2016/679 Art. 4",
+        "NL": "Particular category of personal data according to GDPR 2016/679 Art. 4",
+    },
+
+    "cell_declaretype" : {
+        "EN": "the cell is of type '%TYPE'",
+        "IT": "la cella è di tipo '%TYPE'",
+        "FR": "the cell is of type '%TYPE'",
+        "NL": "the cell is of type '%TYPE'",
+    },
+
+    "cell_typo" : {
+        "EN": "The cell could contain a typo. Possible corrections:",
+        "IT": "La cella potrebbe contenere un typo. Correzioni proposte:",
+        "FR": "The cell could contain a typo. Possible corrections:",
+        "NL": "The cell could contain a typo. Possible corrections:",
+    },
+
+    "cell_declaremetatype" : {
+        "EN": "the cell is of metatype '%METATYPE'",
+        "IT": "la cella è di metatipo '%METATYPE'",
+        "FR": "the cell is of metatype '%METATYPE'",
+        "NL": "the cell is of metatype '%METATYPE'",
+    },
+
+    "col_metatype" : {
+        "EN": "the column '%COL_NAME' is of metatype '%COL_METATYPE'",
+        "IT": "la colonna '%COL_NAME' è di metatipo '%COL_METATYPE'",
+        "FR": "the column '%COL_NAME' is of metatype '%COL_METATYPE'",
+        "NL": "the column '%COL_NAME' is of metatype '%COL_METATYPE'",
+    },
+    "col_notofmetatype_singular": {
+        "EN": "a value is not '%COL_METATYPE'",
+        "IT": "un valore non è un '%COL_METATYPE'",
+        "FR": "La valeur n'est pas '%COL_METATYPE'",
+        "NL": "een waarde is niet '%COL_METATYPE'"
+    },
+
+    "col_notofmetatype_plural": {
+        "EN": "%COL_ERRORS values are not '%COL_METATYPE'",
+        "IT": "%COL_ERRORS valori non sono '%COL_METATYPE'",
+        "FR": "%COL_ERRORS les valeurs ne sont pas de type '%COL_METATYPE'",
+        "NL": "%COL_ERRORS waarden niet '%COL_METATYPE'"
+    },
+
+    "key_declaretype": {
+        "EN": "the column '%COL_NAME' is of type '%COL_TYPE'",
+        "IT": "la colonna '%COL_NAME' è di tipo '%COL_TYPE'",
+        "FR": "le colonne '%COL_NAME' est de type '%COL_TYPE'",
+        "NL": "de kolom '%COL_NAME' is van het type '%COL_TYPE'"
+    },
+
+    "key_notoftype_singular": {
+        "EN": "a value is not '%COL_TYPE'",
+        "IT": "un valore non è un '%COL_TYPE'",
+        "FR": "La valeur n'est pas '%COL_TYPE'",
+        "NL": "een waarde is niet '%COL_TYPE'"
+    },
+
+    "key_cellnotoftype": {
+        "EN": "the cell value is not '%COL_TYPE'",
+        "IT": "il valore della cella non è di tipo '%COL_TYPE'",
+        "FR": "the cell value is not '%COL_TYPE'",
+        "NL": "the cell value is not '%COL_TYPE'"
+    },
+
+    "key_notoftype_plural": {
+        "EN": "%COL_ERRORS values are not '%COL_TYPE'",
+        "IT": "%COL_ERRORS valori non sono di tipo '%COL_TYPE'",
+        "FR": "%COL_ERRORS les valeurs ne sont pas de type '%COL_TYPE'",
+        "NL": "%COL_ERRORS waarden niet '%COL_TYPE'"
+    },
+
+    "key_emptyvalue_singolar": {
+        "EN": "the column '%COL_NAME' has an empty value",
+        "IT": "la colonna '%COL_NAME' ha un valore vuoto",
+        "FR": "La colonne '%COL_NAME'  a une valeur vide",
+        "NL": "de kolom '%COL_NAME' heeft een lege waarde"
+    },
+
+    "key_emptycell": {
+        "EN": "the cell is empty",
+        "IT": "la cella è vuota",
+        "FR": "the cell is empty",
+        "NL": "the cell is empty"
+    },
+
+    "key_emptyvalue_plural": {
+        "EN": "the column '%COL_NAME' has %COL_NULLVALUES empty values",
+        "IT": "la colonna '%COL_NAME' ha %COL_NULLVALUES valori vuoti",
+        "FR": "La colonne '%COL_NAME' a la valeur %COL_NULLVALUES qui est vide",
+        "NL": "de kolom '%COL_NAME' heeft %COL_NULLVALUES lege waarde"
+    },
+
+    "key_seewrongrows": {
+        "EN": "check rows '%LIST_WRONG_ROWS'",
+        "IT": "controlla le righe '%LIST_WRONG_ROWS'",
+        "FR": "check rows '%LIST_WRONG_ROWS'",
+        "NL": "check rows '%LIST_WRONG_ROWS'"
+    },
+
+    "key_type": {
+        "EN": "type",
+        "IT": "tipo",
+        "FR": "type",
+        "NL": "type"
+    },
+
+    "key_subtype": {
+        "EN": "subtype",
+        "IT": "sottotipo",
+        "FR": "sous-type",
+        "NL": "subtype"
+    },
+
+    "key_typetext": {
+        "EN": "text",
+        "IT": "testo",
+        "FR": "texte",
+        "NL": "tekst"
+    },
+
+    "key_typenumber": {
+        "EN": "number",
+        "IT": "numero",
+        "FR": "chiffres",
+        "NL": "aantal"
+    },
+
+    "key_typeobject": {
+        "EN": "object",
+        "IT": "oggetto",
+        "FR": "objet",
+        "NL": "voorwerp"
+    },
+
+    "key_typedatetime": {
+        "EN": "date or time",
+        "IT": "data o orario",
+        "FR": "date ou l'heure",
+        "NL": "datum of tijd"
+    },
+
+    "key_typeempty": {
+        "EN": "empty",
+        "IT": "vuoto",
+        "FR": "vide",
+        "NL": "leeg"
+    },
+
+    "key_typenull": {
+        "EN": "empty",
+        "IT": "vuoto",
+        "FR": "vide",
+        "NL": "leeg"
+    },
+
+    "key_typelatitude": {
+        "EN": "latitude",
+        "IT": "latitudine",
+        "FR": "latitude",
+        "NL": "breedtegraad"
+    },
+
+    "key_typelongitude": {
+        "EN": "longitude",
+        "IT": "longitudine",
+        "FR": "longitude",
+        "NL": "lengtegraad"
+    },
+
+    "key_subtypegeocoordinate": {
+        "EN": "coordinate",
+        "IT": "coordinate",
+        "FR": "coordonnées",
+        "NL": "coordinate"
+    },
+
+    "key_subtypegeojson": {
+        "EN": "geojson",
+        "IT": "geojson",
+        "FR": "geojson",
+        "NL": "geojson"
+    },
+
+    "key_subtypebool": {
+        "EN": "bool",
+        "IT": "bool",
+        "FR": "bool",
+        "NL": "bool"
+    },
+
+    "key_subtypeconst": {
+        "EN": "const",
+        "IT": "costante",
+        "FR": "const",
+        "NL": "const"
+    },
+
+    "key_subtypecategory": {
+        "EN": "category",
+        "IT": "categoria",
+        "FR": "category",
+        "NL": "category"
+    },
+
+    "key_subtypepercentage": {
+        "EN": "percentage",
+        "IT": "percentuale",
+        "FR": "percentage",
+        "NL": "percentage"
+    },
+
+    "key_subtypelatitude": {
+        "EN": "latitude",
+        "IT": "latitudine",
+        "FR": "latitude",
+        "NL": "latitude"
+    },
+
+    "key_subtypelongitude": {
+        "EN": "longitude",
+        "IT": "longitudine",
+        "FR": "longitude",
+        "NL": "longitude"
+    },
+
+    "key_subtypedatetimeymd": {
+        "EN": "YYYY/MM/DD",
+        "IT": "YYYY/MM/DD",
+        "FR": "YYYY/MM/DD",
+        "NL": "YYYY/MM/DD"
+    },
+
+    "key_subtypedatetimedmy": {
+        "EN": "DD/MM/YYYY",
+        "IT": "DD/MM/YYYY",
+        "FR": "DD/MM/YYYY",
+        "NL": "DD/MM/YYYY"
+    },
+
+    "key_subtypedatetimexxy": {
+        "EN": "D?M/D?M/YYYY",
+        "IT": "D?M/D?M/YYYY",
+        "FR": "D?M/D?M/YYYY",
+        "NL": "D?M/D?M/YYYY"
+    },
+
+    "key_subtypenuminteger": {
+        "EN": "integer number",
+        "IT": "numero intero",
+        "FR": "integer number",
+        "NL": "integer number"
+    },
+
+    "key_subtypenumreal": {
+        "EN": "real number",
+        "IT": "numero reale",
+        "FR": "real number",
+        "NL": "real number"
+    },
+
+    "key_subtypeinteger": {
+        "EN": "integer number",
+        "IT": "numero intero",
+        "FR": "integer number",
+        "NL": "integer number"
+    },
+
+    "key_subtypereal": {
+        "EN": "real number",
+        "IT": "numero reale",
+        "FR": "real number",
+        "NL": "real number"
+    },
+
+    "key_dateformatunknown": {
+        "EN": "Cannot determine the date format for the column '%COL_NAME'",
+        "IT": "Impossibile determinare il formato della data per la colonna '%COL_NAME'",
+        "FR": "Cannot determine the date format for the column '%COL_NAME'",
+        "NL": "Cannot determine the date format for the column '%COL_NAME'"
+    },
+
+    "key_datenotinformat": {
+        "EN": "'%COL_NUMDATENOTINFORMAT' values of the column '%COL_NAME' are not in format '%COL_SUBTYPE'",
+        "IT": "'%COL_NUMDATENOTINFORMAT' valori della colonna '%COL_NAME' non sono in formato '%COL_SUBTYPE'",
+        "FR": "'%COL_NUMDATENOTINFORMAT' values of the column '%COL_NAME' are not in format '%COL_SUBTYPE'",
+        "NL": "'%COL_NUMDATENOTINFORMAT' values of the column '%COL_NAME' are not in format '%COL_SUBTYPE'"
+    },
+
 };
 
 (function() {
@@ -222,6 +570,14 @@ class DataChecker {
             annotateInputDataset = (options.annotateInputDataset !== "undefined" && options.annotateInputDataset);
         }
 
+        if(options == null || options == undefined)
+            options = {};
+
+        if (options.hasOwnProperty("language") == false)
+            options.language = LANGS.EN.name;
+        else
+            options.language = options.language.toUpperCase();
+
         for (let irow=0; irow<dataset.length; irow++) {
             let row = dataset[irow];
 
@@ -237,9 +593,10 @@ class DataChecker {
                 let _inferredType =  this.inferDataTypeOfValue(fieldValue);
 
                 if (_inferredType.datatype !== this._dataTypeConfigFactory.DATATYPES.DT_UNKNOWN) {
-                    let _keydescr = "key_descr_" + _inferredType.datatype.name;
-                    // TODO let descr = this._dataTypeConfigFactory.translate(_keydescr, "EN");
-                    let descr = _inferredType.datatype.name;
+
+                    let descr = this._dataTypeConfigFactory.translate("cell_declaretype", options.language);
+                    let type = _inferredType.datatype.name;
+                    descr = descr.replace(/%TYPE/g, type);
 
                     let evaLogItem = {
                         i: irow,
@@ -265,7 +622,7 @@ class DataChecker {
     };//EndFunction.
 
     askForInferDataTypeOfValue(value) {
-        return this._dataTypeConfigFactory.evaluate(value);;
+        return this._dataTypeConfigFactory.evaluate(value);
     }//EndFunction.
 
     askForEvaluation(dataset, fieldKeys, options) {
@@ -277,6 +634,14 @@ class DataChecker {
         if (typeof options !== "undefined") {
             annotateInputDataset = (options.annotateInputDataset !== "undefined" && options.annotateInputDataset);
         }
+
+        if(options == null || options == undefined)
+            options = {};
+
+        if (options.hasOwnProperty("language") == false)
+            options.language = LANGS.EN.name;
+        else
+            options.language = options.language.toUpperCase();
 
         for (let irow=0; irow<dataset.length; irow++) {
             let row = dataset[irow];
@@ -295,19 +660,19 @@ class DataChecker {
 
                 if (_inferredType.datatype !== this._dataTypeConfigFactory.DATATYPES.DT_UNKNOWN){
 
-                    let descr = _inferredType.datatype.name; //TODO
+                    let descr = this._dataTypeConfigFactory.translate("cell_declaretype", options.language);
+                    let type = _inferredType.datatype.name;
+                    descr = descr.replace(/%TYPE/g, type);
+
                     var _metatype = this._dataTypeConfigFactory.DATATYPES.DT_UNKNOWN;
                     if(_inferredType.datatype === this._dataTypeConfigFactory.DATATYPES.DT_NULL)
                         _metatype = this._dataTypeConfigFactory.DATATYPES.DT_NULL;
                     else if('metatype' in _inferredType && _inferredType.metatype !== this._dataTypeConfigFactory.DATATYPES.DT_UNKNOWN){
-                        _metatype = _inferredType.metatype;
-                        descr = _inferredType.metatype.name; //TODO
+                        let metatype_descr = this._dataTypeConfigFactory.translate("cell_declaremetatype", options.language);
+                        let _metatype = _inferredType.metatype.name;
+                        metatype_descr = metatype_descr.replace(/%METATYPE/g, _metatype);
+                        descr += metatype_descr;
                     }
-                    /*todo
-                        let _keydescr = "key_descr_" + _inferredType.metatype.name;
-                        let descr = this._dataTypeConfigFactory.translate(_keydescr, "EN");
-                    */
-
 
                     let evaLogItem = {
                         i: irow,
@@ -347,6 +712,14 @@ class DataChecker {
             annotateInputDataset = (options.annotateInputDataset !== "undefined" && options.annotateInputDataset);
         }
 
+        if(options == null || options == undefined)
+            options = {};
+
+        if (options.hasOwnProperty("language") == false)
+            options.language = LANGS.EN.name;
+        else
+            options.language = options.language.toUpperCase();
+
         for (let irow=0; irow<dataset.length; irow++) {
             let row = dataset[irow];
 
@@ -363,11 +736,9 @@ class DataChecker {
                 let _typosCorrections =  this.detectTyposErrorsCorrections(fieldValue);
 
                 if (_typosCorrections.length != 0 ) {
-                    //TODO manage description and internationalization
 
-                    //let _keydescr = "key_descr_" + _inferredType.datatype.name;
-                    //let descr = this._dataTypeConfigFactory.translate(_keydescr, "EN");
-                    let descr = "TYPOS ERROR: ";
+                    let descr = this._dataTypeConfigFactory.translate("cell_typo", options.language);
+
                     for(let correction_index = 0; correction_index < _typosCorrections.length; correction_index++){
                         let correction = _typosCorrections[correction_index];
                         descr += correction.correction;
@@ -378,7 +749,7 @@ class DataChecker {
                         j: ikey,
                         key: key.name,
                         value: fieldValue,
-                        datatype: "TYPOS ERROR",
+                        datatype: "TYPO", // TYPOS ERROR
                         descr: descr
                     };
 
@@ -590,7 +961,16 @@ class PrivacyReportViewBuilder {
         return { first: max1, second: max2 };
     }//EndFunction.
 
-    buildColumnStats(evaLogs, withMetatypes){
+    buildColumnStats(evaLogs, withMetatypes, options){
+
+        if(options == null || options == undefined)
+            options = {};
+
+        if (options.hasOwnProperty("language") == false)
+            options.language = LANGS.EN.name;
+        else
+            options.language = options.language.toUpperCase();
+
         //initialization
         let COLUMN_DATATYPES={};
         let COLUMN_METADATATYPES={};
@@ -616,7 +996,6 @@ class PrivacyReportViewBuilder {
             reportView['METADATATYPE_HOMOGENEITY'] = 1;
         }
 
-        //
         for (let ilog=0; ilog<evaLogs.length; ilog++) {
             let slog = evaLogs[ilog];
             let _sdatatype = slog.datatype.name;
@@ -772,8 +1151,6 @@ class PrivacyReportViewBuilder {
         reportView.qualityIndex.totalNullValues = reportView.TOTAL_NULL;
         reportView.qualityIndex.totalValues = reportView.TOTAL_VALUES;
 
-        //TODO translation
-
         //Convert confidence to description
         for(var columnName in reportView.types){
             var columnInfo = reportView.types[columnName];
@@ -784,14 +1161,14 @@ class PrivacyReportViewBuilder {
             if (columnInfo.typeConfidence < 1) {
                 var incorrect = columnInfo.numOfItems - columnInfo._inferredTypes[columnInfo.type];
                 if(incorrect > 0){
-                    var _descr1 = "the column '%COL_NAME' is of type '%COL_TYPE'."; //TODO
-                    var _descr2 = "a value is not '%COL_TYPE'."; //TODO
+                    var _descr1 = this.translate("key_declaretype", options.language);
+                    var _descr2 = this.translate("key_notoftype_singular", options.language);
                     if (incorrect > 1)
-                        _descr2 = "%COL_ERRORS values are not '%COL_TYPE'."; //TODO
+                        _descr2 = this.translate("key_notoftype_plural", options.language);
 
                     var _descr3 = ""; var _LISTWRONGROS = "";
 
-                    _descr3 = "check rows '%LIST_WRONG_ROWS'."; //TODO
+                    _descr3 = this.translate("key_seewrongrows", options.language);
 
                     //At the end, this array contains keys with wrong types.
                     var keysWrongTypes =  Object.keys(columnInfo._inferredTypes).filter(function(typekey) {
@@ -813,15 +1190,15 @@ class PrivacyReportViewBuilder {
                         for (var icell = 0; icell < _wrongcells.length; icell++) {
                             var _cell = _wrongcells[icell];
 
-                            var _warningMessage = "the column '%COL_NAME' is of type '%COL_TYPE'. "; //TODO
-                            _warningMessage += "the cell value is not '%COL_TYPE'. ";
+                            var _warningMessage = this.translate("key_declaretype", options.language);
+                            _warningMessage += this.translate("cell_declaretype", options.language);
                             _warningMessage = _warningMessage.replace(/%COL_NAME/g, columnInfo.label);
                             _warningMessage = _warningMessage.replace(/%COL_TYPE/g, columnInfo.type);
                             _cell.warningMessage = _warningMessage;
 
                             //Build the warning message for the cell.
                             if (_keywrongtype === 'NULL')
-                                _cell.warningMessage = "the column '%COL_NAME' has an empty value.";
+                                _cell.warningMessage = this.translate("key_emptyvalue_singolar", options.language);
 
                             columnInfo.cellsWithWarnings.push(_cell);
                         }//EndFor.
@@ -853,14 +1230,15 @@ class PrivacyReportViewBuilder {
             if (withMetatypes & columnInfo.subtypeConfidence < 1) {
                 var incorrect = columnInfo.numOfItems - columnInfo._inferredSubTypes[columnInfo.subtype];
                 if(incorrect > 0){
-                    var _descr1 = "the column '%COL_NAME' is of type '%COL_METATYPE'."; //TODO
-                    var _descr2 = "a value is not '%COL_METATYPE'."; //TODO
+                    var _descr1 = this.translate("col_metatype", options.language);
+                    var _descr2 = this.translate("col_notofmetatype_singular", options.language);
                     if (incorrect > 1)
-                        _descr2 = "%COL_ERRORS values are not '%COL_METATYPE'."; //TODO
+                        _descr2 = this.translate("col_notofmetatype_plural", options.language);
 
-                    var _descr3 = ""; var _LISTWRONGROS = "";
+                    var _descr3 = "";
+                    var _LISTWRONGROS = "";
 
-                    _descr3 = "check rows '%LIST_WRONG_ROWS'."; //TODO
+                    _descr3 = "";
 
                     //At the end, this array contains keys with wrong types.
                     var keysWrongTypes =  Object.keys(columnInfo._inferredSubTypes).filter(function(typekey) {
@@ -875,6 +1253,8 @@ class PrivacyReportViewBuilder {
                     columnInfo.cellsWithWarnings = [];
 
                     for (var iKeyType=0; iKeyType<keysWrongTypes.length; iKeyType++) {
+                        _descr3 = this.translate('key_seewrongrows', options.language);
+
                         var _keywrongtype = keysWrongTypes[iKeyType];
                         var _wrongcells = columnInfo._inferredSubTypes[_keywrongtype + "_cells"];
                         if (typeof _wrongcells === 'undefined') continue;
@@ -883,8 +1263,8 @@ class PrivacyReportViewBuilder {
                         for (var icell = 0; icell < _wrongcells.length; icell++) {
                             var _cell = _wrongcells[icell];
 
-                            var _warningMessage = "the column '%COL_NAME' is of type '%COL_METATYPE'. "; //TODO
-                            _warningMessage += "the cell value is not '%COL_METATYPE'. ";
+                            var _warningMessage = this.translate("col_metatype", options.language);
+                            _warningMessage += this.translate("cell_declaremetatype", options.language);
                             _warningMessage = _warningMessage.replace(/%COL_NAME/g, columnInfo.label);
                             _warningMessage = _warningMessage.replace(/%COL_METATYPE/g, columnInfo.subtype);
                             _cell.warningMessage = _warningMessage;
@@ -920,7 +1300,7 @@ class PrivacyReportViewBuilder {
 
             var descr = "";
             if (columnInfo.totalNullValues > 0 )
-                descr = "In the column '%COL_NAME' '%COL_NULLVALUES' are empty values. ";
+                descr = this.translate("key_emptyvalue_plural", options.language);
 
             description = description + " " + descr;
 
@@ -985,6 +1365,18 @@ class PrivacyReportViewBuilder {
 
         return reportView;
     }//EndFunction.
+
+    translate(key, lang) {
+        if (QUALICY_LNG.hasOwnProperty(key)){
+            let temp = QUALICY_LNG[key];
+            if(temp.hasOwnProperty(lang))
+                return temp[lang];
+            else if(temp.hasOwnProperty("EN"))
+                return temp["EN"];
+        }
+
+        return null;
+    };
 
 }//EndClass.
 /*
@@ -1092,10 +1484,11 @@ const META_DATATYPES = {
     DT_DEGREE : {name:"DEGREE"}
 };
 
-const META_DATATYPES_LANGS = {
-    "key_descr_email": {
-        "EN": "According to the GDPR the e-mail is a sensitive data."
-    },
+const LANGS = {
+    EN   :   { name: "EN" },
+    IT   :   { name: "IT" },
+    FR   :   { name: "FR" },
+    NL   :   { name: "NL" }
 };
 
 const DATATYPES = Object.assign({}, BASIC_DATATYPES, META_DATATYPES);
@@ -1106,15 +1499,7 @@ BASIC_DATATYPES.DT_NULL.evaluate = function(value) {
 
     return { datatype: BASIC_DATATYPES.DT_UNKNOWN, value: value };
 };
-//META_DATATYPES.DT_NULL = BASIC_DATATYPES.DT_NULL;
-/*
-BASIC_DATATYPES.DT_OBJECT.evaluate = function(value) {
-    if (value === 'object')
-        return { datatype: BASIC_DATATYPES.DT_OBJECT, value: value };
 
-    return { datatype: BASIC_DATATYPES.DT_UNKNOWN, value: value };
-};
-*/
 BASIC_DATATYPES.DT_TEXT.evaluate = function(value) {
     return { datatype: BASIC_DATATYPES.DT_TEXT, value: value };
 };//EndFunction.
@@ -5827,8 +6212,14 @@ class TypeAndMetatypeConfigFactory {
      * @returns {*}
      */
     translate(key, lang) {
-        if (META_DATATYPES_LANGS.hasOwnProperty(key))
-            return langs[key][lang];
+        if (QUALICY_LNG.hasOwnProperty(key)){
+            let temp = QUALICY_LNG[key];
+            if(temp.hasOwnProperty(lang))
+                return temp[lang];
+            else if(temp.hasOwnProperty("EN"))
+                return temp["EN"];
+        }
+
         return null;
     };
 
@@ -5863,97 +6254,113 @@ class TypeAndMetatypeConfigFactory {
         return matchList;
     };
 
-    testStructuralPrivacyBreaches(schema){
+    testStructuralPrivacyBreaches(schema, options){
+        if(options == null || options == undefined)
+            options = {};
+
+        if (options.hasOwnProperty("language") == false)
+            options.language = LANGS.EN.name;
+        else
+            options.language = options.language.toUpperCase();
+
         let report = [];
 
         if(schema.hasOwnProperty(META_DATATYPES.DT_CF.name)){
             let privacyBreach = {};
             privacyBreach.breach = {};
             privacyBreach.breach[META_DATATYPES.DT_CF.name] = schema[META_DATATYPES.DT_CF.name];
-            privacyBreach.warning = messages['contentPrivacyBreach_CF'];
+            privacyBreach.warning = this.translate('contentPrivacyBreach_CF', options.language);
             report.push(privacyBreach);
         }
         if(schema.hasOwnProperty(META_DATATYPES.DT_EMAIL.name)){
             let privacyBreach = {};
             privacyBreach.breach = {};
             privacyBreach.breach[META_DATATYPES.DT_EMAIL.name] = schema[META_DATATYPES.DT_EMAIL.name];
-            privacyBreach.warning = messages['contentPrivacyBreach_EMAIL'];
+            privacyBreach.warning = this.translate('contentPrivacyBreach_EMAIL', options.language);
             report.push(privacyBreach);
         }
         if(schema.hasOwnProperty(META_DATATYPES.DT_IBAN.name)){
             let privacyBreach = {};
             privacyBreach.breach = {};
             privacyBreach.breach[META_DATATYPES.DT_IBAN.name] = schema[META_DATATYPES.DT_IBAN.name];
-            privacyBreach.warning = messages['contentPrivacyBreach_IBAN'];
+            privacyBreach.warning = this.translate('contentPrivacyBreach_IBAN', options.language);
             report.push(privacyBreach);
         }
-        if(schema.hasOwnProperty(META_DATATYPES.DT_PHONE.name)){
+        if(schema.hasOwnProperty(META_DATATYPES.DT_PHONE.name)) {
             let privacyBreach = {};
             privacyBreach.breach = {};
             privacyBreach.breach[META_DATATYPES.DT_PHONE.name] = schema[META_DATATYPES.DT_PHONE.name];
-            privacyBreach.warning = messages['contentPrivacyBreach_PHONE'];
+            privacyBreach.warning = this.translate('contentPrivacyBreach_PHONE', options.language);
             report.push(privacyBreach);
         }
         if(schema.hasOwnProperty(META_DATATYPES.DT_MOBILEPHONE.name)){
             let privacyBreach = {};
             privacyBreach.breach = {};
             privacyBreach.breach[META_DATATYPES.DT_MOBILEPHONE.name] = schema[META_DATATYPES.DT_MOBILEPHONE.name];
-            privacyBreach.warning = messages['contentPrivacyBreach_MOBILEPHONE'];
+            privacyBreach.warning = this.translate('contentPrivacyBreach_MOBILEPHONE', options.language);
             report.push(privacyBreach);
         }
-        if(schema.hasOwnProperty(META_DATATYPES.DT_ZIPCODE.name) && schema.hasOwnProperty(META_DATATYPES.DT_GENDER.name) && schema.hasOwnProperty(DATATYPES.DT_DATE.name)){
-            let privacyBreach = {};
-            privacyBreach.breach = {};
-            privacyBreach.breach[META_DATATYPES.DT_ZIPCODE.name] = schema[META_DATATYPES.DT_ZIPCODE.name];
-            privacyBreach.breach[META_DATATYPES.DT_GENDER.name] = schema[META_DATATYPES.DT_GENDER.name];
-            privacyBreach.breach[DATATYPES.DT_DATE.name] = schema[DATATYPES.DT_DATE.name];
-            privacyBreach.warning = messages['contentPrivacyBreach_ZIPCODE_DATE_GENDER'];
-            report.push(privacyBreach);
+        if(schema.hasOwnProperty(META_DATATYPES.DT_ZIPCODE.name)
+            && schema.hasOwnProperty(META_DATATYPES.DT_GENDER.name)
+            && schema.hasOwnProperty(DATATYPES.DT_DATE.name)){
+                let privacyBreach = {};
+                privacyBreach.breach = {};
+                privacyBreach.breach[META_DATATYPES.DT_ZIPCODE.name] = schema[META_DATATYPES.DT_ZIPCODE.name];
+                privacyBreach.breach[META_DATATYPES.DT_GENDER.name] = schema[META_DATATYPES.DT_GENDER.name];
+                privacyBreach.breach[DATATYPES.DT_DATE.name] = schema[DATATYPES.DT_DATE.name];
+                privacyBreach.warning = this.translate('contentPrivacyBreach_ZIPCODE_DATE_GENDER', options.language);
+                report.push(privacyBreach);
         }
-        if(schema.hasOwnProperty(META_DATATYPES.DT_NAME.name) && schema.hasOwnProperty(META_DATATYPES.DT_SURNAME.name) && schema.hasOwnProperty(DATATYPES.DT_LAT_LONG.name)){
-            let privacyBreach = {};
-            privacyBreach.breach = {};
-            privacyBreach.breach[META_DATATYPES.DT_NAME.name] = schema[META_DATATYPES.DT_NAME.name];
-            privacyBreach.breach[META_DATATYPES.DT_SURNAME.name] = schema[META_DATATYPES.DT_SURNAME.name];
-            privacyBreach.breach[META_DATATYPES.DT_LAT_LONG.name] =  schema[META_DATATYPES.DT_LAT_LONG.name];
-            privacyBreach.warning = messages['contentPrivacyBreach_NAME_SURNAME_LAT_LONG'];
-            report.push(privacyBreach);
+        if(schema.hasOwnProperty(META_DATATYPES.DT_NAME.name)
+            && schema.hasOwnProperty(META_DATATYPES.DT_SURNAME.name)
+            && schema.hasOwnProperty(DATATYPES.DT_LAT_LONG.name)) {
+                let privacyBreach = {};
+                privacyBreach.breach = {};
+                privacyBreach.breach[META_DATATYPES.DT_NAME.name] = schema[META_DATATYPES.DT_NAME.name];
+                privacyBreach.breach[META_DATATYPES.DT_SURNAME.name] = schema[META_DATATYPES.DT_SURNAME.name];
+                privacyBreach.breach[META_DATATYPES.DT_LAT_LONG.name] =  schema[META_DATATYPES.DT_LAT_LONG.name];
+                privacyBreach.warning = this.translate('contentPrivacyBreach_NAME_SURNAME_LAT_LONG', options.language);
+                report.push(privacyBreach);
         }
         if(schema.hasOwnProperty(META_DATATYPES.DT_NAME.name) && schema.hasOwnProperty(META_DATATYPES.DT_SURNAME.name) &&
             schema.hasOwnProperty(DATATYPES.DT_LATITUDE.name) && schema.hasOwnProperty(DATATYPES.DT_LONGITUDE.name)){
-            let privacyBreach = {};
-            privacyBreach.breach = {};
-            privacyBreach.breach[META_DATATYPES.DT_NAME.name] = schema[META_DATATYPES.DT_NAME.name];
-            privacyBreach.breach[META_DATATYPES.DT_SURNAME.name] = schema[META_DATATYPES.DT_SURNAME.name];
-            privacyBreach.breach[META_DATATYPES.DT_LATITUDE.name] = schema[META_DATATYPES.DT_LATITUDE.name];
-            privacyBreach.breach[META_DATATYPES.DT_LONGITUDE.name] = schema[META_DATATYPES.DT_LONGITUDE.name];
-            privacyBreach.warning = messages['contentPrivacyBreach_NAME_SURNAME_LAT_LONG'];
-            report.push(privacyBreach);
+                let privacyBreach = {};
+                privacyBreach.breach = {};
+                privacyBreach.breach[META_DATATYPES.DT_NAME.name] = schema[META_DATATYPES.DT_NAME.name];
+                privacyBreach.breach[META_DATATYPES.DT_SURNAME.name] = schema[META_DATATYPES.DT_SURNAME.name];
+                privacyBreach.breach[META_DATATYPES.DT_LATITUDE.name] = schema[META_DATATYPES.DT_LATITUDE.name];
+                privacyBreach.breach[META_DATATYPES.DT_LONGITUDE.name] = schema[META_DATATYPES.DT_LONGITUDE.name];
+                privacyBreach.warning = this.translate('contentPrivacyBreach_NAME_SURNAME_LAT_LONG', options.language);
+                report.push(privacyBreach);
         }
-        if(schema.hasOwnProperty(META_DATATYPES.DT_NAME.name) && schema.hasOwnProperty(META_DATATYPES.DT_SURNAME.name) && schema.hasOwnProperty(DATATYPES.DT_ADDRESS.name)){
-            let privacyBreach = {};
-            privacyBreach.breach = {};
-            privacyBreach.breach[META_DATATYPES.DT_NAME.name] = schema[META_DATATYPES.DT_NAME.name];
-            privacyBreach.breach[META_DATATYPES.DT_SURNAME.name] = schema[META_DATATYPES.DT_SURNAME.name];
-            privacyBreach.breach[META_DATATYPES.DT_ADDRESS.name] = schema[META_DATATYPES.DT_ADDRESS.name];
-            privacyBreach.warning = messages['contentPrivacyBreach_NAME_SURNAME_ADDRESS'];
-            report.push(privacyBreach);
+        if(schema.hasOwnProperty(META_DATATYPES.DT_NAME.name)
+            && schema.hasOwnProperty(META_DATATYPES.DT_SURNAME.name)
+            && schema.hasOwnProperty(DATATYPES.DT_ADDRESS.name)){
+                let privacyBreach = {};
+                privacyBreach.breach = {};
+                privacyBreach.breach[META_DATATYPES.DT_NAME.name] = schema[META_DATATYPES.DT_NAME.name];
+                privacyBreach.breach[META_DATATYPES.DT_SURNAME.name] = schema[META_DATATYPES.DT_SURNAME.name];
+                privacyBreach.breach[META_DATATYPES.DT_ADDRESS.name] = schema[META_DATATYPES.DT_ADDRESS.name];
+                privacyBreach.warning = this.translate('contentPrivacyBreach_NAME_SURNAME_ADDRESS', options.language);
+                report.push(privacyBreach);
         }
-        if(schema.hasOwnProperty(META_DATATYPES.DT_NAME.name) && schema.hasOwnProperty(META_DATATYPES.DT_SURNAME.name) && schema.hasOwnProperty(DATATYPES.DT_RELIGION.name)){
-            let privacyBreach = {};
-            privacyBreach.breach = {};
-            privacyBreach.breach[META_DATATYPES.DT_NAME.name] = schema[META_DATATYPES.DT_NAME.name];
-            privacyBreach.breach[META_DATATYPES.DT_SURNAME.name] = schema[META_DATATYPES.DT_SURNAME.name];
-            privacyBreach.breach[META_DATATYPES.DT_RELIGION.name] = schema[META_DATATYPES.DT_RELIGION.name];
-            privacyBreach.warning = messages['contentPrivacyBreach_NAME_SURNAME_RELIGION'];
-            report.push(privacyBreach);
+        if(schema.hasOwnProperty(META_DATATYPES.DT_NAME.name)
+            && schema.hasOwnProperty(META_DATATYPES.DT_SURNAME.name)
+            && schema.hasOwnProperty(DATATYPES.DT_RELIGION.name)) {
+                let privacyBreach = {};
+                privacyBreach.breach = {};
+                privacyBreach.breach[META_DATATYPES.DT_NAME.name] = schema[META_DATATYPES.DT_NAME.name];
+                privacyBreach.breach[META_DATATYPES.DT_SURNAME.name] = schema[META_DATATYPES.DT_SURNAME.name];
+                privacyBreach.breach[META_DATATYPES.DT_RELIGION.name] = schema[META_DATATYPES.DT_RELIGION.name];
+                privacyBreach.warning = this.translate('contentPrivacyBreach_NAME_SURNAME_RELIGION', options.language);
+                report.push(privacyBreach);
         }
         if(schema.hasOwnProperty(META_DATATYPES.DT_CF.name) && schema.hasOwnProperty(DATATYPES.DT_ADDRESS.name)){
             let privacyBreach = {};
             privacyBreach.breach = {};
             privacyBreach.breach[META_DATATYPES.DT_CF.name] = schema[META_DATATYPES.DT_CF.name];
             privacyBreach.breach[META_DATATYPES.DT_ADDRESS.name] = schema[META_DATATYPES.DT_ADDRESS.name];
-            privacyBreach.warning = messages['contentPrivacyBreach_CF_ADDRESS'];
+            privacyBreach.warning = this.translate('contentPrivacyBreach_CF_ADDRESS', options.language);
             report.push(privacyBreach);
         }
         if(schema.hasOwnProperty(META_DATATYPES.DT_CF.name) && schema.hasOwnProperty(DATATYPES.DT_RELIGION.name)){
@@ -5961,7 +6368,7 @@ class TypeAndMetatypeConfigFactory {
             privacyBreach.breach = {};
             privacyBreach.breach[META_DATATYPES.DT_CF.name] = schema[META_DATATYPES.DT_CF.name];
             privacyBreach.breach[META_DATATYPES.DT_RELIGION.name] = schema[META_DATATYPES.DT_RELIGION.name];
-            privacyBreach.warning = messages['contentPrivacyBreach_CF_RELIGION'];
+            privacyBreach.warning = this.translate('contentPrivacyBreach_CF_RELIGION', options.language);
             report.push(privacyBreach);
         }
         if(schema.hasOwnProperty(META_DATATYPES.DT_CF.name) && schema.hasOwnProperty(DATATYPES.DT_LAT_LONG.name)){
@@ -5969,7 +6376,7 @@ class TypeAndMetatypeConfigFactory {
             privacyBreach.breach = {};
             privacyBreach.breach[META_DATATYPES.DT_CF.name] = schema[META_DATATYPES.DT_CF.name];
             privacyBreach.breach[META_DATATYPES.DT_LAT_LONG.name] = schema[META_DATATYPES.DT_LAT_LONG.name];
-            privacyBreach.warning = messages['contentPrivacyBreach_CF_LAT_LONG'];
+            privacyBreach.warning = this.translate('contentPrivacyBreach_CF_LAT_LONG', options.language);
             report.push(privacyBreach);
         }
         if(schema.hasOwnProperty(META_DATATYPES.DT_CF.name) &&
@@ -5979,7 +6386,7 @@ class TypeAndMetatypeConfigFactory {
             privacyBreach.breach[META_DATATYPES.DT_CF.name] = schema[META_DATATYPES.DT_CF.name];
             privacyBreach.breach[META_DATATYPES.DT_LATITUDE.name] = schema[META_DATATYPES.DT_LATITUDE.name];
             privacyBreach.breach[META_DATATYPES.DT_LONGITUDE.name] = schema[META_DATATYPES.DT_LONGITUDE.name];
-            privacyBreach.warning = messages['contentPrivacyBreach_CF_LAT_LONG'];
+            privacyBreach.warning = this.translate('contentPrivacyBreach_CF_LAT_LONG', options.language);
             report.push(privacyBreach);
         }
 
@@ -5987,7 +6394,7 @@ class TypeAndMetatypeConfigFactory {
     }
 
 
-};//EndClass.
+}//EndClass.
 
 class TypeConfigFactory {
 
@@ -6036,7 +6443,7 @@ class TypeConfigFactory {
         var arrTraverseOrder = this.types();
 
         //Runs each registered "evaluate" function on the value.
-        let _inferredDataType = { datatype: tBASIC_DATATYPES.DT_UNKNOWN, value: value };
+        let _inferredDataType = { datatype: BASIC_DATATYPES.DT_UNKNOWN, value: value };
         for (let i=0; i<arrTraverseOrder.length; i++) {
             let dtnode = arrTraverseOrder[i];
             _inferredDataType = dtnode.evaluate(value);
@@ -6063,8 +6470,14 @@ class TypeConfigFactory {
      * @returns {*}
      */
     translate(key, lang) {
-        if (META_DATATYPES_LANGS.hasOwnProperty(key))
-            return langs[key][lang];
+        if (QUALICY_LNG.hasOwnProperty(key)){
+            let temp = QUALICY_LNG[key];
+            if(temp.hasOwnProperty(lang))
+                return temp[lang];
+            else if(temp.hasOwnProperty("EN"))
+                return temp["EN"];
+        }
+
         return null;
     };
 
@@ -6076,152 +6489,17 @@ class TypeConfigFactory {
     };
 
     testTyposErrors(value) {
-        // var editDistance1Words = editDistance1(value);
-        //
-        // var corrections = [];
-        // var testCorrectionBASIC_DATATYPES = this.typosCheckingTypes;
-        //
-        // for(var index in testCorrectionBASIC_DATATYPES){
-        //     corrections = corrections.concat(testCorrectionBASIC_DATATYPES[index].correct(editDistance1Words, value));
-        // }
-        //
-        // return corrections;
-
         var corrections = [];
         return corrections;
     };
 
     testContentPrivacyBreaches(value){
         var matchList = [];
-        // var contentPrivacyBreaches = this.contentPrivacyBreachesTypes;
-        //
-        // for(var index in contentPrivacyBreaches){
-        //     matchList = matchList.concat(contentPrivacyBreaches[index].checkInText(value));
-        // }
-
         return matchList;
     };
 
     testStructuralPrivacyBreaches(schema){
         let report = [];
-
-        // if(schema.hasOwnProperty(META_DATATYPES.DT_CF.name)){
-        //     let privacyBreach = {};
-        //     privacyBreach.breach = {};
-        //     privacyBreach.breach[META_DATATYPES.DT_CF.name] = schema[META_DATATYPES.DT_CF.name];
-        //     privacyBreach.warning = messages['contentPrivacyBreach_CF'];
-        //     report.push(privacyBreach);
-        // }
-        // if(schema.hasOwnProperty(META_DATATYPES.DT_EMAIL.name)){
-        //     let privacyBreach = {};
-        //     privacyBreach.breach = {};
-        //     privacyBreach.breach[META_DATATYPES.DT_EMAIL.name] = schema[META_DATATYPES.DT_EMAIL.name];
-        //     privacyBreach.warning = messages['contentPrivacyBreach_EMAIL'];
-        //     report.push(privacyBreach);
-        // }
-        // if(schema.hasOwnProperty(META_DATATYPES.DT_IBAN.name)){
-        //     let privacyBreach = {};
-        //     privacyBreach.breach = {};
-        //     privacyBreach.breach[META_DATATYPES.DT_IBAN.name] = schema[META_DATATYPES.DT_IBAN.name];
-        //     privacyBreach.warning = messages['contentPrivacyBreach_IBAN'];
-        //     report.push(privacyBreach);
-        // }
-        // if(schema.hasOwnProperty(META_DATATYPES.DT_PHONE.name)){
-        //     let privacyBreach = {};
-        //     privacyBreach.breach = {};
-        //     privacyBreach.breach[META_DATATYPES.DT_PHONE.name] = schema[META_DATATYPES.DT_PHONE.name];
-        //     privacyBreach.warning = messages['contentPrivacyBreach_PHONE'];
-        //     report.push(privacyBreach);
-        // }
-        // if(schema.hasOwnProperty(META_DATATYPES.DT_MOBILEPHONE.name)){
-        //     let privacyBreach = {};
-        //     privacyBreach.breach = {};
-        //     privacyBreach.breach[META_DATATYPES.DT_MOBILEPHONE.name] = schema[META_DATATYPES.DT_MOBILEPHONE.name];
-        //     privacyBreach.warning = messages['contentPrivacyBreach_MOBILEPHONE'];
-        //     report.push(privacyBreach);
-        // }
-        // if(schema.hasOwnProperty(META_DATATYPES.DT_ZIPCODE.name) && schema.hasOwnProperty(META_DATATYPES.DT_GENDER.name) && schema.hasOwnProperty(DATATYPES.DT_DATE.name)){
-        //     let privacyBreach = {};
-        //     privacyBreach.breach = {};
-        //     privacyBreach.breach[META_DATATYPES.DT_ZIPCODE.name] = schema[META_DATATYPES.DT_ZIPCODE.name];
-        //     privacyBreach.breach[META_DATATYPES.DT_GENDER.name] = schema[META_DATATYPES.DT_GENDER.name];
-        //     privacyBreach.breach[DATATYPES.DT_DATE.name] = schema[DATATYPES.DT_DATE.name];
-        //     privacyBreach.warning = messages['contentPrivacyBreach_ZIPCODE_DATE_GENDER'];
-        //     report.push(privacyBreach);
-        // }
-        // if(schema.hasOwnProperty(META_DATATYPES.DT_NAME.name) && schema.hasOwnProperty(META_DATATYPES.DT_SURNAME.name) && schema.hasOwnProperty(DATATYPES.DT_LAT_LONG.name)){
-        //     let privacyBreach = {};
-        //     privacyBreach.breach = {};
-        //     privacyBreach.breach[META_DATATYPES.DT_NAME.name] = schema[META_DATATYPES.DT_NAME.name];
-        //     privacyBreach.breach[META_DATATYPES.DT_SURNAME.name] = schema[META_DATATYPES.DT_SURNAME.name];
-        //     privacyBreach.breach[META_DATATYPES.DT_LAT_LONG.name] =  schema[META_DATATYPES.DT_LAT_LONG.name];
-        //     privacyBreach.warning = messages['contentPrivacyBreach_NAME_SURNAME_LAT_LONG'];
-        //     report.push(privacyBreach);
-        // }
-        // if(schema.hasOwnProperty(META_DATATYPES.DT_NAME.name) && schema.hasOwnProperty(META_DATATYPES.DT_SURNAME.name) &&
-        //     schema.hasOwnProperty(DATATYPES.DT_LATITUDE.name) && schema.hasOwnProperty(DATATYPES.DT_LONGITUDE.name)){
-        //     let privacyBreach = {};
-        //     privacyBreach.breach = {};
-        //     privacyBreach.breach[META_DATATYPES.DT_NAME.name] = schema[META_DATATYPES.DT_NAME.name];
-        //     privacyBreach.breach[META_DATATYPES.DT_SURNAME.name] = schema[META_DATATYPES.DT_SURNAME.name];
-        //     privacyBreach.breach[META_DATATYPES.DT_LATITUDE.name] = schema[META_DATATYPES.DT_LATITUDE.name];
-        //     privacyBreach.breach[META_DATATYPES.DT_LONGITUDE.name] = schema[META_DATATYPES.DT_LONGITUDE.name];
-        //     privacyBreach.warning = messages['contentPrivacyBreach_NAME_SURNAME_LAT_LONG'];
-        //     report.push(privacyBreach);
-        // }
-        // if(schema.hasOwnProperty(META_DATATYPES.DT_NAME.name) && schema.hasOwnProperty(META_DATATYPES.DT_SURNAME.name) && schema.hasOwnProperty(DATATYPES.DT_ADDRESS.name)){
-        //     let privacyBreach = {};
-        //     privacyBreach.breach = {};
-        //     privacyBreach.breach[META_DATATYPES.DT_NAME.name] = schema[META_DATATYPES.DT_NAME.name];
-        //     privacyBreach.breach[META_DATATYPES.DT_SURNAME.name] = schema[META_DATATYPES.DT_SURNAME.name];
-        //     privacyBreach.breach[META_DATATYPES.DT_ADDRESS.name] = schema[META_DATATYPES.DT_ADDRESS.name];
-        //     privacyBreach.warning = messages['contentPrivacyBreach_NAME_SURNAME_ADDRESS'];
-        //     report.push(privacyBreach);
-        // }
-        // if(schema.hasOwnProperty(META_DATATYPES.DT_NAME.name) && schema.hasOwnProperty(META_DATATYPES.DT_SURNAME.name) && schema.hasOwnProperty(DATATYPES.DT_RELIGION.name)){
-        //     let privacyBreach = {};
-        //     privacyBreach.breach = {};
-        //     privacyBreach.breach[META_DATATYPES.DT_NAME.name] = schema[META_DATATYPES.DT_NAME.name];
-        //     privacyBreach.breach[META_DATATYPES.DT_SURNAME.name] = schema[META_DATATYPES.DT_SURNAME.name];
-        //     privacyBreach.breach[META_DATATYPES.DT_RELIGION.name] = schema[META_DATATYPES.DT_RELIGION.name];
-        //     privacyBreach.warning = messages['contentPrivacyBreach_NAME_SURNAME_RELIGION'];
-        //     report.push(privacyBreach);
-        // }
-        // if(schema.hasOwnProperty(META_DATATYPES.DT_CF.name) && schema.hasOwnProperty(DATATYPES.DT_ADDRESS.name)){
-        //     let privacyBreach = {};
-        //     privacyBreach.breach = {};
-        //     privacyBreach.breach[META_DATATYPES.DT_CF.name] = schema[META_DATATYPES.DT_CF.name];
-        //     privacyBreach.breach[META_DATATYPES.DT_ADDRESS.name] = schema[META_DATATYPES.DT_ADDRESS.name];
-        //     privacyBreach.warning = messages['contentPrivacyBreach_CF_ADDRESS'];
-        //     report.push(privacyBreach);
-        // }
-        // if(schema.hasOwnProperty(META_DATATYPES.DT_CF.name) && schema.hasOwnProperty(DATATYPES.DT_RELIGION.name)){
-        //     let privacyBreach = {};
-        //     privacyBreach.breach = {};
-        //     privacyBreach.breach[META_DATATYPES.DT_CF.name] = schema[META_DATATYPES.DT_CF.name];
-        //     privacyBreach.breach[META_DATATYPES.DT_RELIGION.name] = schema[META_DATATYPES.DT_RELIGION.name];
-        //     privacyBreach.warning = messages['contentPrivacyBreach_CF_RELIGION'];
-        //     report.push(privacyBreach);
-        // }
-        // if(schema.hasOwnProperty(META_DATATYPES.DT_CF.name) && schema.hasOwnProperty(DATATYPES.DT_LAT_LONG.name)){
-        //     let privacyBreach = {};
-        //     privacyBreach.breach = {};
-        //     privacyBreach.breach[META_DATATYPES.DT_CF.name] = schema[META_DATATYPES.DT_CF.name];
-        //     privacyBreach.breach[META_DATATYPES.DT_LAT_LONG.name] = schema[META_DATATYPES.DT_LAT_LONG.name];
-        //     privacyBreach.warning = messages['contentPrivacyBreach_CF_LAT_LONG'];
-        //     report.push(privacyBreach);
-        // }
-        // if(schema.hasOwnProperty(META_DATATYPES.DT_CF.name) &&
-        //     schema.hasOwnProperty(DATATYPES.DT_LATITUDE.name) && schema.hasOwnProperty(DATATYPES.DT_LONGITUDE.name)){
-        //     let privacyBreach = {};
-        //     privacyBreach.breach = {};
-        //     privacyBreach.breach[META_DATATYPES.DT_CF.name] = schema[META_DATATYPES.DT_CF.name];
-        //     privacyBreach.breach[META_DATATYPES.DT_LATITUDE.name] = schema[META_DATATYPES.DT_LATITUDE.name];
-        //     privacyBreach.breach[META_DATATYPES.DT_LONGITUDE.name] = schema[META_DATATYPES.DT_LONGITUDE.name];
-        //     privacyBreach.warning = messages['contentPrivacyBreach_CF_LAT_LONG'];
-        //     report.push(privacyBreach);
-        // }
-
         return report;
     }
 
