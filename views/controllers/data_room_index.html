@@ -60,7 +60,7 @@
     {
         height: 1px;
         background: #ddd;
-        margin: 12px 8px;
+        margin: 4px 8px;
     }
 
     paper-item
@@ -429,7 +429,6 @@
 
 </style>
 <style>
-
     div.ow_chat_cont {
         display: block !important;
     }
@@ -485,7 +484,7 @@
                             </paper-item-body>
                         </paper-item>
 
-                        <div class="separator"></div>
+                        <!--<div class="separator"></div>-->
 
                         <paper-item id="info_menu_item" onclick="room.handleSelectUIMode('info')">
                             <iron-icon icon="info"></iron-icon>
@@ -534,31 +533,36 @@
 
                         <div class="separator"></div>
 
+                        <paper-item onclick="room.handleSelectUIMode('split')">
+                            <iron-icon id="screen_1" icon="av:airplay"></iron-icon>
+                            <iron-icon id="screen_2" icon="av:airplay"></iron-icon>
+                            <paper-item-body class="no_padding_item" two-lines>
+                                <div>
+                                    <span style="font-weight: 700">Split screen</span>
+                                    <paper-checkbox id="split_checkbox" class="checkbox_splitscreen" onclick="room.handleSelectUIMode('split')"></paper-checkbox>
+                                </div>
+                            </paper-item-body>
+                        </paper-item>
+
+                        <div class="separator"></div>
+
+                        <!--<span id="export_to_csv" onclick="room._exportToCSV()">Export CSV</span>-->
+                        <!--<span id="import_from_csv" onclick="room._importFromCSV()">Import CSV</span>-->
+
+                        <paper-button raised class="menu_button" title='{text key="cocreation+open_dataset_button_tooltip"}' on-tap="_importDatasetFromSPOD">{text key="cocreation+open_dataset_button_label"}</paper-button>
+
+                        <paper-button raised class="menu_button" title='{text key="cocreation+publish_dataset_internally_tooltip"}' on-tap="_publishDataset">{text key="cocreation+publish_dataset_button_label"}</paper-button>
+                        {if $canPublishOnCKAN}
+                        <paper-button raised class="menu_button" title='{text key="cocreation+publish_on_ckan_button_tooltip"}' on-tap="_publishOnCkan">{text key="cocreation+publish_on_ckan_button_label"}</paper-button>
+                        {/if}
+
+                        <div class="separator"></div>
+
+                        <paper-button raised class="menu_button" title='{text key="cocreation+check_quality_button_tooltip"}' on-tap="_checkPrivacy">{text key="cocreation+check_quality_button_label"}</paper-button>
+
                     </paper-menu>
 
-                    <paper-item onclick="room.handleSelectUIMode('split')">
-                        <iron-icon id="screen_1" icon="av:airplay"></iron-icon>
-                        <iron-icon id="screen_2" icon="av:airplay"></iron-icon>
-                        <paper-item-body class="no_padding_item" two-lines>
-                            <div>
-                                <span style="font-weight: 700">Split screen</span>
-                                <paper-checkbox id="split_checkbox" class="checkbox_splitscreen" onclick="room.handleSelectUIMode('split')"></paper-checkbox>
-                            </div>
-                        </paper-item-body>
-                    </paper-item>
 
-                    <div class="separator"></div>
-
-                    <paper-button raised class="menu_button" title='{text key="cocreation+open_dataset_button_tooltip"}' on-tap="_importDatasetFromSPOD">{text key="cocreation+open_dataset_button_label"}</paper-button>
-
-                    <paper-button raised class="menu_button" title='{text key="cocreation+publish_dataset_internally_tooltip"}' on-tap="_publishDataset">{text key="cocreation+publish_dataset_button_label"}</paper-button>
-                    {if $canPublishOnCKAN}
-                    <paper-button raised class="menu_button" title='{text key="cocreation+publish_on_ckan_button_tooltip"}' on-tap="_publishOnCkan">{text key="cocreation+publish_on_ckan_button_label"}</paper-button>
-                    {/if}
-
-                    <div class="separator"></div>
-
-                    <paper-button raised class="menu_button" title='{text key="cocreation+check_quality_button_tooltip"}' on-tap="_checkPrivacy">{text key="cocreation+check_quality_button_label"}</paper-button>
 
                 </div>
 
@@ -655,6 +659,5 @@
         </p>
         <paper-icon-button class="clear" suffix onclick="syncToast.toggle()" icon="clear"></paper-icon-button>
     </paper-toast>
-
+    {/if}
 </template>
-{/if}

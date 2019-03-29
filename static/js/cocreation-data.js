@@ -101,7 +101,6 @@ $(document).ready(function() {
                 console.log(err);
             });
     });
-
 });
 
 room.handleSelectUIMode = function(mode) {
@@ -279,6 +278,29 @@ room.loadDiscussion = function() {
             onload.setAttribute("type","text/javascript");
             onload.innerHTML = data.onloadScript;
         });
+};
+
+// CSV
+
+room._exportToCSV = async function() {
+    let fileCSVData = await room.getSheetCSV();
+    let filename = COCREATION.sheetName;
+    fileCSVData = room._convertDatasetToCSV(JSON.parse(fileCSVData));
+
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += fileCSVData;
+
+    let encodedUri = encodeURI(csvContent);
+    let link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", filename+".csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};
+
+room._importFromCSV = async function() {
+    //todo
 };
 
 // METADATA MANAGEMENT
