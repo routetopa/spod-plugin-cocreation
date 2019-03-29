@@ -139,7 +139,6 @@ CKANClient.prototype = (function() {
         },//EndFunction.
 
         showPackage: function(package_id, callback) {
-            debugger
             var targetUrl = this.baseApiUrl + "package_show";
 
             const key = package_id.toLowerCase();

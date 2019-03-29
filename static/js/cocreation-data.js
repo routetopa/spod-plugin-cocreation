@@ -795,17 +795,16 @@ room.prepareCOMMONCOREMetadataForCKAN = function (_jsonCocreationMetadata) {
 };
 
 room.prepareDCATMetadataForCKAN = function (_jsonCocreationMetadata) {
-    // DCAT-AP_IT
-    let metadata = {
-        // self-generated
-        name:           COCREATION.sheetName,
-        identifier:     COCREATION.sheetName,
-        modified:       room.print_date(),
+    // MANDATOTY
 
-        // metadata
+    let metadata = {
+        name:           COCREATION.sheetName,
+
         title:          _jsonCocreationMetadata.dct_title,
         description:    _jsonCocreationMetadata.dct_description,
+        identifier:     _jsonCocreationMetadata.dct_identifier,
         theme:          _jsonCocreationMetadata['dcat_theme-dct_subject'].reduce((themes, e) => { themes.push(e.dcat_theme.value.split('_')[0]); return themes; },[]),
+        modified:       room.format_date_it(_jsonCocreationMetadata.dct_modified),
         frequency:      _jsonCocreationMetadata.dct_accrualPeriodicity.value.split('_')[0],
 
         // notes
@@ -815,9 +814,18 @@ room.prepareDCATMetadataForCKAN = function (_jsonCocreationMetadata) {
         owner_org:      COCREATION.ckan_def_organisation_preference,
     };
 
+    for (let k in metadata)
+    {
+        let value = metadata[k];
+
+        if (value == null || typeof value == 'undefined' || (typeof value == 'string' && value.trim().length === 0))
+            return { success: false, errors: ['The "' + k + '" is a required field in the metadata.'] };
+    }
+
+    // OPTIONAL
+
+    // groups
     let $defgroups = [];
-    // for(let k in COCREATION.ckan_def_groups_preference)
-    //     $defgroups.push({"name": COCREATION.ckan_def_groups_preference[k]});
     COCREATION.ckan_def_groups_preference.each(function () {
         $defgroups.push({"name": $(this).val()});
     });
@@ -826,13 +834,6 @@ room.prepareDCATMetadataForCKAN = function (_jsonCocreationMetadata) {
         metadata.groups = $defgroups;
 
 
-    for (let k in metadata)
-    {
-        let value = metadata[k];
-
-        if (value == null || typeof value == 'undefined' || (typeof value == 'string' && value.trim().length === 0))
-            return { success: false, errors: ['The "' + k + '" is a required field in the metadata.'] };
-    }
 
     return { success: true, metadata: metadata };
 };
@@ -903,8 +904,18 @@ room.print_date = function() {
     let s = D.getSeconds() < 10 ? '0' +  D.getSeconds() : D.getSeconds();
     let ms = D.getMilliseconds() < 10 ? '0' +  D.getMilliseconds() : D.getMilliseconds();
 
-    // return y+'-'+m+'-'+d+'T'+h+':'+mi+':'+s+'.'+ms+'000';
-    return y+'-'+m+'-'+d;
+    return y+'-'+m+'-'+d+'T'+h+':'+mi+':'+s+'.'+ms+'000';
+    // return y+'-'+m+'-'+d;
+};
+
+room.format_date_it = function(date) {
+    let D = new Date(date);
+
+    let y = D.getFullYear();
+    let m = (D.getMonth()+1) < 10 ? '0' +  (D.getMonth()+1) : (D.getMonth()+1);
+    let d = D.getDate() < 10 ? '0' +  D.getDate() : D.getDate();
+
+    return d+'/'+m+'/'+y;
 };
 
 room.uploadOnCkan = async function (_jsonData, _jsonCocreationMetadata, notes, callbackUpload) {

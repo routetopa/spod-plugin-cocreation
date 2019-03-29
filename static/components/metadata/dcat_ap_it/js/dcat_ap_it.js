@@ -160,7 +160,8 @@ METADATA.getTab1Components = function() {
         // IDENTIFIER
         {
             key: 'dct_identifier',
-            type: 'textfield'
+            type: 'textfield',
+            validate: { required: true }
         },
 
         // LANGUAGE
@@ -279,18 +280,18 @@ METADATA.getTab4Components = function() {
         {
             key: 'dct_issued',
             type: 'datetime',
-            format: 'dd-MM-yyyy',
+            format: 'dd/MM/yyyy',
             enableTime: false
         },
 
         // MODIFIED DATE
-        // {
-        //     key: 'dct_modified',
-        //     type: 'datetime',
-        //     format: 'dd-MM-yyyy',
-        //     enableTime: false,
-        //     validate: { required: true }
-        // },
+        {
+            key: 'dct_modified',
+            type: 'datetime',
+            format: 'dd/MM/yyyy',
+            enableTime: false,
+            validate: { required: true }
+        },
 
         // ACCRUAL PERIODICITY
         {
@@ -312,13 +313,13 @@ METADATA.getTab4Components = function() {
                 {
                     key: 'dct_period_of_time-schema_start_date',
                     type: 'datetime',
-                    format: 'dd-MM-yyyy',
+                    format: 'dd/MM/yyyy',
                     enableTime: false
                 },
                 {
                     key: 'dct_period_of_time-schema_end_date',
                     type: 'datetime',
-                    format: 'dd-MM-yyyy',
+                    format: 'dd/MM/yyyy',
                     enableTime: false
                 }
             ]
