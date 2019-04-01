@@ -16,6 +16,10 @@
 
         //Register the click on the "Import dataset" button in the wizard to import from SPOD.
         window.addEventListener("import-dataset-controllet.doPublish", function (e) {
+            debugger
+            /**ddrddr/
+
+            console.log(e.detail.dataset.metadata);
             parent.room._uploadDatasetOnEthersheet(e, function(response) {
                 if (response.success) {
                     console.log("success");

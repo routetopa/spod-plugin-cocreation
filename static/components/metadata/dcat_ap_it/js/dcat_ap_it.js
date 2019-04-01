@@ -43,23 +43,20 @@ METADATA.create_form = function() {
             this.parent.window.dispatchEvent(new CustomEvent('update-metadata', {detail: { metadata: submission.data} }));
         });
 
-        // Everytime the form changes, this will fire.
-        /*METADATA.form.on('change', function(changed) {
-            console.log('Form was changed', changed);
-        });*/
+        document.getElementById("tmp-submit").addEventListener('click', () => {
+            let isValid = METADATA.form.checkValidity(METADATA.form.submission.data);
+            console.log('validation', isValid)
+            if (isValid) {
+                try {
+                    METADATA.form.submit();
+                } catch (e) {
+                    alert('error');
+                }
+            } else {
+                alert('error');
+            }
+        });
 
-/*        METADATA.form.components.forEach((e,i)=>{
-            let el = e.element.querySelector('input');
-            if(el)
-                el.setAttribute('title', dcat_ap_it_ln[METADATA.form.component.components[i].key + '-it']);
-        });*/
-
-
-        /*Formio.request('./datasource/themes/themes.json', "GET", null, null, null).then((data)=>{
-            console.log('DATA');
-            console.log(data);
-            console.log('DATA');
-        });*/
     });
 };
 

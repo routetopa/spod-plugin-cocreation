@@ -55,3 +55,13 @@ html, body {
 .datagrid-table.table-bordered>thead>tr>th {
     font-size: 14px !important;
 }
+
+#tmp-submit {
+    position: relative;
+    bottom: 49px;
+    left: 30px;
+}
+
+button[name="data[submit]"] {
+    visibility: hidden;
+}
