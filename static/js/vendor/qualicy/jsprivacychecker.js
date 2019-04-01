@@ -1,5 +1,11 @@
 const QUALICY_LNG = {
 
+    "conjunction" : {
+        "IT": "e",
+        "EN": "and",
+        "FR": "and",
+        "NL": "and"
+    },
     "contentPrivacyBreach_CF" : {
         "IT": "Dato personale secondo il GDPR 2016/679 Art. 4",
         "EN": "Personal data according to GDPR 2016/679 Art. 4",
@@ -1213,7 +1219,7 @@ class PrivacyReportViewBuilder {
                         for (var icell = 0; icell < _cells.length; icell++) {
                             var _cell = _cells[icell];
                             _LISTWRONGROS += (_cell.rowIndex + 2) + "(" + _keytype + ")" +
-                                (icell == _cells.length - 2 ? ", and " : "") +
+                                (icell == _cells.length - 2 ? ", "+this.translate("conjunction", options.language)+" " : "") +
                                 (icell < _cells.length - 2 ? ", " : "");
                         }
                     }//EndForInfTypes.
@@ -1282,7 +1288,7 @@ class PrivacyReportViewBuilder {
                         for (var icell = 0; icell < _cells.length; icell++) {
                             var _cell = _cells[icell];
                             _LISTWRONGROS += (_cell.rowIndex + 2) + "(" + _keytype + ")" +
-                                (icell == _cells.length - 2 ? ", and " : "") +
+                                (icell == _cells.length - 2 ? ", "+this.translate("conjunction", options.language)+" " : "") +
                                 (icell < _cells.length - 2 ? ", " : "");
                         }
                     }//EndForInfTypes.
