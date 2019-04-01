@@ -19,11 +19,15 @@ METADATA.loadTheme = function(theme) {
 };
 
 METADATA.setMetadata = function(metadata) {
-    parent.COCREATION.metadata = METADATA.parseMetadata(metadata);
+    try {
+        parent.COCREATION.metadata = METADATA.parseMetadata(metadata);
 
-    METADATA.form.submission = {
-        data: parent.COCREATION.metadata
-    };
+        METADATA.form.submission = {
+            data: parent.COCREATION.metadata
+        };
+    } catch (e) {
+        console.log('incompatible metadata - impossible to import metadata', e);
+    }
 };
 
 METADATA.parseMetadata = function(metadata) {
