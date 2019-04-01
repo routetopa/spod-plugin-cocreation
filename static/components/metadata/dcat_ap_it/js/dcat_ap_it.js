@@ -41,6 +41,7 @@ METADATA.create_form = function() {
         { components: METADATA.components }, { readOnly: is_read_only }
     ).then(function(form)
     {
+        debugger
         METADATA.form = form;
 
         let meta = this.parent.COCREATION.metadata ? (typeof this.parent.COCREATION.metadata === 'string' ? JSON.parse(this.parent.COCREATION.metadata) : this.parent.COCREATION.metadata) : null;
@@ -70,8 +71,7 @@ METADATA.create_form = function() {
     });
 };
 
-METADATA.checkValidity = function(form, data)
-{
+METADATA.checkValidity = function(form, data) {
     for(let i in form)
     {
         if(Array.isArray(form[i])) {
@@ -265,7 +265,7 @@ METADATA.getTab2Components = function() {
                     key: "dct_subject",
                     type: "select",
                     data: {
-                        custom: "values = METADATA.loadTheme(row.dcat_theme.value)"
+                        custom: "values = METADATA.loadTheme(row.dcat_theme.value + '_' + parent.ODE.user_language)"
                     },
                     dataSrc: "custom",
                     refreshOn: 'dcat_theme',

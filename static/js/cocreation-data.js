@@ -361,15 +361,11 @@ room._uploadDatasetOnEthersheet = function (event, cb) {
 // FUNCTION UPLOAD METADATA.
 
 room._uploadMetadata = function (metadata) {
-    debugger
     COCREATION.metadata = parseMetadata(metadata);
     $("#metadata_iframe")[0].contentWindow.METADATA.setMetadata();
-    // metadata_iframe
 };
 
 function parseMetadata(metadata) {
-    console.log(metadata);
-
     return meta = {
         "dct_title":"XXX",
         "dct_description":"XXX",
