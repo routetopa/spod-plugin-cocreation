@@ -1,5 +1,6 @@
 METADATA = {
-    form:null
+    form:null,
+    components:null
 };
 
 METADATA.init = function() {
@@ -18,14 +19,14 @@ METADATA.loadTheme = function(theme) {
 };
 
 METADATA.create_form = function() {
-    let components = METADATA.getComponents();
+    METADATA.components = METADATA.getComponents();
 
-    METADATA.add_info(components);
+    METADATA.add_info(METADATA.components);
 
     let is_read_only = !!window.frameElement.getAttribute('data-read-only');
 
     Formio.createForm(document.getElementById('dcat_ap_it_form'),
-        { components: components }, { readOnly: is_read_only }
+        { components: METADATA.components }, { readOnly: is_read_only }
     ).then(function(form)
     {
         METADATA.form = form;
@@ -44,20 +45,37 @@ METADATA.create_form = function() {
         });
 
         document.getElementById("tmp-submit").addEventListener('click', () => {
-            let isValid = METADATA.form.checkValidity(METADATA.form.submission.data);
-            console.log('validation', isValid)
+
+            //let isValid = METADATA.form.checkValidity(METADATA.form.submission.data); //The right one ... to sobstitute when formio will fix the tab bug
+            let isValid = METADATA.checkValidity(METADATA.components, METADATA.form.submission.data);
+
             if (isValid) {
-                try {
-                    METADATA.form.submit();
-                } catch (e) {
-                    alert('error');
-                }
+                METADATA.form.submit();
             } else {
-                alert('error');
+                METADATA.form.setAlert('danger', 'Campi obbligatori mancanti');
             }
         });
-
     });
+};
+
+METADATA.checkValidity = function(form, data)
+{
+    for(let i in form)
+    {
+        if(Array.isArray(form[i])) {
+            return METADATA.checkValidity(form[i], data);
+        } else if (form[i].components) {
+            return METADATA.checkValidity(form[i].components, data);
+        } else {
+            if(form[i].validate && form[i].validate.required ) {
+                console.log(form[i].key);
+                if(!data[form[i].key] || data[form[i]] === "")
+                    return false;
+            }
+        }
+    }
+
+    return true;
 };
 
 METADATA.add_info = function(components) {
@@ -129,12 +147,12 @@ METADATA.getComponents = function() {
         },
 
         // SUBMIT
-        {
+        /*{
             type: 'button',
             label: 'Salva',
             action: 'submit',
             theme: 'primary'
-        }
+        }*/
     ]
 };
 
@@ -144,6 +162,7 @@ METADATA.getTab1Components = function() {
         {
             key: 'dct_title',
             type: 'textfield',
+            defaultValue: undefined,
             validate: { required: true }
         },
 
