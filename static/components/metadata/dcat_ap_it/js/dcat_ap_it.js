@@ -18,6 +18,18 @@ METADATA.loadTheme = function(theme) {
     return THEMES[theme];
 };
 
+METADATA.setMetadata = function() {
+    debugger
+    let meta = parent.COCREATION.metadata ? (typeof parent.COCREATION.metadata === 'string' ? JSON.parse(parent.COCREATION.metadata) : parent.COCREATION.metadata) : null;
+
+    if(meta)
+    {
+        METADATA.form.submission = {
+            data: meta
+        };
+    }
+};
+
 METADATA.create_form = function() {
     METADATA.components = METADATA.getComponents();
 
