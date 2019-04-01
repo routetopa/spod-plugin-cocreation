@@ -237,6 +237,13 @@
         }
     }
 
+    paper-button
+    {
+        --paper-button:{
+            font-size: 14px;
+        }
+    }
+
     .content_container
     {
         height: calc(100vh - 158px);
@@ -459,113 +466,105 @@
         <paper-drawer-panel id="paperDrawerPanel" force-narrow>
 
             <paper-header-panel drawer>
-                <div>
-                    <paper-menu id="section_menu">
+                <div style="overflow-y: auto ; max-height: 100%;">
+                    <paper-item id="dataset_menu_item" onclick="room.handleSelectUIMode('dataset')">
+                        <iron-icon id="dataset_icon" icon="image:grid-on"></iron-icon>
+                        <paper-item-body two-lines title='{text key="cocreation+room_dataset_tooltip"}'>
+                            <div>{text key="cocreation+room_dataset_tab_label"}</div>
+                        </paper-item-body>
+                    </paper-item>
 
-                        <paper-item id="dataset_menu_item" onclick="room.handleSelectUIMode('dataset')">
-                            <iron-icon id="dataset_icon" icon="image:grid-on"></iron-icon>
-                            <paper-item-body two-lines title='{text key="cocreation+room_dataset_tooltip"}'>
-                                <div>{text key="cocreation+room_dataset_tab_label"}</div>
-                            </paper-item-body>
-                        </paper-item>
+                    <paper-item id="metadata_menu_item" onclick="room.handleSelectUIMode('metadata')">
+                        <iron-icon id="metadata_icon" icon="maps:local-offer"></iron-icon>
+                        <paper-item-body two-lines title='{text key="cocreation+room_metadata_tooltip"}'>
+                            <div>{text key="cocreation+room_metadata_tab_label"}</div>
+                        </paper-item-body>
+                    </paper-item>
 
-                        <paper-item id="metadata_menu_item" onclick="room.handleSelectUIMode('metadata')">
-                            <iron-icon id="metadata_icon" icon="maps:local-offer"></iron-icon>
-                            <paper-item-body two-lines title='{text key="cocreation+room_metadata_tooltip"}'>
-                                <div>{text key="cocreation+room_metadata_tab_label"}</div>
-                            </paper-item-body>
-                        </paper-item>
+                    <paper-item onclick="room.handleSelectUIMode('notes')">
+                        <iron-icon icon="description"></iron-icon>
 
-                        <paper-item onclick="room.handleSelectUIMode('notes')">
-                            <iron-icon icon="description"></iron-icon>
+                        <paper-item-body two-lines title='{text key="cocreation+room_notes_tooltip"}'>
+                            <div>{text key="cocreation+room_notes_tab_label"}</div>
+                        </paper-item-body>
+                    </paper-item>
 
-                            <paper-item-body two-lines title='{text key="cocreation+room_notes_tooltip"}'>
-                                <div>{text key="cocreation+room_notes_tab_label"}</div>
-                            </paper-item-body>
-                        </paper-item>
+                    <!--<div class="separator"></div>-->
 
-                        <!--<div class="separator"></div>-->
+                    <paper-item id="info_menu_item" onclick="room.handleSelectUIMode('info')">
+                        <iron-icon icon="info"></iron-icon>
+                        <paper-item-body two-lines>
+                            <div>Info</div>
+                        </paper-item-body>
+                    </paper-item>
 
-                        <paper-item id="info_menu_item" onclick="room.handleSelectUIMode('info')">
-                            <iron-icon icon="info"></iron-icon>
-                            <paper-item-body two-lines>
-                                <div>Info</div>
-                            </paper-item-body>
-                        </paper-item>
+                    <paper-item onclick="room.handleSelectUIMode('members')">
+                        <iron-icon icon="social:person"></iron-icon>
+                        <paper-item-body two-lines>
+                            <!--<div>{text key="cocreation+room_members_tab_label"}</div>-->
+                            <div>{text key="cocreation+room_members_tab_label"}</div>
 
-                        <paper-item onclick="room.handleSelectUIMode('members')">
-                            <iron-icon icon="social:person"></iron-icon>
-                            <paper-item-body two-lines>
-                                <!--<div>{text key="cocreation+room_members_tab_label"}</div>-->
-                                <div>{text key="cocreation+room_members_tab_label"}</div>
+                        </paper-item-body>
+                    </paper-item>
 
-                            </paper-item-body>
-                        </paper-item>
+                    <paper-item onclick="room.handleSelectUIMode('datalets')">
+                        <iron-icon icon="assessment"></iron-icon>
+                        <paper-item-body two-lines title='{text key="cocreation+room_cc_datalet"}'>
+                            <div>Datalets</div>
+                        </paper-item-body>
+                    </paper-item>
 
-                        <paper-item onclick="room.handleSelectUIMode('datalets')">
-                            <iron-icon icon="assessment"></iron-icon>
-                            <paper-item-body two-lines title='{text key="cocreation+room_cc_datalet"}'>
-                                <div>Datalets</div>
-                            </paper-item-body>
-                        </paper-item>
+                    <paper-item onclick="room.handleSelectUIMode('images')">
+                        <iron-icon icon="image:collections"></iron-icon>
+                        <paper-item-body two-lines title='{text key="cocreation+room_images_tooltip"}'>
+                            <div>{text key="cocreation+room_images_tab_label"}</div>
+                        </paper-item-body>
+                    </paper-item>
 
-                        <paper-item onclick="room.handleSelectUIMode('images')">
-                            <iron-icon icon="image:collections"></iron-icon>
-                            <paper-item-body two-lines title='{text key="cocreation+room_images_tooltip"}'>
-                                <div>{text key="cocreation+room_images_tab_label"}</div>
-                            </paper-item-body>
-                        </paper-item>
+                    <paper-item onclick="room.handleSelectUIMode('discussion')">
+                        <iron-icon id="discussion_icon" icon="communication:forum"></iron-icon>
+                        <paper-item-body two-lines title='{text key="cocreation+room_discussion_tab_label"}'>
+                            <div>{text key="cocreation+room_discussion_tab_label"}</div>
+                        </paper-item-body>
+                    </paper-item>
 
-                        <paper-item onclick="room.handleSelectUIMode('discussion')">
-                            <iron-icon id="discussion_icon" icon="communication:forum"></iron-icon>
-                            <paper-item-body two-lines title='{text key="cocreation+room_discussion_tab_label"}'>
-                                <div>{text key="cocreation+room_discussion_tab_label"}</div>
-                            </paper-item-body>
-                        </paper-item>
+                    <!-- FORM -->
+                    <paper-item onclick="room.handleSelectUIMode('form')">
+                        <iron-icon icon="assignment"></iron-icon>
+                        <paper-item-body two-lines>
+                            <div>Form</div>
+                        </paper-item-body>
+                    </paper-item>
 
-                        <!-- FORM -->
-                        <paper-item onclick="room.handleSelectUIMode('form')">
-                            <iron-icon icon="assignment"></iron-icon>
-                            <paper-item-body two-lines>
-                                <div>Form</div>
-                            </paper-item-body>
-                        </paper-item>
+                    <div class="separator"></div>
 
-                        <div class="separator"></div>
+                    <paper-item onclick="room.handleSelectUIMode('split')">
+                        <iron-icon id="screen_1" icon="av:airplay"></iron-icon>
+                        <iron-icon id="screen_2" icon="av:airplay"></iron-icon>
+                        <paper-item-body class="no_padding_item" two-lines>
+                            <div>
+                                <span style="font-weight: 700">Split screen</span>
+                                <paper-checkbox id="split_checkbox" class="checkbox_splitscreen" onclick="room.handleSelectUIMode('split')"></paper-checkbox>
+                            </div>
+                        </paper-item-body>
+                    </paper-item>
 
-                        <paper-item onclick="room.handleSelectUIMode('split')">
-                            <iron-icon id="screen_1" icon="av:airplay"></iron-icon>
-                            <iron-icon id="screen_2" icon="av:airplay"></iron-icon>
-                            <paper-item-body class="no_padding_item" two-lines>
-                                <div>
-                                    <span style="font-weight: 700">Split screen</span>
-                                    <paper-checkbox id="split_checkbox" class="checkbox_splitscreen" onclick="room.handleSelectUIMode('split')"></paper-checkbox>
-                                </div>
-                            </paper-item-body>
-                        </paper-item>
+                    <div class="separator"></div>
 
-                        <div class="separator"></div>
+                    <!--<span id="export_to_csv" onclick="room._exportToCSV()">Export CSV</span>-->
+                    <!--<span id="import_from_csv" onclick="room._importFromCSV()">Import CSV</span>-->
 
-                        <!--<span id="export_to_csv" onclick="room._exportToCSV()">Export CSV</span>-->
-                        <!--<span id="import_from_csv" onclick="room._importFromCSV()">Import CSV</span>-->
+                    <paper-button raised class="menu_button" title='{text key="cocreation+open_dataset_button_tooltip"}' on-tap="_importDatasetFromSPOD">{text key="cocreation+open_dataset_button_label"}</paper-button>
 
-                        <paper-button raised class="menu_button" title='{text key="cocreation+open_dataset_button_tooltip"}' on-tap="_importDatasetFromSPOD">{text key="cocreation+open_dataset_button_label"}</paper-button>
+                    <paper-button raised class="menu_button" title='{text key="cocreation+publish_dataset_internally_tooltip"}' on-tap="_publishDataset">{text key="cocreation+publish_dataset_button_label"}</paper-button>
+                    {if $canPublishOnCKAN}
+                    <paper-button raised class="menu_button" title='{text key="cocreation+publish_on_ckan_button_tooltip"}' on-tap="_publishOnCkan">{text key="cocreation+publish_on_ckan_button_label"}</paper-button>
+                    {/if}
 
-                        <paper-button raised class="menu_button" title='{text key="cocreation+publish_dataset_internally_tooltip"}' on-tap="_publishDataset">{text key="cocreation+publish_dataset_button_label"}</paper-button>
-                        {if $canPublishOnCKAN}
-                        <paper-button raised class="menu_button" title='{text key="cocreation+publish_on_ckan_button_tooltip"}' on-tap="_publishOnCkan">{text key="cocreation+publish_on_ckan_button_label"}</paper-button>
-                        {/if}
+                    <div class="separator"></div>
 
-                        <div class="separator"></div>
-
-                        <paper-button raised class="menu_button" title='{text key="cocreation+check_quality_button_tooltip"}' on-tap="_checkPrivacy">{text key="cocreation+check_quality_button_label"}</paper-button>
-
-                    </paper-menu>
-
-
-
+                    <paper-button raised class="menu_button" title='{text key="cocreation+check_quality_button_tooltip"}' on-tap="_checkPrivacy">{text key="cocreation+check_quality_button_label"}</paper-button>
                 </div>
-
             </paper-header-panel>
 
             <paper-header-panel main>
