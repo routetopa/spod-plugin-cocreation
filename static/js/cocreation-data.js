@@ -361,47 +361,8 @@ room._uploadDatasetOnEthersheet = function (event, cb) {
 // FUNCTION UPLOAD METADATA.
 
 room._uploadMetadata = function (metadata) {
-    COCREATION.metadata = parseMetadata(metadata);
-    $("#metadata_iframe")[0].contentWindow.METADATA.setMetadata();
+    $("#metadata_iframe")[0].contentWindow.METADATA.setMetadata(metadata);
 };
-
-function parseMetadata(metadata) {
-    return meta = {
-        "dct_title":"XXX",
-        "dct_description":"XXX",
-        "dct_identifier":"XXX",
-        "dct_language":[],
-        "dct_license":"",
-        "owl_versionInfo":"",
-        "dcat_theme-dct_subject":[
-            {"dcat_theme":{"value":"AGRI_en","label":"Agriculture, fisheries, forestry and food"},
-                "dct_subject":[{"value":"5606_en","label":"5606 agricultural policy"},{"value":"5611_en","label":"5611 agricultural structures and production"}]},
-            {"dcat_theme":{"value":"ENVI_en","label":"Environment"},
-                "dct_subject":[{"value":"5206_en","label":"5206 environmental policy"}]}
-        ],
-        "dcat_keyword":"",
-        "foaf_agent-dct_identifier-foaf_agent-foaf_name":[{"foaf_agent-foaf_name":"","foaf_agent-dct_identifier":""}],
-        "dct_issued":"",
-        "dct_modified":"2019-04-05T00:00:00+02:00",
-        "dct_accrualPeriodicity":{"value":"BIWEEKLY_en","label":"BIWEEKLY"},
-        "dct_temporal":[
-            {"dct_period_of_time-schema_start_date":"",
-                "dct_period_of_time-schema_end_date":""}
-        ],
-        "dct_spatial":[],
-        "locn_geographicalName":"",
-        "dcatapit_geographicalIdentifier":"",
-        "dct_conformsTo":[{"dct_standards-dct_identifier":"","dct_standards-dct_title":"","dct_standards-dct_description":"","dct_standards-referenceDocumentation_URI":""}],
-        "adms_identifier":[{"othid_identifier":"","othid_organization_name":"","othid_organization_identifier":""}],
-        "dct_creator":"",
-        "dct_publisher":"",
-        "dct_rights_holder":"",
-        "dcat_contactPoint":"",
-        "distribution_dct_title":"",
-        "distribution_dct_description":"",
-        "dct_format":"","dcat_byteSize":""
-    };
-}
 
 //
 
@@ -581,7 +542,6 @@ room._checkPrivacy_2 = function() {
 
             let reportColumnStats= viewBuilder.buildColumnStats(evaLogs, true, { language: ODE.user_language });
 
-            debugger
             let schema = {};
             for(let column_name in reportColumnStats.types){
                 if(reportColumnStats.types[column_name].subtype!==null){

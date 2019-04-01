@@ -18,16 +18,63 @@ METADATA.loadTheme = function(theme) {
     return THEMES[theme];
 };
 
-METADATA.setMetadata = function() {
-    debugger
-    let meta = parent.COCREATION.metadata ? (typeof parent.COCREATION.metadata === 'string' ? JSON.parse(parent.COCREATION.metadata) : parent.COCREATION.metadata) : null;
+METADATA.setMetadata = function(metadata) {
+    parent.COCREATION.metadata = METADATA.parseMetadata(metadata);
 
-    if(meta)
-    {
-        METADATA.form.submission = {
-            data: meta
-        };
+    METADATA.form.submission = {
+        data: parent.COCREATION.metadata
+    };
+};
+
+METADATA.parseMetadata = function(metadata) {
+    let themes = JSON.parse(metadata.theme);
+    let formio_themes = [];
+
+    for (let i in themes) {
+        formio_themes.push(
+            {
+                "dcat_theme":{value: themes[i].theme, label: METADATA.getLabelbyValue(themes[i].theme, THEMES['main_theme_' + parent.ODE.user_language])},
+                "dct_subject":[]
+            }
+        );
     }
+
+    //todo get resources index
+    return meta = {
+        "dct_title": metadata.resources[0].name,
+        "dct_description": metadata.resources[0].description,
+        "dct_identifier": metadata.identifier,
+        "dct_language":[],
+        "dct_license":"",
+        "owl_versionInfo":"",
+        "dcat_theme-dct_subject": formio_themes,
+        "dcat_keyword":"",
+        "foaf_agent-dct_identifier-foaf_agent-foaf_name":[{"foaf_agent-foaf_name":"","foaf_agent-dct_identifier":""}],
+        "dct_issued":"",
+        "dct_modified": metadata.modified,
+        "dct_accrualPeriodicity":{"value": metadata.frequency, "label": METADATA.getLabelbyValue(metadata.frequency, FREQUENCY['frequency_' + parent.ODE.user_language])},
+        "dct_temporal":[
+            {"dct_period_of_time-schema_start_date":"",
+                "dct_period_of_time-schema_end_date":""}
+        ],
+        "dct_spatial":[],
+        "locn_geographicalName":"",
+        "dcatapit_geographicalIdentifier":"",
+        "dct_conformsTo":[{"dct_standards-dct_identifier":"","dct_standards-dct_title":"","dct_standards-dct_description":"","dct_standards-referenceDocumentation_URI":""}],
+        "adms_identifier":[{"othid_identifier":"","othid_organization_name":"","othid_organization_identifier":""}],
+        "dct_creator":"",
+        "dct_publisher":"",
+        "dct_rights_holder":"",
+        "dcat_contactPoint":"",
+        "distribution_dct_title":"",
+        "distribution_dct_description":"",
+        "dct_format":"",
+        "dcat_byteSize":""
+    };
+};
+
+METADATA.getLabelbyValue = function (val, dictionary) {
+    return dictionary.filter((o)=>{return o.value === val})[0].label;
 };
 
 METADATA.create_form = function() {
@@ -41,7 +88,6 @@ METADATA.create_form = function() {
         { components: METADATA.components }, { readOnly: is_read_only }
     ).then(function(form)
     {
-        debugger
         METADATA.form = form;
 
         let meta = this.parent.COCREATION.metadata ? (typeof this.parent.COCREATION.metadata === 'string' ? JSON.parse(this.parent.COCREATION.metadata) : this.parent.COCREATION.metadata) : null;
