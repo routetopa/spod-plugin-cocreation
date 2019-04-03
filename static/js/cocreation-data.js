@@ -164,15 +164,15 @@ room.handleSelectUIMode = function(mode) {
 room.handleSplitScreen = function(e) {
     room.splitScreenActive  = e.checked;
 
-    room.$.spreadsheet.style.visibility = "visible";
-    room.$.metadata.style.visibility    = 'hidden';
-    room.$.notes.style.visibility       = 'hidden';
-    room.$.images.style.visibility      = 'hidden';
-    room.$.discussion.style.visibility  = 'hidden';
-    room.$.datalets.style.display       = 'none';
-    room.$.info.style.visibility        = 'hidden';
-    room.$.members_card.style.visibility     = 'hidden';
-    room.$.form.style.visibility        = 'hidden';
+    room.$.spreadsheet.style.visibility  = "visible";
+    room.$.metadata.style.visibility     = 'hidden';
+    room.$.notes.style.visibility        = 'hidden';
+    room.$.images.style.visibility       = 'hidden';
+    room.$.discussion.style.visibility   = 'hidden';
+    room.$.datalets.style.display        = 'none';
+    room.$.info.style.visibility         = 'hidden';
+    room.$.members_card.style.visibility = 'hidden';
+    room.$.form.style.visibility         = 'hidden';
 
    if(room.splitScreenActive){//active split screen
        room.$.dataset_menu_item.disabled = true;
@@ -181,7 +181,7 @@ room.handleSplitScreen = function(e) {
 
        if(room.current_selected_container == null){
            room.current_selected_container  = room.$.metadata;
-           room.$.section_menu.selected     = 1;
+           //room.$.section_menu.selected     = 1;
        }
 
        if(room.current_selected_container == room.$.datalets)
@@ -200,7 +200,7 @@ room.handleSplitScreen = function(e) {
        $(room.$.members_card).addClass("split_size_card_right");
    }else{
        room.$.dataset_menu_item.disabled = false;
-       room.$.section_menu.selected      = 0;
+       //room.$.section_menu.selected      = 0;
        room.current_selected_container   = null;
 
        $(room.$.spreadsheet).removeClass("split_size_card_left");
