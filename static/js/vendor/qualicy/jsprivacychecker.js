@@ -1500,8 +1500,9 @@ const LANGS = {
 const DATATYPES = Object.assign({}, BASIC_DATATYPES, META_DATATYPES);
 
 BASIC_DATATYPES.DT_NULL.evaluate = function(value) {
-    if (value === null || typeof value === 'undefined' || value.toLowerCase() == 'null')
-        return { datatype: BASIC_DATATYPES.DT_NULL, value: value };
+    if (value === null || typeof value === 'undefined' ||
+        value.replace(/\s+/g,"") == '' || value.toLowerCase() == 'null')
+            return { datatype: BASIC_DATATYPES.DT_NULL, value: value };
 
     return { datatype: BASIC_DATATYPES.DT_UNKNOWN, value: value };
 };
