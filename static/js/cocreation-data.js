@@ -435,10 +435,10 @@ room._checkPrivacy = function() {
 
             console.log(reportColumnStats)
             let info = [_records, reportColumnStats];
-            const sdata = JSON.stringify(info);
-            const sstyling = JSON.stringify(reportView.DATASET);
+            const sdata = JSON.stringify(info[0]);
+            // const sstyling = JSON.stringify(reportView.DATASET);
 
-            previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_PrivacyChecker', { data: sdata, styling: sstyling } , {top:'56px', width:'calc(100vw - 128px)', height:'calc(100vh - 184px)', iconClass:'ow_ic_lens', title:''});
+            previewFloatBox = OW.ajaxFloatBox('COCREATION_CMP_PrivacyChecker', { data: sdata } , {top:'56px', width:'calc(100vw - 128px)', height:'calc(100vh - 128px)', iconClass:'ow_ic_lens', title:''});
         }
     );
 };
