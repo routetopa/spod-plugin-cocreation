@@ -260,9 +260,16 @@ class COCREATION_BOL_Service
         //$this->addDocToRoom($room->id, $templateId);
     }
 
-    public function  getAllRooms()
+    public function getAllRooms()
     {
         return COCREATION_BOL_RoomDao::getInstance()->findAll();
+    }
+
+    public function getAllRoomOrderedByDate(){
+        //daodaodao
+        $example = new OW_Example();
+        $example->setOrder('`timestamp` DESC');
+        return COCREATION_BOL_RoomDao::getInstance()->findListByExample($example);
     }
 
     public function getRoomById($id){
