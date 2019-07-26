@@ -1,4 +1,4 @@
-<link rel="import" href="{$components_url}controllets2/qualicy-controllet/qualicy-controllet.html"/>
+<!--<link rel="import" href="{$components_url}controllets2/qualicy-controllet/qualicy-controllet.html"/>-->
 
 <style>
     div.clearfix.floatbox_cap {
@@ -22,7 +22,6 @@
     /*body .floatbox_canvas .floatbox_container {}*/
 </style>
 
-
 {literal}
 <script>
     $(document).ready(function(){
@@ -35,5 +34,7 @@
 
 
 <div style="width: 100%; height: 100%;">
-    <qualicy-controllet id="data_table_controllet" data='{$data}'></qualicy-controllet>
+    <iframe width="100%" height="100%" srcdoc="<link rel='import' href='{$components_url}controllets2/qualicy-controllet/qualicy-controllet.html'/> <style>html, body { height: 100%; margin: 0; }</style> <qualicy-controllet id='data_table_controllet' data='{$data}'></qualicy-controllet>"></iframe>
+    <!--<qualicy-controllet id='data_table_controllet' data='{$data}'></qualicy-controllet> `-->
 </div>
+
