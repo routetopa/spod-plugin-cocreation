@@ -3,7 +3,7 @@ const cluster        = require('cluster');
 const httpProxy      = require('http-proxy');
 const _              = require('underscore');
 const URL            = require('url');
-const server         = require('./s');
+const server         = require('./server');
 const config         = require('../config');
 
 exports.createMasterServer = function(config){
