@@ -532,6 +532,13 @@ exports.createServer = function(config){
                             console.log(newPath);
 
                             fs.writeFile(newPath, data, function (err) {
+                                if(err){
+                                    console.log("***ERROR DURING IMAGE SAVING***");
+                                    console.log(err);
+                                    console.log("*******************************");
+                                    res.send(JSON.stringify({status: false, message: "There was an error"}));
+                                }
+
                                 // let's see it
                                 console.log("Image uploaded");
 
