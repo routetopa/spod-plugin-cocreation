@@ -10,7 +10,7 @@ define( function(require,exports,module){
     var UploadImageView = module.exports = View.extend({
 
         events: {
-            'click #upload_image_button': 'uploadImage',
+            //'click #upload_image_button': 'uploadImage',
             'dragover #dragzone'        : 'onFileDrag',
             'dragleave #dragzone'       : 'onFileDragLeave',
             'drop #dragzone'            : 'onFileDrop',
@@ -27,6 +27,7 @@ define( function(require,exports,module){
 
         render: function(){
             $('#es-modal-box').html(t.upload_image_dialog({sheet_id: this.table.getSheet().id}));
+            $('#upload_image_button').on('click',this.uploadImage);
             $('#es-modal-overlay').show();
         },
 
@@ -57,7 +58,6 @@ define( function(require,exports,module){
                     } );
                     e.preventDefault();
                 } );
-
         },
 
         onFileDrag: function(e){
