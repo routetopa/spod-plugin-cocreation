@@ -248,6 +248,16 @@ dcat_ap_it_ln["dcat_byteSize-tooltip-it"] = "Questa proprietà contiene la lungh
 
 /******** EN ********/
 
+/* tabs */
+dcat_ap_it_ln["dct_tab1-label-en"] = "Informations";
+dcat_ap_it_ln["dct_tab2-label-en"] = "Classification";
+dcat_ap_it_ln["dct_tab3-label-en"] = "Organizations";
+dcat_ap_it_ln["dct_tab4-label-en"] = "Temporary References";
+dcat_ap_it_ln["dct_tab5-label-en"] = "Spatial References";
+dcat_ap_it_ln["dct_tab6-label-en"] = "Standards";
+dcat_ap_it_ln["dct_tab7-label-en"] = "Datasets Related";
+dcat_ap_it_ln["dct_tab8-label-en"] = "Additional information";
+
 /* mandatory_fields */
 dcat_ap_it_ln["mandatory_fields-title-en"] = "Mandatory  fields";
 
