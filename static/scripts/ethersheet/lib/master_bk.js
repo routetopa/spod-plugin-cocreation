@@ -1,34 +1,34 @@
-const http           = require('http');
-const cluster        = require('cluster');
-const httpProxy      = require('http-proxy');
-const _              = require('underscore');
-const URL            = require('url');
-const server         = require('./server');
-const config         = require('../config');
+var http           = require('http');
+var cluster        = require('cluster');
+var httpProxy      = require('http-proxy');
+var _              = require('underscore');
+var URL            = require('url');
+var server         = require('./server');
+var config         = require('../config');
 
 exports.createMasterServer = function(config){
 
-    let slaveServers = [];
-    let proxy = httpProxy.createProxyServer();
+    var slaveServers = [];
+    var proxy = httpProxy.createProxyServer();
 
     function getResourceKeyFromURL(url){
         url = url.replace(/\/ethersheet/, "");
         url = url.replace(/\/export_to_csv/, "");
         url = url.replace(/\/s\//, "");
+        url = url.replace(/\/addrow/, "");
         url = url.replace(/\/mediaroom\/init/, "");
         url = url.replace(/\/mediaroom\/addrow/, "");
-        url = url.replace(/\/addrow/, "");
         url = url.replace(/\/images\/?.*/, "");
         url = url.replace(/\/upload\/?.*/, "");
         url = url.replace(/\/pubsub\/?.*/, "");
         url = url.replace(/\/es_client\/?.*/, "");
         if( url.indexOf("/") >= 0 ) url =  url.slice(1, url.length);
         return url;
-    }
+    };
 
     function getKeyByWorkerPid(pid){
-        let key = undefined;
-        let keys = Object.keys(slaveServers);
+        var key = undefined;
+        var keys = Object.keys(slaveServers);
         for(var k in keys){
             if(slaveServers[keys[k]].worker.process.pid === pid){
                 key = keys[k];
@@ -36,12 +36,20 @@ exports.createMasterServer = function(config){
             }
         }
         return key;
-    }
+    };
 
     function assignSlave(request, response)
     {
-        let referer = request.headers.referer;
-        let temp_key, key;
+        var referer = request.headers.referer;
+        var temp_key, key;
+
+        /*if(_.isUndefined(referer)){
+         temp_key =  request.url;
+         }else{
+         temp_key =  URL.parse(referer).pathname;
+         if( parseInt(URL.parse(referer).port) !== config.port )
+         temp_key = request.url;
+         }*/
 
         temp_key = request.url;
         if(request.url.indexOf("import") >= 0 || (request.url.indexOf("export_to_csv") >= 0 && !_.isUndefined(referer))) {
@@ -54,11 +62,11 @@ exports.createMasterServer = function(config){
             }
         }
 
-        key = getResourceKeyFromURL( temp_key.trim());
+        key = getResourceKeyFromURL( temp_key );
 
         if(_.isEmpty(key)){
             //static resources
-            let servers_keys = Object.keys(slaveServers);
+            var servers_keys = Object.keys(slaveServers);
             key = servers_keys[Math.floor(Math.random() * servers_keys.length)];
         }
 
@@ -80,6 +88,7 @@ exports.createMasterServer = function(config){
             //proxy the request after worker creates the server
             console.log("WORKERS: " + Object.keys(cluster.workers).length);
         }else{
+
             if (slaveServers[key].online)
                 proxy.web(request, response, {target : "http://localhost:" + (config.port + (slaveServers[key].worker.process.pid % 1000))}, function(e){});
             else
@@ -91,13 +100,13 @@ exports.createMasterServer = function(config){
                         setTimeout(waitServerUp, 1000); //Gives the time to the server to open.
                 })();
         }
-    }
+    };
 
     if (cluster.isMaster) {
         console.log("MASTER ONLINE");
         http.createServer(assignSlave).listen(config.port, /*config.host*/'127.0.0.1');
     }else if(cluster.isWorker){
-        let cloned_config = require('../config');
+        var cloned_config = require('../config');
         cloned_config.port = (config.port  + (process.pid % 1000));
         server.createServer(cloned_config);
     }

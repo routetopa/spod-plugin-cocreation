@@ -521,17 +521,25 @@ exports.createServer = function(config){
                         /// If there's an error
                         if (!row.image_name) {
                             console.log("There was an error");
-                            res.send(JSON.stringify({status: false, message: "There was an error"}));
+                            res.send(JSON.stringify({status: false, message: "There was an error in image file name"}));
                         } else {
                             let dir = __dirname + "/uploads/" + sheet_ids[0];
                             if (!fs.existsSync(dir)) {
                                 fs.mkdirSync(dir);
+                                ss.chmodSync(dir, 755);
                             }
 
                             let newPath = dir + "/" + row.image_name;
                             console.log(newPath);
 
                             fs.writeFile(newPath, data, function (err) {
+                                if(err){
+                                    console.log("***ERROR DURING IMAGE SAVING***");
+                                    console.log(err);
+                                    console.log("*******************************");
+                                    res.send(JSON.stringify({status: false, message: "There was an error during saving"}));
+                                }
+
                                 // let's see it
                                 console.log("Image uploaded");
 
