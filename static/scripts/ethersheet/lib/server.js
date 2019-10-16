@@ -408,7 +408,7 @@ exports.createServer = function(config){
             fs.readFile(files.image_file.path, function (err, data)
             {
                 /// If there's an error
-                if(!row.image_name)
+                if(!image_name)
                 {
                     console.log("There was an error");
                     res.send(JSON.stringify({ status: false, massage: "There was an error"}));
@@ -425,7 +425,7 @@ exports.createServer = function(config){
                         // let's see it
                         console.log("Image uploaded");
                         //let image_url = req.protocol + "://" + req.hostname + ":" + require('../config').port + "/images/" + sheet_id + "/" + image_name;
-                        let image_url = req.protocol + "://" + req.hostname + "/ethersheet/images/" + sheet_id + "/" + row.image_name;
+                        let image_url = req.protocol + "://" + req.hostname + "/ethersheet/images/" + sheet_id + "/" + image_name;
                         res.send(JSON.stringify({ status: true, massage: "Image uploaded", image_url: image_url}));
                     });
                 }
@@ -526,7 +526,6 @@ exports.createServer = function(config){
                             let dir = __dirname + "/uploads/" + sheet_ids[0];
                             if (!fs.existsSync(dir)) {
                                 fs.mkdirSync(dir);
-                                fs.chmodSync(dir, 775);
                             }
 
                             let newPath = dir + "/" + row.image_name;
