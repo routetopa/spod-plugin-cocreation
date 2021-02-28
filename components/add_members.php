@@ -23,7 +23,8 @@ class COCREATION_CMP_AddMembers extends OW_Component
             );
         }
 
-        $this->assign('friends_info', json_encode($friendsInfo));
+        //$this->assign('friends_info', json_encode($friendsInfo));
+        $this->assign('friends_info', base64_encode(json_encode($friendsInfo)));
         $this->assign('components_url', SPODPR_COMPONENTS_URL);
 
         $form = new Form('CoCreationAddMembersForm');

@@ -7,7 +7,7 @@ COCREATION.openDataPanel;
 COCREATION.init = function()
 {
     $('.floatbox_body').on('scroll', function(){COCREATION.hideAutocomplete()});
-    COCREATION.friend_info = JSON.parse($('#friends_info').val());
+    COCREATION.friend_info = JSON.parse(atob($('#friends_info').val()));
     COCREATION.searchField = ["name", "username", "email"];
 
     // var scope = Polymer.dom(document).querySelector('#scope');
