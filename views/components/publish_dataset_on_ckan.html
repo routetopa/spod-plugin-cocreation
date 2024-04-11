@@ -308,14 +308,14 @@
         var notesContentHTML = "";
 
         room.publishOnCkanNotes = { doPublish: false, notesContentHTML: null };
-
         $("#inputPlatformURL").focusout('', get_organization);
-        $("#inputPlatformURL").focusout('', get_groups);
+        //$("#inputPlatformURL").focusout('', get_groups);
 
         $("#publish_metadata_iframe").attr('src', COCREATION.metadata_url);
-
+        COCREATION.ckan_platform_url_preference = document.querySelector('#inputPlatformURL').value;
+        console.log(COCREATION.ckan_platform_url_preference)
         get_organization();
-        get_groups();
+        //get_groups();
 
         $('#btnPrev').click(function (e) {
 
@@ -866,14 +866,14 @@
         return (typeof field === 'undefined' || field == null || field.length == 0);
     };//EndFunction.
 
+
     function get_organization()
     {
-        let ckan_url = $("#inputPlatformURL").val() + '/api/3/action/organization_list';
-
+    let ckan_url = document.querySelector('#inputPlatformURL').value + '/api/3/action/organization_list';
         $.get(ckan_url, (data)=>{
             $("#inputDefOrganisation").empty();
             data.result.forEach((e)=>{
-               $("#inputDefOrganisation").append(`<option value='${e}'>${e}</option>`);
+            $("#inputDefOrganisation").append(`<option value='${e}'>${e}</option>`);
             });
         });
     }//EndFunction.
@@ -935,9 +935,9 @@
         <paper-input id="inputCkanAPIKey" type="password" always-float-label label="CKAN API Key" value="{$PublishOnCKAN_api_key}" style="width: 230px;"></paper-input>
         <div style="font-family: 'Roboto', 'Noto', sans-serif; color: #737373; font-size: 12px; margin-bottom: 8px;">Organisation</div> <!--ID/Key spa-->
         <select id="inputDefOrganisation"></select>
-        <div style="font-family: 'Roboto', 'Noto', sans-serif; color: #737373; font-size: 12px; margin: 8px 0;">Additional Groups</div>
+        <!-- <div style="font-family: 'Roboto', 'Noto', sans-serif; color: #737373; font-size: 12px; margin: 8px 0;">Additional Groups</div>-->
         <!--<select id="inputDefGroups" multiple style="width: 230px;"></select>-->
-        <ul id="inputDefGroups"></ul>
+        <!-- <ul id="inputDefGroups"></ul> -->
         {else}
         <p>You do not have permissions to upload a dataset on CKAN.</p>
         {/if}
