@@ -41,7 +41,7 @@ class COCREATION_CMP_CreateRoom extends OW_Component
 //        $description->setRequired(true);
 
         $metadata = new Selectbox('metadata');
-        $metadata->addOptions(array("1"=>"Common core", "2"=>"DCAT-AP_IT"));
+        $metadata->addOptions(array("1"=>"Common core", "2"=>"DCAT-AP"));
         $metadata->setValue(2);
         $metadata->setRequired(true);
 
