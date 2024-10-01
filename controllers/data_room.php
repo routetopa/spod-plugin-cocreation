@@ -61,7 +61,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
 
             array_push($room_datalets, $datalet_string);
         }
-
+        
         //Get room members
         $room_members = COCREATION_BOL_Service::getInstance()->getRoomMembers($params['roomId']);
         $members    = array();
@@ -97,7 +97,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         $this->assign('notes', "/etherpad/p/" . $noteUrl);
 
         $data = COCREATION_BOL_Service::getInstance()->getSheetData($sheetUrl);
-        $headers = array();
+	$headers = array();
         foreach($data as $serie) array_push($headers, $serie->name);
         $this->assign('headers', $headers);
         $this->assign('data', json_encode($data));
@@ -114,7 +114,7 @@ class COCREATION_CTRL_DataRoom extends OW_ActionController
         $this->addComponent('info_cmp', new COCREATION_CMP_Info($room));
         /* MEMBERS */
         $this->addComponent('members_cmp', new COCREATION_CMP_Members($owner, $members));
-
+        
         /* METADATA IFRAME SRC */
         $metadata_url = "";
         switch($room->metadata)
