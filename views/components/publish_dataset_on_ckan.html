@@ -870,6 +870,9 @@
     function get_organization()
     {
     let ckan_url = document.querySelector('#inputPlatformURL').value + '/api/3/action/organization_list';
+        if(ckan_url === 'undefined/api/3/action/organization_list'){
+           ckan_url = 'https://data.neolaiacampus.eu/api/3/action/organization_list'
+        }
         $.get(ckan_url, (data)=>{
             $("#inputDefOrganisation").empty();
             data.result.forEach((e)=>{

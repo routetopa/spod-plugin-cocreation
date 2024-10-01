@@ -827,8 +827,32 @@ room.uploadOnCkan = async function (_jsonData, _jsonCocreationMetadata, notes, c
                 var _errors = room.processCkanErrorMessage(_jsonError);
 
                 callbackUpload({ success: false, errors: _errors, package: { id: uploadedPackageId } });
+                
                 return;
             } else {
+
+                const xhr = new XMLHttpRequest();
+                const data = {
+                    id: package_id,
+                    private: true
+                };
+
+                xhr.open('POST', $platformUrl + '/api/3/action/package_patch', true);
+                xhr.setRequestHeader('X-CKAN-API-Key', $keyapi);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                        console.log('Dataset setted as private!');
+                        } else {
+                        console.log(xhr.responseText)
+                        console.error('error:', xhr.responseText);
+                        }
+                    }
+                };
+                xhr.send(JSON.stringify(data));
+
                 if (notes == null)
                     callbackUpload({ success: true, package_id: package_id });
 

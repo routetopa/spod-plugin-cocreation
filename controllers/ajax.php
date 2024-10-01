@@ -678,7 +678,7 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             $document_server_port_preference = BOL_PreferenceService::getInstance()->findPreference('document_server_port_preference');
 
             //$apiurl = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . ":".$document_server_port_preference->defaultValue."/api/1/getHTML?apikey=e20a517df87a59751b0f01d708e2cb6496cf6a59717ccfde763360f68a7bfcec&padID=" . explode("/", $clean['noteUrl'])[4];
-            $apiurl = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['HTTP_HOST'] . "/etherpad" . "/api/1/getHTML?apikey=e20a517df87a59751b0f01d708e2cb6496cf6a59717ccfde763360f68a7bfcec&padID=" .$clean['noteUrl'];
+            $apiurl = "https" . "://" . $_SERVER['HTTP_HOST'] . "/etherpad" . "/api/1/getHTML?apikey=API_KEY&padID=" .$clean['noteUrl'];
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $apiurl);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -688,10 +688,10 @@ class COCREATION_CTRL_Ajax extends OW_ActionController
             if($result->message == "ok")
                 echo json_encode(array("status" => "ok", "data" => $result->data->html));
             else
-                echo json_encode(array("status" => "error", "message" => "error getting note content"));
+                echo json_encode(array("status" => "error", "message" => "Result: ".$_SERVER['REQUEST_SCHEME']));
 
         }catch(Exception $e){
-            echo json_encode(array("status" => "error", "message" => "error getting note content"));
+            echo json_encode(array("status" => "error", "message" => "2"));
         }finally{
             exit;
         }

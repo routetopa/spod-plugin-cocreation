@@ -157,10 +157,15 @@ CKANClient.prototype = (function() {
             xhttp.onerror = function (err) {
                 callback( null, { status: xhttp.status, statusText: xhttp.statusText } );
             };
-            xhttp.open("POST", targetUrl, true);
-            xhttp.setRequestHeader('X-CKAN-API-Key', this.authToken);//Authentication.
+	    //MOD	
+            //xhttp.open("POST", targetUrl, true);
+            //xhttp.setRequestHeader('X-CKAN-API-Key', this.authToken);//Authentication.
             // xhttp.setRequestHeader('Content-Type', 'application/json'); //aaaa
-            xhttp.send(JSON.stringify(data));
+            //MOD
+            //xhttp.send(JSON.stringify(data));
+	    xhttp.open("GET", targetUrl +"?id="+key,true);
+	    xhttp.setRequestHeader('X-CKAN-API-Key', this.authToken);
+            xhttp.send(JSON.stringify(data));	
         },//EndFunction.
 
         updatePackage: function (package_id, data, callback) {

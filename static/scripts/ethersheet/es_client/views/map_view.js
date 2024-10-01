@@ -52,7 +52,8 @@ define( function(require,exports,module){
                    anchorXUnits: 'fraction',
                    anchorYUnits: 'pixels',
                    opacity: 0.9,
-                   src: 'http://services.routetopa.eu/DEEalerProvider/COMPONENTS/datalets/leafletjs-datalet/leafletsjs/images/marker-icon.png',//'icons/marker-icon.png'
+                   //src: 'http://services.routetopa.eu/DEEalerProvider/COMPONENTS/datalets/leafletjs-datalet/leafletsjs/images/marker-icon.png',//'icons/marker-icon.png'
+                   src: '/es_client/icons/marker-icon.png',//'icons/marker-icon.png'
                }))
            });
 
