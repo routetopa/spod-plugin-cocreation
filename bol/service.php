@@ -262,13 +262,15 @@ class COCREATION_BOL_Service
 
     public function getAllRooms()
     {
-        return COCREATION_BOL_RoomDao::getInstance()->findAll();
+        $example = new OW_Example();
+        $example->setOrder('`timeStamp` DESC');
+        return COCREATION_BOL_RoomDao::getInstance()->findListByExample($example);
     }
 
     public function getAllRoomOrderedByDate(){
         //daodaodao
         $example = new OW_Example();
-        $example->setOrder('`timestamp` DESC');
+        $example->setOrder('`name` ASC');
         return COCREATION_BOL_RoomDao::getInstance()->findListByExample($example);
     }
 

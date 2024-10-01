@@ -66,6 +66,10 @@ class COCREATION_CTRL_DataRoomList extends OW_ActionController
                 );
         }
 
+        usort($dataset, function ($a, $b) {
+            return strcmp($a['NAME'], $b['NAME']);
+        });
+        
         return json_encode($dataset);
     }
 }
