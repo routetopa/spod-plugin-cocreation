@@ -246,6 +246,7 @@ class COCREATION_BOL_Service
         $room->invitationText = $invitationText;
         $room->isOpen         = $isOpen;
         $room->type           = $roomType;
+        
 
         COCREATION_BOL_RoomDao::getInstance()->save($room);
 
@@ -263,7 +264,7 @@ class COCREATION_BOL_Service
     public function getAllRooms()
     {
         $example = new OW_Example();
-        $example->setOrder('`timeStamp` DESC');
+        $example->setOrder('`timestamp` DESC');
         return COCREATION_BOL_RoomDao::getInstance()->findListByExample($example);
     }
 
